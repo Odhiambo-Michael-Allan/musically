@@ -1,10 +1,9 @@
-package com.odesa.musically.ui.view.settings
+package com.odesa.musically.ui.settings.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -15,7 +14,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -38,50 +36,50 @@ import kotlinx.coroutines.launch
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun <T> SettingsOptionTile(
-    icon: @Composable () -> Unit,
-    title: @Composable () -> Unit,
-    value: T,
-    values: Map<T, String>,
-    captions: Map<T, String>? = null,
-    enabled: Boolean = true,
-    onChange: ( T ) -> Unit
+    settingIcon: @Composable () -> Unit,
+    settingTitle: @Composable () -> Unit,
+    settingValue: T,
+    valuesToBeDisplayedInSettingDialog: Map<T, String>,
+//    captions: Map<T, String>? = null,
+    settingEnabled: Boolean = true,
+    onSettingChange: (T ) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    var isOpen by remember { mutableStateOf( false ) }
+    var dialogIsOpen by remember { mutableStateOf( false ) }
 
     Card (
-        enabled = enabled,
+        enabled = settingEnabled,
         colors = SettingsTileDefaults.cardColors(),
-        onClick = { isOpen = !isOpen }
+        onClick = { dialogIsOpen = !dialogIsOpen }
     ) {
         ListItem(
-            colors = SettingsTileDefaults.listItemColors( enabled = enabled ),
-            leadingContent = { icon() },
-            headlineContent = { title() },
-            supportingContent = { Text( text = values[ value ]!! ) }
+            colors = SettingsTileDefaults.listItemColors(enabled = settingEnabled),
+            leadingContent = { settingIcon() },
+            headlineContent = { settingTitle() },
+            supportingContent = { Text( text = valuesToBeDisplayedInSettingDialog[ settingValue ]!! ) }
         )
     }
 
-    if ( isOpen ) {
+    if ( dialogIsOpen ) {
         ScaffoldDialog(
-            title = title,
-            onDismissRequest = { isOpen = false },
+            title = settingTitle,
+            onDismissRequest = { dialogIsOpen = false },
             content = {
                 val scrollState = rememberScrollState()
                 var initialScroll by remember { mutableStateOf( false ) }
 
                 Column(
                     modifier = Modifier
-                        .padding(0.dp, 8.dp)
-                        .verticalScroll(scrollState)
+                        .padding( 0.dp, 8.dp )
+                        .verticalScroll( scrollState )
                 ) {
-                    values.map {
-                        val caption = captions?.get( it.key )
-                        val verticalSpace = when {
-                            caption != null -> 4.dp
-                            else -> 0.dp
-                        }
-                        val active = value == it.key
+                    valuesToBeDisplayedInSettingDialog.map {
+//                        val caption = captions?.get( it.key )
+//                        val verticalSpace = when {
+//                            caption != null -> 4.dp
+//                            else -> 0.dp
+//                        }
+                        val selected = settingValue == it.key
 
                         Card(
                             colors = SettingsTileDefaults.cardColors(),
@@ -89,43 +87,43 @@ fun <T> SettingsOptionTile(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .onGloballyPositioned { coordinates ->
-                                    if (active && !initialScroll) {
+                                    if ( selected && !initialScroll ) {
                                         val offset = coordinates.positionInParent()
                                         coroutineScope.launch {
-                                            scrollState.scrollTo(offset.y.toInt())
+                                            scrollState.scrollTo( offset.y.toInt() )
                                         }
                                         initialScroll = true
                                     }
                                 },
                             onClick = {
-                                onChange( it.key )
-                                isOpen = false
+                                onSettingChange( it.key )
+                                dialogIsOpen = false
                             }
                         ) {
                             Row(
-                                modifier = Modifier.padding( 12.dp, verticalSpace ),
+                                modifier = Modifier.padding( 12.dp ),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 RadioButton(
-                                    selected = active,
+                                    selected = selected,
                                     onClick = {
-                                        onChange( it.key )
-                                        isOpen = false
+                                        onSettingChange( it.key )
+                                        dialogIsOpen = false
                                     }
                                 )
                                 Spacer( modifier = Modifier.width( 8.dp ) )
                                 Column {
                                     Text( it.value )
-                                    caption?.let {
-                                        Spacer( modifier = Modifier.height( 2.dp ) )
-                                        Text(
-                                            text = caption,
-                                            style = MaterialTheme.typography.labelSmall.copy(
-                                                color = LocalContentColor.current
-                                                    .copy( alpha = 0.7f )
-                                            )
-                                        )
-                                    }
+//                                    caption?.let {
+//                                        Spacer( modifier = Modifier.height( 2.dp ) )
+//                                        Text(
+//                                            text = caption,
+//                                            style = MaterialTheme.typography.labelSmall.copy(
+//                                                color = LocalContentColor.current
+//                                                    .copy( alpha = 0.7f )
+//                                            )
+//                                        )
+//                                    }
                                 }
                             }
                         }
@@ -140,10 +138,10 @@ fun <T> SettingsOptionTile(
 @Composable
 fun SettingsOptionTilePreview() {
     SettingsOptionTile(
-        icon = { Icon( Icons.Filled.Language, null ) },
-        title = { Text( text = "Language" ) },
-        value = "English",
-        values = mapOf( "English" to "System (English)" ),
-        onChange = {}
+        settingIcon = { Icon( Icons.Filled.Language, null ) },
+        settingTitle = { Text( text = "Language" ) },
+        settingValue = null,
+        valuesToBeDisplayedInSettingDialog = mapOf(),
+        onSettingChange = {}
     )
 }

@@ -2,19 +2,10 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="SettingsOptionTilePreview">
-        <State />
-      </entry>
-      <entry key="SettingsViewPreview">
+      <entry key="TranslatorViewModelTest">
         <State />
       </entry>
       <entry key="app">
-        <State />
-      </entry>
-      <entry key="whenParseLocal_returnExpectedJSONObject()">
-        <State />
-      </entry>
-      <entry key="whenSupportedLocalIsSupplied_returnsTrue()">
         <State />
       </entry>
     </value>

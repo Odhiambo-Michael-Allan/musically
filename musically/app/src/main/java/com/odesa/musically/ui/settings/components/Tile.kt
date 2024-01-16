@@ -1,4 +1,4 @@
-package com.odesa.musically.ui.view.settings
+package com.odesa.musically.ui.settings.components
 
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ListItemDefaults

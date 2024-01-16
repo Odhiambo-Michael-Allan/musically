@@ -15,12 +15,14 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
@@ -94,7 +96,7 @@ fun ScaffoldDialog(
                         horizontalArrangement = Arrangement.End,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding( 12.dp, 0.dp )
+                            .padding(12.dp, 0.dp)
                     ) {
                         actions()
                     }
@@ -104,5 +106,16 @@ fun ScaffoldDialog(
                 }
             }
         }
+    }
+}
+
+@Preview( showBackground = true )
+@Composable
+fun ScaffoldDialogPreview() {
+    ScaffoldDialog(
+        title = { Text( text = "Language" ) },
+        onDismissRequest = { /*TODO*/ }
+    ) {
+
     }
 }
