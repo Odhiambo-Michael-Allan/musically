@@ -32,7 +32,7 @@ class SettingsViewModel( settingsRepository: SettingsRepository ) : ViewModel() 
 @Suppress( "UNCHECKED_CAST" )
 class SettingsViewModelFactory(
     private val settingsRepository: SettingsRepository
-) :ViewModelProvider.NewInstanceFactory() {
+) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel> create( modelClass: Class<T> ) =
         ( SettingsViewModel( settingsRepository ) as T )
