@@ -9,13 +9,12 @@ class SpanishTranslation : Translation {
         get() = "¡Hola!"
     override val introductoryMessage: String
         get() = """
-            Gracias por formar parte de la open-beta de Symphony. Si encuentras un error o quieres sugerir alguna mejora, por favor crea una "incidencia" en nuestro repositorio de Github.
-
-            Ùnete a nuestro Discord y comunidad de Reddit para compartir tus comentarios y mantenerte actualizado con el desarrollo del proyecto.
-
-            Symphony es respaldado completamente por donaciones realizadas vía Github Sponsors, Ko-fi y Patreon.
-
-            Una vez más, gracias por probar Symphony!
+            Gracias por formar parte de la open-beta de Symphony. Si encuentras un error o quieres
+             sugerir alguna mejora, por favor crea una "incidencia" en nuestro repositorio de Github.
+            Ùnete a nuestro Discord y comunidad de Reddit para compartir tus comentarios y 
+            mantenerte actualizado con el desarrollo del proyecto.
+            Symphony es respaldado completamente por donaciones realizadas vía Github Sponsors,
+             Ko-fi y Patreon. Una vez más, gracias por probar Symphony!
         """.trimIndent()
     override val songs: String
         get() = "Canciones"

@@ -2,457 +2,414 @@ package com.odesa.musically.services.i18n
 
 class BelarusianTranslation : Translation {
     override val locale: String
-        get() = TODO("Not yet implemented")
+        get() = "be"
     override val unknownSymbol: String
-        get() = TODO("Not yet implemented")
+        get() = "?"
     override val helloThere: String
-        get() = TODO("Not yet implemented")
+        get() = "Вітаю!"
     override val introductoryMessage: String
-        get() = TODO("Not yet implemented")
+        get() = """
+            Дзякуем вам за ўдзел у адкрытым бэта-тэставанні Symphony. Калі вы сутыкнуліся з
+            якімі-небудзь памылкамі ці хочаце прапанаваць паляпшэнні, калі ласка, адкрыйце 
+            праблему ў нашым рэпазітары Github. Далучайцеся да нашай супольнасці Discord і Reddit,
+            каб дзяліцца сваімі водгукамі і быць у курсе распрацоўкі.
+            Symphony цалкам падтрымліваецца ахвяраваннямі праз Github Sponsors, Ko-fi і Patreon.
+            Яшчэ раз дзякуй, што паспрабавалі Symphony!
+        """.trimIndent()
     override val songs: String
-        get() = TODO("Not yet implemented")
+        get() = "Трэкі"
     override val artists: String
-        get() = TODO("Not yet implemented")
+        get() = "Выканаўцы"
     override val albums: String
-        get() = TODO("Not yet implemented")
+        get() = "Альбомы"
     override val settings: String
-        get() = TODO("Not yet implemented")
+        get() = "Налады"
     override val details: String
-        get() = TODO("Not yet implemented")
+        get() = "Звесткі"
     override val path: String
-        get() = TODO("Not yet implemented")
+        get() = "Шлях да файла"
     override val filename: String
-        get() = TODO("Not yet implemented")
+        get() = "Імя файла"
     override val size: String
-        get() = TODO("Not yet implemented")
+        get() = "Памер"
     override val dateAdded: String
-        get() = TODO("Not yet implemented")
+        get() = "Час дадання"
     override val lastModified: String
-        get() = TODO("Not yet implemented")
+        get() = "Апошняя змена"
     override val length: String
-        get() = TODO("Not yet implemented")
+        get() = "Даўжыня"
     override val bitrate: String
-        get() = TODO("Not yet implemented")
+        get() = "Бітрэйт"
     override val trackName: String
-        get() = TODO("Not yet implemented")
+        get() = "Назва трэка"
     override val artist: String
-        get() = TODO("Not yet implemented")
+        get() = "Выканаўца"
     override val album: String
-        get() = TODO("Not yet implemented")
+        get() = "Альбом"
     override val albumArtist: String
-        get() = TODO("Not yet implemented")
+        get() = "Альбом выканаўцы"
     override val composer: String
-        get() = TODO("Not yet implemented")
+        get() = "Кампазітар"
     override val nothingIsBeingPlayedRightNow: String
-        get() = TODO("Not yet implemented")
+        get() = "Цяпер нічога не гуляе"
     override val addToQueue: String
-        get() = TODO("Not yet implemented")
+        get() = "Дадаць у чаргу"
     override val queue: String
-        get() = TODO("Not yet implemented")
+        get() = "Чарга"
     override val playNext: String
-        get() = TODO("Not yet implemented")
+        get() = "Гуляць далей"
     override val nowPlaying: String
-        get() = TODO("Not yet implemented")
+        get() = "Цяпер гуляе"
     override val language: String
-        get() = TODO("Not yet implemented")
+        get() = "Мова"
     override val materialYou: String
-        get() = TODO("Not yet implemented")
+        get() = "Material You"
     override val system: String
-        get() = TODO("Not yet implemented")
+        get() = "Як у сістэме"
     override val light: String
-        get() = TODO("Not yet implemented")
+        get() = "Светлая"
     override val dark: String
-        get() = TODO("Not yet implemented")
+        get() = "Цёмная"
     override val black: String
-        get() = TODO("Not yet implemented")
+        get() = "Чорная"
     override val viewArtist: String
-        get() = TODO("Not yet implemented")
+        get() = "Паглядзець выканаўца"
     override val title: String
-        get() = TODO("Not yet implemented")
+        get() = "Назва"
     override val duration: String
-        get() = TODO("Not yet implemented")
+        get() = "Працягласць"
     override val year: String
-        get() = TODO("Not yet implemented")
+        get() = "Год"
     override val viewAlbum: String
-        get() = TODO("Not yet implemented")
+        get() = "Паглядзець альбом"
     override val searchYourMusic: String
-        get() = TODO("Not yet implemented")
+        get() = "Знайдзіце сваю музыку"
     override val noResultsFound: String
-        get() = TODO("Not yet implemented")
+        get() = "Няма вынікаў"
     override val albumCount: String
-        get() = TODO("Not yet implemented")
+        get() = "Колькасць альбомаў"
     override val trackCount: String
-        get() = TODO("Not yet implemented")
+        get() = "Колькасць трэкаў"
     override val filteringResults: String
-        get() = TODO("Not yet implemented")
+        get() = "Фільтруем вынікі..."
     override val appearance: String
-        get() = TODO("Not yet implemented")
+        get() = "Знешні выгляд"
     override val about: String
-        get() = TODO("Not yet implemented")
+        get() = "Пра нас"
     override val github: String
-        get() = TODO("Not yet implemented")
+        get() = "Github"
     override val play: String
-        get() = TODO("Not yet implemented")
+        get() = "Гуляць"
     override val previous: String
-        get() = TODO("Not yet implemented")
+        get() = "Папярэдняе"
     override val next: String
-        get() = TODO("Not yet implemented")
+        get() = "Наступнае"
     override val pause: String
-        get() = TODO("Not yet implemented")
+        get() = "Паўза"
     override val done: String
-        get() = TODO("Not yet implemented")
+        get() = "Ужыць"
     override val groove: String
-        get() = TODO("Not yet implemented")
+        get() = "Канал"
     override val songsFilterPattern: String
-        get() = TODO("Not yet implemented")
+        get() = "Шаблон фільтрацыі трэкаў"
     override val reset: String
-        get() = TODO("Not yet implemented")
+        get() = "Скід"
     override val theme: String
-        get() = TODO("Not yet implemented")
+        get() = "Тэма"
     override val checkForUpdates: String
-        get() = TODO("Not yet implemented")
+        get() = "Правяраць наяўнасць абнаўленняў"
     override val version: String
-        get() = TODO("Not yet implemented")
+        get() = "Версія"
     override val shufflePlay: String
-        get() = TODO("Not yet implemented")
+        get() = "Змяшаць"
     override val viewAlbumArtist: String
-        get() = TODO("Not yet implemented")
+        get() = "Паглядзець альбом выканаўцы"
     override val stop: String
-        get() = TODO("Not yet implemented")
+        get() = "Стоп"
     override val all: String
-        get() = TODO("Not yet implemented")
+        get() = "Усё"
     override val fadePlaybackInOut: String
-        get() = TODO("Not yet implemented")
+        get() = "Плаўны пераход"
     override val requireAudioFocus: String
-        get() = TODO("Not yet implemented")
+        get() = "Патрабаваць аўдыё-фокус"
     override val ignoreAudioFocusLoss: String
-        get() = TODO("Not yet implemented")
+        get() = "Ігнараваць аўдыё-фокус"
     override val player: String
-        get() = TODO("Not yet implemented")
+        get() = "Плэер"
     override val playOnHeadphonesConnect: String
-        get() = TODO("Not yet implemented")
+        get() = "Гуляць пры падключэнні навушнікаў"
     override val pauseOnHeadphonesDisconnect: String
-        get() = TODO("Not yet implemented")
+        get() = "Паўза пры адключэнні навушнікаў"
     override val genre: String
-        get() = TODO("Not yet implemented")
+        get() = "Жанр"
     override val damnThisIsSoEmpty: String
-        get() = TODO("Not yet implemented")
+        get() = "Божа, тут так пуста!"
     override val primaryColor: String
-        get() = TODO("Not yet implemented")
+        get() = "Асноўны колер"
     override val playAll: String
-        get() = TODO("Not yet implemented")
+        get() = "Гуляць усё"
     override val forYou: String
-        get() = TODO("Not yet implemented")
+        get() = "Для вас"
     override val suggestedAlbums: String
-        get() = TODO("Not yet implemented")
+        get() = "Прапанаваныя альбомы"
     override val suggestedArtists: String
-        get() = TODO("Not yet implemented")
+        get() = "Прапанаваныя выканаўцы"
     override val recentlyAddedSongs: String
-        get() = TODO("Not yet implemented")
+        get() = "Нядаўна дададзеныя трэкі"
     override val sponsorViaGithub: String
-        get() = TODO("Not yet implemented")
+        get() = "Спансаваць праз Github"
     override val clearSongCache: String
-        get() = TODO("Not yet implemented")
+        get() = "Ачысціць кэш трэкаў"
     override val songCacheCleared: String
-        get() = TODO("Not yet implemented")
+        get() = "Кеш трэкаў ачышчаны"
     override val albumArtists: String
-        get() = TODO("Not yet implemented")
+        get() = "Альбомы выканаўцаў"
     override val genres: String
-        get() = TODO("Not yet implemented")
+        get() = "Жанры"
     override val cancel: String
-        get() = TODO("Not yet implemented")
+        get() = "Адмена"
     override val homeTabs: String
-        get() = TODO("Not yet implemented")
+        get() = "Асноўныя ўкладкі"
     override val selectAtleast2orAtmost5Tabs: String
-        get() = TODO("Not yet implemented")
+        get() = "Абярыце не менш за 2 ці не больш за 5 укладак"
     override val folders: String
-        get() = TODO("Not yet implemented")
+        get() = "Тэчкі"
     override val invisible: String
-        get() = TODO("Not yet implemented")
+        get() = "Утоены"
     override val alwaysVisible: String
-        get() = TODO("Not yet implemented")
+        get() ="Заўсёды бачныя"
     override val visibleWhenActive: String
-        get() = TODO("Not yet implemented")
+        get() = "Толькі на бягучай укладцы"
     override val bottomBarLabelVisibility: String
-        get() = TODO("Not yet implemented")
+        get() = "Назвы ўкладак"
     override val playlists: String
-        get() = TODO("Not yet implemented")
+        get() = "Плэйлісты"
     override val newPlaylist: String
-        get() = TODO("Not yet implemented")
+        get() = "Новы плэйліст"
     override val importPlaylist: String
-        get() = TODO("Not yet implemented")
+        get() = "Імпартаваць плэйліст"
     override val noInAppPlaylistsFound: String
-        get() = TODO("Not yet implemented")
+        get() = "Плэйлісты ў дадатку не знойдзены"
     override val noLocalPlaylistsFound: String
-        get() = TODO("Not yet implemented")
+        get() = "Лакальны плэйлісты не знойдзены"
     override val custom: String
-        get() = TODO("Not yet implemented")
+        get() = "Свой"
     override val playlist: String
-        get() = TODO("Not yet implemented")
+        get() = "Плэйліст"
     override val addSongs: String
-        get() = TODO("Not yet implemented")
+        get() = "Дадаць трэкі"
     override val addToPlaylist: String
-        get() = TODO("Not yet implemented")
+        get() = "Дадаць у плэйліст"
     override val isLocalPlaylist: String
-        get() = TODO("Not yet implemented")
+        get() = "Гэта ўнутраны плэйліст?"
     override val yes: String
-        get() = TODO("Not yet implemented")
+        get() = "Ды"
     override val no: String
-        get() = TODO("Not yet implemented")
+        get() = "Не"
     override val manageSongs: String
-        get() = TODO("Not yet implemented")
+        get() = "Кіраванне трэкамі"
     override val delete: String
-        get() = TODO("Not yet implemented")
+        get() = "Выдаліць"
     override val deletePlaylist: String
-        get() = TODO("Not yet implemented")
+        get() = "Выдаліць плэйліст"
     override val trackNumber: String
-        get() = TODO("Not yet implemented")
+        get() = "Нумар трэка"
     override val tree: String
-        get() = TODO("Not yet implemented")
+        get() = "Дрэва"
     override val loading: String
-        get() = TODO("Not yet implemented")
+        get() = "Загрузка..."
     override val name: String
-        get() = TODO("Not yet implemented")
+        get() = "Імя"
     override val addFolder: String
-        get() = TODO("Not yet implemented")
+        get() = "Дадаць тэчку"
     override val blacklistFolders: String
-        get() = TODO("Not yet implemented")
+        get() = "Чорны спіс тэчак"
     override val whitelistFolders: String
-        get() = TODO("Not yet implemented")
+        get() = "Белы спіс тэчак"
     override val pickFolder: String
-        get() = TODO("Not yet implemented")
+        get() = "Абярыце тэчку"
     override val invalidM3uFile: String
-        get() = TODO("Not yet implemented")
+        get() = "Няверны M3U файл"
     override val discord: String
-        get() = TODO("Not yet implemented")
+        get() = "Discord"
     override val reddit: String
-        get() = TODO("Not yet implemented")
+        get() = "Reddit"
     override val reportAnIssue: String
-        get() = TODO("Not yet implemented")
+        get() = "Паведаміць аб праблеме"
     override val noFoldersFound: String
-        get() = TODO("Not yet implemented")
+        get() = "Тэчкі не знойдзены"
     override val sleepTimer: String
-        get() = TODO("Not yet implemented")
+        get() = "Таймер сну"
     override val hours: String
-        get() = TODO("Not yet implemented")
+        get() = "Гадзіны"
     override val minutes: String
-        get() = TODO("Not yet implemented")
+        get() = "Хвіліны"
     override val quitAppOnEnd: String
-        get() = TODO("Not yet implemented")
+        get() = "Выйсці з плэера па заканчэнні таймера"
     override val favorite: String
-        get() = TODO("Not yet implemented")
+        get() = "Падабаецца"
     override val unfavorite: String
-        get() = TODO("Not yet implemented")
+        get() = "Падабаецца"
     override val bitDepth: String
-        get() = TODO("Not yet implemented")
+        get() = "Глыбіня гуку"
     override val samplingRate: String
-        get() = TODO("Not yet implemented")
+        get() = "Частата дыскрэтызацыі"
     override val showAudioInformation: String
-        get() = TODO("Not yet implemented")
+        get() = "Паказаць аўдыёінфармацыю"
     override val fastRewindDuration: String
-        get() = TODO("Not yet implemented")
+        get() = "Даўжыня перамоткі таму"
     override val fastForwardDuration: String
-        get() = TODO("Not yet implemented")
+        get() = "Даўжыня перамоткі наперад"
     override val suggestedAlbumArtists: String
-        get() = TODO("Not yet implemented")
+        get() = "Прапанаваныя альбомы выканаўцаў"
     override val areYouSureThatYouWantToDeleteThisPlaylist: String
-        get() = TODO("Not yet implemented")
+        get() = "Вы ўпэўненыя, што хочаце выдаліць гэты плэйліст?"
     override val removeFromPlaylist: String
-        get() = TODO("Not yet implemented")
+        get() = "Выдаліць з плэйліста"
     override val speed: String
-        get() = TODO("Not yet implemented")
+        get() = "Хуткасць"
     override val pitch: String
-        get() = TODO("Not yet implemented")
+        get() = "Вышыня"
     override val persistUntilQueueEnd: String
-        get() = TODO("Not yet implemented")
+        get() = "Захаваць да канца чаргі"
     override val noLyrics: String
-        get() = TODO("Not yet implemented")
+        get() = "Няма тэксту песні"
     override val sponsorViaPatreon: String
-        get() = TODO("Not yet implemented")
+        get() = "Спансаваць праз Patreon"
     override val fDroid: String
-        get() = TODO("Not yet implemented")
+        get() = "F-Droid"
     override val izzyOnDroid: String
-        get() = TODO("Not yet implemented")
+        get() = "IzzyOnDroid"
     override val miniPlayer: String
-        get() = TODO("Not yet implemented")
+        get() = "Міні-плэер"
     override val showTrackControls: String
-        get() = TODO("Not yet implemented")
+        get() = "Кіраванне дарожкамі"
     override val showSeekControls: String
-        get() = TODO("Not yet implemented")
+        get() = "Кіраванне перамоткай"
     override val font: String
-        get() = TODO("Not yet implemented")
+        get() = "Шрыфт"
     override val codec: String
-        get() = TODO("Not yet implemented")
+        get() = "Кодэк"
     override val controlsLayout: String
-        get() = TODO("Not yet implemented")
+        get() = "Элементы кіравання"
     override val default: String
-        get() = TODO("Not yet implemented")
+        get() = "Па змаўчанні"
     override val traditional: String
-        get() = TODO("Not yet implemented")
+        get() = "Традыцыйна"
     override val enabled: String
-        get() = TODO("Not yet implemented")
+        get() = "Уключаны"
     override val disabled: String
-        get() = TODO("Not yet implemented")
+        get() = "Адключаны"
     override val showUpdateToast: String
-        get() = TODO("Not yet implemented")
+        get() = "Паказваць апавяшчэнне аб абнаўленні"
     override val sponsorViaKofi: String
-        get() = TODO("Not yet implemented")
+        get() = "Спансаваць праз Ko-fi"
     override val playlistStoreLocation: String
-        get() = TODO("Not yet implemented")
+        get() = "месца захоўвання плейлістаў"
     override val appBuiltIn: String
-        get() = TODO("Not yet implemented")
+        get() = "ўбудаваны дадатак"
     override val localStorage: String
-        get() = TODO("Not yet implemented")
+        get() = "лакальнае захоўванне"
     override val systemLightDark: String
-        get() = TODO("Not yet implemented")
+        get() = "Як у сістэме (Светлая + Цёмная)"
     override val systemLightBlack: String
-        get() = TODO("Not yet implemented")
+        get() = "Як у сістэме (Светлая + Чорная)"
     override val fontScale: String
-        get() = TODO("Not yet implemented")
+        get() = "Памер тэксту"
     override val contentScale: String
-        get() = TODO("Not yet implemented")
+        get() = "Памер кантэнту"
     override val viewGenre: String
-        get() = TODO("Not yet implemented")
+        get() = "Паглядзець жанр"
     override val Interface: String
-        get() = TODO("Not yet implemented")
+        get() = "Інтэрфейс"
     override val rescan: String
-        get() = TODO("Not yet implemented")
+        get() = "Перасканаваць"
     override val updates: String
-        get() = TODO("Not yet implemented")
+        get() = "Абнаўленні"
     override val considerDonating: String
-        get() = TODO("Not yet implemented")
+        get() = "Разгледзім ахвяраванне!"
     override val help: String
-        get() = TODO("Not yet implemented")
+        get() = "Даведка"
     override val shareSong: String
-        get() = TODO("Not yet implemented")
+        get() = "Падзяліцца трэкам"
     override val pauseOnCurrentSongEnd: String
-        get() = TODO("Not yet implemented")
+        get() = "Паўза ў канцы бягучага трэка"
     override val export: String
-        get() = TODO("Not yet implemented")
+        get() = "Экспарт"
     override val renamePlaylist: String
-        get() = TODO("Not yet implemented")
+        get() = "Перайменаваць плэйліст"
     override val rename: String
-        get() = TODO("Not yet implemented")
+        get() = "Перайменаваць"
     override val equalizer: String
-        get() = TODO("Not yet implemented")
+        get() = "Эквалайзер"
     override val considerContributing: String
-        get() = TODO("Not yet implemented")
+        get() = "Разгледзьце магчымасць унесці свой уклад!"
     override val lyrics: String
-        get() = TODO("Not yet implemented")
+        get() = "Тэкст песні"
     override val lyricsLayout: String
-        get() = TODO("Not yet implemented")
+        get() = "Макет тэксту"
     override val replaceArtwork: String
-        get() = TODO("Not yet implemented")
+        get() = "Замена вокладкі"
     override val separatePage: String
-        get() = TODO("Not yet implemented")
+        get() = "Бягучы радок міні-плэера"
     override val miniPlayerTextMarquee: String
-        get() = TODO("Not yet implemented")
+        get() = "Бягучы радок міні-плэера"
     override val addItem: String
-        get() = TODO("Not yet implemented")
+        get() = "Дадаць раздзел"
     override val artistTagValueSeparators: String
-        get() = TODO("Not yet implemented")
+        get() = "Раздзяляльнікі значэнняў тэгаў выканаўцаў"
     override val genreTagValueSeparators: String
-        get() = TODO("Not yet implemented")
+        get() = "Раздзяляльнікі значэнняў тэгаў жанру"
     override val discNumber: String
-        get() = TODO("Not yet implemented")
+        get() = "Нумар дыска"
 
-    override fun playingXofY(x: String, y: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun playingXofY( x: String, y: String ) = "Гуляе $x з $y"
 
-    override fun unknownArtistX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun unknownArtistX( x: String ) = "Невядомы выканаўца (${x})"
 
-    override fun xSongs(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xSongs( x: String ) = "$x трэкаў"
 
-    override fun unknownAlbumId(id: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun unknownAlbumId( id: String ) = "Невядомы альбом (${id})"
 
-    override fun xArtists(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xArtists( x: String ) = "$x выканаўцаў"
 
-    override fun xAlbums(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xAlbums( x: String ) = "$x альбомаў"
 
-    override fun madeByX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun madeByX( x: String ) = "Створана $x"
 
-    override fun newVersionAvailableX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun newVersionAvailableX( x: String ) = "Даступная новая версія! (${x})"
 
-    override fun xKbps(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xKbps(x: String) = "$x Кбіт/с"
 
-    override fun xSecs(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xSecs( x: String ) = "${x}с"
 
-    override fun unknownGenreX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun unknownGenreX( x: String ) = "Невядомы жанр $x"
 
-    override fun xGenres(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xGenres( x: String ) = "$x жанраў"
 
-    override fun xFoldersYfiles(x: String, y: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xFoldersYfiles(x: String, y: String) = "$x тэчак, $y файлаў"
 
-    override fun xItems(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xItems( x: String ) = "$x раздзелаў"
 
-    override fun xPlaylists(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xPlaylists( x: String ) = "$x плэйлістоў"
 
-    override fun unknownPlaylistX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun unknownPlaylistX( x: String ) = "Невядомы плэйліст (ID: ${x})"
 
-    override fun xFolders(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xFolders( x: String ) = "$x тэчак"
 
-    override fun xBit(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xBit( x: String ) = "${x}-біт"
 
-    override fun xKHZ(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xKHZ( x: String ) = "$x кГц"
 
-    override fun shareFailedX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun shareFailedX( x: String ) = "Не ўдалося падзяліцца (Памылка: ${x})"
 
-    override fun exportFailedX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun exportFailedX( x: String ) = "Экспарт не атрымаўся (Памылка: ${x})"
 
-    override fun exportedX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun exportedX( x: String ) = "Экспартавана $x"
 
-    override fun launchingEqualizerFailedX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun launchingEqualizerFailedX( x: String ) = "Не ўдалося запусціць эквалайзер (Памылка: ${x})"
 
-    override fun unknownAlbumX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun unknownAlbumX( x: String ) = "Невядомы альбом (${x})"
 
-    override fun copiedXtoClipboard(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun copiedXtoClipboard( x: String ) = "Скапіявана '${x}' у буфер абмену"
 }
