@@ -2,457 +2,412 @@ package com.odesa.musically.services.i18n
 
 class ChineseTranslation : Translation {
     override val locale: String
-        get() = TODO("Not yet implemented")
+        get() = "zh-Hans"
     override val unknownSymbol: String
-        get() = TODO("Not yet implemented")
+        get() = "?"
     override val helloThere: String
-        get() = TODO("Not yet implemented")
+        get() = "您好！"
     override val introductoryMessage: String
-        get() = TODO("Not yet implemented")
+        get() = """
+            感谢您试用Symphony公开测试版。如果您遇到了任何问题，或想提出任何建议，请您在我们的Github仓库中创建新的Issue。
+            您也可以加入我们的Discord或Reddit社区以分享您的使用体验并获得开发的最新进度。
+            Symphony由来自Github Sponsors，Ko-fi和Patreon的捐赠支持开发。
+            再一次感谢您试用Symphony！
+        """.trimIndent()
     override val songs: String
-        get() = TODO("Not yet implemented")
+        get() = "歌曲"
     override val artists: String
-        get() = TODO("Not yet implemented")
+        get() = "艺术家"
     override val albums: String
-        get() = TODO("Not yet implemented")
+        get() = "专辑"
     override val settings: String
-        get() = TODO("Not yet implemented")
+        get() = "设置"
     override val details: String
-        get() = TODO("Not yet implemented")
+        get() = "详情"
     override val path: String
-        get() = TODO("Not yet implemented")
+        get() = "路径"
     override val filename: String
-        get() = TODO("Not yet implemented")
+        get() = "文件名"
     override val size: String
-        get() = TODO("Not yet implemented")
+        get() = "大小"
     override val dateAdded: String
-        get() = TODO("Not yet implemented")
+        get() = "添加日期"
     override val lastModified: String
-        get() = TODO("Not yet implemented")
+        get() = "上次修改时间"
     override val length: String
-        get() = TODO("Not yet implemented")
+        get() = "时长"
     override val bitrate: String
-        get() = TODO("Not yet implemented")
+        get() = "比特率"
     override val trackName: String
-        get() = TODO("Not yet implemented")
+        get() = "曲名"
     override val artist: String
-        get() = TODO("Not yet implemented")
+        get() = "艺术家"
     override val album: String
-        get() = TODO("Not yet implemented")
+        get() = "专辑"
     override val albumArtist: String
-        get() = TODO("Not yet implemented")
+        get() = "专辑艺术家"
     override val composer: String
-        get() = TODO("Not yet implemented")
+        get() = "作曲家"
     override val nothingIsBeingPlayedRightNow: String
-        get() = TODO("Not yet implemented")
+        get() = "无正在播放曲目"
     override val addToQueue: String
-        get() = TODO("Not yet implemented")
+        get() = "添加到播放列表"
     override val queue: String
-        get() = TODO("Not yet implemented")
+        get() = "播放列表"
     override val playNext: String
-        get() = TODO("Not yet implemented")
+        get() = "下一首"
     override val nowPlaying: String
-        get() = TODO("Not yet implemented")
+        get() = "正在播放"
     override val language: String
-        get() = TODO("Not yet implemented")
+        get() = "语言"
     override val materialYou: String
-        get() = TODO("Not yet implemented")
+        get() = "Material You"
     override val system: String
-        get() = TODO("Not yet implemented")
+        get() = "系统"
     override val light: String
-        get() = TODO("Not yet implemented")
+        get() = "浅色"
     override val dark: String
-        get() = TODO("Not yet implemented")
+        get() = "深色"
     override val black: String
-        get() = TODO("Not yet implemented")
+        get() = "纯黑"
     override val viewArtist: String
-        get() = TODO("Not yet implemented")
+        get() = "查看艺术家"
     override val title: String
-        get() = TODO("Not yet implemented")
+        get() = "曲名"
     override val duration: String
-        get() = TODO("Not yet implemented")
+        get() = "时长"
     override val year: String
-        get() = TODO("Not yet implemented")
+        get() = "年份"
     override val viewAlbum: String
-        get() = TODO("Not yet implemented")
+        get() = "查看专辑"
     override val searchYourMusic: String
-        get() = TODO("Not yet implemented")
+        get() = "搜索歌曲"
     override val noResultsFound: String
-        get() = TODO("Not yet implemented")
+        get() = "未找到结果"
     override val albumCount: String
-        get() = TODO("Not yet implemented")
+        get() = "专辑数量"
     override val trackCount: String
-        get() = TODO("Not yet implemented")
+        get() = "曲目数量"
     override val filteringResults: String
-        get() = TODO("Not yet implemented")
+        get() = "正在搜索..."
     override val appearance: String
-        get() = TODO("Not yet implemented")
+        get() = "外观"
     override val about: String
-        get() = TODO("Not yet implemented")
+        get() = "关于"
     override val github: String
-        get() = TODO("Not yet implemented")
+        get() = "Github"
     override val play: String
-        get() = TODO("Not yet implemented")
+        get() = "播放"
     override val previous: String
-        get() = TODO("Not yet implemented")
+        get() = "上一首"
     override val next: String
-        get() = TODO("Not yet implemented")
+        get() = "下一首"
     override val pause: String
-        get() = TODO("Not yet implemented")
+        get() = "暂停"
     override val done: String
-        get() = TODO("Not yet implemented")
+        get() = "完成"
     override val groove: String
-        get() = TODO("Not yet implemented")
+        get() = "Groove"
     override val songsFilterPattern: String
-        get() = TODO("Not yet implemented")
+        get() = "歌曲过滤模式"
     override val reset: String
-        get() = TODO("Not yet implemented")
+        get() = "重置"
     override val theme: String
-        get() = TODO("Not yet implemented")
+        get() = "主题"
     override val checkForUpdates: String
-        get() = TODO("Not yet implemented")
+        get() = "检查更新"
     override val version: String
-        get() = TODO("Not yet implemented")
+        get() = "版本"
     override val shufflePlay: String
-        get() = TODO("Not yet implemented")
+        get() = "随机播放"
     override val viewAlbumArtist: String
-        get() = TODO("Not yet implemented")
+        get() = "查看专辑艺术家"
     override val stop: String
-        get() = TODO("Not yet implemented")
+        get() = "停止"
     override val all: String
-        get() = TODO("Not yet implemented")
+        get() = "全部"
     override val fadePlaybackInOut: String
-        get() = TODO("Not yet implemented")
+        get() = "音频渐入渐出"
     override val requireAudioFocus: String
-        get() = TODO("Not yet implemented")
+        get() = "请求音频焦点"
     override val ignoreAudioFocusLoss: String
-        get() = TODO("Not yet implemented")
+        get() = "忽略音频焦点丢失事件"
     override val player: String
-        get() = TODO("Not yet implemented")
+        get() = "播放器"
     override val playOnHeadphonesConnect: String
-        get() = TODO("Not yet implemented")
+        get() = "耳机连接时播放"
     override val pauseOnHeadphonesDisconnect: String
-        get() = TODO("Not yet implemented")
+        get() = "耳机断开连接时暂停"
     override val genre: String
-        get() = TODO("Not yet implemented")
+        get() = "歌曲类型"
     override val damnThisIsSoEmpty: String
-        get() = TODO("Not yet implemented")
+        get() = "没有内容"
     override val primaryColor: String
-        get() = TODO("Not yet implemented")
+        get() = "重点颜色"
     override val playAll: String
-        get() = TODO("Not yet implemented")
+        get() = "播放全部"
     override val forYou: String
-        get() = TODO("Not yet implemented")
+        get() = "为你推荐"
     override val suggestedAlbums: String
-        get() = TODO("Not yet implemented")
+        get() = "推荐专辑"
     override val suggestedArtists: String
-        get() = TODO("Not yet implemented")
+        get() = "推荐艺术家"
     override val recentlyAddedSongs: String
-        get() = TODO("Not yet implemented")
+        get() = "最近添加的歌曲"
     override val sponsorViaGithub: String
-        get() = TODO("Not yet implemented")
+        get() = "通过Github支持"
     override val clearSongCache: String
-        get() = TODO("Not yet implemented")
+        get() = "清除歌曲缓存"
     override val songCacheCleared: String
-        get() = TODO("Not yet implemented")
+        get() = "歌曲缓存已清除"
     override val albumArtists: String
-        get() = TODO("Not yet implemented")
+        get() = "专辑艺术家"
     override val genres: String
-        get() = TODO("Not yet implemented")
+        get() = "歌曲类型"
     override val cancel: String
-        get() = TODO("Not yet implemented")
+        get() = "取消"
     override val homeTabs: String
-        get() = TODO("Not yet implemented")
+        get() = "标签页"
     override val selectAtleast2orAtmost5Tabs: String
-        get() = TODO("Not yet implemented")
+        get() = "请选择2到5个标签"
     override val folders: String
-        get() = TODO("Not yet implemented")
+        get() = "文件夹列表"
     override val invisible: String
-        get() = TODO("Not yet implemented")
+        get() = "不可见"
     override val alwaysVisible: String
-        get() = TODO("Not yet implemented")
+        get() = "一直可见"
     override val visibleWhenActive: String
-        get() = TODO("Not yet implemented")
+        get() = "选中时可见"
     override val bottomBarLabelVisibility: String
-        get() = TODO("Not yet implemented")
+        get() = "底栏标签名可见性"
     override val playlists: String
-        get() = TODO("Not yet implemented")
+        get() = "播放列表"
     override val newPlaylist: String
-        get() = TODO("Not yet implemented")
+        get() = "新建播放列表"
     override val importPlaylist: String
-        get() = TODO("Not yet implemented")
+        get() = "导入播放列表"
     override val noInAppPlaylistsFound: String
-        get() = TODO("Not yet implemented")
+        get() = "未找到播放列表"
     override val noLocalPlaylistsFound: String
-        get() = TODO("Not yet implemented")
+        get() = "设备存储中未找到播放列表"
     override val custom: String
-        get() = TODO("Not yet implemented")
+        get() = "自定义"
     override val playlist: String
-        get() = TODO("Not yet implemented")
+        get() = "播放列表"
     override val addSongs: String
-        get() = TODO("Not yet implemented")
+        get() = "添加歌曲"
     override val addToPlaylist: String
-        get() = TODO("Not yet implemented")
+        get() = "添加到播放列表"
     override val isLocalPlaylist: String
-        get() = TODO("Not yet implemented")
+        get() = "Is local playlist?"
     override val yes: String
-        get() = TODO("Not yet implemented")
+        get() = "Yes"
     override val no: String
-        get() = TODO("Not yet implemented")
+        get() = "No"
     override val manageSongs: String
-        get() = TODO("Not yet implemented")
+        get() = "管理歌曲"
     override val delete: String
-        get() = TODO("Not yet implemented")
+        get() = "删除"
     override val deletePlaylist: String
-        get() = TODO("Not yet implemented")
+        get() = "删除播放列表"
     override val trackNumber: String
-        get() = TODO("Not yet implemented")
+        get() = "歌曲编号"
     override val tree: String
-        get() = TODO("Not yet implemented")
+        get() = "文件树"
     override val loading: String
-        get() = TODO("Not yet implemented")
+        get() = "加载中..."
     override val name: String
-        get() = TODO("Not yet implemented")
+        get() = "Name"
     override val addFolder: String
-        get() = TODO("Not yet implemented")
+        get() = "添加文件夹"
     override val blacklistFolders: String
-        get() = TODO("Not yet implemented")
+        get() = "文件夹黑名单"
     override val whitelistFolders: String
-        get() = TODO("Not yet implemented")
+        get() = "文件夹白名单"
     override val pickFolder: String
-        get() = TODO("Not yet implemented")
+        get() = "选择文件夹"
     override val invalidM3uFile: String
-        get() = TODO("Not yet implemented")
+        get() = "无效的M3U文件"
     override val discord: String
-        get() = TODO("Not yet implemented")
+        get() = "Discord"
     override val reddit: String
-        get() = TODO("Not yet implemented")
+        get() = "Reddit"
     override val reportAnIssue: String
-        get() = TODO("Not yet implemented")
+        get() = "反馈问题"
     override val noFoldersFound: String
-        get() = TODO("Not yet implemented")
+        get() = "未找到文件夹"
     override val sleepTimer: String
-        get() = TODO("Not yet implemented")
+        get() = "睡眠定时"
     override val hours: String
-        get() = TODO("Not yet implemented")
+        get() = "小时"
     override val minutes: String
-        get() = TODO("Not yet implemented")
+        get() = "分钟"
     override val quitAppOnEnd: String
-        get() = TODO("Not yet implemented")
+        get() = "结束时退出"
     override val favorite: String
-        get() = TODO("Not yet implemented")
+        get() = "添加喜爱"
     override val unfavorite: String
-        get() = TODO("Not yet implemented")
+        get() = "移除喜爱"
     override val bitDepth: String
-        get() = TODO("Not yet implemented")
+        get() = "位深"
     override val samplingRate: String
-        get() = TODO("Not yet implemented")
+        get() = "采样率"
     override val showAudioInformation: String
-        get() = TODO("Not yet implemented")
+        get() = "显示音频详情"
     override val fastRewindDuration: String
-        get() = TODO("Not yet implemented")
+        get() = "快退步进"
     override val fastForwardDuration: String
-        get() = TODO("Not yet implemented")
+        get() = "快进步进"
     override val suggestedAlbumArtists: String
-        get() = TODO("Not yet implemented")
+        get() = "推荐的专辑艺术家"
     override val areYouSureThatYouWantToDeleteThisPlaylist: String
-        get() = TODO("Not yet implemented")
+        get() = "您要删除这个播放列表吗？"
     override val removeFromPlaylist: String
-        get() = TODO("Not yet implemented")
+        get() = "从播放列表中移除"
     override val speed: String
-        get() = TODO("Not yet implemented")
+        get() = "速度"
     override val pitch: String
-        get() = TODO("Not yet implemented")
+        get() = "音高"
     override val persistUntilQueueEnd: String
-        get() = TODO("Not yet implemented")
+        get() = "在播放列表中保持设置"
     override val noLyrics: String
-        get() = TODO("Not yet implemented")
+        get() = "无歌词"
     override val sponsorViaPatreon: String
-        get() = TODO("Not yet implemented")
+        get() = "通过Patreon支持"
     override val fDroid: String
-        get() = TODO("Not yet implemented")
+        get() = "F-droid"
     override val izzyOnDroid: String
-        get() = TODO("Not yet implemented")
+        get() = "IzzyOnDroid"
     override val miniPlayer: String
-        get() = TODO("Not yet implemented")
+        get() = "播放小控件"
     override val showTrackControls: String
-        get() = TODO("Not yet implemented")
+        get() = "上一首/下一首"
     override val showSeekControls: String
-        get() = TODO("Not yet implemented")
+        get() = "快进/快退"
     override val font: String
-        get() = TODO("Not yet implemented")
+        get() = "字体"
     override val codec: String
-        get() = TODO("Not yet implemented")
+        get() = "编解码器"
     override val controlsLayout: String
-        get() = TODO("Not yet implemented")
+        get() = "控制按钮布局"
     override val default: String
-        get() = TODO("Not yet implemented")
+        get() = "默认"
     override val traditional: String
-        get() = TODO("Not yet implemented")
+        get() = "经典"
     override val enabled: String
-        get() = TODO("Not yet implemented")
+        get() = "已开启"
     override val disabled: String
-        get() = TODO("Not yet implemented")
+        get() = "已关闭"
     override val showUpdateToast: String
-        get() = TODO("Not yet implemented")
+        get() = "显示升级提示"
     override val sponsorViaKofi: String
-        get() = TODO("Not yet implemented")
+        get() = "通过Ko-fi支持"
     override val playlistStoreLocation: String
-        get() = TODO("Not yet implemented")
+        get() = "播放列表存储位置"
     override val appBuiltIn: String
-        get() = TODO("Not yet implemented")
+        get() = "应用内置"
     override val localStorage: String
-        get() = TODO("Not yet implemented")
+        get() = "设备内部存储"
     override val systemLightDark: String
-        get() = TODO("Not yet implemented")
+        get() = "系统（明亮 + 暗黑）"
     override val systemLightBlack: String
-        get() = TODO("Not yet implemented")
+        get() = "系统（明亮 + 黑色）"
     override val fontScale: String
-        get() = TODO("Not yet implemented")
+        get() = "字体缩放"
     override val contentScale: String
-        get() = TODO("Not yet implemented")
+        get() = "内容缩放"
     override val viewGenre: String
-        get() = TODO("Not yet implemented")
+        get() = "查看流派"
     override val Interface: String
-        get() = TODO("Not yet implemented")
+        get() = "界面"
     override val rescan: String
-        get() = TODO("Not yet implemented")
+        get() = "重新扫描"
     override val updates: String
-        get() = TODO("Not yet implemented")
+        get() = "更新"
     override val considerDonating: String
-        get() = TODO("Not yet implemented")
+        get() =  "考虑捐赠"
     override val help: String
-        get() = TODO("Not yet implemented")
+        get() = "帮助"
     override val shareSong: String
-        get() = TODO("Not yet implemented")
+        get() = "分享歌曲"
     override val pauseOnCurrentSongEnd: String
-        get() = TODO("Not yet implemented")
+        get() = "在当前歌曲结束时暂停"
     override val export: String
-        get() = TODO("Not yet implemented")
+        get() =  "导出"
     override val renamePlaylist: String
-        get() = TODO("Not yet implemented")
+        get() = "重命名播放列表"
     override val rename: String
-        get() = TODO("Not yet implemented")
+        get() = "重命名"
     override val equalizer: String
-        get() = TODO("Not yet implemented")
+        get() = "均衡器"
     override val considerContributing: String
-        get() = TODO("Not yet implemented")
+        get() = "考虑贡献"
     override val lyrics: String
-        get() = TODO("Not yet implemented")
+        get() =  "歌词"
     override val lyricsLayout: String
-        get() = TODO("Not yet implemented")
+        get() = "歌词布局"
     override val replaceArtwork: String
-        get() = TODO("Not yet implemented")
+        get() = "替换封面"
     override val separatePage: String
-        get() = TODO("Not yet implemented")
+        get() = "单独页面"
     override val miniPlayerTextMarquee: String
-        get() = TODO("Not yet implemented")
+        get() =  "迷你播放器文本滚动"
     override val addItem: String
-        get() = TODO("Not yet implemented")
+        get() = "添加项目"
     override val artistTagValueSeparators: String
-        get() = TODO("Not yet implemented")
+        get() = "艺术家标签值分隔符"
     override val genreTagValueSeparators: String
-        get() = TODO("Not yet implemented")
+        get() = "流派标签值分隔符"
     override val discNumber: String
-        get() = TODO("Not yet implemented")
+        get() =  "碟片编号"
 
-    override fun playingXofY(x: String, y: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun playingXofY( x: String, y: String ) = "第 $x 首，共 $y 首"
 
-    override fun unknownArtistX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun unknownArtistX( x: String ) = "未知的艺术家 (${x})"
 
-    override fun xSongs(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xSongs( x: String ) = "$x 首歌曲"
 
-    override fun unknownAlbumId(id: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun unknownAlbumId( id: String ) = "未知的专辑 (ID: $id)"
 
-    override fun xArtists(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xArtists( x: String ) = "$x 位艺术家"
 
-    override fun xAlbums(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xAlbums( x: String ) = "$x 张专辑"
 
-    override fun madeByX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun madeByX( x: String ) = "Made by $x"
 
-    override fun newVersionAvailableX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun newVersionAvailableX(x: String) = "新版本可用！ (${x})"
 
-    override fun xKbps(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xKbps( x: String ) = "$x kbps"
 
-    override fun xSecs(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xSecs( x: String ) = "${x}s"
 
-    override fun unknownGenreX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun unknownGenreX( x: String ) = "未知的类型 $x"
 
-    override fun xGenres(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xGenres( x: String ) = "$x 种类型"
 
-    override fun xFoldersYfiles(x: String, y: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xFoldersYfiles( x: String, y: String ) = "$x 个文件夹, $y 个文件"
 
-    override fun xItems(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xItems( x: String ) = "$x 项"
 
-    override fun xPlaylists(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xPlaylists( x: String ) = "$x 个播放列表"
 
-    override fun unknownPlaylistX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun unknownPlaylistX( x: String ) = "未知的播放列表 (ID: $x)"
 
-    override fun xFolders(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xFolders( x: String ) = "$x 个文件夹"
 
-    override fun xBit(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xBit( x: String ) = "$x-bit"
 
-    override fun xKHZ(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun xKHZ( x: String ) = "$x kHz"
 
-    override fun shareFailedX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun shareFailedX( x: String ) = "分享失败 （错误代码： $x）"
 
-    override fun exportFailedX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun exportFailedX( x: String ) = "导出失败。错误：$x"
 
-    override fun exportedX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun exportedX( x: String ) = "导出 $x"
 
-    override fun launchingEqualizerFailedX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun launchingEqualizerFailedX( x: String ) = "启动均衡器失败。错误：$x"
 
-    override fun unknownAlbumX(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun unknownAlbumX( x: String ) = "未知的专辑 (ID: $x)"
 
-    override fun copiedXtoClipboard(x: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun copiedXtoClipboard( x: String ) =  "复制 $x 到剪贴板"
 }
