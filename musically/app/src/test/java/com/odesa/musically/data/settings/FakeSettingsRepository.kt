@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 class FakeSettingsRepository : SettingsRepository {
 
-    private val _currentLanguage: MutableStateFlow<Translation> = MutableStateFlow( EnglishTranslation() )
+    private val _currentLanguage: MutableStateFlow<Translation> = MutableStateFlow( EnglishTranslation )
     override val currentLanguage: StateFlow<Translation>
         get() = _currentLanguage
 
@@ -18,8 +18,8 @@ class FakeSettingsRepository : SettingsRepository {
 
     private fun resolveLanguage( language: String ): Translation {
         return when( language ) {
-            "en" -> EnglishTranslation()
-            else -> SpanishTranslation()
+            "en" -> EnglishTranslation
+            else -> SpanishTranslation
         }
     }
 

@@ -1,6 +1,6 @@
 package com.odesa.musically.services.i18n
 
-class TurkishTranslation : Translation {
+object TurkishTranslation : Translation {
     override val locale: String
         get() = TODO("Not yet implemented")
     override val unknownSymbol: String

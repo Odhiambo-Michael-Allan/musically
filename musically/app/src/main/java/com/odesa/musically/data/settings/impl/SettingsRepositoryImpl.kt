@@ -26,8 +26,8 @@ class SettingsRepositoryImpl(
 
     private fun resolveLanguage( language: String ): Translation {
         return when( language ) {
-            "en" -> EnglishTranslation()
-            else -> SpanishTranslation()
+            "en" -> EnglishTranslation
+            else -> SpanishTranslation
         }
     }
 }

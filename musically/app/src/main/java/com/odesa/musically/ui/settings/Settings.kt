@@ -158,7 +158,7 @@ fun SettingsScreenContent(
 fun SettingsScreenContentPreview() {
     MusicallyTheme {
         SettingsScreenContent(
-            SettingsScreenUiState( language = EnglishTranslation() )
+            SettingsScreenUiState( language = EnglishTranslation )
         )
     }
 }

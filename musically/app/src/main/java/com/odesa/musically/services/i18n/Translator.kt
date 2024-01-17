@@ -68,12 +68,12 @@ object Translator {
     )
 
     private val translations = mapOf(
-        "en" to EnglishTranslation(),
-        "es" to SpanishTranslation()
+        "en" to EnglishTranslation,
+        "es" to SpanishTranslation
     )
 
     fun parse( localeCode: String? ): Translation {
-        return localeCode?.let { translations[ localeCode ] } ?: EnglishTranslation()
+        return localeCode?.let { translations[ localeCode ] } ?: EnglishTranslation
     }
 
 

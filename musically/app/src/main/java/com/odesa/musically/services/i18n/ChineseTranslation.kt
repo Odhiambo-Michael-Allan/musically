@@ -1,6 +1,6 @@
 package com.odesa.musically.services.i18n
 
-class ChineseTranslation : Translation {
+object ChineseTranslation : Translation {
     override val locale: String
         get() = "zh-Hans"
     override val unknownSymbol: String
