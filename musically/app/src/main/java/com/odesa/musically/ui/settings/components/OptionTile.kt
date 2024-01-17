@@ -17,7 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import com.odesa.musically.ui.components.DialogOption
 import com.odesa.musically.ui.components.ScaffoldDialog
-import com.odesa.musically.ui.settings.SettingOption
+import com.odesa.musically.ui.settings.SettingDialogOption
 import com.odesa.musically.ui.theme.MusicallyTheme
 
 
@@ -26,7 +26,7 @@ import com.odesa.musically.ui.theme.MusicallyTheme
 fun SettingsOptionTile(
     settingIcon: @Composable () -> Unit,
     settingTitle: @Composable () -> Unit,
-    valuesToBeDisplayedInSettingDialog: List<SettingOption>,
+    valuesToBeDisplayedInSettingDialog: List<SettingDialogOption>,
     settingEnabled: Boolean = true,
     settingOptionValue: String,
     onSettingChange: ( String ) -> Unit
@@ -53,9 +53,12 @@ fun SettingsOptionTile(
                     items( valuesToBeDisplayedInSettingDialog ) {
                         DialogOption(
                             selected = settingOptionValue == it.value,
-                            value = it.value,
+                            title = it.value,
                             caption = it.caption
-                        ) {}
+                        ) {
+                            onSettingChange( it.additionalMetadata!! )
+                            dialogIsOpen = false
+                        }
                     }
                 }
             },
@@ -72,18 +75,12 @@ fun SettingsOptionTilePreview() {
             settingIcon = { Icon( Icons.Filled.Language, null ) },
             settingTitle = { Text( text = "Language" ) },
             valuesToBeDisplayedInSettingDialog = listOf(
-                SettingOption( "English", "English" ),
-                SettingOption( "Belarusian", "Belarusian" ),
-                SettingOption( "Chinese", "Chinese" ),
-                SettingOption( "French", "French" ),
-                SettingOption( "Deutsch", "Deutsch" ),
-                SettingOption( "Italiano", "Italiano" ),
-                SettingOption( "Portuguese", "Portuguese" ),
-                SettingOption( "Romanian", "Romanian" ),
-                SettingOption( "Russian", "Russian" ),
-                SettingOption( "Spanish", "Spanish" ),
-                SettingOption( "Turkish", "Turkish" ),
-                SettingOption( "Ukrainian", "Ukrainian" )
+                SettingDialogOption( "English", "English", "en" ),
+                SettingDialogOption( "Belarusian", "Belarusian", "be" ),
+                SettingDialogOption( "Chinese", "Chinese", "zh-Hans" ),
+                SettingDialogOption( "French", "French", "fr" ),
+                SettingDialogOption( "Deutsch", "German", "de" ),
+                SettingDialogOption( "Spanish", "Spanish", "es" )
             ),
             settingOptionValue = "English",
             onSettingChange = {},

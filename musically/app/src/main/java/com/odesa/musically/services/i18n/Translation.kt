@@ -2,6 +2,7 @@ package com.odesa.musically.services.i18n
 
 interface Translation {
     val locale: String
+    val languageName: String
     val unknownSymbol: String
     val helloThere: String
     val introductoryMessage: String

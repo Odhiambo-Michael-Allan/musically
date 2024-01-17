@@ -32,7 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.odesa.musically.ui.settings.SettingOption
+import com.odesa.musically.ui.settings.SettingDialogOption
 import com.odesa.musically.ui.settings.components.SettingsTileDefaults
 import com.odesa.musically.ui.theme.MusicallyTheme
 
@@ -46,7 +46,6 @@ fun ScaffoldDialog(
     content: @Composable () -> Unit,
     actions: ( @Composable RowScope.() -> Unit )? = null,
     onDismissRequest: () -> Unit,
-    contentHeight: Float? = null,
 ) {
 
     val configuration = LocalConfiguration.current
@@ -56,10 +55,7 @@ fun ScaffoldDialog(
             shape = RoundedCornerShape( 8.dp ),
             modifier = Modifier.run {
                 val maxHeight = ( configuration.screenHeightDp * 0.9f ).dp
-                when {
-                    contentHeight != null -> height( maxHeight.times( contentHeight ) )
-                    else -> requiredHeightIn( max = maxHeight )
-                }
+                requiredHeightIn( max = maxHeight )
             }
         ) {
             Column {
@@ -83,11 +79,7 @@ fun ScaffoldDialog(
                     }
                 }
                 Divider()
-                Box(
-                    modifier = Modifier.run {
-                        contentHeight?.let { weight( it ) } ?: this
-                    }
-                ) {
+                Box {
                     content()
                 }
                 actions?.let {
@@ -95,7 +87,7 @@ fun ScaffoldDialog(
                         horizontalArrangement = Arrangement.End,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(12.dp, 0.dp)
+                            .padding( 12.dp, 0.dp )
                     ) {
                         actions()
                     }
@@ -113,25 +105,25 @@ fun ScaffoldDialogPreview() {
             title = { Text( text = "Language" ) },
             content = {
                 val values = listOf(
-                    SettingOption( "English", "English" ),
-                    SettingOption( "Belarusian", "Belarusian" ),
-                    SettingOption( "Chinese", "Chinese" ),
-                    SettingOption( "French", "French" ),
-                    SettingOption( "Deutsch", "Deutsch" ),
-                    SettingOption( "Italiano", "Italiano" ),
-                    SettingOption( "Portuguese", "Portuguese" ),
-                    SettingOption( "Romanian", "Romanian" ),
-                    SettingOption( "Russian", "Russian" ),
-                    SettingOption( "Spanish", "Spanish" ),
-                    SettingOption( "Turkish", "Turkish" ),
-                    SettingOption( "Ukrainian", "Ukrainian" )
+                    SettingDialogOption( "English", "English" ),
+                    SettingDialogOption( "Belarusian", "Belarusian" ),
+                    SettingDialogOption( "Chinese", "Chinese" ),
+                    SettingDialogOption( "French", "French" ),
+                    SettingDialogOption( "Deutsch", "Deutsch" ),
+                    SettingDialogOption( "Italiano", "Italiano" ),
+                    SettingDialogOption( "Portuguese", "Portuguese" ),
+                    SettingDialogOption( "Romanian", "Romanian" ),
+                    SettingDialogOption( "Russian", "Russian" ),
+                    SettingDialogOption( "Spanish", "Spanish" ),
+                    SettingDialogOption( "Turkish", "Turkish" ),
+                    SettingDialogOption( "Ukrainian", "Ukrainian" )
                 )
 
                 LazyColumn {
                     items( values ) {
                         DialogOption(
                             selected = false,
-                            value = it.value,
+                            title = it.value,
                             caption = it.caption
                         ) {}
                     }
@@ -146,7 +138,7 @@ fun ScaffoldDialogPreview() {
 @Composable
 fun DialogOption(
     selected: Boolean,
-    value: String,
+    title: String,
     caption: String? = null,
     onClick: () -> Unit,
 ) {
@@ -167,7 +159,7 @@ fun DialogOption(
             )
             Spacer( modifier = Modifier.width( 8.dp ) )
             Column {
-                Text( text = value )
+                Text( text = title )
                 caption?.let {
                     Spacer( modifier = Modifier.height( 2.dp ) )
                     Text(
@@ -188,7 +180,7 @@ fun DialogOptionPreview() {
     MusicallyTheme {
         DialogOption(
             selected = true,
-            value = "English",
+            title = "English",
             caption = "English",
             onClick = {}
         )

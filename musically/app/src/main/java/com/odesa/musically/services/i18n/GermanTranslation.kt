@@ -3,6 +3,8 @@ package com.odesa.musically.services.i18n
 object GermanTranslation : Translation {
     override val locale: String
         get() = "de"
+    override val languageName: String
+        get() = "German"
     override val unknownSymbol: String
         get() = "?"
     override val helloThere: String
@@ -302,15 +304,15 @@ object GermanTranslation : Translation {
     override val disabled: String
         get() = "Aus"
     override val showUpdateToast: String
-        get() = TODO("Not yet implemented")
+        get() = "Update-Benachrichtigung anzeigen"
     override val sponsorViaKofi: String
-        get() = TODO("Not yet implemented")
+        get() = "Unterstützen über Ko-Fi"
     override val playlistStoreLocation: String
-        get() = TODO("Not yet implemented")
+        get() = "Ort der Wiedergabelisten-Speicherung."
     override val appBuiltIn: String
-        get() = TODO("Not yet implemented")
+        get() =  "In der App integriert"
     override val localStorage: String
-        get() = TODO("Not yet implemented")
+        get() = "lokaler Speicher"
     override val systemLightDark: String
         get() = "System (Hell + Dunkel)"
     override val systemLightBlack: String

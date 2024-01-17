@@ -35,7 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.odesa.musically.services.i18n.EnglishTranslation
+import com.odesa.musically.services.i18n.FrenchTranslation
 import com.odesa.musically.services.i18n.Translator
 import com.odesa.musically.ui.components.AdaptiveSnackBar
 import com.odesa.musically.ui.components.TopAppBarMinimalTitle
@@ -49,14 +49,15 @@ fun SettingsScreen() {}
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun SettingsScreenContent(
-    uiState: SettingsScreenUiState
+    uiState: SettingsScreenUiState,
+    onLanguageChange: ( String ) -> Unit
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackBarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = {
-            SnackbarHost( snackbarHostState ) {
+            SnackbarHost( snackBarHostState ) {
                 AdaptiveSnackBar( snackBarData = it )
             }
         },
@@ -121,7 +122,7 @@ fun SettingsScreenContent(
                     }
                     Box(
                         modifier = Modifier
-                            .align(Alignment.CenterEnd)
+                            .align( Alignment.CenterEnd )
                             .padding( 8.dp, 0.dp )
                     ) {
                         Icon(
@@ -144,8 +145,8 @@ fun SettingsScreenContent(
                         Text( text = uiState.language.language )
                     },
                     valuesToBeDisplayedInSettingDialog = Translator.supportedLanguages,
-                    settingOptionValue = "English",
-                    onSettingChange = {}
+                    settingOptionValue = uiState.language.languageName,
+                    onSettingChange = onLanguageChange
                 )
             }
         }
@@ -158,7 +159,8 @@ fun SettingsScreenContent(
 fun SettingsScreenContentPreview() {
     MusicallyTheme {
         SettingsScreenContent(
-            SettingsScreenUiState( language = EnglishTranslation )
+            SettingsScreenUiState( language = FrenchTranslation ),
+            onLanguageChange = {}
         )
     }
 }

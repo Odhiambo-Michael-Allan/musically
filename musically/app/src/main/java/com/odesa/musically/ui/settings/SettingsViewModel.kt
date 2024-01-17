@@ -6,15 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.i18n.Translation
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class SettingsViewModel( settingsRepository: SettingsRepository ) : ViewModel() {
+class SettingsViewModel( val settingsRepository: SettingsRepository ) : ViewModel() {
 
     private val _language = settingsRepository.currentLanguage
 
     private val _uiState = MutableStateFlow( SettingsScreenUiState( language = _language.value ) )
-    val uiState: StateFlow<SettingsScreenUiState> = _uiState
+    val uiState = _uiState.asStateFlow()
 
 
     init {
@@ -25,6 +25,10 @@ class SettingsViewModel( settingsRepository: SettingsRepository ) : ViewModel() 
                 )
             }
         }
+    }
+
+    fun setLanguage( localeCode: String ) {
+        settingsRepository.setLanguage( localeCode )
     }
 
 }

@@ -3,6 +3,8 @@ package com.odesa.musically.services.i18n
 object ChineseTranslation : Translation {
     override val locale: String
         get() = "zh-Hans"
+    override val languageName: String
+        get() = "Chinese (simplified)"
     override val unknownSymbol: String
         get() = "?"
     override val helloThere: String

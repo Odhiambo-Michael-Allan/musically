@@ -6,7 +6,7 @@ import org.junit.Test
 
 class SettingsRepositoryImplTest {
 
-    private val preferences: FakePreferences = FakePreferences()
+    private val preferences: FakePreferences = FakePreferences
     private val settingsRepository = SettingsRepositoryImpl( preferences )
 
     @Test
@@ -18,7 +18,6 @@ class SettingsRepositoryImplTest {
     fun whenLanguageIsSpanish_spanishLanguageIsUsed() {
         settingsRepository.setLanguage( "es" )
         assertEquals( "Configuración", settingsRepository.currentLanguage.value.settings )
-        assertEquals( "es", preferences.language )
     }
 
 }

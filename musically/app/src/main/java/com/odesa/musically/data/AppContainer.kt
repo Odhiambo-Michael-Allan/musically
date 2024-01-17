@@ -1,6 +1,7 @@
 package com.odesa.musically.data
 
-import com.odesa.musically.data.preferences.Preferences
+import android.content.Context
+import com.odesa.musically.data.preferences.impl.PreferencesImpl
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.data.settings.impl.SettingsRepositoryImpl
 
@@ -16,14 +17,9 @@ interface AppContainer {
  * Variables are initialized lazily and the same instance is shared across the whole
  * app
  */
-class AppContainerImpl : AppContainer {
+class AppContainerImpl( private val context: Context ) : AppContainer {
 
     override val settingRepository: SettingsRepository
-        get() = SettingsRepositoryImpl( PreferencePlaceHolder() )
-
-}
-
-class PreferencePlaceHolder : Preferences {
-    override var language: String = "en"
+        get() = SettingsRepositoryImpl( PreferencesImpl( context ) )
 
 }

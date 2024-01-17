@@ -1,23 +1,16 @@
 package com.odesa.musically.services.i18n
 
-import com.odesa.musically.ui.settings.SettingOption
+import com.odesa.musically.ui.settings.SettingDialogOption
 
 object Translator {
 
     val supportedLanguages = listOf(
-        SettingOption( "English", "English" ),
-        SettingOption( "Беларуская", "Belarusian" ),
-        SettingOption( "中文（简体", "Chinese (Simplified)" ),
-        SettingOption( "français", "French" ),
-        SettingOption( "Deutsch", "German" ),
-        SettingOption( "italiano", "Italian" ),
-        SettingOption( "日本語", "Japanese" ),
-        SettingOption( "Português", "Portuguese" ),
-        SettingOption( "Română", "Romanian" ),
-        SettingOption( "русский", "Russian" ),
-        SettingOption( "español", "Spanish" ),
-        SettingOption( "Türkçe", "Turkish" ),
-        SettingOption( "українська", "Ukrainian" )
+        SettingDialogOption( "English", "English", EnglishTranslation.locale ),
+        SettingDialogOption( "Беларуская", "Belarusian", BelarusianTranslation.locale ),
+        SettingDialogOption( "中文（简体", "Chinese (Simplified)", ChineseTranslation.locale ),
+        SettingDialogOption( "français", "French", FrenchTranslation.locale ),
+        SettingDialogOption( "Deutsch", "German", GermanTranslation.locale ),
+        SettingDialogOption( "español", "Spanish", SpanishTranslation.locale ),
     )
 
 
