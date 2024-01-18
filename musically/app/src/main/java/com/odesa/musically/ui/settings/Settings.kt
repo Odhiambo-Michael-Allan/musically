@@ -83,7 +83,7 @@ fun SettingsScreenContent(
     ) { contentPadding ->
         Box(
             modifier = Modifier
-                .padding( contentPadding )
+                .padding(contentPadding)
                 .fillMaxSize()
         ) {
             Column {
@@ -92,13 +92,13 @@ fun SettingsScreenContent(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background( MaterialTheme.colorScheme.primary )
+                        .background(MaterialTheme.colorScheme.primary)
                         .clickable { }
                 ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding( 24.dp, 8.dp ),
+                            .padding(24.dp, 8.dp),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -119,8 +119,8 @@ fun SettingsScreenContent(
                     }
                     Box(
                         modifier = Modifier
-                            .align( Alignment.CenterEnd )
-                            .padding( 8.dp, 0.dp )
+                            .align(Alignment.CenterEnd)
+                            .padding(8.dp, 0.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Filled.East,
@@ -148,11 +148,15 @@ fun SettingsScreenContent(
 //@Preview( showSystemUi = true )
 //@Composable
 //fun SettingsScreenContentPreview() {
-//    MusicallyTheme {
+//    MusicallyTheme(
+//        themeState = ThemeState(
+//            font = SupportedFonts.ProductSans
+//        )
+//    ) {
 //        SettingsScreenContent(
 //            SettingsScreenUiState(
-//                language = FrenchTranslation,
-//                font =
+//                language = EnglishTranslation,
+//                font = SupportedFonts.ProductSans
 //            ),
 //            onLanguageChange = {},
 //            onFontChange = {}

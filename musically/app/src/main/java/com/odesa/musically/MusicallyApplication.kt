@@ -9,8 +9,6 @@ class MusicallyApplication : Application() {
     // AppContainer instance used by the rest of the classes to obtain dependencies
     lateinit var container: AppContainer
 
-
-
     override fun onCreate() {
         super.onCreate()
         container = AppContainerImpl( applicationContext )

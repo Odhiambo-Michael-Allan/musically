@@ -21,6 +21,7 @@ import com.odesa.musically.ui.components.ScaffoldDialog
 import com.odesa.musically.ui.settings.SettingsScreenUiState
 import com.odesa.musically.ui.settings.components.DialogOption
 import com.odesa.musically.ui.settings.components.SettingsTileDefaults
+import com.odesa.musically.ui.theme.SupportedFonts
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
@@ -88,7 +89,10 @@ data class Language (
 @Composable
 fun LanguagePreview() {
     Language(
-        uiState = SettingsScreenUiState( language = EnglishTranslation ),
+        uiState = SettingsScreenUiState(
+            language = EnglishTranslation,
+            font = SupportedFonts.ProductSans
+        ),
         onLanguageChange = {}
     )
 }
