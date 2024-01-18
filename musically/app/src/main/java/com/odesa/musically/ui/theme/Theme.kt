@@ -13,6 +13,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.style.TextDirection
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
@@ -42,6 +43,7 @@ fun MusicallyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
+    themeState: ThemeState,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -56,15 +58,28 @@ fun MusicallyTheme(
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            val window = (view.context as Activity).window
+            val window = ( view.context as Activity ).window
             window.statusBarColor = colorScheme.primary.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
 
+    val typography = MusicallyTypography.toTypography(
+        MusicallyTypography.resolveFont( themeState.fontName ),
+        when ( "ltr" ) {
+            "ltr" -> TextDirection.Ltr
+            else -> TextDirection.Rtl
+        }
+    )
+
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = typography,
         content = content
     )
 }
+
+data class ThemeState(
+    val fontName: String,
+    val textDirection: String
+)

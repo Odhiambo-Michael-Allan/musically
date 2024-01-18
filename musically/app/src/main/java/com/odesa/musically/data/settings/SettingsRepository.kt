@@ -1,10 +1,13 @@
 package com.odesa.musically.data.settings
 
 import com.odesa.musically.services.i18n.Translation
+import com.odesa.musically.ui.theme.MusicallyFont
 import kotlinx.coroutines.flow.StateFlow
 
 interface SettingsRepository {
-    val currentLanguage: StateFlow<Translation>
+    val language: StateFlow<Translation>
+    val font: StateFlow<MusicallyFont>
 
     fun setLanguage( localeCode: String )
+    fun setFont( fontName: String )
 }

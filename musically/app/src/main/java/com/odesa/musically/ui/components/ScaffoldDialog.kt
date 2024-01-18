@@ -8,32 +8,19 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.odesa.musically.services.i18n.BelarusianTranslation
-import com.odesa.musically.services.i18n.ChineseTranslation
-import com.odesa.musically.services.i18n.EnglishTranslation
-import com.odesa.musically.services.i18n.FrenchTranslation
-import com.odesa.musically.services.i18n.GermanTranslation
-import com.odesa.musically.services.i18n.SpanishTranslation
-import com.odesa.musically.ui.settings.components.DialogOption
-import com.odesa.musically.ui.settings.language.Language
-import com.odesa.musically.ui.theme.MusicallyTheme
 
 object ScaffoldDialogDefaults {
     const val PreferredMaxHeight = 0.8f
@@ -96,36 +83,36 @@ fun ScaffoldDialog(
     }
 }
 
-@Preview( showBackground = true )
-@Composable
-fun ScaffoldDialogPreview() {
-    MusicallyTheme {
-        ScaffoldDialog(
-            title = { Text( text = "Language" ) },
-            content = {
-                val values = listOf(
-                    Language( "English", "English", EnglishTranslation.locale ),
-                    Language( "Беларуская", "Belarusian", BelarusianTranslation.locale ),
-                    Language( "简体中文", "Chinese", ChineseTranslation.locale ),
-                    Language( "Français", "French", FrenchTranslation.locale ),
-                    Language( "Deutsch", "Deutsch", GermanTranslation.locale ),
-                    Language( "Español", "Spanish", SpanishTranslation.locale ),
-                )
-
-                LazyColumn {
-                    items( values ) {
-                        DialogOption(
-                            selected = false,
-                            title = it.nativeName,
-                            caption = it.englishName,
-                            onClick = {}
-                        )
-                    }
-                }
-            },
-            onDismissRequest = {}
-        )
-    }
-}
+//@Preview( showBackground = true )
+//@Composable
+//fun ScaffoldDialogPreview() {
+//    MusicallyTheme {
+//        ScaffoldDialog(
+//            title = { Text( text = "Language" ) },
+//            content = {
+//                val values = listOf(
+//                    Language( "English", "English", EnglishTranslation.locale ),
+//                    Language( "Беларуская", "Belarusian", BelarusianTranslation.locale ),
+//                    Language( "简体中文", "Chinese", ChineseTranslation.locale ),
+//                    Language( "Français", "French", FrenchTranslation.locale ),
+//                    Language( "Deutsch", "Deutsch", GermanTranslation.locale ),
+//                    Language( "Español", "Spanish", SpanishTranslation.locale ),
+//                )
+//
+//                LazyColumn {
+//                    items( values ) {
+//                        DialogOption(
+//                            selected = false,
+//                            title = it.nativeName,
+//                            caption = it.englishName,
+//                            onClick = {}
+//                        )
+//                    }
+//                }
+//            },
+//            onDismissRequest = {}
+//        )
+//    }
+//}
 
 

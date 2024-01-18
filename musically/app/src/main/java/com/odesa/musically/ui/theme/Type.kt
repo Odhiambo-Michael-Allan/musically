@@ -1,34 +1,145 @@
 package com.odesa.musically.ui.theme
 
 import androidx.compose.material3.Typography
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.style.TextDirection
+import com.odesa.musically.R
 
-// Set of Material typography styles to start with
-val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
+class MusicallyFont(
+    val fontName: String,
+    val fontFamily: FontFamily
+) {
+    companion object {
+        fun fromValue( fontName: String, fontFamily: FontFamily ) = MusicallyFont(
+            fontName = fontName,
+            fontFamily = fontFamily
+        )
+    }
+}
+
+object SupportedFonts {
+    val Inter = MusicallyFont.fromValue(
+        fontName = "Inter",
+        fontFamily = FontFamily(
+            Font( R.font.inter_regular, FontWeight.Normal ),
+            Font( R.font.inter_bold, FontWeight.Bold )
+        )
     )
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
+
+    val Poppins = MusicallyFont.fromValue(
+        fontName = "Poppins",
+        fontFamily = FontFamily(
+            Font( R.font.roboto_regular, FontWeight.Normal ),
+            Font( R.font.roboto_bold, FontWeight.Bold )
+        )
     )
-    */
-)
+
+    val DMSans = MusicallyFont.fromValue(
+        fontName = "DM Sans",
+        fontFamily = FontFamily(
+            Font( R.font.dmsans_regular, FontWeight.Normal ),
+            Font( R.font.dmsans_bold, FontWeight.Bold )
+        )
+    )
+
+    val Roboto = MusicallyFont.fromValue(
+        fontName = "Roboto",
+        fontFamily = FontFamily(
+            Font( R.font.roboto_regular, FontWeight.Normal ),
+            Font( R.font.roboto_bold, FontWeight.Bold )
+        )
+    )
+
+    val ProductSans = MusicallyFont.fromValue(
+        fontName = "Product Sans",
+        fontFamily = FontFamily(
+            Font( R.font.productsans_regular, FontWeight.Normal ),
+            Font( R.font.productsans_bold, FontWeight.Bold )
+        )
+    )
+
+}
+
+object MusicallyTypography {
+    private val defaultFont = SupportedFonts.ProductSans
+    val all = mapOf(
+        SupportedFonts.Inter.fontName to SupportedFonts.Inter,
+        SupportedFonts.Poppins.fontName to SupportedFonts.Poppins,
+        SupportedFonts.DMSans.fontName to SupportedFonts.DMSans,
+        SupportedFonts.Roboto.fontName to SupportedFonts.Roboto,
+        SupportedFonts.ProductSans.fontName to SupportedFonts.ProductSans
+    )
+
+    fun resolveFont( name: String? ) = all[ name ] ?: defaultFont
+
+    fun toTypography( font: MusicallyFont, textDirection: TextDirection ): Typography {
+        val fontFamily = font.fontFamily
+
+        return Typography().run {
+            copy(
+                displayLarge = displayLarge.copy(
+                    fontFamily = fontFamily,
+                    textDirection = textDirection
+                ),
+                displayMedium = displayMedium.copy(
+                    fontFamily = fontFamily,
+                    textDirection = textDirection
+                ),
+                displaySmall = displaySmall.copy(
+                    fontFamily = fontFamily,
+                    textDirection = textDirection
+                ),
+                headlineLarge = headlineLarge.copy(
+                    fontFamily = fontFamily,
+                    textDirection = textDirection
+                ),
+                headlineMedium = headlineMedium.copy(
+                    fontFamily = fontFamily,
+                    textDirection = textDirection
+                ),
+                headlineSmall = headlineSmall.copy(
+                    fontFamily = fontFamily,
+                    textDirection = textDirection
+                ),
+                titleLarge = titleLarge.copy(
+                    fontFamily = fontFamily,
+                    textDirection = textDirection
+                ),
+                titleMedium = titleMedium.copy(
+                    fontFamily = fontFamily,
+                    textDirection = textDirection
+                ),
+                titleSmall = titleSmall.copy(
+                    fontFamily = fontFamily,
+                    textDirection = textDirection
+                ),
+                bodyLarge = bodyLarge.copy(
+                    fontFamily = fontFamily,
+                    textDirection = textDirection
+                ),
+                bodyMedium = bodyMedium.copy(
+                    fontFamily = fontFamily,
+                    textDirection = textDirection
+                ),
+                bodySmall = bodySmall.copy(
+                    fontFamily = fontFamily,
+                    textDirection = textDirection
+                ),
+                labelLarge = labelLarge.copy(
+                    fontFamily = fontFamily,
+                    textDirection = textDirection
+                ),
+                labelMedium = labelMedium.copy(
+                    fontFamily = fontFamily,
+                    textDirection = textDirection
+                ),
+                labelSmall = labelSmall.copy(
+                    fontFamily = fontFamily,
+                    textDirection = textDirection
+                )
+            )
+        }
+    }
+}

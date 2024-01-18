@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class SettingsViewModel( val settingsRepository: SettingsRepository ) : ViewModel() {
+class SettingsViewModel(private val settingsRepository: SettingsRepository ) : ViewModel() {
 
-    private val _language = settingsRepository.currentLanguage
+    private val _language = settingsRepository.language
 
     private val _uiState = MutableStateFlow( SettingsScreenUiState( language = _language.value ) )
     val uiState = _uiState.asStateFlow()
@@ -43,5 +43,6 @@ class SettingsViewModelFactory(
 }
 
 data class SettingsScreenUiState(
-    val language: Translation
+    val language: Translation,
+//    val font: Font
 )

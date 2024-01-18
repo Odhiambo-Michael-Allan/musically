@@ -32,14 +32,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.odesa.musically.services.i18n.FrenchTranslation
 import com.odesa.musically.ui.components.AdaptiveSnackBar
 import com.odesa.musically.ui.components.TopAppBarMinimalTitle
 import com.odesa.musically.ui.settings.components.SettingsSideHeading
+import com.odesa.musically.ui.settings.font.Font
 import com.odesa.musically.ui.settings.language.Language
-import com.odesa.musically.ui.theme.MusicallyTheme
 
 @Composable
 fun SettingsScreen() {}
@@ -48,7 +46,8 @@ fun SettingsScreen() {}
 @Composable
 fun SettingsScreenContent(
     uiState: SettingsScreenUiState,
-    onLanguageChange: ( String ) -> Unit
+    onLanguageChange: ( String ) -> Unit,
+    onFontChange: ( String ) -> Unit
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
@@ -136,19 +135,27 @@ fun SettingsScreenContent(
                     uiState = uiState,
                     onLanguageChange = onLanguageChange
                 )
+                Font(
+                    uiState = uiState,
+                    onFontChange = onFontChange
+                )
             }
         }
 
     }
 }
 
-@Preview( showSystemUi = true )
-@Composable
-fun SettingsScreenContentPreview() {
-    MusicallyTheme {
-        SettingsScreenContent(
-            SettingsScreenUiState( language = FrenchTranslation ),
-            onLanguageChange = {}
-        )
-    }
-}
+//@Preview( showSystemUi = true )
+//@Composable
+//fun SettingsScreenContentPreview() {
+//    MusicallyTheme {
+//        SettingsScreenContent(
+//            SettingsScreenUiState(
+//                language = FrenchTranslation,
+//                font =
+//            ),
+//            onLanguageChange = {},
+//            onFontChange = {}
+//        )
+//    }
+//}
