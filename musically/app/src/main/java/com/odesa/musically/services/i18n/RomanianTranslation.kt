@@ -3,8 +3,10 @@ package com.odesa.musically.services.i18n
 object RomanianTranslation : Translation {
     override val locale: String
         get() = TODO("Not yet implemented")
-    override val languageName: String
+    override val nativeLanguageName: String
         get() = "Romanian"
+    override val englishName: String
+        get() = TODO("Not yet implemented")
     override val unknownSymbol: String
         get() = TODO("Not yet implemented")
     override val helloThere: String

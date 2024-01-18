@@ -3,7 +3,9 @@ package com.odesa.musically.services.i18n
 object FrenchTranslation : Translation {
     override val locale: String
         get() = "fr"
-    override val languageName: String
+    override val nativeLanguageName: String
+        get() = "Français"
+    override val englishName: String
         get() = "French"
     override val unknownSymbol: String
         get() = "?"

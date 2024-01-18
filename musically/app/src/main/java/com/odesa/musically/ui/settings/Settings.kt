@@ -16,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.East
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Language
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -36,11 +35,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.odesa.musically.services.i18n.FrenchTranslation
-import com.odesa.musically.services.i18n.Translator
 import com.odesa.musically.ui.components.AdaptiveSnackBar
 import com.odesa.musically.ui.components.TopAppBarMinimalTitle
-import com.odesa.musically.ui.settings.components.SettingsOptionTile
 import com.odesa.musically.ui.settings.components.SettingsSideHeading
+import com.odesa.musically.ui.settings.language.Language
 import com.odesa.musically.ui.theme.MusicallyTheme
 
 @Composable
@@ -86,7 +84,7 @@ fun SettingsScreenContent(
     ) { contentPadding ->
         Box(
             modifier = Modifier
-                .padding(contentPadding)
+                .padding( contentPadding )
                 .fillMaxSize()
         ) {
             Column {
@@ -95,13 +93,13 @@ fun SettingsScreenContent(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.primary)
+                        .background( MaterialTheme.colorScheme.primary )
                         .clickable { }
                 ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(24.dp, 8.dp),
+                            .padding( 24.dp, 8.dp ),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -134,19 +132,9 @@ fun SettingsScreenContent(
                     }
                 }
                 SettingsSideHeading( text = uiState.language.appearance )
-                SettingsOptionTile(
-                    settingIcon = {
-                        Icon(
-                            imageVector = Icons.Filled.Language,
-                            contentDescription = null
-                        )
-                    },
-                    settingTitle = {
-                        Text( text = uiState.language.language )
-                    },
-                    valuesToBeDisplayedInSettingDialog = Translator.supportedLanguages,
-                    settingOptionValue = uiState.language.languageName,
-                    onSettingChange = onLanguageChange
+                Language(
+                    uiState = uiState,
+                    onLanguageChange = onLanguageChange
                 )
             }
         }
