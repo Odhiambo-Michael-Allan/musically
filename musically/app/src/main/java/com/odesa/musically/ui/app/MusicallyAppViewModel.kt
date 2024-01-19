@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class MusicallyAppViewModel( settingsRepository: SettingsRepository ) : ViewModel() {
+class MusicallyAppViewModel( private val settingsRepository: SettingsRepository ) : ViewModel() {
 
     private val font = settingsRepository.font
 
@@ -30,6 +30,10 @@ class MusicallyAppViewModel( settingsRepository: SettingsRepository ) : ViewMode
                 font = it
             )
         }
+    }
+
+    fun setFont( fontName: String ) {
+        settingsRepository.setFont( fontName )
     }
 
 }

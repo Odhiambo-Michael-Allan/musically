@@ -20,8 +20,11 @@ interface AppContainer {
  */
 class AppContainerImpl( private val context: Context ) : AppContainer {
 
+    private val _settingsRepository = SettingsRepositoryImpl(
+        PreferencesImpl( PreferenceStoreImpl( context ) )
+    )
 
     override val settingRepository: SettingsRepository
-        get() = SettingsRepositoryImpl( PreferencesImpl( PreferenceStoreImpl( context ) ) )
+        get() = _settingsRepository
 
 }

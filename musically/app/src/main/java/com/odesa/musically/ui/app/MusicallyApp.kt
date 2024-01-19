@@ -17,11 +17,12 @@ fun MusicallyApp(
     musicallyAppViewModel: MusicallyAppViewModel
 ) {
 
+
     val settingsScreenUiState by settingsViewModel.uiState.collectAsState()
-//    val themeState by musicallyAppViewModel.uiState.collectAsState()
+    val themeState by musicallyAppViewModel.uiState.collectAsState()
 
     MusicallyTheme(
-        uiState = settingsScreenUiState
+        uiState = themeState
     ) {
         // A surface container using the 'background' color from the theme
         Surface(
@@ -31,7 +32,7 @@ fun MusicallyApp(
             SettingsScreenContent(
                 uiState = settingsScreenUiState,
                 onLanguageChange = {  newLanguage -> settingsViewModel.setLanguage( newLanguage ) },
-                onFontChange = { newFont -> settingsViewModel.setFont( newFont )}
+                onFontChange = { newFont -> musicallyAppViewModel.setFont( newFont ) }
             )
         }
     }

@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextDirection
 import androidx.core.view.WindowCompat
-import com.odesa.musically.ui.settings.SettingsScreenUiState
+import com.odesa.musically.ui.app.ThemeState
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -44,7 +44,7 @@ fun MusicallyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
-    uiState: SettingsScreenUiState,
+    uiState: ThemeState,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

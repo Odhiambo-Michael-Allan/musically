@@ -26,4 +26,11 @@ class MusicallyAppViewModelTest {
         val currentFont = musicallyAppViewModel.uiState.value.font
         assertEquals( SupportedFonts.ProductSans.fontName, currentFont.fontName )
     }
+
+    @Test
+    fun whenFontChangesToInter_interFontIsUsed() {
+        settingsRepository.setFont( SupportedFonts.Inter.fontName )
+        val currentFont = musicallyAppViewModel.uiState.value.font
+        assertEquals( SupportedFonts.Inter.fontName, currentFont.fontName )
+    }
 }
