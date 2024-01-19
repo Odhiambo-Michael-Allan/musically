@@ -2,13 +2,13 @@ package com.odesa.musically.data.preferences.impl
 
 import com.odesa.musically.data.preferences.Preferences
 import com.odesa.musically.data.preferences.storage.FakePreferencesStoreImpl
-import com.odesa.musically.services.i18n.BelarusianTranslation
-import com.odesa.musically.services.i18n.ChineseTranslation
-import com.odesa.musically.services.i18n.EnglishTranslation
-import com.odesa.musically.services.i18n.FrenchTranslation
-import com.odesa.musically.services.i18n.GermanTranslation
-import com.odesa.musically.services.i18n.SpanishTranslation
-import com.odesa.musically.services.i18n.Translation
+import com.odesa.musically.services.i18n.Belarusian
+import com.odesa.musically.services.i18n.Chinese
+import com.odesa.musically.services.i18n.English
+import com.odesa.musically.services.i18n.French
+import com.odesa.musically.services.i18n.German
+import com.odesa.musically.services.i18n.Spanish
+import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.SupportedFonts
 import junit.framework.TestCase.assertEquals
@@ -33,35 +33,35 @@ class PreferencesImplTest {
 
     @Test
     fun whenLanguageIsSetToBelarusian_theBelarusianLanguageIsUsed() {
-        testLanguage( BelarusianTranslation, "Налады" )
+        testLanguage( Belarusian, "Налады" )
     }
 
     @Test
     fun whenLanguageIsSetToChinese_theChineseLanguageIsUsed() {
-        testLanguage( ChineseTranslation, "设置" )
+        testLanguage( Chinese, "设置" )
     }
 
     @Test
     fun whenLanguageIsSetToEnglish_theEnglishLanguageIsUsed() {
-        testLanguage( EnglishTranslation, "Settings" )
+        testLanguage( English, "Settings" )
     }
 
     @Test
     fun whenLanguageIsSetToFrench_theFrenchLanguageIsUsed() {
-        testLanguage( FrenchTranslation, "Paramètres" )
+        testLanguage( French, "Paramètres" )
     }
 
     @Test
     fun whenLanguageIsSetToGerman_theGermanLanguageIsUsed() {
-        testLanguage( GermanTranslation, "Einstellungen" )
+        testLanguage( German, "Einstellungen" )
     }
 
     @Test
     fun whenLanguageIsSetToSpanish_theSpanishLanguageIsUsed() {
-        testLanguage( SpanishTranslation, "Configuración" )
+        testLanguage( Spanish, "Configuración" )
     }
 
-    private fun testLanguage( languageToTest: Translation, testString: String ) {
+    private fun testLanguage(languageToTest: Language, testString: String ) {
         preferences.setLanguage( languageToTest.locale )
         val currentLanguage = preferences.language.value
         assertEquals( testString, currentLanguage.settings )

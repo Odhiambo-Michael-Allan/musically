@@ -2,13 +2,13 @@ package com.odesa.musically.data.settings.impl
 
 import com.odesa.musically.data.preferences.FakePreferences
 import com.odesa.musically.data.settings.SettingsRepository
-import com.odesa.musically.services.i18n.BelarusianTranslation
-import com.odesa.musically.services.i18n.ChineseTranslation
-import com.odesa.musically.services.i18n.EnglishTranslation
-import com.odesa.musically.services.i18n.FrenchTranslation
-import com.odesa.musically.services.i18n.GermanTranslation
-import com.odesa.musically.services.i18n.SpanishTranslation
-import com.odesa.musically.services.i18n.Translation
+import com.odesa.musically.services.i18n.Belarusian
+import com.odesa.musically.services.i18n.Chinese
+import com.odesa.musically.services.i18n.English
+import com.odesa.musically.services.i18n.French
+import com.odesa.musically.services.i18n.German
+import com.odesa.musically.services.i18n.Language
+import com.odesa.musically.services.i18n.Spanish
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.SupportedFonts
 import junit.framework.TestCase.assertEquals
@@ -33,15 +33,15 @@ class SettingsRepositoryImplTest {
 
     @Test
     fun testLanguageChange() {
-        changeLanguageTo( BelarusianTranslation, "Налады" )
-        changeLanguageTo( ChineseTranslation, "设置" )
-        changeLanguageTo( EnglishTranslation, "Settings" )
-        changeLanguageTo( FrenchTranslation, "Paramètres" )
-        changeLanguageTo( GermanTranslation, "Einstellungen" )
-        changeLanguageTo( SpanishTranslation, "Configuración" )
+        changeLanguageTo( Belarusian, "Налады" )
+        changeLanguageTo( Chinese, "设置" )
+        changeLanguageTo( English, "Settings" )
+        changeLanguageTo( French, "Paramètres" )
+        changeLanguageTo( German, "Einstellungen" )
+        changeLanguageTo( Spanish, "Configuración" )
     }
 
-    private fun changeLanguageTo( language: Translation, testString: String ) {
+    private fun changeLanguageTo(language: Language, testString: String ) {
         preferences.setLanguage( language.locale )
         val currentLanguage = settingsRepository.language.value
         assertEquals( testString, currentLanguage.settings )

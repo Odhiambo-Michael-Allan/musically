@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.odesa.musically.data.settings.SettingsRepository
-import com.odesa.musically.services.i18n.Translation
+import com.odesa.musically.services.i18n.Language
+import com.odesa.musically.ui.settings.fontScale.scalingPresets
 import com.odesa.musically.ui.theme.MusicallyFont
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -64,6 +65,13 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         settingsRepository.setFont( fontName )
     }
 
+    fun setFontScale( fontScale: String ) {
+        val float = fontScale.toFloatOrNull()
+        float?.let {
+            if ( scalingPresets.contains( it ) ) settingsRepository.setFontScale( it )
+        }
+    }
+
 }
 
 @Suppress( "UNCHECKED_CAST" )
@@ -76,7 +84,7 @@ class SettingsViewModelFactory(
 }
 
 data class SettingsScreenUiState(
-    val language: Translation,
+    val language: Language,
     val font: MusicallyFont,
     val fontScale: Float
 )

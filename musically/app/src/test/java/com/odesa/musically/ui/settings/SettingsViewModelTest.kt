@@ -3,13 +3,13 @@ package com.odesa.musically.ui.settings
 import com.odesa.musically.MainCoroutineRule
 import com.odesa.musically.data.settings.FakeSettingsRepository
 import com.odesa.musically.data.settings.SettingsRepository
-import com.odesa.musically.services.i18n.BelarusianTranslation
-import com.odesa.musically.services.i18n.ChineseTranslation
-import com.odesa.musically.services.i18n.EnglishTranslation
-import com.odesa.musically.services.i18n.FrenchTranslation
-import com.odesa.musically.services.i18n.GermanTranslation
-import com.odesa.musically.services.i18n.SpanishTranslation
-import com.odesa.musically.services.i18n.Translation
+import com.odesa.musically.services.i18n.Belarusian
+import com.odesa.musically.services.i18n.Chinese
+import com.odesa.musically.services.i18n.English
+import com.odesa.musically.services.i18n.French
+import com.odesa.musically.services.i18n.German
+import com.odesa.musically.services.i18n.Language
+import com.odesa.musically.services.i18n.Spanish
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.SupportedFonts
 import junit.framework.TestCase.assertEquals
@@ -41,15 +41,15 @@ class SettingsViewModelTest {
 
     @Test
     fun testLanguageChange() {
-        changeLanguageTo( BelarusianTranslation, "Налады" )
-        changeLanguageTo( ChineseTranslation, "设置" )
-        changeLanguageTo( EnglishTranslation, "Settings" )
-        changeLanguageTo( FrenchTranslation, "Paramètres" )
-        changeLanguageTo( GermanTranslation, "Einstellungen" )
-        changeLanguageTo( SpanishTranslation, "Configuración" )
+        changeLanguageTo( Belarusian, "Налады" )
+        changeLanguageTo( Chinese, "设置" )
+        changeLanguageTo( English, "Settings" )
+        changeLanguageTo( French, "Paramètres" )
+        changeLanguageTo( German, "Einstellungen" )
+        changeLanguageTo( Spanish, "Configuración" )
     }
 
-    private fun changeLanguageTo( language: Translation, testString: String ) {
+    private fun changeLanguageTo(language: Language, testString: String ) {
         settingsRepository.setLanguage( language.locale )
         val currentLanguage = settingsViewModel.uiState.value.language
         assertEquals( testString, currentLanguage.settings )
@@ -104,4 +104,17 @@ class SettingsViewModelTest {
         val currentFontScale = settingsViewModel.uiState.value.fontScale
         assertEquals( fontScale, currentFontScale )
     }
+
+    @Test
+    fun whenValidFontScaleStringIsProvided_settingsViewModelCorrectlyParsesIt() {
+        settingsViewModel.setFontScale( "1.25" )
+        assertEquals( "1.25", settingsViewModel.uiState.value.fontScale.toString() )
+    }
+
+    @Test
+    fun whenInvalidFontScaleIsProvided_settingsViewModelCorrectlyIdentifiesIt() {
+        settingsViewModel.setFontScale( "1245323" )
+        assertEquals( "1.0", settingsViewModel.uiState.value.fontScale.toString() )
+    }
+
 }

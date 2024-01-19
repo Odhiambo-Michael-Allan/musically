@@ -1,19 +1,19 @@
 package com.odesa.musically.data.settings
 
-import com.odesa.musically.services.i18n.BelarusianTranslation
-import com.odesa.musically.services.i18n.ChineseTranslation
-import com.odesa.musically.services.i18n.EnglishTranslation
-import com.odesa.musically.services.i18n.FrenchTranslation
-import com.odesa.musically.services.i18n.GermanTranslation
-import com.odesa.musically.services.i18n.SpanishTranslation
-import com.odesa.musically.services.i18n.Translation
+import com.odesa.musically.services.i18n.Belarusian
+import com.odesa.musically.services.i18n.Chinese
+import com.odesa.musically.services.i18n.English
+import com.odesa.musically.services.i18n.French
+import com.odesa.musically.services.i18n.German
+import com.odesa.musically.services.i18n.Spanish
+import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.theme.SupportedFonts
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class FakeSettingsRepository : SettingsRepository {
 
-    private val _currentLanguage: MutableStateFlow<Translation> = MutableStateFlow( EnglishTranslation )
+    private val _currentLanguage: MutableStateFlow<Language> = MutableStateFlow( English )
     override val language = _currentLanguage.asStateFlow()
 
     private val _currentFont = MutableStateFlow( SupportedFonts.ProductSans )
@@ -29,12 +29,12 @@ class FakeSettingsRepository : SettingsRepository {
 
 
     private fun resolveLanguage( language: String ) = when( language ) {
-        BelarusianTranslation.locale -> BelarusianTranslation
-        ChineseTranslation.locale -> ChineseTranslation
-        FrenchTranslation.locale -> FrenchTranslation
-        GermanTranslation.locale -> GermanTranslation
-        SpanishTranslation.locale -> SpanishTranslation
-        else -> EnglishTranslation
+        Belarusian.locale -> Belarusian
+        Chinese.locale -> Chinese
+        French.locale -> French
+        German.locale -> German
+        Spanish.locale -> Spanish
+        else -> English
     }
 
     override fun setFont( fontName: String ) {

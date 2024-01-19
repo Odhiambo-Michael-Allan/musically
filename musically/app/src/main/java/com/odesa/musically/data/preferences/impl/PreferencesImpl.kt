@@ -3,13 +3,13 @@ package com.odesa.musically.data.preferences.impl
 import androidx.compose.ui.text.style.TextDirection
 import com.odesa.musically.data.preferences.Preferences
 import com.odesa.musically.data.preferences.storage.PreferenceStore
-import com.odesa.musically.services.i18n.BelarusianTranslation
-import com.odesa.musically.services.i18n.ChineseTranslation
-import com.odesa.musically.services.i18n.EnglishTranslation
-import com.odesa.musically.services.i18n.FrenchTranslation
-import com.odesa.musically.services.i18n.GermanTranslation
-import com.odesa.musically.services.i18n.SpanishTranslation
-import com.odesa.musically.services.i18n.Translation
+import com.odesa.musically.services.i18n.Belarusian
+import com.odesa.musically.services.i18n.Chinese
+import com.odesa.musically.services.i18n.English
+import com.odesa.musically.services.i18n.French
+import com.odesa.musically.services.i18n.German
+import com.odesa.musically.services.i18n.Language
+import com.odesa.musically.services.i18n.Spanish
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.SupportedFonts
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,14 +40,14 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
         }
     }
 
-    private fun getLanguage() : Translation {
+    private fun getLanguage() : Language {
         return when ( preferenceStore.getLanguage() ) {
-            BelarusianTranslation.locale -> BelarusianTranslation
-            ChineseTranslation.locale -> ChineseTranslation
-            FrenchTranslation.locale -> FrenchTranslation
-            GermanTranslation.locale -> GermanTranslation
-            SpanishTranslation.locale -> SpanishTranslation
-            else -> EnglishTranslation
+            Belarusian.locale -> Belarusian
+            Chinese.locale -> Chinese
+            French.locale -> French
+            German.locale -> German
+            Spanish.locale -> Spanish
+            else -> English
         }
     }
 

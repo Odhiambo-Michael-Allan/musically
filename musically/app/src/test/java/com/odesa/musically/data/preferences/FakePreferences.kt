@@ -1,13 +1,13 @@
 package com.odesa.musically.data.preferences
 
 import androidx.compose.ui.text.style.TextDirection
-import com.odesa.musically.services.i18n.BelarusianTranslation
-import com.odesa.musically.services.i18n.ChineseTranslation
-import com.odesa.musically.services.i18n.EnglishTranslation
-import com.odesa.musically.services.i18n.FrenchTranslation
-import com.odesa.musically.services.i18n.GermanTranslation
-import com.odesa.musically.services.i18n.SpanishTranslation
-import com.odesa.musically.services.i18n.Translation
+import com.odesa.musically.services.i18n.Belarusian
+import com.odesa.musically.services.i18n.Chinese
+import com.odesa.musically.services.i18n.English
+import com.odesa.musically.services.i18n.French
+import com.odesa.musically.services.i18n.German
+import com.odesa.musically.services.i18n.Spanish
+import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.SupportedFonts
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,12 +29,12 @@ class FakePreferences : Preferences {
 
     override fun setLanguage( localeCode: String ) {
         when ( localeCode ) {
-            BelarusianTranslation.locale -> _language.value = BelarusianTranslation
-            ChineseTranslation.locale -> _language.value = ChineseTranslation
-            FrenchTranslation.locale -> _language.value = FrenchTranslation
-            GermanTranslation.locale -> _language.value = GermanTranslation
-            SpanishTranslation.locale -> _language.value = SpanishTranslation
-            else -> _language.value = EnglishTranslation
+            Belarusian.locale -> _language.value = Belarusian
+            Chinese.locale -> _language.value = Chinese
+            French.locale -> _language.value = French
+            German.locale -> _language.value = German
+            Spanish.locale -> _language.value = Spanish
+            else -> _language.value = English
         }
     }
 
@@ -52,8 +52,8 @@ class FakePreferences : Preferences {
         _fontScale.value = fontScale
     }
 
-    private fun getLanguage() : Translation {
-        return EnglishTranslation
+    private fun getLanguage() : Language {
+        return English
     }
 
     private fun getFont(): MusicallyFont {

@@ -1,6 +1,6 @@
 package com.odesa.musically.services.i18n
 
-object SpanishTranslation : Translation {
+object Spanish : Language {
     override val locale: String
         get() = "es"
     override val nativeLanguageName: String

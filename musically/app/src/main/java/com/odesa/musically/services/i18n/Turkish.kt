@@ -1,10 +1,10 @@
 package com.odesa.musically.services.i18n
 
-object JapaneseTranslation : Translation {
+object Turkish : Language {
     override val locale: String
         get() = TODO("Not yet implemented")
     override val nativeLanguageName: String
-        get() = "Japanese"
+        get() = "Turkish"
     override val englishName: String
         get() = TODO("Not yet implemented")
     override val unknownSymbol: String

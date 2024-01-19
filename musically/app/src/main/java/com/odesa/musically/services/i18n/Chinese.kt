@@ -1,209 +1,207 @@
 package com.odesa.musically.services.i18n
 
-object EnglishTranslation : Translation {
+object Chinese : Language {
     override val locale: String
-        get() = "en"
+        get() = "zh-Hans"
     override val nativeLanguageName: String
-        get() = "English"
+        get() = "简体中文"
     override val englishName: String
-        get() = nativeLanguageName
+        get() = "Chinese (Simplified)"
     override val unknownSymbol: String
         get() = "?"
     override val helloThere: String
-        get() = "Hello there!"
+        get() = "您好！"
     override val introductoryMessage: String
         get() = """
-            Thank you for being a part of Musically open-beta. If you encounter any bugs or want to
-            suggest improvements, kindly open an issue in our Github Repository. Join our Discord
-            and Reddit community to share your feedback and to stay up-to-date with the development.
-            Musically is totally free-to-use and entirely supported by contributions made by 
-            kindhearted individuals. Any contribution will be highly appreciated. Once again, thank
-            you for trying out Musically!
+            感谢您试用Symphony公开测试版。如果您遇到了任何问题，或想提出任何建议，请您在我们的Github仓库中创建新的Issue。
+            您也可以加入我们的Discord或Reddit社区以分享您的使用体验并获得开发的最新进度。
+            Symphony由来自Github Sponsors，Ko-fi和Patreon的捐赠支持开发。
+            再一次感谢您试用Symphony！
         """.trimIndent()
     override val songs: String
-        get() = "Songs"
+        get() = "歌曲"
     override val artists: String
-        get() = "Artists"
+        get() = "艺术家"
     override val albums: String
-        get() = "Albums"
+        get() = "专辑"
     override val settings: String
-        get() = "Settings"
+        get() = "设置"
     override val details: String
-        get() = "Details"
+        get() = "详情"
     override val path: String
-        get() = "Path"
+        get() = "路径"
     override val filename: String
-        get() = "Filename"
+        get() = "文件名"
     override val size: String
-        get() = "Size"
+        get() = "大小"
     override val dateAdded: String
-        get() = "Date added"
+        get() = "添加日期"
     override val lastModified: String
-        get() = "Last modified"
+        get() = "上次修改时间"
     override val length: String
-        get() = "Length"
+        get() = "时长"
     override val bitrate: String
-        get() = "Bitrate"
+        get() = "比特率"
     override val trackName: String
-        get() = "Track name"
+        get() = "曲名"
     override val artist: String
-        get() = "Artist"
+        get() = "艺术家"
     override val album: String
-        get() = "Album"
+        get() = "专辑"
     override val albumArtist: String
-        get() = "Album Artist"
+        get() = "专辑艺术家"
     override val composer: String
-        get() = "Composer"
+        get() = "作曲家"
     override val nothingIsBeingPlayedRightNow: String
-        get() = "Nothing is being played right now"
+        get() = "无正在播放曲目"
     override val addToQueue: String
-        get() = "Add to queue"
+        get() = "添加到播放列表"
     override val queue: String
-        get() = "Queue"
+        get() = "播放列表"
     override val playNext: String
-        get() = "Play next"
+        get() = "下一首"
     override val nowPlaying: String
-        get() = "Now Playing"
+        get() = "正在播放"
     override val language: String
-        get() = "Language"
+        get() = "语言"
     override val materialYou: String
         get() = "Material You"
     override val system: String
-        get() = "System"
+        get() = "系统"
     override val light: String
-        get() = "Light"
+        get() = "浅色"
     override val dark: String
-        get() = "Dark"
+        get() = "深色"
     override val black: String
-        get() = "Black"
+        get() = "纯黑"
     override val viewArtist: String
-        get() = "View artist"
+        get() = "查看艺术家"
     override val title: String
-        get() = "Title"
+        get() = "曲名"
     override val duration: String
-        get() = "Duration"
+        get() = "时长"
     override val year: String
-        get() = "Year"
+        get() = "年份"
     override val viewAlbum: String
-        get() = "View album"
+        get() = "查看专辑"
     override val searchYourMusic: String
-        get() = "Search your music"
+        get() = "搜索歌曲"
     override val noResultsFound: String
-        get() = "No results found"
+        get() = "未找到结果"
     override val albumCount: String
-        get() = "Album count"
+        get() = "专辑数量"
     override val trackCount: String
-        get() = "Track count"
+        get() = "曲目数量"
     override val filteringResults: String
-        get() = "Filtering results..."
+        get() = "正在搜索..."
     override val appearance: String
-        get() = "Appearance"
+        get() = "外观"
     override val about: String
-        get() = "About"
+        get() = "关于"
     override val github: String
         get() = "Github"
     override val play: String
-        get() = "Play"
+        get() = "播放"
     override val previous: String
-        get() = "Previous"
+        get() = "上一首"
     override val next: String
-        get() = "Next"
+        get() = "下一首"
     override val pause: String
-        get() = "Pause"
+        get() = "暂停"
     override val done: String
-        get() = "Done"
+        get() = "完成"
     override val groove: String
         get() = "Groove"
     override val songsFilterPattern: String
-        get() = "Song filter pattern"
+        get() = "歌曲过滤模式"
     override val reset: String
-        get() = "Reset"
+        get() = "重置"
     override val theme: String
-        get() = "Theme"
+        get() = "主题"
     override val checkForUpdates: String
-        get() = "Check for updates"
+        get() = "检查更新"
     override val version: String
-        get() = "Version"
+        get() = "版本"
     override val shufflePlay: String
-        get() = "Shuffle play"
+        get() = "随机播放"
     override val viewAlbumArtist: String
-        get() = "View album artist"
+        get() = "查看专辑艺术家"
     override val stop: String
-        get() = "Stop"
+        get() = "停止"
     override val all: String
-        get() = "All"
+        get() = "全部"
     override val fadePlaybackInOut: String
-        get() = "Fade playback in-out"
+        get() = "音频渐入渐出"
     override val requireAudioFocus: String
-        get() = "Require audio focus"
+        get() = "请求音频焦点"
     override val ignoreAudioFocusLoss: String
-        get() = "Ignore audio focus loss"
+        get() = "忽略音频焦点丢失事件"
     override val player: String
-        get() = "Player"
+        get() = "播放器"
     override val playOnHeadphonesConnect: String
-        get() = "Play on headphones connect"
+        get() = "耳机连接时播放"
     override val pauseOnHeadphonesDisconnect: String
-        get() = "Pause on headphones disconnect"
+        get() = "耳机断开连接时暂停"
     override val genre: String
-        get() = "Genre"
+        get() = "歌曲类型"
     override val damnThisIsSoEmpty: String
-        get() = "Damn, this is so empty"
+        get() = "没有内容"
     override val primaryColor: String
-        get() = "Primary color"
+        get() = "重点颜色"
     override val playAll: String
-        get() = "Play all"
+        get() = "播放全部"
     override val forYou: String
-        get() = "For you"
+        get() = "为你推荐"
     override val suggestedAlbums: String
-        get() = "Suggested albums"
+        get() = "推荐专辑"
     override val suggestedArtists: String
-        get() = "Suggested artists"
+        get() = "推荐艺术家"
     override val recentlyAddedSongs: String
-        get() = "Recently added songs"
+        get() = "最近添加的歌曲"
     override val sponsorViaGithub: String
-        get() = "Sponsor via Github"
+        get() = "通过Github支持"
     override val clearSongCache: String
-        get() = "Clear song cache"
+        get() = "清除歌曲缓存"
     override val songCacheCleared: String
-        get() = "Song cache cleared"
+        get() = "歌曲缓存已清除"
     override val albumArtists: String
-        get() = "Album artists"
+        get() = "专辑艺术家"
     override val genres: String
-        get() = "Genres"
+        get() = "歌曲类型"
     override val cancel: String
-        get() = "Cancel"
+        get() = "取消"
     override val homeTabs: String
-        get() = "Home tabs"
+        get() = "标签页"
     override val selectAtleast2orAtmost5Tabs: String
-        get() = "Select at least 2 or at most 5 tabs"
+        get() = "请选择2到5个标签"
     override val folders: String
-        get() = "Folders"
+        get() = "文件夹列表"
     override val invisible: String
-        get() = "Invisible"
+        get() = "不可见"
     override val alwaysVisible: String
-        get() = "Always visible"
+        get() = "一直可见"
     override val visibleWhenActive: String
-        get() = "Visible when active"
+        get() = "选中时可见"
     override val bottomBarLabelVisibility: String
-        get() = "Bottom bar label visibility"
+        get() = "底栏标签名可见性"
     override val playlists: String
-        get() = "Playlists"
+        get() = "播放列表"
     override val newPlaylist: String
-        get() = "New playlist"
+        get() = "新建播放列表"
     override val importPlaylist: String
-        get() = "Import playlist"
+        get() = "导入播放列表"
     override val noInAppPlaylistsFound: String
-        get() = "No in-app playlists found"
+        get() = "未找到播放列表"
     override val noLocalPlaylistsFound: String
-        get() = "No local playlists found"
+        get() = "设备存储中未找到播放列表"
     override val custom: String
-        get() = "Custom"
+        get() = "自定义"
     override val playlist: String
-        get() = "Playlist"
+        get() = "播放列表"
     override val addSongs: String
-        get() = "Add songs"
+        get() = "添加歌曲"
     override val addToPlaylist: String
-        get() = "Add to playlist"
+        get() = "添加到播放列表"
     override val isLocalPlaylist: String
         get() = "Is local playlist?"
     override val yes: String
@@ -211,210 +209,209 @@ object EnglishTranslation : Translation {
     override val no: String
         get() = "No"
     override val manageSongs: String
-        get() = "Manage songs"
+        get() = "管理歌曲"
     override val delete: String
-        get() = "Delete"
+        get() = "删除"
     override val deletePlaylist: String
-        get() = "Delete playlist"
+        get() = "删除播放列表"
     override val trackNumber: String
-        get() = "Track number"
+        get() = "歌曲编号"
     override val tree: String
-        get() = "Tree"
+        get() = "文件树"
     override val loading: String
-        get() = "Loading..."
+        get() = "加载中..."
     override val name: String
         get() = "Name"
     override val addFolder: String
-        get() = "Add folder"
+        get() = "添加文件夹"
     override val blacklistFolders: String
-        get() = "Blacklist folders"
+        get() = "文件夹黑名单"
     override val whitelistFolders: String
-        get() = "Whitelist folders"
+        get() = "文件夹白名单"
     override val pickFolder: String
-        get() = "Pick folder"
+        get() = "选择文件夹"
     override val invalidM3uFile: String
-        get() = "Invalid M3U file"
+        get() = "无效的M3U文件"
     override val discord: String
         get() = "Discord"
     override val reddit: String
         get() = "Reddit"
     override val reportAnIssue: String
-        get() = "Report an issue"
+        get() = "反馈问题"
     override val noFoldersFound: String
-        get() = "No folders found"
+        get() = "未找到文件夹"
     override val sleepTimer: String
-        get() = "Sleep timer"
+        get() = "睡眠定时"
     override val hours: String
-        get() = "Hours"
+        get() = "小时"
     override val minutes: String
-        get() = "Minutes"
+        get() = "分钟"
     override val quitAppOnEnd: String
-        get() = "Quit app on end"
+        get() = "结束时退出"
     override val favorite: String
-        get() = "Favorite"
+        get() = "添加喜爱"
     override val unfavorite: String
-        get() = "Unfavorite"
+        get() = "移除喜爱"
     override val bitDepth: String
-        get() = "Bit depth"
+        get() = "位深"
     override val samplingRate: String
-        get() = "Sampling rate"
+        get() = "采样率"
     override val showAudioInformation: String
-        get() = "Show audio information"
+        get() = "显示音频详情"
     override val fastRewindDuration: String
-        get() = "Fast-rewind duration"
+        get() = "快退步进"
     override val fastForwardDuration: String
-        get() = "Fast-forward duration"
+        get() = "快进步进"
     override val suggestedAlbumArtists: String
-        get() = "Suggested album artists"
+        get() = "推荐的专辑艺术家"
     override val areYouSureThatYouWantToDeleteThisPlaylist: String
-        get() = "Are you sure that you want to delete this playlist?"
+        get() = "您要删除这个播放列表吗？"
     override val removeFromPlaylist: String
-        get() = "Remove from playlist"
+        get() = "从播放列表中移除"
     override val speed: String
-        get() = "Speed"
+        get() = "速度"
     override val pitch: String
-        get() = "Pitch"
+        get() = "音高"
     override val persistUntilQueueEnd: String
-        get() = "Persist until queue end"
+        get() = "在播放列表中保持设置"
     override val noLyrics: String
-        get() = "No lyrics"
+        get() = "无歌词"
     override val sponsorViaPatreon: String
-        get() = "Sponsor via Patreon"
+        get() = "通过Patreon支持"
     override val fDroid: String
         get() = "F-droid"
     override val izzyOnDroid: String
         get() = "IzzyOnDroid"
     override val miniPlayer: String
-        get() = "Mini-player"
+        get() = "播放小控件"
     override val showTrackControls: String
-        get() = "Show track controls"
+        get() = "上一首/下一首"
     override val showSeekControls: String
-        get() = "Show seek controls"
+        get() = "快进/快退"
     override val font: String
-        get() = "Font"
+        get() = "字体"
     override val codec: String
-        get() = "Codec"
+        get() = "编解码器"
     override val controlsLayout: String
-        get() = "Controls layout"
+        get() = "控制按钮布局"
     override val default: String
-        get() = "Default"
+        get() = "默认"
     override val traditional: String
-        get() = "Traditional"
+        get() = "经典"
     override val enabled: String
-        get() = "Enabled"
+        get() = "已开启"
     override val disabled: String
-        get() = "Disabled"
+        get() = "已关闭"
     override val showUpdateToast: String
-        get() = "Show update toast"
+        get() = "显示升级提示"
     override val sponsorViaKofi: String
-        get() = "Sponsor via Ko-fi"
+        get() = "通过Ko-fi支持"
     override val playlistStoreLocation: String
-        get() = "Playlist location"
+        get() = "播放列表存储位置"
     override val appBuiltIn: String
-        get() = "Build-in"
+        get() = "应用内置"
     override val localStorage: String
-        get() = "Local storage"
+        get() = "设备内部存储"
     override val systemLightDark: String
-        get() = "System (Light + Dark)"
+        get() = "系统（明亮 + 暗黑）"
     override val systemLightBlack: String
-        get() = "System (Light + Black)"
+        get() = "系统（明亮 + 黑色）"
     override val fontScale: String
-        get() = "Font Scale"
+        get() = "字体缩放"
     override val contentScale: String
-        get() = "Content Scale"
+        get() = "内容缩放"
     override val viewGenre: String
-        get() = "View Genre"
+        get() = "查看流派"
     override val Interface: String
-        get() = "Interface"
+        get() = "界面"
     override val rescan: String
-        get() = "Re-scan"
+        get() = "重新扫描"
     override val updates: String
-        get() = "Updates"
+        get() = "更新"
     override val considerDonating: String
-        get() = "Consider donating!"
+        get() =  "考虑捐赠"
     override val help: String
-        get() = "Help"
+        get() = "帮助"
     override val shareSong: String
-        get() = "Share song"
+        get() = "分享歌曲"
     override val pauseOnCurrentSongEnd: String
-        get() = "Pause on current song end"
+        get() = "在当前歌曲结束时暂停"
     override val export: String
-        get() = "Export"
+        get() =  "导出"
     override val renamePlaylist: String
-        get() = "Rename playlist"
+        get() = "重命名播放列表"
     override val rename: String
-        get() = "Rename"
+        get() = "重命名"
     override val equalizer: String
-        get() = "Equalizer"
+        get() = "均衡器"
     override val considerContributing: String
-        get() = "Consider contributing!"
+        get() = "考虑贡献"
     override val lyrics: String
-        get() = "Lyrics"
+        get() =  "歌词"
     override val lyricsLayout: String
-        get() = "Lyrics layout"
+        get() = "歌词布局"
     override val replaceArtwork: String
-        get() = "Replace artwork"
+        get() = "替换封面"
     override val separatePage: String
-        get() = "Separate page"
+        get() = "单独页面"
     override val miniPlayerTextMarquee: String
-        get() = "Mini-player text marquee"
+        get() =  "迷你播放器文本滚动"
     override val addItem: String
-        get() = "Add item"
+        get() = "添加项目"
     override val artistTagValueSeparators: String
-        get() = "Artist tag value separators"
+        get() = "艺术家标签值分隔符"
     override val genreTagValueSeparators: String
-        get() = "Genre tag value separators"
+        get() = "流派标签值分隔符"
     override val discNumber: String
-        get() = "Disc number"
+        get() =  "碟片编号"
 
-    override fun playingXofY( x: String, y: String ) = "Playing $x of $y"
+    override fun playingXofY( x: String, y: String ) = "第 $x 首，共 $y 首"
 
-    override fun unknownArtistX( x: String ) = "Unknown artist ($x)"
+    override fun unknownArtistX( x: String ) = "未知的艺术家 (${x})"
 
-    override fun xSongs( x: String ) = "$x songs"
+    override fun xSongs( x: String ) = "$x 首歌曲"
 
-    override fun unknownAlbumId( id: String ) = "Unknown album (ID: $id)"
+    override fun unknownAlbumId( id: String ) = "未知的专辑 (ID: $id)"
 
-    override fun xArtists( x: String ) = "$x artists"
+    override fun xArtists( x: String ) = "$x 位艺术家"
 
-    override fun xAlbums( x: String ) = "$x albums"
+    override fun xAlbums( x: String ) = "$x 张专辑"
 
     override fun madeByX( x: String ) = "Made by $x"
 
-    override fun newVersionAvailableX( x: String ) = "New version available! ($x)"
+    override fun newVersionAvailableX(x: String) = "新版本可用！ (${x})"
 
     override fun xKbps( x: String ) = "$x kbps"
 
     override fun xSecs( x: String ) = "${x}s"
 
-    override fun unknownGenreX( x: String ) = "Unknown genre ($x)"
+    override fun unknownGenreX( x: String ) = "未知的类型 $x"
 
-    override fun xGenres( x: String ) = "$x genres"
+    override fun xGenres( x: String ) = "$x 种类型"
 
-    override fun xFoldersYfiles( x: String, y: String ) = "$x folders, $y files"
+    override fun xFoldersYfiles( x: String, y: String ) = "$x 个文件夹, $y 个文件"
 
-    override fun xItems( x: String ) = "$x items"
+    override fun xItems( x: String ) = "$x 项"
 
-    override fun xPlaylists( x: String ) = "$x playlists"
+    override fun xPlaylists( x: String ) = "$x 个播放列表"
 
-    override fun unknownPlaylistX( x: String ) = "Unknown playlist (ID: $x)"
+    override fun unknownPlaylistX( x: String ) = "未知的播放列表 (ID: $x)"
 
-    override fun xFolders( x: String ) = "$x folders"
+    override fun xFolders( x: String ) = "$x 个文件夹"
 
     override fun xBit( x: String ) = "$x-bit"
 
-    override fun xKHZ( x: String ) = "$x kHZ"
+    override fun xKHZ( x: String ) = "$x kHz"
 
-    override fun shareFailedX( x: String ) = "Share failed (Error: $x)"
+    override fun shareFailedX( x: String ) = "分享失败 （错误代码： $x）"
 
-    override fun exportFailedX( x: String ) = "Export failed (Error: $x)"
+    override fun exportFailedX( x: String ) = "导出失败。错误：$x"
 
-    override fun exportedX( x: String ) = "Exported $x"
+    override fun exportedX( x: String ) = "导出 $x"
 
-    override fun launchingEqualizerFailedX( x: String ) = "Launching equalizer failed (Error: $x)"
+    override fun launchingEqualizerFailedX( x: String ) = "启动均衡器失败。错误：$x"
 
-    override fun unknownAlbumX( x: String ) = "Unknown album ($x)"
+    override fun unknownAlbumX( x: String ) = "未知的专辑 (ID: $x)"
 
-    override fun copiedXtoClipboard( x: String ) = "Copied '$x' to clipboard"
-
+    override fun copiedXtoClipboard( x: String ) =  "复制 $x 到剪贴板"
 }

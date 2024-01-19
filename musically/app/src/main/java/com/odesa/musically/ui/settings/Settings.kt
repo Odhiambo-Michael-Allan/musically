@@ -34,11 +34,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.odesa.musically.services.i18n.EnglishTranslation
+import com.odesa.musically.services.i18n.English
 import com.odesa.musically.ui.components.AdaptiveSnackBar
 import com.odesa.musically.ui.components.TopAppBarMinimalTitle
 import com.odesa.musically.ui.settings.components.SettingsSideHeading
 import com.odesa.musically.ui.settings.font.Font
+import com.odesa.musically.ui.settings.fontScale.FontScale
 import com.odesa.musically.ui.settings.language.Language
 import com.odesa.musically.ui.theme.MusicallyTheme
 import com.odesa.musically.ui.theme.SupportedFonts
@@ -51,7 +52,8 @@ fun SettingsScreen() {}
 fun SettingsScreenContent(
     uiState: SettingsScreenUiState,
     onLanguageChange: ( String ) -> Unit,
-    onFontChange: ( String ) -> Unit
+    onFontChange: ( String ) -> Unit,
+    onFontScaleChange: ( String ) -> Unit
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
@@ -123,8 +125,8 @@ fun SettingsScreenContent(
                     }
                     Box(
                         modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .padding(8.dp, 0.dp)
+                            .align( Alignment.CenterEnd )
+                            .padding( 8.dp, 0.dp )
                     ) {
                         Icon(
                             imageVector = Icons.Filled.East,
@@ -136,12 +138,17 @@ fun SettingsScreenContent(
                 }
                 SettingsSideHeading( text = uiState.language.appearance )
                 Language(
-                    uiState = uiState,
+                    language = uiState.language,
                     onLanguageChange = onLanguageChange
                 )
                 Font(
                     uiState = uiState,
                     onFontChange = onFontChange
+                )
+                FontScale(
+                    language = uiState.language,
+                    fontScale = uiState.fontScale,
+                    onFontScaleChange = onFontScaleChange
                 )
             }
         }
@@ -153,9 +160,9 @@ fun SettingsScreenContent(
 @Composable
 fun SettingsScreenContentPreview() {
     val uiState = SettingsScreenUiState(
-        language = EnglishTranslation,
+        language = English,
         font = SupportedFonts.ProductSans,
-        fontScale = 2.25f
+        fontScale = 2.0f
     )
     MusicallyTheme(
         uiState = uiState
@@ -163,7 +170,8 @@ fun SettingsScreenContentPreview() {
         SettingsScreenContent(
             uiState = uiState,
             onLanguageChange = {},
-            onFontChange = {}
+            onFontChange = {},
+            onFontScaleChange = {}
         )
     }
 }

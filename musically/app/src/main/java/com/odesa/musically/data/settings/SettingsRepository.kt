@@ -1,11 +1,11 @@
 package com.odesa.musically.data.settings
 
-import com.odesa.musically.services.i18n.Translation
+import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.theme.MusicallyFont
 import kotlinx.coroutines.flow.StateFlow
 
 interface SettingsRepository {
-    val language: StateFlow<Translation>
+    val language: StateFlow<Language>
     val font: StateFlow<MusicallyFont>
     val fontScale: StateFlow<Float>
 

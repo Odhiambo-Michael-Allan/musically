@@ -3,7 +3,7 @@ package com.odesa.musically.data.preferences.storage.impl
 import android.content.Context
 import androidx.core.content.edit
 import com.odesa.musically.data.preferences.storage.PreferenceStore
-import com.odesa.musically.services.i18n.EnglishTranslation
+import com.odesa.musically.services.i18n.English
 import com.odesa.musically.ui.theme.SupportedFonts
 
 class PreferenceStoreImpl( private val context: Context) : PreferenceStore {
@@ -52,7 +52,7 @@ class PreferenceStoreImpl( private val context: Context) : PreferenceStore {
 }
 
 object SettingsDefaults {
-    val translation = EnglishTranslation
+    val translation = English
     val font = SupportedFonts.ProductSans
     const val fontScale = 1.0f
 }
