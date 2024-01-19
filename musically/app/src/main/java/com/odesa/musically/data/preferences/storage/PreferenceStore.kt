@@ -6,4 +6,6 @@ interface PreferenceStore {
 
     fun setFontName( fontName: String )
     fun getFontName(): String
+    fun setFontScale( fontScale: Float )
+    fun getFontScale(): Float
 }

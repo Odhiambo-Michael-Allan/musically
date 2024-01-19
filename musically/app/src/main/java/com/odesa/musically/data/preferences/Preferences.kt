@@ -9,7 +9,10 @@ interface Preferences {
     val language: StateFlow<Translation>
     val font: StateFlow<MusicallyFont>
     val textDirection: StateFlow<TextDirection>
+    val fontScale: StateFlow<Float>
+
     fun setLanguage( localeCode: String )
     fun setFont( fontName: String )
+    fun setFontScale( fontScale: Float )
 
 }

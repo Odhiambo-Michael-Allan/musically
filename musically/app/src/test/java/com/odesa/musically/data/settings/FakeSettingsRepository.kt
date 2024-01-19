@@ -19,6 +19,9 @@ class FakeSettingsRepository : SettingsRepository {
     private val _currentFont = MutableStateFlow( SupportedFonts.ProductSans )
     override val font = _currentFont.asStateFlow()
 
+    private val _fontScale = MutableStateFlow( 1.0f )
+    override val fontScale = _fontScale.asStateFlow()
+
     override fun setLanguage( localeCode: String ) {
         _currentLanguage.value = resolveLanguage( localeCode )
     }
@@ -35,16 +38,18 @@ class FakeSettingsRepository : SettingsRepository {
     }
 
     override fun setFont( fontName: String ) {
-        println( "Setting Font to $fontName.." )
         _currentFont.value = resolveFont( fontName )
-        println( "New font name: ${font.value.fontName}" )
+    }
+
+    override fun setFontScale( fontScale: Float ) {
+        _fontScale.value = fontScale
     }
 
     private fun resolveFont( fontName: String ) = when( fontName ) {
-        SupportedFonts.DMSans.fontName -> SupportedFonts.DMSans
-        SupportedFonts.Inter.fontName -> SupportedFonts.Inter
-        SupportedFonts.Poppins.fontName -> SupportedFonts.Poppins
-        SupportedFonts.Roboto.fontName -> SupportedFonts.Roboto
+        SupportedFonts.DMSans.name -> SupportedFonts.DMSans
+        SupportedFonts.Inter.name -> SupportedFonts.Inter
+        SupportedFonts.Poppins.name -> SupportedFonts.Poppins
+        SupportedFonts.Roboto.name -> SupportedFonts.Roboto
         else -> SupportedFonts.ProductSans
     }
 

@@ -2,7 +2,6 @@ package com.odesa.musically.data.preferences.storage.impl
 
 import android.content.Context
 import androidx.core.content.edit
-import com.odesa.musically.data.preferences.impl.SettingsKeys
 import com.odesa.musically.data.preferences.storage.PreferenceStore
 import com.odesa.musically.services.i18n.EnglishTranslation
 import com.odesa.musically.ui.theme.SupportedFonts
@@ -18,7 +17,7 @@ class PreferenceStoreImpl( private val context: Context) : PreferenceStore {
         val language = getSharedPreferences().getString(
             SettingsKeys.language, null
         )
-        return language ?: EnglishTranslation.locale
+        return language ?: SettingsDefaults.translation.locale
     }
 
     override fun setFontName( fontName: String ) {
@@ -31,11 +30,36 @@ class PreferenceStoreImpl( private val context: Context) : PreferenceStore {
         val fontName = getSharedPreferences().getString(
             SettingsKeys.fontName, null
         )
-        return fontName ?: SupportedFonts.ProductSans.fontName
+        return fontName ?: SettingsDefaults.font.name
+    }
+
+    override fun setFontScale( fontScale: Float ) {
+        getSharedPreferences().edit {
+            putFloat( SettingsKeys.fontScale, fontScale )
+        }
+    }
+
+    override fun getFontScale(): Float {
+        return getSharedPreferences().getFloat(
+            SettingsKeys.fontScale, SettingsDefaults.fontScale
+        )
     }
 
     private fun getSharedPreferences() = context.getSharedPreferences(
         SettingsKeys.identifier,
         Context.MODE_PRIVATE
     )
+}
+
+object SettingsDefaults {
+    val translation = EnglishTranslation
+    val font = SupportedFonts.ProductSans
+    const val fontScale = 1.0f
+}
+
+object SettingsKeys {
+    const val identifier = "musically_settings"
+    const val language = "language"
+    const val fontName = "font_name"
+    const val fontScale = "font_scale"
 }

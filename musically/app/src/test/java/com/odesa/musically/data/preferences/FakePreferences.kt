@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-object FakePreferences : Preferences {
+class FakePreferences : Preferences {
 
     private val _language = MutableStateFlow( getLanguage() )
     override val language = _language.asStateFlow()
@@ -23,6 +23,9 @@ object FakePreferences : Preferences {
     override val font = _font.asStateFlow()
     override val textDirection: StateFlow<TextDirection>
         get() = TODO("Not yet implemented")
+
+    private val _fontScale = MutableStateFlow( getFontScale() )
+    override val fontScale = _fontScale.asStateFlow()
 
     override fun setLanguage( localeCode: String ) {
         when ( localeCode ) {
@@ -37,12 +40,16 @@ object FakePreferences : Preferences {
 
     override fun setFont( fontName: String ) {
         when ( fontName ) {
-            SupportedFonts.Inter.fontName -> _font.value = SupportedFonts.Inter
-            SupportedFonts.ProductSans.fontName -> _font.value = SupportedFonts.ProductSans
-            SupportedFonts.DMSans.fontName -> _font.value = SupportedFonts.DMSans
-            SupportedFonts.Roboto.fontName -> _font.value = SupportedFonts.Roboto
+            SupportedFonts.Inter.name -> _font.value = SupportedFonts.Inter
+            SupportedFonts.ProductSans.name -> _font.value = SupportedFonts.ProductSans
+            SupportedFonts.DMSans.name -> _font.value = SupportedFonts.DMSans
+            SupportedFonts.Roboto.name -> _font.value = SupportedFonts.Roboto
             else -> _font.value = SupportedFonts.Poppins
         }
+    }
+
+    override fun setFontScale( fontScale: Float ) {
+        _fontScale.value = fontScale
     }
 
     private fun getLanguage() : Translation {
@@ -51,6 +58,10 @@ object FakePreferences : Preferences {
 
     private fun getFont(): MusicallyFont {
         return SupportedFonts.ProductSans
+    }
+
+    private fun getFontScale(): Float {
+        return 1.0f
     }
 
 }

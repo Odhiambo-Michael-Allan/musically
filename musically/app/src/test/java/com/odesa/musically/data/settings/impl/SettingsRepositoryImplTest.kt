@@ -8,6 +8,8 @@ import com.odesa.musically.services.i18n.EnglishTranslation
 import com.odesa.musically.services.i18n.FrenchTranslation
 import com.odesa.musically.services.i18n.GermanTranslation
 import com.odesa.musically.services.i18n.SpanishTranslation
+import com.odesa.musically.services.i18n.Translation
+import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.SupportedFonts
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
@@ -15,11 +17,12 @@ import org.junit.Test
 
 class SettingsRepositoryImplTest {
 
-    private val preferences: FakePreferences = FakePreferences
+    private lateinit var preferences: FakePreferences
     private lateinit var settingsRepository: SettingsRepository
 
     @Before
     fun setup() {
+        preferences = FakePreferences()
         settingsRepository = SettingsRepositoryImpl( preferences )
     }
 
@@ -29,79 +32,67 @@ class SettingsRepositoryImplTest {
     }
 
     @Test
-    fun whenLanguageChangesToBelarusian_belarusianLanguageIsUsed() {
-        settingsRepository.setLanguage( BelarusianTranslation.locale )
-        assertEquals( "Налады", settingsRepository.language.value.settings )
+    fun testLanguageChange() {
+        changeLanguageTo( BelarusianTranslation, "Налады" )
+        changeLanguageTo( ChineseTranslation, "设置" )
+        changeLanguageTo( EnglishTranslation, "Settings" )
+        changeLanguageTo( FrenchTranslation, "Paramètres" )
+        changeLanguageTo( GermanTranslation, "Einstellungen" )
+        changeLanguageTo( SpanishTranslation, "Configuración" )
     }
 
-    @Test
-    fun whenLanguageChangesToChinese_chineseLanguageIsUsed() {
-        settingsRepository.setLanguage( ChineseTranslation.locale )
-        assertEquals( "设置", settingsRepository.language.value.settings )
+    private fun changeLanguageTo( language: Translation, testString: String ) {
+        preferences.setLanguage( language.locale )
+        val currentLanguage = settingsRepository.language.value
+        assertEquals( testString, currentLanguage.settings )
     }
 
-    @Test
-    fun whenLanguageChangesToEnglish_englishLanguageIsUsed() {
-        settingsRepository.setLanguage( EnglishTranslation.locale )
-        assertEquals( "Settings", settingsRepository.language.value.settings )
-    }
-
-    @Test
-    fun whenLanguageChangesToFrench_frenchLanguageIsUsed() {
-        settingsRepository.setLanguage( FrenchTranslation.locale )
-        assertEquals( "Paramètres", settingsRepository.language.value.settings )
-    }
-
-    @Test
-    fun whenLanguageChangesToGerman_germanLanguageIsUsed() {
-        settingsRepository.setLanguage( GermanTranslation.locale )
-        assertEquals( "Einstellungen", settingsRepository.language.value.settings )
-    }
-
-    @Test
-    fun whenLanguageIsSpanish_spanishLanguageIsUsed() {
-        settingsRepository.setLanguage( SpanishTranslation.locale )
-        assertEquals( "Configuración", settingsRepository.language.value.settings )
-    }
 
     @Test
     fun whenNoFontHasBeenSet_productSansIsUsedAsDefault() {
         val currentFont = settingsRepository.font.value
-        assertEquals( SupportedFonts.ProductSans.fontName, currentFont.fontName )
-    }
-    @Test
-    fun whenFontChangesToInter_interFontIsUsed() {
-        settingsRepository.setFont( SupportedFonts.Inter.fontName )
-        val currentFont = settingsRepository.font.value
-        assertEquals( SupportedFonts.Inter.fontName, currentFont.fontName )
+        assertEquals( SupportedFonts.ProductSans.name, currentFont.name )
     }
 
     @Test
-    fun whenFontChangesToPoppins_poppinsFontIsUsed() {
-        settingsRepository.setFont( SupportedFonts.Poppins.fontName )
+    fun testFontChange() {
+        changeFontTo( SupportedFonts.ProductSans )
+        changeFontTo( SupportedFonts.Roboto )
+        changeFontTo( SupportedFonts.DMSans )
+        changeFontTo( SupportedFonts.Poppins )
+        changeFontTo( SupportedFonts.Inter )
+    }
+
+    private fun changeFontTo( font: MusicallyFont ) {
+        preferences.setFont( font.name )
         val currentFont = settingsRepository.font.value
-        assertEquals( SupportedFonts.Poppins.fontName, currentFont.fontName )
+        assertEquals( font.name, currentFont.name )
     }
 
     @Test
-    fun whenFontChangesToDMSans_DMSansFontIsUsed() {
-        settingsRepository.setFont( SupportedFonts.DMSans.fontName )
-        val currentFont = settingsRepository.font.value
-        assertEquals( SupportedFonts.DMSans.fontName, currentFont.fontName )
+    fun whenNoFontScaleHasBeenSet_oneIsUsedAsTheDefault() {
+        assertEquals( 1.0f, settingsRepository.fontScale.value )
     }
 
     @Test
-    fun whenFontChangesToRoboto_RobotoFontIsUsed() {
-        settingsRepository.setFont( SupportedFonts.Roboto.fontName )
-        val currentFont = settingsRepository.font.value
-        assertEquals( SupportedFonts.Roboto.fontName, currentFont.fontName )
+    fun testFontScaleChange() {
+        changeFontScaleTo( 0.25f )
+        changeFontScaleTo( 0.5f )
+        changeFontScaleTo( 0.75f )
+        changeFontScaleTo( 1.0f )
+        changeFontScaleTo( 1.25f )
+        changeFontScaleTo( 1.5f )
+        changeFontScaleTo( 1.75f )
+        changeFontScaleTo( 2.0f )
+        changeFontScaleTo( 2.25f )
+        changeFontScaleTo( 2.5f )
+        changeFontScaleTo( 2.75f )
+        changeFontScaleTo( 2.0f )
     }
 
-    @Test
-    fun whenFontChangesToProductSans_ProductSansFontIsUsed() {
-        settingsRepository.setFont( SupportedFonts.ProductSans.fontName )
-        val currentFont = settingsRepository.font.value
-        assertEquals( SupportedFonts.ProductSans.fontName, currentFont.fontName )
+    private fun changeFontScaleTo( fontScale: Float ) {
+        preferences.setFontScale( fontScale )
+        assertEquals( fontScale, settingsRepository.fontScale.value )
     }
 
 }

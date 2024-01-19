@@ -14,11 +14,13 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
 
     private val _language = settingsRepository.language
     private val _font = settingsRepository.font
+    private val _fontScale = settingsRepository.fontScale
 
     private val _uiState = MutableStateFlow(
         SettingsScreenUiState(
             language = _language.value,
-            font = _font.value
+            font = _font.value,
+            fontScale = _fontScale.value
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -27,6 +29,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     init {
         viewModelScope.launch { observeLanguage() }
         viewModelScope.launch { observeFont() }
+        viewModelScope.launch { observeFontScale() }
     }
 
     private suspend fun observeLanguage() {
@@ -34,8 +37,6 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
             _uiState.value = _uiState.value.copy(
                 language = it
             )
-            println( "Setting language in settings view model to ${it.locale}" )
-            println( "Font is: ${_uiState.value.font.fontName}" )
         }
     }
 
@@ -44,8 +45,14 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
             _uiState.value = _uiState.value.copy(
                 font = it
             )
-            println( "Setting font in settings view model to: ${it.fontName}" )
-            println( "Language is: ${_uiState.value.language.locale}" )
+        }
+    }
+
+    private suspend fun observeFontScale() {
+        _fontScale.collect {
+            _uiState.value = _uiState.value.copy(
+                fontScale = it
+            )
         }
     }
 
@@ -70,5 +77,6 @@ class SettingsViewModelFactory(
 
 data class SettingsScreenUiState(
     val language: Translation,
-    val font: MusicallyFont
+    val font: MusicallyFont,
+    val fontScale: Float
 )

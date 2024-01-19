@@ -14,14 +14,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.tooling.preview.Preview
-import com.odesa.musically.services.i18n.EnglishTranslation
 import com.odesa.musically.ui.components.ScaffoldDialog
 import com.odesa.musically.ui.settings.SettingsScreenUiState
 import com.odesa.musically.ui.settings.components.DialogOption
 import com.odesa.musically.ui.settings.components.SettingsTileDefaults
 import com.odesa.musically.ui.theme.MusicallyTypography
-import com.odesa.musically.ui.theme.SupportedFonts
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
@@ -51,7 +48,7 @@ fun Font(
                 Text( text = uiState.language.font )
             },
             supportingContent = {
-                Text( text = uiState.font.fontName )
+                Text( text = uiState.font.name )
             }
         )
     }
@@ -62,10 +59,10 @@ fun Font(
                 LazyColumn {
                     items( MusicallyTypography.all.values.toList() ) {
                         DialogOption(
-                            selected = uiState.font.fontName == it.fontName,
-                            title = it.fontName
+                            selected = uiState.font.name == it.name,
+                            title = it.name
                         ) {
-                            onFontChange( it.fontName )
+                            onFontChange( it.name )
                             fontDialogIsOpen = false
                         }
                     }
@@ -83,14 +80,14 @@ data class Font (
     val name: String
 )
 
-@Preview( showSystemUi = true )
-@Composable
-fun FontPreview() {
-    Font(
-        uiState = SettingsScreenUiState(
-            language = EnglishTranslation,
-            font = SupportedFonts.ProductSans
-        ),
-        onFontChange = {}
-    )
-}
+//@Preview( showSystemUi = true )
+//@Composable
+//fun FontPreview() {
+//    Font(
+//        uiState = SettingsScreenUiState(
+//            language = EnglishTranslation,
+//            font = SupportedFonts.ProductSans
+//        ),
+//        onFontChange = {}
+//    )
+//}

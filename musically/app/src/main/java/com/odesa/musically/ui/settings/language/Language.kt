@@ -14,14 +14,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.tooling.preview.Preview
-import com.odesa.musically.services.i18n.EnglishTranslation
 import com.odesa.musically.services.i18n.Translator
 import com.odesa.musically.ui.components.ScaffoldDialog
 import com.odesa.musically.ui.settings.SettingsScreenUiState
 import com.odesa.musically.ui.settings.components.DialogOption
 import com.odesa.musically.ui.settings.components.SettingsTileDefaults
-import com.odesa.musically.ui.theme.SupportedFonts
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
@@ -85,14 +82,14 @@ data class Language (
 )
 
 
-@Preview( showSystemUi = true )
-@Composable
-fun LanguagePreview() {
-    Language(
-        uiState = SettingsScreenUiState(
-            language = EnglishTranslation,
-            font = SupportedFonts.ProductSans
-        ),
-        onLanguageChange = {}
-    )
-}
+//@Preview( showSystemUi = true )
+//@Composable
+//fun LanguagePreview() {
+//    Language(
+//        uiState = SettingsScreenUiState(
+//            language = EnglishTranslation,
+//            font = SupportedFonts.ProductSans
+//        ),
+//        onLanguageChange = {}
+//    )
+//}

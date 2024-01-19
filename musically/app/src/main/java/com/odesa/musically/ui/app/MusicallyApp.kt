@@ -13,16 +13,13 @@ import com.odesa.musically.ui.theme.MusicallyTheme
 
 @Composable
 fun MusicallyApp(
-    settingsViewModel: SettingsViewModel,
-    musicallyAppViewModel: MusicallyAppViewModel
+    settingsViewModel: SettingsViewModel
 ) {
 
-
     val settingsScreenUiState by settingsViewModel.uiState.collectAsState()
-    val themeState by musicallyAppViewModel.uiState.collectAsState()
 
     MusicallyTheme(
-        uiState = themeState
+        uiState = settingsScreenUiState
     ) {
         // A surface container using the 'background' color from the theme
         Surface(
@@ -32,7 +29,7 @@ fun MusicallyApp(
             SettingsScreenContent(
                 uiState = settingsScreenUiState,
                 onLanguageChange = {  newLanguage -> settingsViewModel.setLanguage( newLanguage ) },
-                onFontChange = { newFont -> musicallyAppViewModel.setFont( newFont ) }
+                onFontChange = { newFont -> settingsViewModel.setFont( newFont ) }
             )
         }
     }

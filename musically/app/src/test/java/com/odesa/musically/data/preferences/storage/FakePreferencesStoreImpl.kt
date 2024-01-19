@@ -6,6 +6,7 @@ class FakePreferencesStoreImpl : PreferenceStore {
 
     private var language: String? = null
     private var fontName: String? = null
+    private var fontScale: Float? = null
 
     override fun setLanguage( localeCode: String ) {
         language = localeCode
@@ -19,5 +20,12 @@ class FakePreferencesStoreImpl : PreferenceStore {
         this.fontName = fontName
     }
 
-    override fun getFontName() = this.fontName ?: SupportedFonts.ProductSans.fontName
+    override fun getFontName() = this.fontName ?: SupportedFonts.ProductSans.name
+    override fun setFontScale( fontScale: Float ) {
+        this.fontScale = fontScale
+    }
+
+    override fun getFontScale(): Float {
+        return fontScale ?: 1.0f
+    }
 }

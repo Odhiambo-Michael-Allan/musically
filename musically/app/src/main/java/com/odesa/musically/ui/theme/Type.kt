@@ -8,12 +8,12 @@ import androidx.compose.ui.text.style.TextDirection
 import com.odesa.musically.R
 
 class MusicallyFont(
-    val fontName: String,
+    val name: String,
     val fontFamily: FontFamily
 ) {
     companion object {
         fun fromValue( fontName: String, fontFamily: FontFamily ) = MusicallyFont(
-            fontName = fontName,
+            name = fontName,
             fontFamily = fontFamily
         )
     }
@@ -65,11 +65,11 @@ object SupportedFonts {
 object MusicallyTypography {
     private val defaultFont = SupportedFonts.ProductSans
     val all = mapOf(
-        SupportedFonts.Inter.fontName to SupportedFonts.Inter,
-        SupportedFonts.Poppins.fontName to SupportedFonts.Poppins,
-        SupportedFonts.DMSans.fontName to SupportedFonts.DMSans,
-        SupportedFonts.Roboto.fontName to SupportedFonts.Roboto,
-        SupportedFonts.ProductSans.fontName to SupportedFonts.ProductSans
+        SupportedFonts.Inter.name to SupportedFonts.Inter,
+        SupportedFonts.Poppins.name to SupportedFonts.Poppins,
+        SupportedFonts.DMSans.name to SupportedFonts.DMSans,
+        SupportedFonts.Roboto.name to SupportedFonts.Roboto,
+        SupportedFonts.ProductSans.name to SupportedFonts.ProductSans
     )
 
     fun resolveFont( name: String? ) = all[ name ] ?: defaultFont

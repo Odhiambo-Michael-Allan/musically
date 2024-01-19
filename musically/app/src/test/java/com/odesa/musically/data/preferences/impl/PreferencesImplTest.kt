@@ -8,6 +8,8 @@ import com.odesa.musically.services.i18n.EnglishTranslation
 import com.odesa.musically.services.i18n.FrenchTranslation
 import com.odesa.musically.services.i18n.GermanTranslation
 import com.odesa.musically.services.i18n.SpanishTranslation
+import com.odesa.musically.services.i18n.Translation
+import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.SupportedFonts
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
@@ -31,85 +33,146 @@ class PreferencesImplTest {
 
     @Test
     fun whenLanguageIsSetToBelarusian_theBelarusianLanguageIsUsed() {
-        preferences.setLanguage( BelarusianTranslation.locale )
-        val currentLanguage = preferences.language.value
-        assertEquals( "Налады", currentLanguage.settings )
+        testLanguage( BelarusianTranslation, "Налады" )
     }
 
     @Test
     fun whenLanguageIsSetToChinese_theChineseLanguageIsUsed() {
-        preferences.setLanguage( ChineseTranslation.locale )
-        val currentLanguage = preferences.language.value
-        assertEquals( "设置", currentLanguage.settings )
+        testLanguage( ChineseTranslation, "设置" )
     }
 
     @Test
     fun whenLanguageIsSetToEnglish_theEnglishLanguageIsUsed() {
-        preferences.setLanguage( EnglishTranslation.locale )
-        val currentLanguage = preferences.language.value
-        assertEquals( "Settings", currentLanguage.settings )
+        testLanguage( EnglishTranslation, "Settings" )
     }
 
     @Test
     fun whenLanguageIsSetToFrench_theFrenchLanguageIsUsed() {
-        preferences.setLanguage( FrenchTranslation.locale )
-        val currentLanguage = preferences.language.value
-        assertEquals( "Paramètres", currentLanguage.settings )
+        testLanguage( FrenchTranslation, "Paramètres" )
     }
 
     @Test
     fun whenLanguageIsSetToGerman_theGermanLanguageIsUsed() {
-        preferences.setLanguage( GermanTranslation.locale )
-        val currentLanguage = preferences.language.value
-        assertEquals( "Einstellungen", currentLanguage.settings )
+        testLanguage( GermanTranslation, "Einstellungen" )
     }
 
     @Test
     fun whenLanguageIsSetToSpanish_theSpanishLanguageIsUsed() {
-        preferences.setLanguage( SpanishTranslation.locale )
+        testLanguage( SpanishTranslation, "Configuración" )
+    }
+
+    private fun testLanguage( languageToTest: Translation, testString: String ) {
+        preferences.setLanguage( languageToTest.locale )
         val currentLanguage = preferences.language.value
-        assertEquals( "Configuración", currentLanguage.settings )
+        assertEquals( testString, currentLanguage.settings )
     }
 
     @Test
     fun whenFontHasNotBeenSet_productSansIsUsedAsTheDefault() {
         val currentFont = preferences.font.value
-        assertEquals( SupportedFonts.ProductSans.fontName, currentFont.fontName )
+        assertEquals( SupportedFonts.ProductSans.name, currentFont.name )
     }
 
     @Test
     fun whenFontChangesToInter_interFontIsUsed() {
-        preferences.setFont( SupportedFonts.Inter.fontName )
-        val currentFont = preferences.font.value
-        assertEquals( SupportedFonts.Inter.fontName, currentFont.fontName )
+        testFont( SupportedFonts.Inter )
     }
 
     @Test
     fun whenFontChangesToPoppins_poppinsFontIsUsed() {
-        preferences.setFont( SupportedFonts.Poppins.fontName )
-        val currentFont = preferences.font.value
-        assertEquals( SupportedFonts.Poppins.fontName, currentFont.fontName )
+        testFont( SupportedFonts.Poppins )
     }
 
     @Test
     fun whenFontChangesToDMSans_DMSansFontIsUsed() {
-        preferences.setFont( SupportedFonts.DMSans.fontName )
-        val currentFont = preferences.font.value
-        assertEquals( SupportedFonts.DMSans.fontName, currentFont.fontName )
+        testFont( SupportedFonts.DMSans )
     }
 
     @Test
     fun whenFontChangesToRoboto_robotoFontIsUsed() {
-        preferences.setFont( SupportedFonts.Roboto.fontName )
-        val currentFont = preferences.font.value
-        assertEquals( SupportedFonts.Roboto.fontName, currentFont.fontName )
+        testFont( SupportedFonts.Roboto )
     }
 
     @Test
     fun whenFontChangesToProductSans_productSansFontIsUsed() {
-        preferences.setFont( SupportedFonts.ProductSans.fontName )
+        testFont( SupportedFonts.ProductSans )
+    }
+
+    private fun testFont( expectedFont: MusicallyFont ) {
+        preferences.setFont( expectedFont.name )
         val currentFont = preferences.font.value
-        assertEquals( SupportedFonts.ProductSans.fontName, currentFont.fontName )
+        assertEquals( expectedFont.name, currentFont.name )
+    }
+
+    @Test
+    fun whenNoFontScaleHasBeenSet_oneIsUsedAsTheDefault() {
+        val currentFontScale = preferences.fontScale.value
+        assertEquals( 1.0f, currentFontScale )
+    }
+
+    @Test
+    fun whenFontScaleIsSetToQuarter_quarterFontScaleIsUsed() {
+        testFontScale( 0.25f )
+    }
+
+    @Test
+    fun whenFontScaleIsSetToHalf_halfFontScaleIsUsed() {
+        testFontScale( 0.5f )
+    }
+
+    @Test
+    fun whenFontScaleIsSetToThreeQuarter_threeQuarterFontScaleIsUsed() {
+        testFontScale( 0.75f )
+    }
+
+    @Test
+    fun whenFontScaleIsSetToOne_oneFontScaleIsUsed() {
+        testFontScale( 1.0f )
+    }
+
+    @Test
+    fun whenFontScaleIsSetToOneAndQuarter_oneAndQuarterFontScaleIsUsed() {
+        testFontScale( 1.25f )
+    }
+
+    @Test
+    fun whenFontScaleIsSetToOneAndHalf_oneAndHalfFontScaleIsUsed() {
+        testFontScale( 1.5f )
+    }
+
+    @Test
+    fun whenFontScaleIsSetToOneAndThreeQuarter_oneAndThreeQuarterFontScaleIsUsed() {
+        testFontScale( 1.75f )
+    }
+
+    @Test
+    fun whenFontScaleIsSetToTwo_twoFontScaleIsUsed() {
+        testFontScale( 2.0f )
+    }
+
+    @Test
+    fun whenFontScaleIsSetToTwoAndQuarter_twoAndQuarterFontScaleIsUsed() {
+        testFontScale( 2.25f )
+    }
+
+    @Test
+    fun whenFontScaleIsSetToTwoAndHalf_twoAndHalfFontScaleIsUsed() {
+        testFontScale( 2.5f )
+    }
+
+    @Test
+    fun whenFontScaleIsSetToTwoAndThreeQuarter_twoAndThreeQuarterFontScaleIsUsed() {
+        testFontScale( 2.75f )
+    }
+
+    @Test
+    fun whenFontScaleIsSetToThree_threeFontScaleIsUsed() {
+        testFontScale( 3.0f )
+    }
+
+    private fun testFontScale( expectedFontScale: Float ) {
+        preferences.setFontScale( expectedFontScale )
+        assertEquals( expectedFontScale, preferences.fontScale.value )
     }
 
 }

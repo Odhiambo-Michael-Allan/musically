@@ -27,12 +27,15 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
     override val textDirection: StateFlow<TextDirection>
         get() = TODO("Not yet implemented")
 
+    private val _fontScale = MutableStateFlow( getFontScale() )
+    override val fontScale = _fontScale.asStateFlow()
+
     private fun getFont(): MusicallyFont {
         return when( preferenceStore.getFontName() ) {
-            SupportedFonts.DMSans.fontName -> SupportedFonts.DMSans
-            SupportedFonts.Inter.fontName -> SupportedFonts.Inter
-            SupportedFonts.Poppins.fontName -> SupportedFonts.Poppins
-            SupportedFonts.Roboto.fontName -> SupportedFonts.Roboto
+            SupportedFonts.DMSans.name -> SupportedFonts.DMSans
+            SupportedFonts.Inter.name -> SupportedFonts.Inter
+            SupportedFonts.Poppins.name -> SupportedFonts.Poppins
+            SupportedFonts.Roboto.name -> SupportedFonts.Roboto
             else -> SupportedFonts.ProductSans
         }
     }
@@ -62,10 +65,13 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
         }
     }
 
-}
+    override fun setFontScale( fontScale: Float ) {
+        preferenceStore.setFontScale( fontScale )
+        _fontScale.update {
+            getFontScale()
+        }
+    }
 
-object SettingsKeys {
-    const val identifier = "musically_settings"
-    const val language = "language"
-    const val fontName = "font_name"
+    private fun getFontScale() = preferenceStore.getFontScale()
+
 }

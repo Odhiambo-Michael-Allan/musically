@@ -9,6 +9,7 @@ class SettingsRepositoryImpl(
 
     override val language = preferences.language
     override val font = preferences.font
+    override val fontScale = preferences.fontScale
 
     override fun setLanguage( localeCode: String ) {
         preferences.setLanguage( localeCode )
@@ -16,5 +17,9 @@ class SettingsRepositoryImpl(
 
     override fun setFont( fontName: String ) {
         preferences.setFont( fontName )
+    }
+
+    override fun setFontScale( fontScale: Float ) {
+        preferences.setFontScale( fontScale )
     }
 }
