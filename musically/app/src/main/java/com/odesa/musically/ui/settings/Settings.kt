@@ -32,12 +32,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.odesa.musically.services.i18n.EnglishTranslation
 import com.odesa.musically.ui.components.AdaptiveSnackBar
 import com.odesa.musically.ui.components.TopAppBarMinimalTitle
 import com.odesa.musically.ui.settings.components.SettingsSideHeading
 import com.odesa.musically.ui.settings.font.Font
 import com.odesa.musically.ui.settings.language.Language
+import com.odesa.musically.ui.theme.MusicallyTheme
+import com.odesa.musically.ui.theme.SupportedFonts
 
 @Composable
 fun SettingsScreen() {}
@@ -145,21 +149,21 @@ fun SettingsScreenContent(
     }
 }
 
-//@Preview( showSystemUi = true )
-//@Composable
-//fun SettingsScreenContentPreview() {
-//    MusicallyTheme(
-//        themeState = ThemeState(
-//            font = SupportedFonts.ProductSans
-//        )
-//    ) {
-//        SettingsScreenContent(
-//            SettingsScreenUiState(
-//                language = EnglishTranslation,
-//                font = SupportedFonts.ProductSans
-//            ),
-//            onLanguageChange = {},
-//            onFontChange = {}
-//        )
-//    }
-//}
+@Preview( showSystemUi = true )
+@Composable
+fun SettingsScreenContentPreview() {
+    val uiState = SettingsScreenUiState(
+        language = EnglishTranslation,
+        font = SupportedFonts.ProductSans,
+        fontScale = 2.25f
+    )
+    MusicallyTheme(
+        uiState = uiState
+    ) {
+        SettingsScreenContent(
+            uiState = uiState,
+            onLanguageChange = {},
+            onFontChange = {}
+        )
+    }
+}
