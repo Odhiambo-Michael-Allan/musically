@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.Density
 import androidx.core.view.WindowCompat
+import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.settings.SettingsScreenUiState
 
 enum class ThemeMode {
@@ -95,4 +96,12 @@ fun MusicallyTheme(
             }
         }
     )
+}
+
+fun ThemeMode.resolveName( language: Language ) = when ( this ) {
+    ThemeMode.SYSTEM -> language.systemLightDark
+    ThemeMode.SYSTEM_BLACK -> language.systemLightBlack
+    ThemeMode.LIGHT -> language.light
+    ThemeMode.DARK -> language.dark
+    ThemeMode.BLACK -> language.black
 }

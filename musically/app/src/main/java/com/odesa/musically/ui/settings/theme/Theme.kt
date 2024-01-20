@@ -21,6 +21,7 @@ import com.odesa.musically.ui.components.ScaffoldDialog
 import com.odesa.musically.ui.settings.components.DialogOption
 import com.odesa.musically.ui.settings.components.SettingsTileDefaults
 import com.odesa.musically.ui.theme.ThemeMode
+import com.odesa.musically.ui.theme.resolveName
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
@@ -50,13 +51,7 @@ fun Theme(
             },
             supportingContent = {
                 Text(
-                    text = when( themeMode ) {
-                        ThemeMode.SYSTEM -> language.systemLightDark
-                        ThemeMode.SYSTEM_BLACK -> language.systemLightBlack
-                        ThemeMode.LIGHT -> language.light
-                        ThemeMode.DARK -> language.dark
-                        ThemeMode.BLACK -> language.black
-                    }
+                    text = themeMode.resolveName( language )
                 )
             }
         )
@@ -69,7 +64,7 @@ fun Theme(
                     items( ThemeMode.entries) {
                         DialogOption(
                             selected = it.name == themeMode.name,
-                            title = it.name
+                            title = it.resolveName( language )
                         ) {
                             onThemeChange( it )
                             themeDialogIsOpen = false
