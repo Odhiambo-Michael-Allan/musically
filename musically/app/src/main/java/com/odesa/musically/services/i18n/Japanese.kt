@@ -3,7 +3,7 @@ package com.odesa.musically.services.i18n
 object Japanese : Language {
     override val locale: String
         get() = TODO("Not yet implemented")
-    override val nativeLanguageName: String
+    override val nativeName: String
         get() = "Japanese"
     override val englishName: String
         get() = TODO("Not yet implemented")

@@ -12,6 +12,7 @@ import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.services.i18n.Spanish
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.SupportedFonts
+import com.odesa.musically.ui.theme.ThemeMode
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -115,6 +116,26 @@ class SettingsViewModelTest {
     fun whenInvalidFontScaleIsProvided_settingsViewModelCorrectlyIdentifiesIt() {
         settingsViewModel.setFontScale( "1245323" )
         assertEquals( "1.0", settingsViewModel.uiState.value.fontScale.toString() )
+    }
+
+    @Test
+    fun whenNoThemeModeHasBeenSet_systemIsUsedAsTheDefault() {
+        val currentThemeMode = settingsViewModel.uiState.value.themeMode
+        assertEquals( ThemeMode.SYSTEM.name, currentThemeMode.name )
+    }
+
+    @Test
+    fun testThemeModeChange() {
+        changeThemeModeTo( ThemeMode.SYSTEM )
+        changeThemeModeTo( ThemeMode.SYSTEM_BLACK )
+        changeThemeModeTo( ThemeMode.LIGHT )
+        changeThemeModeTo( ThemeMode.DARK )
+        changeThemeModeTo( ThemeMode.BLACK )
+    }
+
+    private fun changeThemeModeTo( themeMode: ThemeMode ) {
+        settingsRepository.setThemeMode( themeMode )
+        assertEquals( themeMode.name, settingsViewModel.uiState.value.themeMode.name )
     }
 
 }

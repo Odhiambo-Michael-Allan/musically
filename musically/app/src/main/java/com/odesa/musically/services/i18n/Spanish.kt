@@ -3,7 +3,7 @@ package com.odesa.musically.services.i18n
 object Spanish : Language {
     override val locale: String
         get() = "es"
-    override val nativeLanguageName: String
+    override val nativeName: String
         get() = "Español"
     override val englishName: String
         get() = "Spanish"

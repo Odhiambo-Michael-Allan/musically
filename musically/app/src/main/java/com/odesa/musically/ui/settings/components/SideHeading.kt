@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SettingsSideHeading( text: String ) {
-    Box( modifier = Modifier.padding( start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp ) ) {
+    Box( modifier = Modifier.padding( 16.dp ) ) {
         Text(
             text = text,
             style = MaterialTheme.typography.labelMedium.copy(

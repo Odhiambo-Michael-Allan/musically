@@ -80,15 +80,11 @@ fun FontScale(
 
         if ( fontScaleDialogIsOpen ) {
             var currentInputValue by remember { mutableStateOf( fontScale.toString() ) }
-//            val inputValue by remember( textFieldValue ) { derivedStateOf { textFieldValue.toFloatOrNull() } }
-//            val isError by remember( inputValue ) { derivedStateOf { inputValue == null } }
-//            val modified by remember( inputValue, fontScale ) { derivedStateOf { inputValue != null && fontScale != inputValue } }
 
             ScaffoldDialog(
                 title = { Text( text = language.fontScale ) },
                 content = {
                     DialogContent(
-                        fontScale = fontScale,
                         currentInputValue = currentInputValue,
                         onValueChange = {
                             currentInputValue = it.ifEmpty { "" }
@@ -143,7 +139,6 @@ fun FontScalePreview() {
 @OptIn( ExperimentalLayoutApi::class )
 @Composable
 fun DialogContent(
-    fontScale: Float,
     currentInputValue: String,
     onValueChange: ( String ) -> Unit,
     onPresetClicked: ( Float ) -> Unit
@@ -177,7 +172,7 @@ fun DialogContent(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 scalingPresets.map {
-                    val active = fontScale == it
+                    val active = currentInputValue == it.toString()
                     val xString = "x$it"
                     val shape = RoundedCornerShape( 4.dp )
                     val backgroundColor = when {
@@ -216,7 +211,6 @@ fun DialogContent(
 @Composable
 fun DialogContentPreview() {
     DialogContent(
-        fontScale = 1.0f,
         currentInputValue = "1.0",
         onValueChange = {},
         onPresetClicked = {}

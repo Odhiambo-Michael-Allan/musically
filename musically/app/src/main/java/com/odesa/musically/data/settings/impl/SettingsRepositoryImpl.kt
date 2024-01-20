@@ -2,6 +2,7 @@ package com.odesa.musically.data.settings.impl
 
 import com.odesa.musically.data.preferences.Preferences
 import com.odesa.musically.data.settings.SettingsRepository
+import com.odesa.musically.ui.theme.ThemeMode
 
 class SettingsRepositoryImpl(
     private val preferences: Preferences
@@ -10,6 +11,7 @@ class SettingsRepositoryImpl(
     override val language = preferences.language
     override val font = preferences.font
     override val fontScale = preferences.fontScale
+    override val themeMode = preferences.themeMode
 
     override fun setLanguage( localeCode: String ) {
         preferences.setLanguage( localeCode )
@@ -21,5 +23,9 @@ class SettingsRepositoryImpl(
 
     override fun setFontScale( fontScale: Float ) {
         preferences.setFontScale( fontScale )
+    }
+
+    override fun setThemeMode( themeMode: ThemeMode ) {
+        preferences.setThemeMode( themeMode )
     }
 }

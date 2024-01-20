@@ -3,10 +3,10 @@ package com.odesa.musically.services.i18n
 object English : Language {
     override val locale: String
         get() = "en"
-    override val nativeLanguageName: String
+    override val nativeName: String
         get() = "English"
     override val englishName: String
-        get() = nativeLanguageName
+        get() = nativeName
     override val unknownSymbol: String
         get() = "?"
     override val helloThere: String

@@ -20,6 +20,14 @@ import androidx.compose.ui.unit.Density
 import androidx.core.view.WindowCompat
 import com.odesa.musically.ui.settings.SettingsScreenUiState
 
+enum class ThemeMode {
+    SYSTEM,
+    SYSTEM_BLACK,
+    LIGHT,
+    DARK,
+    BLACK
+}
+
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
     secondary = PurpleGrey80,

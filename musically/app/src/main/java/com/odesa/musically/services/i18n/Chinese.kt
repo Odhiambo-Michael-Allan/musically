@@ -3,7 +3,7 @@ package com.odesa.musically.services.i18n
 object Chinese : Language {
     override val locale: String
         get() = "zh-Hans"
-    override val nativeLanguageName: String
+    override val nativeName: String
         get() = "简体中文"
     override val englishName: String
         get() = "Chinese (Simplified)"

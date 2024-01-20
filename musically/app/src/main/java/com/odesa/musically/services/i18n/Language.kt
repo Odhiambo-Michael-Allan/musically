@@ -2,7 +2,7 @@ package com.odesa.musically.services.i18n
 
 interface Language {
     val locale: String
-    val nativeLanguageName: String
+    val nativeName: String
     val englishName: String
     val unknownSymbol: String
     val helloThere: String

@@ -7,10 +7,11 @@ import com.odesa.musically.services.i18n.Chinese
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.French
 import com.odesa.musically.services.i18n.German
-import com.odesa.musically.services.i18n.Spanish
 import com.odesa.musically.services.i18n.Language
+import com.odesa.musically.services.i18n.Spanish
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.SupportedFonts
+import com.odesa.musically.ui.theme.ThemeMode
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -32,32 +33,12 @@ class PreferencesImplTest {
     }
 
     @Test
-    fun whenLanguageIsSetToBelarusian_theBelarusianLanguageIsUsed() {
+    fun testLanguageChange() {
         testLanguage( Belarusian, "Налады" )
-    }
-
-    @Test
-    fun whenLanguageIsSetToChinese_theChineseLanguageIsUsed() {
         testLanguage( Chinese, "设置" )
-    }
-
-    @Test
-    fun whenLanguageIsSetToEnglish_theEnglishLanguageIsUsed() {
         testLanguage( English, "Settings" )
-    }
-
-    @Test
-    fun whenLanguageIsSetToFrench_theFrenchLanguageIsUsed() {
         testLanguage( French, "Paramètres" )
-    }
-
-    @Test
-    fun whenLanguageIsSetToGerman_theGermanLanguageIsUsed() {
         testLanguage( German, "Einstellungen" )
-    }
-
-    @Test
-    fun whenLanguageIsSetToSpanish_theSpanishLanguageIsUsed() {
         testLanguage( Spanish, "Configuración" )
     }
 
@@ -74,34 +55,18 @@ class PreferencesImplTest {
     }
 
     @Test
-    fun whenFontChangesToInter_interFontIsUsed() {
-        testFont( SupportedFonts.Inter )
+    fun testFontChange() {
+        changeFontTo( SupportedFonts.Inter )
+        changeFontTo( SupportedFonts.Poppins )
+        changeFontTo( SupportedFonts.DMSans )
+        changeFontTo( SupportedFonts.Roboto )
+        changeFontTo( SupportedFonts.ProductSans )
     }
 
-    @Test
-    fun whenFontChangesToPoppins_poppinsFontIsUsed() {
-        testFont( SupportedFonts.Poppins )
-    }
-
-    @Test
-    fun whenFontChangesToDMSans_DMSansFontIsUsed() {
-        testFont( SupportedFonts.DMSans )
-    }
-
-    @Test
-    fun whenFontChangesToRoboto_robotoFontIsUsed() {
-        testFont( SupportedFonts.Roboto )
-    }
-
-    @Test
-    fun whenFontChangesToProductSans_productSansFontIsUsed() {
-        testFont( SupportedFonts.ProductSans )
-    }
-
-    private fun testFont( expectedFont: MusicallyFont ) {
-        preferences.setFont( expectedFont.name )
+    private fun changeFontTo( font: MusicallyFont ) {
+        preferences.setFont( font.name )
         val currentFont = preferences.font.value
-        assertEquals( expectedFont.name, currentFont.name )
+        assertEquals( font.name, currentFont.name )
     }
 
     @Test
@@ -111,68 +76,43 @@ class PreferencesImplTest {
     }
 
     @Test
-    fun whenFontScaleIsSetToQuarter_quarterFontScaleIsUsed() {
-        testFontScale( 0.25f )
+    fun testFontScaleChange() {
+        changeFontScaleTo( 0.25f )
+        changeFontScaleTo( 0.5f )
+        changeFontScaleTo( 0.75f )
+        changeFontScaleTo( 1.0f )
+        changeFontScaleTo( 1.25f )
+        changeFontScaleTo( 1.5f )
+        changeFontScaleTo( 1.75f )
+        changeFontScaleTo( 2.0f )
+        changeFontScaleTo( 2.25f )
+        changeFontScaleTo( 2.5f )
+        changeFontScaleTo( 2.75f )
+        changeFontScaleTo( 3.0f )
+    }
+
+    private fun changeFontScaleTo( fontScale: Float ) {
+        preferences.setFontScale( fontScale )
+        assertEquals( fontScale, preferences.fontScale.value )
     }
 
     @Test
-    fun whenFontScaleIsSetToHalf_halfFontScaleIsUsed() {
-        testFontScale( 0.5f )
+    fun whenNoThemeModeHasBeenSet_systemIsUsedAsTheDefault() {
+        assertEquals( ThemeMode.SYSTEM.name, preferences.themeMode.value.name )
     }
 
     @Test
-    fun whenFontScaleIsSetToThreeQuarter_threeQuarterFontScaleIsUsed() {
-        testFontScale( 0.75f )
+    fun testThemeModeChange() {
+        changeThemeModeTo( ThemeMode.SYSTEM )
+        changeThemeModeTo( ThemeMode.SYSTEM_BLACK )
+        changeThemeModeTo( ThemeMode.LIGHT )
+        changeThemeModeTo( ThemeMode.DARK )
+        changeThemeModeTo( ThemeMode.BLACK )
     }
 
-    @Test
-    fun whenFontScaleIsSetToOne_oneFontScaleIsUsed() {
-        testFontScale( 1.0f )
-    }
-
-    @Test
-    fun whenFontScaleIsSetToOneAndQuarter_oneAndQuarterFontScaleIsUsed() {
-        testFontScale( 1.25f )
-    }
-
-    @Test
-    fun whenFontScaleIsSetToOneAndHalf_oneAndHalfFontScaleIsUsed() {
-        testFontScale( 1.5f )
-    }
-
-    @Test
-    fun whenFontScaleIsSetToOneAndThreeQuarter_oneAndThreeQuarterFontScaleIsUsed() {
-        testFontScale( 1.75f )
-    }
-
-    @Test
-    fun whenFontScaleIsSetToTwo_twoFontScaleIsUsed() {
-        testFontScale( 2.0f )
-    }
-
-    @Test
-    fun whenFontScaleIsSetToTwoAndQuarter_twoAndQuarterFontScaleIsUsed() {
-        testFontScale( 2.25f )
-    }
-
-    @Test
-    fun whenFontScaleIsSetToTwoAndHalf_twoAndHalfFontScaleIsUsed() {
-        testFontScale( 2.5f )
-    }
-
-    @Test
-    fun whenFontScaleIsSetToTwoAndThreeQuarter_twoAndThreeQuarterFontScaleIsUsed() {
-        testFontScale( 2.75f )
-    }
-
-    @Test
-    fun whenFontScaleIsSetToThree_threeFontScaleIsUsed() {
-        testFontScale( 3.0f )
-    }
-
-    private fun testFontScale( expectedFontScale: Float ) {
-        preferences.setFontScale( expectedFontScale )
-        assertEquals( expectedFontScale, preferences.fontScale.value )
+    private fun changeThemeModeTo( themeMode: ThemeMode ) {
+        preferences.setThemeMode( themeMode )
+        assertEquals( themeMode.name, preferences.themeMode.value.name )
     }
 
 }

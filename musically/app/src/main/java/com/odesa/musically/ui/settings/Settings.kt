@@ -43,6 +43,7 @@ import com.odesa.musically.ui.settings.fontScale.FontScale
 import com.odesa.musically.ui.settings.language.Language
 import com.odesa.musically.ui.theme.MusicallyTheme
 import com.odesa.musically.ui.theme.SupportedFonts
+import com.odesa.musically.ui.theme.ThemeMode
 
 @Composable
 fun SettingsScreen() {}
@@ -89,7 +90,7 @@ fun SettingsScreenContent(
     ) { contentPadding ->
         Box(
             modifier = Modifier
-                .padding(contentPadding)
+                .padding( contentPadding )
                 .fillMaxSize()
         ) {
             Column {
@@ -98,13 +99,13 @@ fun SettingsScreenContent(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.primary)
+                        .background( MaterialTheme.colorScheme.primary )
                         .clickable { }
                 ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(24.dp, 8.dp),
+                            .padding( 24.dp, 8.dp ),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -162,7 +163,8 @@ fun SettingsScreenContentPreview() {
     val uiState = SettingsScreenUiState(
         language = English,
         font = SupportedFonts.ProductSans,
-        fontScale = 2.0f
+        fontScale = 2.0f,
+        themeMode = ThemeMode.DARK
     )
     MusicallyTheme(
         uiState = uiState

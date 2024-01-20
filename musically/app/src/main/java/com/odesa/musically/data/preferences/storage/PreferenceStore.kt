@@ -1,5 +1,7 @@
 package com.odesa.musically.data.preferences.storage
 
+import com.odesa.musically.ui.theme.ThemeMode
+
 interface PreferenceStore {
     fun setLanguage( localeCode: String )
     fun getLanguage(): String
@@ -8,4 +10,6 @@ interface PreferenceStore {
     fun getFontName(): String
     fun setFontScale( fontScale: Float )
     fun getFontScale(): Float
+    fun setThemeMode( themeMode: ThemeMode )
+    fun getThemeMode(): ThemeMode
 }

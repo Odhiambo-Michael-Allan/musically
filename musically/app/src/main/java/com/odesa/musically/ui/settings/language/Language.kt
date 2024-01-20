@@ -50,7 +50,7 @@ fun Language(
                 Text( text = language.language )
             },
             supportingContent = {
-                Text( text = language.nativeLanguageName )
+                Text( text = language.nativeName )
             }
         )
     }
@@ -61,7 +61,7 @@ fun Language(
                 LazyColumn {
                     items( Translator.supportedLanguages ) {
                         DialogOption(
-                            selected = language.nativeLanguageName == it.nativeName,
+                            selected = language.nativeName == it.nativeName,
                             title = it.nativeName,
                             caption = it.englishName
                         ) {

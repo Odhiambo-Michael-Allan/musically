@@ -7,6 +7,7 @@ import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.settings.fontScale.scalingPresets
 import com.odesa.musically.ui.theme.MusicallyFont
+import com.odesa.musically.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -16,12 +17,14 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     private val _language = settingsRepository.language
     private val _font = settingsRepository.font
     private val _fontScale = settingsRepository.fontScale
+    private val _themeMode = settingsRepository.themeMode
 
     private val _uiState = MutableStateFlow(
         SettingsScreenUiState(
             language = _language.value,
             font = _font.value,
-            fontScale = _fontScale.value
+            fontScale = _fontScale.value,
+            themeMode = _themeMode.value
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -31,6 +34,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         viewModelScope.launch { observeLanguage() }
         viewModelScope.launch { observeFont() }
         viewModelScope.launch { observeFontScale() }
+        viewModelScope.launch { observeThemeMode() }
     }
 
     private suspend fun observeLanguage() {
@@ -57,6 +61,14 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
+    private suspend fun observeThemeMode() {
+        _themeMode.collect {
+            _uiState.value = _uiState.value.copy(
+                themeMode = it
+            )
+        }
+    }
+
     fun setLanguage( localeCode: String ) {
         settingsRepository.setLanguage( localeCode )
     }
@@ -70,6 +82,10 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         float?.let {
             if ( scalingPresets.contains( it ) ) settingsRepository.setFontScale( it )
         }
+    }
+
+    fun setThemeMode( themeMode: ThemeMode ) {
+        settingsRepository.setThemeMode( themeMode )
     }
 
 }
@@ -86,5 +102,6 @@ class SettingsViewModelFactory(
 data class SettingsScreenUiState(
     val language: Language,
     val font: MusicallyFont,
-    val fontScale: Float
+    val fontScale: Float,
+    val themeMode: ThemeMode
 )

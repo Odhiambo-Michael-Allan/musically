@@ -11,6 +11,7 @@ import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.services.i18n.Spanish
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.SupportedFonts
+import com.odesa.musically.ui.theme.ThemeMode
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -93,6 +94,25 @@ class SettingsRepositoryImplTest {
     private fun changeFontScaleTo( fontScale: Float ) {
         preferences.setFontScale( fontScale )
         assertEquals( fontScale, settingsRepository.fontScale.value )
+    }
+
+    @Test
+    fun whenNoThemeModeHasBeenSet_systemIsUsedAsTheDefault() {
+        assertEquals( ThemeMode.SYSTEM.name, settingsRepository.themeMode.value.name )
+    }
+
+    @Test
+    fun testThemeModeChange() {
+        changeThemeModeTo( ThemeMode.SYSTEM )
+        changeThemeModeTo( ThemeMode.SYSTEM_BLACK )
+        changeThemeModeTo( ThemeMode.LIGHT )
+        changeThemeModeTo( ThemeMode.DARK )
+        changeThemeModeTo( ThemeMode.BLACK )
+    }
+
+    private fun changeThemeModeTo( themeMode: ThemeMode ) {
+        preferences.setThemeMode( themeMode )
+        assertEquals( themeMode.name, settingsRepository.themeMode.value.name )
     }
 
 }

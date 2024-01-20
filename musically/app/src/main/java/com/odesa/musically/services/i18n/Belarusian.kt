@@ -3,7 +3,7 @@ package com.odesa.musically.services.i18n
 object Belarusian : Language {
     override val locale: String
         get() = "be"
-    override val nativeLanguageName: String
+    override val nativeName: String
         get() = "Беларуская"
     override val englishName: String
         get() = "Belarusian"

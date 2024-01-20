@@ -6,10 +6,10 @@ import com.odesa.musically.services.i18n.Chinese
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.French
 import com.odesa.musically.services.i18n.German
-import com.odesa.musically.services.i18n.Spanish
 import com.odesa.musically.services.i18n.Language
-import com.odesa.musically.ui.theme.MusicallyFont
+import com.odesa.musically.services.i18n.Spanish
 import com.odesa.musically.ui.theme.SupportedFonts
+import com.odesa.musically.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,6 +26,9 @@ class FakePreferences : Preferences {
 
     private val _fontScale = MutableStateFlow( getFontScale() )
     override val fontScale = _fontScale.asStateFlow()
+
+    private val _themeMode = MutableStateFlow( getThemeMode() )
+    override val themeMode = _themeMode.asStateFlow()
 
     override fun setLanguage( localeCode: String ) {
         when ( localeCode ) {
@@ -52,16 +55,18 @@ class FakePreferences : Preferences {
         _fontScale.value = fontScale
     }
 
+    override fun setThemeMode( themeMode: ThemeMode ) {
+        _themeMode.value = themeMode
+    }
+
     private fun getLanguage() : Language {
         return English
     }
 
-    private fun getFont(): MusicallyFont {
-        return SupportedFonts.ProductSans
-    }
+    private fun getFont() = SupportedFonts.ProductSans
 
-    private fun getFontScale(): Float {
-        return 1.0f
-    }
+    private fun getFontScale() = 1.0f
+
+    private fun getThemeMode() = ThemeMode.SYSTEM
 
 }
