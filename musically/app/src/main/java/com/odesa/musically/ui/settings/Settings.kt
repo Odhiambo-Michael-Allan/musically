@@ -42,6 +42,7 @@ import com.odesa.musically.ui.settings.font.Font
 import com.odesa.musically.ui.settings.fontScale.FontScale
 import com.odesa.musically.ui.settings.language.Language
 import com.odesa.musically.ui.settings.materialYou.MaterialYou
+import com.odesa.musically.ui.settings.primaryColor.PrimaryColor
 import com.odesa.musically.ui.settings.theme.Theme
 import com.odesa.musically.ui.theme.MusicallyTheme
 import com.odesa.musically.ui.theme.SupportedFonts
@@ -58,7 +59,8 @@ fun SettingsScreenContent(
     onFontChange: ( String ) -> Unit,
     onFontScaleChange: ( String ) -> Unit,
     onThemeChange: ( ThemeMode ) -> Unit,
-    onUseMaterialYouChange: ( Boolean ) -> Unit
+    onUseMaterialYouChange: ( Boolean ) -> Unit,
+    onPrimaryColorChange: ( String ) -> Unit
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
@@ -165,6 +167,12 @@ fun SettingsScreenContent(
                     useMaterialYou = uiState.useMaterialYou,
                     onUseMaterialYouChange = onUseMaterialYouChange
                 )
+                PrimaryColor(
+                    primaryColor = uiState.primaryColorName,
+                    language = uiState.language,
+                    onPrimaryColorChange = onPrimaryColorChange,
+                    useMaterialYou = uiState.useMaterialYou
+                )
             }
         }
 
@@ -179,7 +187,8 @@ fun SettingsScreenContentPreview() {
         font = SupportedFonts.ProductSans,
         fontScale = 1.0f,
         themeMode = ThemeMode.DARK,
-        useMaterialYou = true
+        useMaterialYou = true,
+        primaryColorName = "Blue"
     )
     MusicallyTheme(
         uiState = uiState
@@ -190,7 +199,8 @@ fun SettingsScreenContentPreview() {
             onFontChange = {},
             onFontScaleChange = {},
             onThemeChange = {},
-            onUseMaterialYouChange = {}
+            onUseMaterialYouChange = {},
+            onPrimaryColorChange = {}
         )
     }
 }

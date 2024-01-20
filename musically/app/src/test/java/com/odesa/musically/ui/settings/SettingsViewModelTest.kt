@@ -10,7 +10,10 @@ import com.odesa.musically.services.i18n.French
 import com.odesa.musically.services.i18n.German
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.services.i18n.Spanish
+import com.odesa.musically.ui.settings.fontScale.scalingPresets
 import com.odesa.musically.ui.theme.MusicallyFont
+import com.odesa.musically.ui.theme.MusicallyTypography
+import com.odesa.musically.ui.theme.PrimaryThemeColors
 import com.odesa.musically.ui.theme.SupportedFonts
 import com.odesa.musically.ui.theme.ThemeMode
 import junit.framework.TestCase.assertEquals
@@ -65,11 +68,7 @@ class SettingsViewModelTest {
 
     @Test
     fun testFontChange() {
-        changeFontTo( SupportedFonts.ProductSans )
-        changeFontTo( SupportedFonts.Roboto )
-        changeFontTo( SupportedFonts.DMSans )
-        changeFontTo( SupportedFonts.Poppins )
-        changeFontTo( SupportedFonts.Inter )
+        MusicallyTypography.all.values.forEach { changeFontTo( it ) }
     }
 
 
@@ -87,18 +86,7 @@ class SettingsViewModelTest {
 
     @Test
     fun testFontScaleChange() {
-        changeFontScaleTo( 0.25f )
-        changeFontScaleTo( 0.5f )
-        changeFontScaleTo( 0.75f )
-        changeFontScaleTo( 1.0f )
-        changeFontScaleTo( 1.25f )
-        changeFontScaleTo( 1.5f )
-        changeFontScaleTo( 1.75f )
-        changeFontScaleTo( 2.0f )
-        changeFontScaleTo( 2.25f )
-        changeFontScaleTo( 2.5f )
-        changeFontScaleTo( 2.75f )
-        changeFontScaleTo( 3.0f )
+        scalingPresets.forEach { changeFontScaleTo( it )  }
     }
 
     private fun changeFontScaleTo( fontScale: Float ) {
@@ -127,11 +115,7 @@ class SettingsViewModelTest {
 
     @Test
     fun testThemeModeChange() {
-        changeThemeModeTo( ThemeMode.SYSTEM )
-        changeThemeModeTo( ThemeMode.SYSTEM_BLACK )
-        changeThemeModeTo( ThemeMode.LIGHT )
-        changeThemeModeTo( ThemeMode.DARK )
-        changeThemeModeTo( ThemeMode.BLACK )
+        ThemeMode.entries.forEach { changeThemeModeTo( it ) }
     }
 
     private fun changeThemeModeTo( themeMode: ThemeMode ) {
@@ -153,6 +137,23 @@ class SettingsViewModelTest {
     private fun changeUseMaterialYouTo( useMaterialYou: Boolean ) {
         settingsRepository.setUseMaterialYou( useMaterialYou )
         assertEquals( useMaterialYou, settingsViewModel.uiState.value.useMaterialYou )
+    }
+
+    @Test
+    fun testDefaultPrimaryColorIsBlue() {
+        assertEquals( PrimaryThemeColors.Blue.name, settingsViewModel.uiState.value.primaryColorName )
+    }
+
+    @Test
+    fun testPrimaryColorNameChange() {
+        PrimaryThemeColors.entries.forEach {
+            changePrimaryColorTo( it.name )
+        }
+    }
+
+    private fun changePrimaryColorTo( primaryColorName: String ) {
+        settingsRepository.setPrimaryColorName( primaryColorName )
+        assertEquals( primaryColorName, settingsViewModel.uiState.value.primaryColorName )
     }
 
 }

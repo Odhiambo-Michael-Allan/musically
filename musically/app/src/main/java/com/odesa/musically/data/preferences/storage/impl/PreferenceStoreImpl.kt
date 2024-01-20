@@ -19,7 +19,7 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         val language = getSharedPreferences().getString(
             SettingsKeys.language, null
         )
-        return language ?: SettingsDefaults.translation.locale
+        return language ?: SettingsDefaults.language.locale
     }
 
     override fun setFontName( fontName: String ) {
@@ -28,12 +28,9 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         }
     }
 
-    override fun getFontName(): String {
-        val fontName = getSharedPreferences().getString(
-            SettingsKeys.fontName, SettingsDefaults.font.name
-        )
-        return fontName ?: SettingsDefaults.font.name
-    }
+    override fun getFontName() = getSharedPreferences().getString(
+        SettingsKeys.fontName, SettingsDefaults.font.name
+    ) ?: SettingsDefaults.font.name
 
     override fun setFontScale( fontScale: Float ) {
         getSharedPreferences().edit {
@@ -65,6 +62,15 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         }
     }
 
+    override fun setPrimaryColorName( primaryColorName: String ) {
+        getSharedPreferences().edit {
+            putString( SettingsKeys.primaryColorName, primaryColorName )
+        }
+    }
+
+    override fun getPrimaryColorName() = getSharedPreferences()
+        .getString( SettingsKeys.primaryColorName, null ) ?: SettingsDefaults.primaryColorName
+
     private fun getSharedPreferences() = context.getSharedPreferences(
         SettingsKeys.identifier,
         Context.MODE_PRIVATE
@@ -72,11 +78,12 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
 }
 
 object SettingsDefaults {
-    val translation = English
+    val language = English
     val font = SupportedFonts.ProductSans
     const val fontScale = 1.0f
     val themeMode = ThemeMode.SYSTEM
     const val useMaterialYou = true
+    const val primaryColorName = "Blue"
 }
 
 object SettingsKeys {
@@ -86,4 +93,5 @@ object SettingsKeys {
     const val fontScale = "font_scale"
     const val themeMode = "theme_mode"
     const val useMaterialYou = "use_material_you"
+    const val primaryColorName = "primary_color_name"
 }

@@ -13,5 +13,7 @@ interface PreferenceStore {
     fun getThemeMode(): ThemeMode
     fun getUseMaterialYou(): Boolean
     fun setUseMaterialYou( useMaterialYou: Boolean )
+    fun setPrimaryColorName( primaryColorName: String )
+    fun getPrimaryColorName(): String
 
 }

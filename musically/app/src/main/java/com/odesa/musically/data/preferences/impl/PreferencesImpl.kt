@@ -37,6 +37,9 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
     private val _useMaterialYou = MutableStateFlow( preferenceStore.getUseMaterialYou() )
     override val useMaterialYou = _useMaterialYou.asStateFlow()
 
+    private val _primaryColorName = MutableStateFlow( preferenceStore.getPrimaryColorName() )
+    override val primaryColorName = _primaryColorName.asStateFlow()
+
 
     private fun getLanguage( localeCode: String ) : Language {
         return when ( localeCode ) {
@@ -92,6 +95,13 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
         preferenceStore.setUseMaterialYou( useMaterialYou )
         _useMaterialYou.update {
             useMaterialYou
+        }
+    }
+
+    override fun setPrimaryColorName( primaryColorName: String ) {
+        preferenceStore.setPrimaryColorName( primaryColorName )
+        _primaryColorName.update {
+            primaryColorName
         }
     }
 

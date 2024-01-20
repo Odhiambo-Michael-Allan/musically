@@ -19,6 +19,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     private val _fontScale = settingsRepository.fontScale
     private val _themeMode = settingsRepository.themeMode
     private val _useMaterialYou = settingsRepository.useMaterialYou
+    private val _primaryColorName = settingsRepository.primaryColorName
 
     private val _uiState = MutableStateFlow(
         SettingsScreenUiState(
@@ -26,7 +27,8 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
             font = _font.value,
             fontScale = _fontScale.value,
             themeMode = _themeMode.value,
-            useMaterialYou = _useMaterialYou.value
+            useMaterialYou = _useMaterialYou.value,
+            primaryColorName = _primaryColorName.value
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -38,6 +40,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         viewModelScope.launch { observeFontScale() }
         viewModelScope.launch { observeThemeMode() }
         viewModelScope.launch { observeUseMaterialYou() }
+        viewModelScope.launch { observePrimaryColorName() }
     }
 
     private suspend fun observeLanguage() {
@@ -80,6 +83,14 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
+    private suspend fun observePrimaryColorName() {
+        _primaryColorName.collect {
+            _uiState.value = _uiState.value.copy(
+                primaryColorName = it
+            )
+        }
+    }
+
     fun setLanguage( localeCode: String ) {
         settingsRepository.setLanguage( localeCode )
     }
@@ -103,6 +114,10 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         settingsRepository.setUseMaterialYou( useMaterialYou )
     }
 
+    fun setPrimaryColorName( primaryColorName: String ) {
+        settingsRepository.setPrimaryColorName( primaryColorName )
+    }
+
 }
 
 @Suppress( "UNCHECKED_CAST" )
@@ -119,5 +134,6 @@ data class SettingsScreenUiState(
     val font: MusicallyFont,
     val fontScale: Float,
     val themeMode: ThemeMode,
-    val useMaterialYou: Boolean
+    val useMaterialYou: Boolean,
+    val primaryColorName: String
 )

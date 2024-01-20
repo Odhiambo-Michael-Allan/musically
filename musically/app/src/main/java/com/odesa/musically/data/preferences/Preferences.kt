@@ -13,11 +13,13 @@ interface Preferences {
     val fontScale: StateFlow<Float>
     val themeMode: StateFlow<ThemeMode>
     val useMaterialYou: StateFlow<Boolean>
+    val primaryColorName: StateFlow<String>
 
     fun setLanguage( localeCode: String )
     fun setFont( fontName: String )
     fun setFontScale( fontScale: Float )
     fun setThemeMode( themeMode: ThemeMode )
     fun setUseMaterialYou( useMaterialYou: Boolean )
+    fun setPrimaryColorName( primaryColorName: String )
 
 }

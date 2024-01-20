@@ -21,6 +21,8 @@ import androidx.core.view.WindowCompat
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.settings.SettingsScreenUiState
 
+const val contentScale = 1.0f
+
 enum class ThemeMode {
     SYSTEM,
     SYSTEM_BLACK,
@@ -88,7 +90,9 @@ fun MusicallyTheme(
         content = {
             CompositionLocalProvider(
                 LocalDensity provides Density(
-                    LocalDensity.current.density * uiState.fontScale
+                    LocalDensity.current.density * contentScale,
+                    LocalDensity.current.fontScale * uiState.fontScale
+
                 )
             )
             {
