@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import com.odesa.musically.ui.app.MusicallyApp
+import com.odesa.musically.ui.MusicallyApp
 import com.odesa.musically.ui.settings.SettingsViewModel
 import com.odesa.musically.ui.settings.SettingsViewModelFactory
 

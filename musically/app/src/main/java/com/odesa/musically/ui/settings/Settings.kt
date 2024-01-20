@@ -41,6 +41,7 @@ import com.odesa.musically.ui.settings.components.SettingsSideHeading
 import com.odesa.musically.ui.settings.font.Font
 import com.odesa.musically.ui.settings.fontScale.FontScale
 import com.odesa.musically.ui.settings.language.Language
+import com.odesa.musically.ui.settings.theme.Theme
 import com.odesa.musically.ui.theme.MusicallyTheme
 import com.odesa.musically.ui.theme.SupportedFonts
 import com.odesa.musically.ui.theme.ThemeMode
@@ -54,7 +55,8 @@ fun SettingsScreenContent(
     uiState: SettingsScreenUiState,
     onLanguageChange: ( String ) -> Unit,
     onFontChange: ( String ) -> Unit,
-    onFontScaleChange: ( String ) -> Unit
+    onFontScaleChange: ( String ) -> Unit,
+    onThemeChange: ( ThemeMode ) -> Unit
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
@@ -90,7 +92,7 @@ fun SettingsScreenContent(
     ) { contentPadding ->
         Box(
             modifier = Modifier
-                .padding( contentPadding )
+                .padding(contentPadding)
                 .fillMaxSize()
         ) {
             Column {
@@ -99,13 +101,13 @@ fun SettingsScreenContent(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background( MaterialTheme.colorScheme.primary )
+                        .background(MaterialTheme.colorScheme.primary)
                         .clickable { }
                 ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding( 24.dp, 8.dp ),
+                            .padding(24.dp, 8.dp),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -126,8 +128,8 @@ fun SettingsScreenContent(
                     }
                     Box(
                         modifier = Modifier
-                            .align( Alignment.CenterEnd )
-                            .padding( 8.dp, 0.dp )
+                            .align(Alignment.CenterEnd)
+                            .padding(8.dp, 0.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Filled.East,
@@ -151,6 +153,11 @@ fun SettingsScreenContent(
                     fontScale = uiState.fontScale,
                     onFontScaleChange = onFontScaleChange
                 )
+                Theme(
+                    language = uiState.language,
+                    themeMode = uiState.themeMode,
+                    onThemeChange = onThemeChange
+                )
             }
         }
 
@@ -173,7 +180,8 @@ fun SettingsScreenContentPreview() {
             uiState = uiState,
             onLanguageChange = {},
             onFontChange = {},
-            onFontScaleChange = {}
+            onFontScaleChange = {},
+            onThemeChange = {}
         )
     }
 }

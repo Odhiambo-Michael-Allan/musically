@@ -75,10 +75,6 @@ fun Font(
 
 }
 
-data class Font (
-    val key: String,
-    val name: String
-)
 
 //@Preview( showSystemUi = true )
 //@Composable

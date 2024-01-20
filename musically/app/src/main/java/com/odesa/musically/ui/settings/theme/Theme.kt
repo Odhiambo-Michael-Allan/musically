@@ -1,9 +1,9 @@
-package com.odesa.musically.ui.settings.language
+package com.odesa.musically.ui.settings.theme
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -17,74 +17,78 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.Language
-import com.odesa.musically.services.i18n.Translator
 import com.odesa.musically.ui.components.ScaffoldDialog
 import com.odesa.musically.ui.settings.components.DialogOption
 import com.odesa.musically.ui.settings.components.SettingsTileDefaults
+import com.odesa.musically.ui.theme.ThemeMode
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
-fun Language(
+fun Theme(
     language: Language,
-    onLanguageChange: ( String ) -> Unit
+    themeMode: ThemeMode,
+    onThemeChange: ( ThemeMode ) -> Unit
 ) {
 
-    var languageDialogIsOpen by remember { mutableStateOf( false ) }
+    var themeDialogIsOpen by remember { mutableStateOf( false ) }
 
     Card (
         enabled = true,
         colors = SettingsTileDefaults.cardColors(),
-        onClick = { languageDialogIsOpen = !languageDialogIsOpen }
+        onClick = { themeDialogIsOpen = !themeDialogIsOpen }
     ) {
-        ListItem(
+        ListItem (
             colors = SettingsTileDefaults.listItemColors( enabled = true ),
-            leadingContent = { 
+            leadingContent = {
                 Icon(
-                    imageVector = Icons.Filled.Language,
+                    imageVector = Icons.Filled.Palette,
                     contentDescription = null
                 )
             },
             headlineContent = {
-                Text( text = language.language )
+                Text( text = language.theme )
             },
             supportingContent = {
-                Text( text = language.nativeName )
+                Text(
+                    text = when( themeMode ) {
+                        ThemeMode.SYSTEM -> language.systemLightDark
+                        ThemeMode.SYSTEM_BLACK -> language.systemLightBlack
+                        ThemeMode.LIGHT -> language.light
+                        ThemeMode.DARK -> language.dark
+                        ThemeMode.BLACK -> language.black
+                    }
+                )
             }
         )
     }
-    if ( languageDialogIsOpen ) {
+    if ( themeDialogIsOpen ) {
         ScaffoldDialog(
-            title = { Text( text = language.language ) },
+            title = { Text( text = language.theme ) },
             content = {
                 LazyColumn {
-                    items( Translator.supportedLanguages ) {
+                    items( ThemeMode.entries) {
                         DialogOption(
-                            selected = language.nativeName == it.nativeName,
-                            title = it.nativeName,
-                            caption = it.englishName
+                            selected = it.name == themeMode.name,
+                            title = it.name
                         ) {
-                            onLanguageChange( it.localeCode )
-                            languageDialogIsOpen = false
+                            onThemeChange( it )
+                            themeDialogIsOpen = false
                         }
                     }
                 }
-            },
-            onDismissRequest = { languageDialogIsOpen = false }
-        )
+            }
+        ) {
+            themeDialogIsOpen = false
+        }
     }
 }
 
-data class Language (
-    val nativeName: String,
-    val englishName: String,
-    val localeCode: String
-)
-
-
 @Preview( showSystemUi = true )
 @Composable
-fun LanguagePreview() {
-    Language(
-        language = English
-    ) {}
+fun ThemePreview() {
+    Theme(
+        language = English,
+        themeMode = ThemeMode.SYSTEM,
+        onThemeChange = {}
+    )
 }

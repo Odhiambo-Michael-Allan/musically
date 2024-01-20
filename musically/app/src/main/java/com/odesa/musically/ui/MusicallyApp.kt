@@ -1,4 +1,4 @@
-package com.odesa.musically.ui.app
+package com.odesa.musically.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +30,8 @@ fun MusicallyApp(
                 uiState = settingsScreenUiState,
                 onLanguageChange = {  newLanguage -> settingsViewModel.setLanguage( newLanguage ) },
                 onFontChange = { newFont -> settingsViewModel.setFont( newFont ) },
-                onFontScaleChange = { newFontScale -> settingsViewModel.setFontScale( newFontScale ) }
+                onFontScaleChange = { newFontScale -> settingsViewModel.setFontScale( newFontScale ) },
+                onThemeChange = { newTheme -> settingsViewModel.setThemeMode( newTheme ) }
             )
         }
     }
