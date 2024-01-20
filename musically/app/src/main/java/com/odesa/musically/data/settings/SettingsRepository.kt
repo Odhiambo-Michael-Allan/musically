@@ -10,9 +10,11 @@ interface SettingsRepository {
     val font: StateFlow<MusicallyFont>
     val fontScale: StateFlow<Float>
     val themeMode: StateFlow<ThemeMode>
+    val useMaterialYou: StateFlow<Boolean>
 
     fun setLanguage( localeCode: String )
     fun setFont( fontName: String )
     fun setFontScale( fontScale: Float )
     fun setThemeMode( themeMode: ThemeMode )
+    fun setUseMaterialYou( useMaterialYou: Boolean )
 }

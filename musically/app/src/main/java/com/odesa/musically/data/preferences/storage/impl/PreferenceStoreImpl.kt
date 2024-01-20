@@ -30,7 +30,7 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
 
     override fun getFontName(): String {
         val fontName = getSharedPreferences().getString(
-            SettingsKeys.fontName, null
+            SettingsKeys.fontName, SettingsDefaults.font.name
         )
         return fontName ?: SettingsDefaults.font.name
     }
@@ -41,11 +41,9 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         }
     }
 
-    override fun getFontScale(): Float {
-        return getSharedPreferences().getFloat(
-            SettingsKeys.fontScale, SettingsDefaults.fontScale
-        )
-    }
+    override fun getFontScale() = getSharedPreferences().getFloat(
+        SettingsKeys.fontScale, SettingsDefaults.fontScale
+    )
 
     override fun setThemeMode( themeMode: ThemeMode ) {
         getSharedPreferences().edit {
@@ -56,6 +54,16 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
     override fun getThemeMode() = getSharedPreferences().getString( SettingsKeys.themeMode, null )
         ?.let { ThemeMode.valueOf( it ) }
         ?: SettingsDefaults.themeMode
+
+    override fun getUseMaterialYou() = getSharedPreferences().getBoolean(
+        SettingsKeys.useMaterialYou, SettingsDefaults.useMaterialYou
+    )
+
+    override fun setUseMaterialYou( useMaterialYou: Boolean ) {
+        getSharedPreferences().edit {
+            putBoolean( SettingsKeys.useMaterialYou, useMaterialYou )
+        }
+    }
 
     private fun getSharedPreferences() = context.getSharedPreferences(
         SettingsKeys.identifier,
@@ -68,6 +76,7 @@ object SettingsDefaults {
     val font = SupportedFonts.ProductSans
     const val fontScale = 1.0f
     val themeMode = ThemeMode.SYSTEM
+    const val useMaterialYou = true
 }
 
 object SettingsKeys {
@@ -76,4 +85,5 @@ object SettingsKeys {
     const val fontName = "font_name"
     const val fontScale = "font_scale"
     const val themeMode = "theme_mode"
+    const val useMaterialYou = "use_material_you"
 }

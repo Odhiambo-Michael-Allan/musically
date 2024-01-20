@@ -19,16 +19,19 @@ class FakePreferences : Preferences {
     private val _language = MutableStateFlow( getLanguage() )
     override val language = _language.asStateFlow()
 
-    private val _font = MutableStateFlow( getFont() )
+    private val _font = MutableStateFlow( SupportedFonts.ProductSans )
     override val font = _font.asStateFlow()
     override val textDirection: StateFlow<TextDirection>
         get() = TODO("Not yet implemented")
 
-    private val _fontScale = MutableStateFlow( getFontScale() )
+    private val _fontScale = MutableStateFlow( 1.0f )
     override val fontScale = _fontScale.asStateFlow()
 
-    private val _themeMode = MutableStateFlow( getThemeMode() )
+    private val _themeMode = MutableStateFlow( ThemeMode.SYSTEM )
     override val themeMode = _themeMode.asStateFlow()
+
+    private val _useMaterialYou = MutableStateFlow( true )
+    override val useMaterialYou = _useMaterialYou.asStateFlow()
 
     override fun setLanguage( localeCode: String ) {
         when ( localeCode ) {
@@ -59,14 +62,12 @@ class FakePreferences : Preferences {
         _themeMode.value = themeMode
     }
 
+    override fun setUseMaterialYou( useMaterialYou: Boolean ) {
+        _useMaterialYou.value = useMaterialYou
+    }
+
     private fun getLanguage() : Language {
         return English
     }
-
-    private fun getFont() = SupportedFonts.ProductSans
-
-    private fun getFontScale() = 1.0f
-
-    private fun getThemeMode() = ThemeMode.SYSTEM
 
 }

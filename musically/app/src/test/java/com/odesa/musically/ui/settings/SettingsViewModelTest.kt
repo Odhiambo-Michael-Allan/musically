@@ -14,6 +14,7 @@ import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.SupportedFonts
 import com.odesa.musically.ui.theme.ThemeMode
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -136,6 +137,22 @@ class SettingsViewModelTest {
     private fun changeThemeModeTo( themeMode: ThemeMode ) {
         settingsRepository.setThemeMode( themeMode )
         assertEquals( themeMode.name, settingsViewModel.uiState.value.themeMode.name )
+    }
+
+    @Test
+    fun testMaterialYouIsUsedByDefault() {
+        assertTrue( settingsViewModel.uiState.value.useMaterialYou )
+    }
+
+    @Test
+    fun testUseMaterialYouChange() {
+        changeUseMaterialYouTo( true )
+        changeUseMaterialYouTo( false )
+    }
+
+    private fun changeUseMaterialYouTo( useMaterialYou: Boolean ) {
+        settingsRepository.setUseMaterialYou( useMaterialYou )
+        assertEquals( useMaterialYou, settingsViewModel.uiState.value.useMaterialYou )
     }
 
 }

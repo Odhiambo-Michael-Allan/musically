@@ -31,7 +31,8 @@ fun MusicallyApp(
                 onLanguageChange = {  newLanguage -> settingsViewModel.setLanguage( newLanguage ) },
                 onFontChange = { newFont -> settingsViewModel.setFont( newFont ) },
                 onFontScaleChange = { newFontScale -> settingsViewModel.setFontScale( newFontScale ) },
-                onThemeChange = { newTheme -> settingsViewModel.setThemeMode( newTheme ) }
+                onThemeChange = { newTheme -> settingsViewModel.setThemeMode( newTheme ) },
+                onUseMaterialYouChange = { useMaterialYou -> settingsViewModel.setUseMaterialYou( useMaterialYou ) }
             )
         }
     }

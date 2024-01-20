@@ -26,6 +26,9 @@ class FakeSettingsRepository : SettingsRepository {
     private val _themeMode = MutableStateFlow( ThemeMode.SYSTEM )
     override val themeMode = _themeMode.asStateFlow()
 
+    private val _useMaterialYou = MutableStateFlow( true )
+    override val useMaterialYou = _useMaterialYou.asStateFlow()
+
     override fun setLanguage( localeCode: String ) {
         _currentLanguage.value = resolveLanguage( localeCode )
     }
@@ -51,6 +54,10 @@ class FakeSettingsRepository : SettingsRepository {
 
     override fun setThemeMode( themeMode: ThemeMode ) {
         _themeMode.value = themeMode
+    }
+
+    override fun setUseMaterialYou( useMaterialYou: Boolean ) {
+        _useMaterialYou.value = useMaterialYou
     }
 
     private fun resolveFont( fontName: String ) = when( fontName ) {

@@ -12,6 +12,7 @@ class SettingsRepositoryImpl(
     override val font = preferences.font
     override val fontScale = preferences.fontScale
     override val themeMode = preferences.themeMode
+    override val useMaterialYou = preferences.useMaterialYou
 
     override fun setLanguage( localeCode: String ) {
         preferences.setLanguage( localeCode )
@@ -27,5 +28,9 @@ class SettingsRepositoryImpl(
 
     override fun setThemeMode( themeMode: ThemeMode ) {
         preferences.setThemeMode( themeMode )
+    }
+
+    override fun setUseMaterialYou( useMaterialYou: Boolean ) {
+        preferences.setUseMaterialYou( useMaterialYou )
     }
 }

@@ -34,7 +34,8 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
     private val _themeMode = MutableStateFlow( preferenceStore.getThemeMode() )
     override val themeMode = _themeMode.asStateFlow()
 
-
+    private val _useMaterialYou = MutableStateFlow( preferenceStore.getUseMaterialYou() )
+    override val useMaterialYou = _useMaterialYou.asStateFlow()
 
 
     private fun getLanguage( localeCode: String ) : Language {
@@ -84,6 +85,13 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
         preferenceStore.setThemeMode( themeMode )
         _themeMode.update {
             themeMode
+        }
+    }
+
+    override fun setUseMaterialYou( useMaterialYou: Boolean ) {
+        preferenceStore.setUseMaterialYou( useMaterialYou )
+        _useMaterialYou.update {
+            useMaterialYou
         }
     }
 

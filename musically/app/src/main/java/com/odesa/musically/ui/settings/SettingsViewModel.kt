@@ -18,13 +18,15 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     private val _font = settingsRepository.font
     private val _fontScale = settingsRepository.fontScale
     private val _themeMode = settingsRepository.themeMode
+    private val _useMaterialYou = settingsRepository.useMaterialYou
 
     private val _uiState = MutableStateFlow(
         SettingsScreenUiState(
             language = _language.value,
             font = _font.value,
             fontScale = _fontScale.value,
-            themeMode = _themeMode.value
+            themeMode = _themeMode.value,
+            useMaterialYou = _useMaterialYou.value
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -35,6 +37,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         viewModelScope.launch { observeFont() }
         viewModelScope.launch { observeFontScale() }
         viewModelScope.launch { observeThemeMode() }
+        viewModelScope.launch { observeUseMaterialYou() }
     }
 
     private suspend fun observeLanguage() {
@@ -69,6 +72,14 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
+    private suspend fun observeUseMaterialYou() {
+        _useMaterialYou.collect {
+            _uiState.value = _uiState.value.copy(
+                useMaterialYou = it
+            )
+        }
+    }
+
     fun setLanguage( localeCode: String ) {
         settingsRepository.setLanguage( localeCode )
     }
@@ -88,6 +99,10 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         settingsRepository.setThemeMode( themeMode )
     }
 
+    fun setUseMaterialYou( useMaterialYou: Boolean ) {
+        settingsRepository.setUseMaterialYou( useMaterialYou )
+    }
+
 }
 
 @Suppress( "UNCHECKED_CAST" )
@@ -103,5 +118,6 @@ data class SettingsScreenUiState(
     val language: Language,
     val font: MusicallyFont,
     val fontScale: Float,
-    val themeMode: ThemeMode
+    val themeMode: ThemeMode,
+    val useMaterialYou: Boolean
 )
