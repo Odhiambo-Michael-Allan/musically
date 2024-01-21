@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.East
@@ -104,90 +104,91 @@ fun SettingsScreenContent(
                 .padding(contentPadding)
                 .fillMaxSize()
         ) {
-            Column {
-                val contentColor = MaterialTheme.colorScheme.onPrimary
+            LazyColumn {
+                item {
+                    val contentColor = MaterialTheme.colorScheme.onPrimary
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.primary)
-                        .clickable { }
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(24.dp, 8.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Favorite,
-                            contentDescription = null,
-                            tint = contentColor,
-                            modifier = Modifier.size( 12.dp )
-                        )
-                        Spacer( modifier = Modifier.width( 4.dp ) )
-                        Text(
-                            text = uiState.language.considerContributing,
-                            style = MaterialTheme.typography.labelLarge.copy(
-                                fontWeight = FontWeight.Bold,
-                                color = contentColor
-                            )
-                        )
-                    }
                     Box(
                         modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .padding(8.dp, 0.dp)
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.primary)
+                            .clickable { }
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.East,
-                            contentDescription = null,
-                            tint = contentColor,
-                            modifier = Modifier.size( 20.dp )
-                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp, 8.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Favorite,
+                                contentDescription = null,
+                                tint = contentColor,
+                                modifier = Modifier.size( 12.dp )
+                            )
+                            Spacer( modifier = Modifier.width( 4.dp ) )
+                            Text(
+                                text = uiState.language.considerContributing,
+                                style = MaterialTheme.typography.labelLarge.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = contentColor
+                                )
+                            )
+                        }
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd)
+                                .padding(8.dp, 0.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.East,
+                                contentDescription = null,
+                                tint = contentColor,
+                                modifier = Modifier.size( 20.dp )
+                            )
+                        }
                     }
+                    SettingsSideHeading( text = uiState.language.appearance )
+                    Language(
+                        language = uiState.language,
+                        onLanguageChange = onLanguageChange
+                    )
+                    Font(
+                        uiState = uiState,
+                        onFontChange = onFontChange
+                    )
+                    FontScale(
+                        language = uiState.language,
+                        fontScale = uiState.fontScale,
+                        onFontScaleChange = onFontScaleChange
+                    )
+                    Theme(
+                        language = uiState.language,
+                        themeMode = uiState.themeMode,
+                        onThemeChange = onThemeChange
+                    )
+                    MaterialYou(
+                        language = uiState.language,
+                        useMaterialYou = uiState.useMaterialYou,
+                        onUseMaterialYouChange = onUseMaterialYouChange
+                    )
+                    PrimaryColor(
+                        primaryColor = uiState.primaryColorName,
+                        language = uiState.language,
+                        onPrimaryColorChange = onPrimaryColorChange,
+                        useMaterialYou = uiState.useMaterialYou
+                    )
+                    Divider( thickness = 0.5.dp )
+                    SettingsSideHeading( text = uiState.language.Interface )
+                    HomeTabs(
+                        language = uiState.language,
+                        homeTabs = uiState.homeTabs,
+                        onValueChange = onHomeTabsChange
+                    )
                 }
-                SettingsSideHeading( text = uiState.language.appearance )
-                Language(
-                    language = uiState.language,
-                    onLanguageChange = onLanguageChange
-                )
-                Font(
-                    uiState = uiState,
-                    onFontChange = onFontChange
-                )
-                FontScale(
-                    language = uiState.language,
-                    fontScale = uiState.fontScale,
-                    onFontScaleChange = onFontScaleChange
-                )
-                Theme(
-                    language = uiState.language,
-                    themeMode = uiState.themeMode,
-                    onThemeChange = onThemeChange
-                )
-                MaterialYou(
-                    language = uiState.language,
-                    useMaterialYou = uiState.useMaterialYou,
-                    onUseMaterialYouChange = onUseMaterialYouChange
-                )
-                PrimaryColor(
-                    primaryColor = uiState.primaryColorName,
-                    language = uiState.language,
-                    onPrimaryColorChange = onPrimaryColorChange,
-                    useMaterialYou = uiState.useMaterialYou
-                )
-                Divider( thickness = 0.5.dp )
-                SettingsSideHeading( text = uiState.language.Interface )
-                HomeTabs(
-                    language = uiState.language,
-                    homeTabs = uiState.homeTabs,
-                    onValueChange = onHomeTabsChange
-                )
             }
         }
-
     }
 }
 
@@ -197,7 +198,7 @@ fun SettingsScreenContentPreview() {
     val uiState = SettingsScreenUiState(
         language = English,
         font = SupportedFonts.ProductSans,
-        fontScale = 1.0f,
+        fontScale = 1.75f,
         themeMode = ThemeMode.LIGHT,
         useMaterialYou = true,
         primaryColorName = "Blue",
