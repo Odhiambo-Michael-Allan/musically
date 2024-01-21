@@ -32,7 +32,6 @@ import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.French
 import com.odesa.musically.services.i18n.German
 import com.odesa.musically.services.i18n.Spanish
-import com.odesa.musically.ui.settings.appearance.language.Language
 import com.odesa.musically.ui.settings.components.DialogOption
 
 object ScaffoldDialogDefaults {
@@ -117,12 +116,7 @@ fun ScaffoldDialogPreview() {
         },
         content = {
             val values = listOf(
-                Language( "English", "English", English.locale ),
-                Language( "Беларуская", "Belarusian", Belarusian.locale ),
-                Language( "简体中文", "Chinese", Chinese.locale ),
-                Language( "Français", "French", French.locale ),
-                Language( "Deutsch", "Deutsch", German.locale ),
-                Language( "Español", "Spanish", Spanish.locale ),
+                English, Belarusian, Chinese, French, German, Spanish
             )
 
             LazyColumn {

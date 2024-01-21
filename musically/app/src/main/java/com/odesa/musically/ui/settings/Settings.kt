@@ -39,6 +39,7 @@ import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.English
+import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.components.AdaptiveSnackBar
 import com.odesa.musically.ui.components.TopAppBarMinimalTitle
 import com.odesa.musically.ui.settings.Interface.forYou.ForYou
@@ -50,6 +51,7 @@ import com.odesa.musically.ui.settings.appearance.materialYou.MaterialYou
 import com.odesa.musically.ui.settings.appearance.primaryColor.PrimaryColor
 import com.odesa.musically.ui.settings.appearance.theme.Theme
 import com.odesa.musically.ui.settings.components.SettingsSideHeading
+import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.MusicallyTheme
 import com.odesa.musically.ui.theme.SupportedFonts
 import com.odesa.musically.ui.theme.ThemeMode
@@ -61,8 +63,8 @@ fun SettingsScreen() {}
 @Composable
 fun SettingsScreenContent(
     uiState: SettingsScreenUiState,
-    onLanguageChange: ( String ) -> Unit,
-    onFontChange: ( String ) -> Unit,
+    onLanguageChange: ( Language ) -> Unit,
+    onFontChange: ( MusicallyFont ) -> Unit,
     onFontScaleChange: ( String ) -> Unit,
     onThemeChange: ( ThemeMode ) -> Unit,
     onUseMaterialYouChange: ( Boolean ) -> Unit,
@@ -158,7 +160,8 @@ fun SettingsScreenContent(
                         onLanguageChange = onLanguageChange
                     )
                     Font(
-                        uiState = uiState,
+                        font = uiState.font,
+                        language = uiState.language,
                         onFontChange = onFontChange
                     )
                     FontScale(

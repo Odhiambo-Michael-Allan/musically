@@ -29,10 +29,10 @@ fun MusicallyApp(
             SettingsScreenContent(
                 uiState = settingsScreenUiState,
                 onLanguageChange = {
-                    newLanguage -> settingsViewModel.setLanguage( newLanguage )
+                    newLanguage -> settingsViewModel.setLanguage( newLanguage.locale )
                 },
                 onFontChange = {
-                    newFont -> settingsViewModel.setFont( newFont )
+                    newFont -> settingsViewModel.setFont( newFont.name )
                 },
                 onFontScaleChange = {
                     newFontScale -> settingsViewModel.setFontScale( newFontScale )

@@ -1,81 +1,32 @@
 package com.odesa.musically.ui.settings.appearance.theme
 
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.Language
-import com.odesa.musically.ui.components.ScaffoldDialog
-import com.odesa.musically.ui.settings.components.DialogOption
-import com.odesa.musically.ui.settings.components.SettingsTileDefaults
+import com.odesa.musically.ui.settings.components.SettingsOptionTile
 import com.odesa.musically.ui.theme.ThemeMode
 import com.odesa.musically.ui.theme.resolveName
 
-@OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun Theme(
     language: Language,
     themeMode: ThemeMode,
     onThemeChange: ( ThemeMode ) -> Unit
 ) {
-
-    var themeDialogIsOpen by remember { mutableStateOf( false ) }
-
-    Card (
+    SettingsOptionTile(
+        currentValue = themeMode,
+        possibleValues = ThemeMode.entries.associateBy({ it }, { it.resolveName(language) }),
         enabled = true,
-        colors = SettingsTileDefaults.cardColors(),
-        onClick = { themeDialogIsOpen = !themeDialogIsOpen }
-    ) {
-        ListItem (
-            colors = SettingsTileDefaults.listItemColors( enabled = true ),
-            leadingContent = {
-                Icon(
-                    imageVector = Icons.Filled.Palette,
-                    contentDescription = null
-                )
-            },
-            headlineContent = {
-                Text( text = language.theme )
-            },
-            supportingContent = {
-                Text(
-                    text = themeMode.resolveName( language )
-                )
-            }
-        )
-    }
-    if ( themeDialogIsOpen ) {
-        ScaffoldDialog(
-            title = { Text( text = language.theme ) },
-            content = {
-                LazyColumn {
-                    items( ThemeMode.entries) {
-                        DialogOption(
-                            selected = it.name == themeMode.name,
-                            title = it.resolveName( language )
-                        ) {
-                            onThemeChange( it )
-                            themeDialogIsOpen = false
-                        }
-                    }
-                }
-            }
-        ) {
-            themeDialogIsOpen = false
-        }
-    }
+        dialogTitle = language.theme,
+        onValueChange = onThemeChange,
+        leadingContentIcon = Icons.Filled.Palette,
+        headlineContentText = language.theme,
+        supportingContentText = themeMode.resolveName(language)
+    )
 }
 
 @Preview( showSystemUi = true )
