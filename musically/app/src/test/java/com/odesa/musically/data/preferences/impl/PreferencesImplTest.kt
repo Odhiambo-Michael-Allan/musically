@@ -2,6 +2,7 @@ package com.odesa.musically.data.preferences.impl
 
 import com.odesa.musically.data.preferences.Preferences
 import com.odesa.musically.data.preferences.storage.FakePreferencesStoreImpl
+import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Chinese
@@ -161,5 +162,23 @@ class PreferencesImplTest {
         preferences.setHomeTabs( homeTabs )
         assertEquals( homeTabs.size, preferences.homeTabs.value.size )
         assertEquals( homeTabs.size, preferenceStore.getHomeTabs().size )
+    }
+
+    @Test
+    fun testDefaultForYouContentsAreSetCorrectly() {
+        assertEquals( 2, preferences.forYouContents.value.size )
+    }
+
+    @Test
+    fun testForYouContentsChange() {
+        changeForYouContentsTo( setOf( ForYou.Albums ) )
+        changeForYouContentsTo( setOf( ForYou.Albums, ForYou.Artists ) )
+        changeForYouContentsTo( setOf( ForYou.Albums, ForYou.Artists, ForYou.AlbumArtists ) )
+    }
+
+    private fun changeForYouContentsTo( forYouContents: Set<ForYou> ) {
+        preferences.setForYouContents( forYouContents )
+        assertEquals( forYouContents.size, preferences.forYouContents.value.size )
+        assertEquals( forYouContents.size, preferenceStore.getForYouContents().size )
     }
 }

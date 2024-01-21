@@ -1,6 +1,7 @@
 package com.odesa.musically.ui.settings
 
 import com.odesa.musically.MainCoroutineRule
+import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.settings.FakeSettingsRepository
 import com.odesa.musically.data.settings.SettingsRepository
@@ -176,6 +177,23 @@ class SettingsViewModelTest {
         settingsRepository.setHomeTabs( homeTabs )
         val currentHomeTabsSize = settingsViewModel.uiState.value.homeTabs.size
         assertEquals( homeTabs.size, currentHomeTabsSize )
+    }
+
+    @Test
+    fun testDefaultForYouContentIsSetCorrectly() {
+        assertEquals( 2, settingsViewModel.uiState.value.forYouContent.size )
+    }
+
+    @Test
+    fun testForYouContentsChange() {
+        changeForYouContentsTo( setOf( ForYou.Albums ) )
+        changeForYouContentsTo( setOf( ForYou.Albums, ForYou.Artists ) )
+        changeForYouContentsTo( setOf( ForYou.Albums, ForYou.Artists, ForYou.AlbumArtists ) )
+    }
+
+    private fun changeForYouContentsTo( forYouContents: Set<ForYou> ) {
+        settingsRepository.setForYouContents( forYouContents )
+        assertEquals( forYouContents.size, settingsViewModel.uiState.value.forYouContent.size )
     }
 
 }

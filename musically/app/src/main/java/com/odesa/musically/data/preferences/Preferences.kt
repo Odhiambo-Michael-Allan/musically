@@ -1,6 +1,7 @@
 package com.odesa.musically.data.preferences
 
 import androidx.compose.ui.text.style.TextDirection
+import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.theme.MusicallyFont
@@ -16,6 +17,7 @@ interface Preferences {
     val useMaterialYou: StateFlow<Boolean>
     val primaryColorName: StateFlow<String>
     val homeTabs: StateFlow<Set<HomeTab>>
+    val forYouContents: StateFlow<Set<ForYou>>
 
     fun setLanguage( localeCode: String )
     fun setFont( fontName: String )
@@ -24,5 +26,6 @@ interface Preferences {
     fun setUseMaterialYou( useMaterialYou: Boolean )
     fun setPrimaryColorName( primaryColorName: String )
     fun setHomeTabs( homeTabs: Set<HomeTab> )
+    fun setForYouContents( forYouContents: Set<ForYou> )
 
 }

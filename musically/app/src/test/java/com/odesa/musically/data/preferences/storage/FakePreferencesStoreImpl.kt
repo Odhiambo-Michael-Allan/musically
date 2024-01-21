@@ -12,6 +12,7 @@ class FakePreferencesStoreImpl : PreferenceStore {
     private var useMaterialYou: Boolean? = null
     private var primaryColorName: String? = null
     private var homeTabs: Set<HomeTab>? = null
+    private var forYouContents: Set<ForYou>? = null
 
     override fun setLanguage( localeCode: String ) {
         language = localeCode
@@ -52,5 +53,11 @@ class FakePreferencesStoreImpl : PreferenceStore {
 
     override fun setHomeTabs( homeTabs: Set<HomeTab> ) {
         this.homeTabs = homeTabs
+    }
+
+    override fun getForYouContents() = forYouContents ?: SettingsDefaults.forYouContents
+
+    override fun setForYouContents( forYouContents: Set<ForYou> ) {
+        this.forYouContents = forYouContents
     }
 }

@@ -22,14 +22,14 @@ import com.odesa.musically.ui.settings.components.SettingsMultiOptionTile
 fun HomeTabs(
     language: Language,
     homeTabs: Set<HomeTab>,
-    onValueChange: ( Set<HomeTab> ) -> Unit
+    onHomeTabsChange: ( Set<HomeTab> ) -> Unit
 ) {
 
     SettingsMultiOptionTile(
         selectedValues = homeTabs,
         possibleValues = HomeTab.entries.toSet(),
         satisfies = { it.size in 2..5 },
-        onValueChange = onValueChange,
+        onValueChange = onHomeTabsChange,
         leadingContentImageVector = Icons.Filled.Home,
         headlineContentText = language.homeTabs,
         supportingContentText = homeTabs.joinToString { it.name },
@@ -58,7 +58,7 @@ fun HomeTabsPreview() {
     HomeTabs(
         language = English,
         homeTabs = SettingsDefaults.homeTabs,
-        onValueChange = {}
+        onHomeTabsChange = {}
     )
 }
 

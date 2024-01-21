@@ -41,7 +41,7 @@ fun <T> SettingsMultiOptionTile(
     topBar: ( @Composable () -> Unit )? = null,
     selectedValues: Set<T>,
     possibleValues: Set<T>,
-    satisfies: ( Set<T> ) -> Boolean,
+    satisfies: ( Set<T> ) -> Boolean = { true },
     onValueChange: ( Set<T> ) -> Unit,
     leadingContentImageVector: ImageVector,
     headlineContentText: String,

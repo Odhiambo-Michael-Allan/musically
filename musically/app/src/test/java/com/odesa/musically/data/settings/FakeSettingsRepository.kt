@@ -1,5 +1,6 @@
 package com.odesa.musically.data.settings
 
+import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.Belarusian
@@ -36,6 +37,9 @@ class FakeSettingsRepository : SettingsRepository {
 
     private val _homeTabs = MutableStateFlow( SettingsDefaults.homeTabs )
     override val homeTabs = _homeTabs.asStateFlow()
+
+    private val _forYouContents = MutableStateFlow( SettingsDefaults.forYouContents )
+    override val forYouContent = _forYouContents.asStateFlow()
 
     override fun setLanguage( localeCode: String ) {
         _currentLanguage.value = resolveLanguage( localeCode )
@@ -74,6 +78,10 @@ class FakeSettingsRepository : SettingsRepository {
 
     override fun setHomeTabs( homeTabs: Set<HomeTab> ) {
         _homeTabs.value = homeTabs
+    }
+
+    override fun setForYouContents( forYouContents: Set<ForYou> ) {
+        _forYouContents.value = forYouContents
     }
 
     private fun resolveFont( fontName: String ) = when( fontName ) {

@@ -3,6 +3,7 @@ package com.odesa.musically.ui.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.i18n.Language
@@ -22,6 +23,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     private val _useMaterialYou = settingsRepository.useMaterialYou
     private val _primaryColorName = settingsRepository.primaryColorName
     private val _homeTabs = settingsRepository.homeTabs
+    private val _forYouContent = settingsRepository.forYouContent
 
     private val _uiState = MutableStateFlow(
         SettingsScreenUiState(
@@ -31,7 +33,8 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
             themeMode = _themeMode.value,
             useMaterialYou = _useMaterialYou.value,
             primaryColorName = _primaryColorName.value,
-            homeTabs = _homeTabs.value
+            homeTabs = _homeTabs.value,
+            forYouContent = _forYouContent.value
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -45,6 +48,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         viewModelScope.launch { observeUseMaterialYou() }
         viewModelScope.launch { observePrimaryColorName() }
         viewModelScope.launch { observeHomeTabs() }
+        viewModelScope.launch { observeForYouContent() }
     }
 
     private suspend fun observeLanguage() {
@@ -103,6 +107,14 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
+    private suspend fun observeForYouContent() {
+        _forYouContent.collect {
+            _uiState.value = _uiState.value.copy(
+                forYouContent = it
+            )
+        }
+    }
+
     fun setLanguage( localeCode: String ) {
         settingsRepository.setLanguage( localeCode )
     }
@@ -134,6 +146,10 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         settingsRepository.setHomeTabs( homeTabs )
     }
 
+    fun setForYouContent( forYouContent: Set<ForYou> ) {
+        settingsRepository.setForYouContents( forYouContent )
+    }
+
 }
 
 @Suppress( "UNCHECKED_CAST" )
@@ -152,5 +168,6 @@ data class SettingsScreenUiState(
     val themeMode: ThemeMode,
     val useMaterialYou: Boolean,
     val primaryColorName: String,
-    val homeTabs: Set<HomeTab>
+    val homeTabs: Set<HomeTab>,
+    val forYouContent: Set<ForYou>
 )

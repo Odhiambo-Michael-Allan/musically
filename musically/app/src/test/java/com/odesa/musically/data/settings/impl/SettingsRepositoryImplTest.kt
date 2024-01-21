@@ -1,6 +1,7 @@
 package com.odesa.musically.data.settings.impl
 
 import com.odesa.musically.data.preferences.FakePreferences
+import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.i18n.Belarusian
@@ -151,6 +152,23 @@ class SettingsRepositoryImplTest {
     private fun changeHomeTabsTo( homeTabs: Set<HomeTab> ) {
         preferences.setHomeTabs( homeTabs )
         assertEquals( homeTabs.size, settingsRepository.homeTabs.value.size )
+    }
+
+    @Test
+    fun testDefaultForYouContentsAreSetCorrectly() {
+        assertEquals( 2, settingsRepository.forYouContent.value.size )
+    }
+
+    @Test
+    fun testForYouContentsChange() {
+        changeForYouContentsTo( setOf( ForYou.Albums ) )
+        changeForYouContentsTo( setOf( ForYou.Albums, ForYou.Artists ) )
+        changeForYouContentsTo( setOf( ForYou.Albums, ForYou.Artists, ForYou.AlbumArtists ) )
+    }
+
+    private fun changeForYouContentsTo( forYouContents: Set<ForYou> ) {
+        preferences.setForYouContents( forYouContents )
+        assertEquals( forYouContents.size, settingsRepository.forYouContent.value.size )
     }
 
 }

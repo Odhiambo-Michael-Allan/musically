@@ -2,6 +2,7 @@ package com.odesa.musically.data.preferences.storage.impl
 
 import android.content.Context
 import androidx.core.content.edit
+import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.preferences.storage.PreferenceStore
 import com.odesa.musically.services.i18n.English
@@ -85,6 +86,20 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         }
     }
 
+    override fun getForYouContents() = getSharedPreferences()
+        .getString( SettingsKeys.forYouContents, null )
+        ?.split( "," )
+        ?.mapNotNull { parseEnumValue<ForYou>( it ) }
+        ?.toSet()
+        ?: SettingsDefaults.forYouContents
+
+    override fun setForYouContents(forYouContents: Set<ForYou>) {
+        getSharedPreferences().edit {
+            putString( SettingsKeys.forYouContents,
+                forYouContents.joinToString( "," ) { it.name } )
+        }
+    }
+
     private fun getSharedPreferences() = context.getSharedPreferences(
         SettingsKeys.identifier,
         Context.MODE_PRIVATE
@@ -105,6 +120,10 @@ object SettingsDefaults {
         HomeTab.Artists,
         HomeTab.Playlists,
     )
+    val forYouContents = setOf(
+        ForYou.Albums,
+        ForYou.Artists
+    )
 }
 
 object SettingsKeys {
@@ -116,6 +135,7 @@ object SettingsKeys {
     const val useMaterialYou = "use_material_you"
     const val primaryColorName = "primary_color_name"
     const val homeTabs = "home_tabs"
+    const val forYouContents = "for_you_contents"
 }
 
 private inline fun <reified T : Enum<T>> parseEnumValue( value: String ): T? =

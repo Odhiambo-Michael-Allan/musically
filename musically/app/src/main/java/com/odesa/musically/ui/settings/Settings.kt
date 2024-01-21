@@ -35,11 +35,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.ui.components.AdaptiveSnackBar
 import com.odesa.musically.ui.components.TopAppBarMinimalTitle
+import com.odesa.musically.ui.settings.Interface.forYou.ForYou
 import com.odesa.musically.ui.settings.Interface.homeTabs.HomeTabs
 import com.odesa.musically.ui.settings.appearance.font.Font
 import com.odesa.musically.ui.settings.appearance.fontScale.FontScale
@@ -65,7 +67,8 @@ fun SettingsScreenContent(
     onThemeChange: ( ThemeMode ) -> Unit,
     onUseMaterialYouChange: ( Boolean ) -> Unit,
     onPrimaryColorChange: ( String ) -> Unit,
-    onHomeTabsChange: ( Set<HomeTab> ) -> Unit
+    onHomeTabsChange: ( Set<HomeTab> ) -> Unit,
+    onForYouContentChange: ( Set<ForYou> ) -> Unit
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
@@ -184,7 +187,12 @@ fun SettingsScreenContent(
                     HomeTabs(
                         language = uiState.language,
                         homeTabs = uiState.homeTabs,
-                        onValueChange = onHomeTabsChange
+                        onHomeTabsChange = onHomeTabsChange
+                    )
+                    ForYou(
+                        language = uiState.language,
+                        forYouContent = uiState.forYouContent,
+                        onForYouContentChange = onForYouContentChange
                     )
                 }
             }
@@ -202,7 +210,8 @@ fun SettingsScreenContentPreview() {
         themeMode = ThemeMode.LIGHT,
         useMaterialYou = true,
         primaryColorName = "Blue",
-        homeTabs = SettingsDefaults.homeTabs
+        homeTabs = SettingsDefaults.homeTabs,
+        forYouContent = SettingsDefaults.forYouContents
     )
     MusicallyTheme(
         uiState = uiState
@@ -215,7 +224,8 @@ fun SettingsScreenContentPreview() {
             onThemeChange = {},
             onUseMaterialYouChange = {},
             onPrimaryColorChange = {},
-            onHomeTabsChange = {}
+            onHomeTabsChange = {},
+            onForYouContentChange = {}
         )
     }
 }

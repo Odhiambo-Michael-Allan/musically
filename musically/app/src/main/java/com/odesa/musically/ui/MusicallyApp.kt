@@ -48,6 +48,9 @@ fun MusicallyApp(
                 },
                 onHomeTabsChange = {
                     homeTabs -> settingsViewModel.setHomeTabs( homeTabs )
+                },
+                onForYouContentChange = {
+                    forYouContent -> settingsViewModel.setForYouContent( forYouContent )
                 }
             )
         }

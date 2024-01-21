@@ -1,6 +1,7 @@
 package com.odesa.musically.data.settings.impl
 
 import com.odesa.musically.data.preferences.Preferences
+import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.ui.theme.ThemeMode
@@ -16,6 +17,7 @@ class SettingsRepositoryImpl(
     override val useMaterialYou = preferences.useMaterialYou
     override val primaryColorName = preferences.primaryColorName
     override val homeTabs = preferences.homeTabs
+    override val forYouContent = preferences.forYouContents
 
     override fun setLanguage( localeCode: String ) {
         preferences.setLanguage( localeCode )
@@ -43,5 +45,9 @@ class SettingsRepositoryImpl(
 
     override fun setHomeTabs( homeTabs: Set<HomeTab> ) {
         preferences.setHomeTabs( homeTabs )
+    }
+
+    override fun setForYouContents( forYouContents: Set<ForYou> ) {
+        preferences.setForYouContents( forYouContents )
     }
 }

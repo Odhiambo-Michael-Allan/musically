@@ -2,6 +2,7 @@ package com.odesa.musically.data.preferences.impl
 
 import androidx.compose.ui.text.style.TextDirection
 import com.odesa.musically.data.preferences.Preferences
+import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.preferences.storage.PreferenceStore
 import com.odesa.musically.services.i18n.Belarusian
@@ -43,6 +44,9 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
 
     private val _homeTabs = MutableStateFlow( preferenceStore.getHomeTabs() )
     override val homeTabs = _homeTabs.asStateFlow()
+
+    private val _forYouContents = MutableStateFlow( preferenceStore.getForYouContents() )
+    override val forYouContents = _forYouContents.asStateFlow()
 
 
     private fun getLanguage( localeCode: String ) : Language {
@@ -113,6 +117,13 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
         preferenceStore.setHomeTabs( homeTabs )
         _homeTabs.update {
             homeTabs
+        }
+    }
+
+    override fun setForYouContents( forYouContents: Set<ForYou> ) {
+        preferenceStore.setForYouContents( forYouContents )
+        _forYouContents.update {
+            forYouContents
         }
     }
 
