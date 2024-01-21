@@ -19,6 +19,8 @@ interface PreferenceStore {
     fun setHomeTabs( homeTabs: Set<HomeTab> )
     fun getForYouContents(): Set<ForYou>
     fun setForYouContents( forYouContents: Set<ForYou> )
+    fun getHomePageBottomBarLabelVisibility(): HomePageBottomBarLabelVisibility
+    fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility )
 
 }
 
@@ -38,4 +40,10 @@ enum class ForYou {
     Albums,
     Artists,
     AlbumArtists
+}
+
+enum class HomePageBottomBarLabelVisibility {
+    ALWAYS_VISIBLE,
+    VISIBLE_WHEN_ACTIVE,
+    INVISIBLE
 }

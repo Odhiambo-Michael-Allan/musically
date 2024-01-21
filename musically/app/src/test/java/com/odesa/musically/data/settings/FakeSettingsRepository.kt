@@ -1,6 +1,7 @@
 package com.odesa.musically.data.settings
 
 import com.odesa.musically.data.preferences.storage.ForYou
+import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.Belarusian
@@ -41,11 +42,12 @@ class FakeSettingsRepository : SettingsRepository {
     private val _forYouContents = MutableStateFlow( SettingsDefaults.forYouContents )
     override val forYouContent = _forYouContents.asStateFlow()
 
+    private val _homePageBottomBarLabelVisibility = MutableStateFlow( SettingsDefaults.homePageBottomBarLabelVisibility )
+    override val homePageBottomBarLabelVisibility = _homePageBottomBarLabelVisibility.asStateFlow()
+
     override fun setLanguage( localeCode: String ) {
         _currentLanguage.value = resolveLanguage( localeCode )
     }
-
-
 
     private fun resolveLanguage( language: String ) = when( language ) {
         Belarusian.locale -> Belarusian
@@ -82,6 +84,10 @@ class FakeSettingsRepository : SettingsRepository {
 
     override fun setForYouContents( forYouContents: Set<ForYou> ) {
         _forYouContents.value = forYouContents
+    }
+
+    override fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility ) {
+        _homePageBottomBarLabelVisibility.value = value
     }
 
     private fun resolveFont( fontName: String ) = when( fontName ) {

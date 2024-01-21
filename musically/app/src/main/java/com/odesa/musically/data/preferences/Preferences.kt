@@ -2,6 +2,7 @@ package com.odesa.musically.data.preferences
 
 import androidx.compose.ui.text.style.TextDirection
 import com.odesa.musically.data.preferences.storage.ForYou
+import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.theme.MusicallyFont
@@ -18,6 +19,7 @@ interface Preferences {
     val primaryColorName: StateFlow<String>
     val homeTabs: StateFlow<Set<HomeTab>>
     val forYouContents: StateFlow<Set<ForYou>>
+    val homePageBottomBarLabelVisibility: StateFlow<HomePageBottomBarLabelVisibility>
 
     fun setLanguage( localeCode: String )
     fun setFont( fontName: String )
@@ -27,5 +29,6 @@ interface Preferences {
     fun setPrimaryColorName( primaryColorName: String )
     fun setHomeTabs( homeTabs: Set<HomeTab> )
     fun setForYouContents( forYouContents: Set<ForYou> )
+    fun setHomePageBottomBarLabelVisibility( homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility )
 
 }

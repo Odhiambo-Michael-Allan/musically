@@ -51,6 +51,9 @@ fun MusicallyApp(
                 },
                 onForYouContentChange = {
                     forYouContent -> settingsViewModel.setForYouContent( forYouContent )
+                },
+                onHomePageBottomBarLabelVisibilityChange = {
+                    value -> settingsViewModel.setHomePageBottomBarLabelVisibility( value )
                 }
             )
         }

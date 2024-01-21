@@ -2,6 +2,7 @@ package com.odesa.musically.data.settings.impl
 
 import com.odesa.musically.data.preferences.Preferences
 import com.odesa.musically.data.preferences.storage.ForYou
+import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.ui.theme.ThemeMode
@@ -18,6 +19,7 @@ class SettingsRepositoryImpl(
     override val primaryColorName = preferences.primaryColorName
     override val homeTabs = preferences.homeTabs
     override val forYouContent = preferences.forYouContents
+    override val homePageBottomBarLabelVisibility = preferences.homePageBottomBarLabelVisibility
 
     override fun setLanguage( localeCode: String ) {
         preferences.setLanguage( localeCode )
@@ -49,5 +51,9 @@ class SettingsRepositoryImpl(
 
     override fun setForYouContents( forYouContents: Set<ForYou> ) {
         preferences.setForYouContents( forYouContents )
+    }
+
+    override fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility ) {
+        preferences.setHomePageBottomBarLabelVisibility( value )
     }
 }

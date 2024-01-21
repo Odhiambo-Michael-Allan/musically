@@ -1,8 +1,10 @@
 package com.odesa.musically.data.preferences.storage.impl
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.odesa.musically.data.preferences.storage.ForYou
+import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.preferences.storage.PreferenceStore
 import com.odesa.musically.services.i18n.English
@@ -100,6 +102,16 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         }
     }
 
+    override fun getHomePageBottomBarLabelVisibility() = getSharedPreferences()
+        .getEnum( SettingsKeys.homePageBottomBarLabelVisibility, null )
+        ?: SettingsDefaults.homePageBottomBarLabelVisibility
+
+    override fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility ) {
+        getSharedPreferences().edit {
+            putEnum( SettingsKeys.homePageBottomBarLabelVisibility, value )
+        }
+    }
+
     private fun getSharedPreferences() = context.getSharedPreferences(
         SettingsKeys.identifier,
         Context.MODE_PRIVATE
@@ -124,7 +136,8 @@ object SettingsDefaults {
         ForYou.Albums,
         ForYou.Artists
     )
-    const val homePageBottomBarLabelVisibility = "home_page_bottom_bar_visibility"
+    val homePageBottomBarLabelVisibility = HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE
+
 }
 
 object SettingsKeys {
@@ -137,7 +150,22 @@ object SettingsKeys {
     const val primaryColorName = "primary_color_name"
     const val homeTabs = "home_tabs"
     const val forYouContents = "for_you_contents"
+    const val homePageBottomBarLabelVisibility = "home_page_bottom_bar_visibility"
 }
 
 private inline fun <reified T : Enum<T>> parseEnumValue( value: String ): T? =
     T::class.java.enumConstants?.find { it.name == value }
+
+private inline fun <reified T : Enum<T>> SharedPreferences.Editor.putEnum(
+    key: String,
+    value: T?
+) = putString( key, value?.name )
+
+private inline fun <reified T : Enum<T>> SharedPreferences.getEnum(
+    key: String,
+    defaultValue: T?
+): T? {
+    var result = defaultValue
+    getString( key, null )?.let { value -> result = parseEnumValue<T>( value ) }
+    return result
+}

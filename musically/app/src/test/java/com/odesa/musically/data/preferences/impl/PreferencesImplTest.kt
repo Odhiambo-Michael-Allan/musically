@@ -3,6 +3,7 @@ package com.odesa.musically.data.preferences.impl
 import com.odesa.musically.data.preferences.Preferences
 import com.odesa.musically.data.preferences.storage.FakePreferencesStoreImpl
 import com.odesa.musically.data.preferences.storage.ForYou
+import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Chinese
@@ -180,5 +181,24 @@ class PreferencesImplTest {
         preferences.setForYouContents( forYouContents )
         assertEquals( forYouContents.size, preferences.forYouContents.value.size )
         assertEquals( forYouContents.size, preferenceStore.getForYouContents().size )
+    }
+
+    @Test
+    fun testDefaultHomePageBottomBarLabelVisibilityIsSetCorrectly() {
+        assertEquals( HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE,
+            preferences.homePageBottomBarLabelVisibility.value )
+    }
+
+    @Test
+    fun testHomePageBottomBarLabelVisibilityChange() {
+        changeHomePageBottomBarLabelVisibilityTo( HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE )
+        changeHomePageBottomBarLabelVisibilityTo( HomePageBottomBarLabelVisibility.VISIBLE_WHEN_ACTIVE )
+        changeHomePageBottomBarLabelVisibilityTo( HomePageBottomBarLabelVisibility.INVISIBLE )
+    }
+
+    private fun changeHomePageBottomBarLabelVisibilityTo( value: HomePageBottomBarLabelVisibility ) {
+        preferences.setHomePageBottomBarLabelVisibility( value )
+        assertEquals( value, preferences.homePageBottomBarLabelVisibility.value )
+        assertEquals( value, preferenceStore.getHomePageBottomBarLabelVisibility() )
     }
 }

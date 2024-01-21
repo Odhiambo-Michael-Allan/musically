@@ -3,6 +3,7 @@ package com.odesa.musically.data.preferences.impl
 import androidx.compose.ui.text.style.TextDirection
 import com.odesa.musically.data.preferences.Preferences
 import com.odesa.musically.data.preferences.storage.ForYou
+import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.preferences.storage.PreferenceStore
 import com.odesa.musically.services.i18n.Belarusian
@@ -27,6 +28,7 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
 
     private val _font = MutableStateFlow( getFont( preferenceStore.getFontName() ) )
     override val font = _font.asStateFlow()
+
     override val textDirection: StateFlow<TextDirection>
         get() = TODO("Not yet implemented")
 
@@ -47,6 +49,9 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
 
     private val _forYouContents = MutableStateFlow( preferenceStore.getForYouContents() )
     override val forYouContents = _forYouContents.asStateFlow()
+
+    private val _homePageBottomBarLabelVisibility = MutableStateFlow( preferenceStore.getHomePageBottomBarLabelVisibility() )
+    override val homePageBottomBarLabelVisibility = _homePageBottomBarLabelVisibility.asStateFlow()
 
 
     private fun getLanguage( localeCode: String ) : Language {
@@ -124,6 +129,13 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
         preferenceStore.setForYouContents( forYouContents )
         _forYouContents.update {
             forYouContents
+        }
+    }
+
+    override fun setHomePageBottomBarLabelVisibility( homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility ) {
+        preferenceStore.setHomePageBottomBarLabelVisibility( homePageBottomBarLabelVisibility )
+        _homePageBottomBarLabelVisibility.update {
+            homePageBottomBarLabelVisibility
         }
     }
 

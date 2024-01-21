@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.odesa.musically.data.preferences.storage.ForYou
+import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.i18n.Language
@@ -16,25 +17,28 @@ import kotlinx.coroutines.launch
 
 class SettingsViewModel( private val settingsRepository: SettingsRepository ) : ViewModel() {
 
-    private val _language = settingsRepository.language
-    private val _font = settingsRepository.font
-    private val _fontScale = settingsRepository.fontScale
-    private val _themeMode = settingsRepository.themeMode
-    private val _useMaterialYou = settingsRepository.useMaterialYou
-    private val _primaryColorName = settingsRepository.primaryColorName
-    private val _homeTabs = settingsRepository.homeTabs
-    private val _forYouContent = settingsRepository.forYouContent
+    private val language = settingsRepository.language
+    private val font = settingsRepository.font
+    private val fontScale = settingsRepository.fontScale
+    private val themeMode = settingsRepository.themeMode
+    private val useMaterialYou = settingsRepository.useMaterialYou
+    private val primaryColorName = settingsRepository.primaryColorName
+    private val homeTabs = settingsRepository.homeTabs
+    private val forYouContent = settingsRepository.forYouContent
+    private val homePageBottomBarLabelVisibility = settingsRepository.homePageBottomBarLabelVisibility
+
 
     private val _uiState = MutableStateFlow(
         SettingsScreenUiState(
-            language = _language.value,
-            font = _font.value,
-            fontScale = _fontScale.value,
-            themeMode = _themeMode.value,
-            useMaterialYou = _useMaterialYou.value,
-            primaryColorName = _primaryColorName.value,
-            homeTabs = _homeTabs.value,
-            forYouContent = _forYouContent.value
+            language = language.value,
+            font = font.value,
+            fontScale = fontScale.value,
+            themeMode = themeMode.value,
+            useMaterialYou = useMaterialYou.value,
+            primaryColorName = primaryColorName.value,
+            homeTabs = homeTabs.value,
+            forYouContent = forYouContent.value,
+            homePageBottomBarLabelVisibility = homePageBottomBarLabelVisibility.value
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -49,10 +53,11 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         viewModelScope.launch { observePrimaryColorName() }
         viewModelScope.launch { observeHomeTabs() }
         viewModelScope.launch { observeForYouContent() }
+        viewModelScope.launch { observeHomePageBottomBarLabelVisibility() }
     }
 
     private suspend fun observeLanguage() {
-        _language.collect {
+        language.collect {
             _uiState.value = _uiState.value.copy(
                 language = it
             )
@@ -60,7 +65,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     }
 
     private suspend fun observeFont() {
-        _font.collect {
+        font.collect {
             _uiState.value = _uiState.value.copy(
                 font = it
             )
@@ -68,7 +73,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     }
 
     private suspend fun observeFontScale() {
-        _fontScale.collect {
+        fontScale.collect {
             _uiState.value = _uiState.value.copy(
                 fontScale = it
             )
@@ -76,7 +81,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     }
 
     private suspend fun observeThemeMode() {
-        _themeMode.collect {
+        themeMode.collect {
             _uiState.value = _uiState.value.copy(
                 themeMode = it
             )
@@ -84,7 +89,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     }
 
     private suspend fun observeUseMaterialYou() {
-        _useMaterialYou.collect {
+        useMaterialYou.collect {
             _uiState.value = _uiState.value.copy(
                 useMaterialYou = it
             )
@@ -92,7 +97,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     }
 
     private suspend fun observePrimaryColorName() {
-        _primaryColorName.collect {
+        primaryColorName.collect {
             _uiState.value = _uiState.value.copy(
                 primaryColorName = it
             )
@@ -100,7 +105,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     }
 
     private suspend fun observeHomeTabs() {
-        _homeTabs.collect {
+        homeTabs.collect {
             _uiState.value = _uiState.value.copy(
                 homeTabs = it
             )
@@ -108,9 +113,17 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     }
 
     private suspend fun observeForYouContent() {
-        _forYouContent.collect {
+        forYouContent.collect {
             _uiState.value = _uiState.value.copy(
                 forYouContent = it
+            )
+        }
+    }
+
+    private suspend fun observeHomePageBottomBarLabelVisibility() {
+        homePageBottomBarLabelVisibility.collect {
+            _uiState.value = _uiState.value.copy(
+                homePageBottomBarLabelVisibility = it
             )
         }
     }
@@ -150,6 +163,10 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         settingsRepository.setForYouContents( forYouContent )
     }
 
+    fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility ) {
+        settingsRepository.setHomePageBottomBarLabelVisibility( value )
+    }
+
 }
 
 @Suppress( "UNCHECKED_CAST" )
@@ -169,5 +186,6 @@ data class SettingsScreenUiState(
     val useMaterialYou: Boolean,
     val primaryColorName: String,
     val homeTabs: Set<HomeTab>,
-    val forYouContent: Set<ForYou>
+    val forYouContent: Set<ForYou>,
+    val homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility
 )

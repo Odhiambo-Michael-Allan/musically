@@ -2,6 +2,7 @@ package com.odesa.musically.data.preferences
 
 import androidx.compose.ui.text.style.TextDirection
 import com.odesa.musically.data.preferences.storage.ForYou
+import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.Belarusian
@@ -44,6 +45,9 @@ class FakePreferences : Preferences {
 
     private val _forYouContents = MutableStateFlow( SettingsDefaults.forYouContents )
     override val forYouContents = _forYouContents.asStateFlow()
+
+    private val _homePageBottomBarLabelVisibility = MutableStateFlow( SettingsDefaults.homePageBottomBarLabelVisibility )
+    override val homePageBottomBarLabelVisibility = _homePageBottomBarLabelVisibility.asStateFlow()
 
     override fun setLanguage( localeCode: String ) {
         when ( localeCode ) {
@@ -88,6 +92,12 @@ class FakePreferences : Preferences {
 
     override fun setForYouContents( forYouContents: Set<ForYou> ) {
         _forYouContents.value = forYouContents
+    }
+
+    override fun setHomePageBottomBarLabelVisibility(
+        homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility
+    ) {
+        _homePageBottomBarLabelVisibility.value = homePageBottomBarLabelVisibility
     }
 
     private fun getLanguage() : Language {

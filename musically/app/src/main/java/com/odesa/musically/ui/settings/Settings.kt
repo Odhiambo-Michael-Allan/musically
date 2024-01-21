@@ -36,12 +36,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.odesa.musically.data.preferences.storage.ForYou
+import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.components.AdaptiveSnackBar
 import com.odesa.musically.ui.components.TopAppBarMinimalTitle
+import com.odesa.musically.ui.settings.Interface.bottomBarLabelVisibility.BottomBarLabelVisibility
 import com.odesa.musically.ui.settings.Interface.forYou.ForYou
 import com.odesa.musically.ui.settings.Interface.homeTabs.HomeTabs
 import com.odesa.musically.ui.settings.appearance.font.Font
@@ -70,7 +72,8 @@ fun SettingsScreenContent(
     onUseMaterialYouChange: ( Boolean ) -> Unit,
     onPrimaryColorChange: ( String ) -> Unit,
     onHomeTabsChange: ( Set<HomeTab> ) -> Unit,
-    onForYouContentChange: ( Set<ForYou> ) -> Unit
+    onForYouContentChange: ( Set<ForYou> ) -> Unit,
+    onHomePageBottomBarLabelVisibilityChange: ( HomePageBottomBarLabelVisibility ) -> Unit
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
@@ -197,6 +200,11 @@ fun SettingsScreenContent(
                         forYouContent = uiState.forYouContent,
                         onForYouContentChange = onForYouContentChange
                     )
+                    BottomBarLabelVisibility(
+                        value = uiState.homePageBottomBarLabelVisibility,
+                        language = uiState.language,
+                        onValueChange = onHomePageBottomBarLabelVisibilityChange
+                    )
                 }
             }
         }
@@ -214,7 +222,8 @@ fun SettingsScreenContentPreview() {
         useMaterialYou = true,
         primaryColorName = "Blue",
         homeTabs = SettingsDefaults.homeTabs,
-        forYouContent = SettingsDefaults.forYouContents
+        forYouContent = SettingsDefaults.forYouContents,
+        homePageBottomBarLabelVisibility = SettingsDefaults.homePageBottomBarLabelVisibility
     )
     MusicallyTheme(
         uiState = uiState
@@ -228,7 +237,8 @@ fun SettingsScreenContentPreview() {
             onUseMaterialYouChange = {},
             onPrimaryColorChange = {},
             onHomeTabsChange = {},
-            onForYouContentChange = {}
+            onForYouContentChange = {},
+            onHomePageBottomBarLabelVisibilityChange = {}
         )
     }
 }

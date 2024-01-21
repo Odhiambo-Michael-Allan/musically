@@ -13,6 +13,7 @@ class FakePreferencesStoreImpl : PreferenceStore {
     private var primaryColorName: String? = null
     private var homeTabs: Set<HomeTab>? = null
     private var forYouContents: Set<ForYou>? = null
+    private var homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility? = null
 
     override fun setLanguage( localeCode: String ) {
         language = localeCode
@@ -59,5 +60,12 @@ class FakePreferencesStoreImpl : PreferenceStore {
 
     override fun setForYouContents( forYouContents: Set<ForYou> ) {
         this.forYouContents = forYouContents
+    }
+
+    override fun getHomePageBottomBarLabelVisibility() = homePageBottomBarLabelVisibility
+        ?: SettingsDefaults.homePageBottomBarLabelVisibility
+
+    override fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility ) {
+        homePageBottomBarLabelVisibility = value
     }
 }
