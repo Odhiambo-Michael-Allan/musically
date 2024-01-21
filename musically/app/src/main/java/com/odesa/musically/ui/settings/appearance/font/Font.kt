@@ -1,4 +1,4 @@
-package com.odesa.musically.ui.settings.font
+package com.odesa.musically.ui.settings.appearance.font
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items

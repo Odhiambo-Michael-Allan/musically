@@ -2,6 +2,7 @@ package com.odesa.musically.data.preferences.impl
 
 import androidx.compose.ui.text.style.TextDirection
 import com.odesa.musically.data.preferences.Preferences
+import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.preferences.storage.PreferenceStore
 import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Chinese
@@ -39,6 +40,9 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
 
     private val _primaryColorName = MutableStateFlow( preferenceStore.getPrimaryColorName() )
     override val primaryColorName = _primaryColorName.asStateFlow()
+
+    private val _homeTabs = MutableStateFlow( preferenceStore.getHomeTabs() )
+    override val homeTabs = _homeTabs.asStateFlow()
 
 
     private fun getLanguage( localeCode: String ) : Language {
@@ -102,6 +106,13 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
         preferenceStore.setPrimaryColorName( primaryColorName )
         _primaryColorName.update {
             primaryColorName
+        }
+    }
+
+    override fun setHomeTabs( homeTabs: Set<HomeTab> ) {
+        preferenceStore.setHomeTabs( homeTabs )
+        _homeTabs.update {
+            homeTabs
         }
     }
 

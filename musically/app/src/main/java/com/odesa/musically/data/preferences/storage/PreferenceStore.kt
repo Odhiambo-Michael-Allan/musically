@@ -15,5 +15,19 @@ interface PreferenceStore {
     fun setUseMaterialYou( useMaterialYou: Boolean )
     fun setPrimaryColorName( primaryColorName: String )
     fun getPrimaryColorName(): String
+    fun getHomeTabs(): Set<HomeTab>
+    fun setHomeTabs( homeTabs: Set<HomeTab> )
 
+}
+
+enum class HomeTab {
+    ForYou,
+    Songs,
+    Artists,
+    Albums,
+    AlbumArtists,
+    Genres,
+    Folders,
+    Playlists,
+    Tree
 }

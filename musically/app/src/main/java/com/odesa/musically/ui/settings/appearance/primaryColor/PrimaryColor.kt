@@ -1,4 +1,4 @@
-package com.odesa.musically.ui.settings.primaryColor
+package com.odesa.musically.ui.settings.appearance.primaryColor
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items

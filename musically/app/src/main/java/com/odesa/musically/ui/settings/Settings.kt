@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.East
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,16 +35,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.odesa.musically.data.preferences.storage.HomeTab
+import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.ui.components.AdaptiveSnackBar
 import com.odesa.musically.ui.components.TopAppBarMinimalTitle
+import com.odesa.musically.ui.settings.Interface.homeTabs.HomeTabs
+import com.odesa.musically.ui.settings.appearance.font.Font
+import com.odesa.musically.ui.settings.appearance.fontScale.FontScale
+import com.odesa.musically.ui.settings.appearance.language.Language
+import com.odesa.musically.ui.settings.appearance.materialYou.MaterialYou
+import com.odesa.musically.ui.settings.appearance.primaryColor.PrimaryColor
+import com.odesa.musically.ui.settings.appearance.theme.Theme
 import com.odesa.musically.ui.settings.components.SettingsSideHeading
-import com.odesa.musically.ui.settings.font.Font
-import com.odesa.musically.ui.settings.fontScale.FontScale
-import com.odesa.musically.ui.settings.language.Language
-import com.odesa.musically.ui.settings.materialYou.MaterialYou
-import com.odesa.musically.ui.settings.primaryColor.PrimaryColor
-import com.odesa.musically.ui.settings.theme.Theme
 import com.odesa.musically.ui.theme.MusicallyTheme
 import com.odesa.musically.ui.theme.SupportedFonts
 import com.odesa.musically.ui.theme.ThemeMode
@@ -60,7 +64,8 @@ fun SettingsScreenContent(
     onFontScaleChange: ( String ) -> Unit,
     onThemeChange: ( ThemeMode ) -> Unit,
     onUseMaterialYouChange: ( Boolean ) -> Unit,
-    onPrimaryColorChange: ( String ) -> Unit
+    onPrimaryColorChange: ( String ) -> Unit,
+    onHomeTabsChange: ( Set<HomeTab> ) -> Unit
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
@@ -173,6 +178,13 @@ fun SettingsScreenContent(
                     onPrimaryColorChange = onPrimaryColorChange,
                     useMaterialYou = uiState.useMaterialYou
                 )
+                Divider( thickness = 0.5.dp )
+                SettingsSideHeading( text = uiState.language.Interface )
+                HomeTabs(
+                    language = uiState.language,
+                    homeTabs = uiState.homeTabs,
+                    onValueChange = onHomeTabsChange
+                )
             }
         }
 
@@ -186,9 +198,10 @@ fun SettingsScreenContentPreview() {
         language = English,
         font = SupportedFonts.ProductSans,
         fontScale = 1.0f,
-        themeMode = ThemeMode.DARK,
+        themeMode = ThemeMode.LIGHT,
         useMaterialYou = true,
-        primaryColorName = "Blue"
+        primaryColorName = "Blue",
+        homeTabs = SettingsDefaults.homeTabs
     )
     MusicallyTheme(
         uiState = uiState
@@ -200,7 +213,8 @@ fun SettingsScreenContentPreview() {
             onFontScaleChange = {},
             onThemeChange = {},
             onUseMaterialYouChange = {},
-            onPrimaryColorChange = {}
+            onPrimaryColorChange = {},
+            onHomeTabsChange = {}
         )
     }
 }

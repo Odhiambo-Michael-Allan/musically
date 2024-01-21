@@ -2,6 +2,7 @@ package com.odesa.musically.data.preferences.impl
 
 import com.odesa.musically.data.preferences.Preferences
 import com.odesa.musically.data.preferences.storage.FakePreferencesStoreImpl
+import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Chinese
 import com.odesa.musically.services.i18n.English
@@ -9,7 +10,7 @@ import com.odesa.musically.services.i18n.French
 import com.odesa.musically.services.i18n.German
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.services.i18n.Spanish
-import com.odesa.musically.ui.settings.fontScale.scalingPresets
+import com.odesa.musically.ui.settings.appearance.fontScale.scalingPresets
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.MusicallyTypography
 import com.odesa.musically.ui.theme.PrimaryThemeColors
@@ -46,10 +47,11 @@ class PreferencesImplTest {
         testLanguage( Spanish, "Configuración" )
     }
 
-    private fun testLanguage(languageToTest: Language, testString: String ) {
+    private fun testLanguage( languageToTest: Language, testString: String ) {
         preferences.setLanguage( languageToTest.locale )
         val currentLanguage = preferences.language.value
         assertEquals( testString, currentLanguage.settings )
+        assertEquals( languageToTest.locale, preferenceStore.getLanguage() )
     }
 
     @Test
@@ -67,6 +69,7 @@ class PreferencesImplTest {
         preferences.setFont( font.name )
         val currentFont = preferences.font.value
         assertEquals( font.name, currentFont.name )
+        assertEquals( font.name, preferenceStore.getFontName() )
     }
 
     @Test
@@ -83,6 +86,7 @@ class PreferencesImplTest {
     private fun changeFontScaleTo( fontScale: Float ) {
         preferences.setFontScale( fontScale )
         assertEquals( fontScale, preferences.fontScale.value )
+        assertEquals( fontScale, preferenceStore.getFontScale() )
     }
 
     @Test
@@ -116,6 +120,7 @@ class PreferencesImplTest {
     private fun changeUseMaterialYouTo( useMaterialYou: Boolean ) {
         preferences.setUseMaterialYou( useMaterialYou )
         assertEquals( useMaterialYou, preferences.useMaterialYou.value )
+        assertEquals( useMaterialYou, preferenceStore.getUseMaterialYou() )
     }
 
     @Test
@@ -133,5 +138,28 @@ class PreferencesImplTest {
     private fun changePrimaryColorTo( primaryColorName: String ) {
         preferences.setPrimaryColorName( primaryColorName )
         assertEquals( primaryColorName, preferences.primaryColorName.value )
+        assertEquals( primaryColorName, preferenceStore.getPrimaryColorName() )
+    }
+
+    @Test
+    fun testDefaultHomeTabsAreSetCorrectly() {
+        val homeTabs = preferences.homeTabs.value
+        assertEquals( 5, homeTabs.size )
+    }
+
+    @Test
+    fun testHomeTabsChange() {
+        changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs ) )
+        changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums ) )
+        changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums,
+            HomeTab.AlbumArtists ) )
+        changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums,
+            HomeTab.AlbumArtists, HomeTab.Genres ) )
+    }
+
+    private fun changeHomeTabsTo( homeTabs: Set<HomeTab> ) {
+        preferences.setHomeTabs( homeTabs )
+        assertEquals( homeTabs.size, preferences.homeTabs.value.size )
+        assertEquals( homeTabs.size, preferenceStore.getHomeTabs().size )
     }
 }

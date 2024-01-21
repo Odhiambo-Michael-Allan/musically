@@ -11,6 +11,7 @@ class FakePreferencesStoreImpl : PreferenceStore {
     private var themeMode: ThemeMode? = null
     private var useMaterialYou: Boolean? = null
     private var primaryColorName: String? = null
+    private var homeTabs: Set<HomeTab>? = null
 
     override fun setLanguage( localeCode: String ) {
         language = localeCode
@@ -47,4 +48,9 @@ class FakePreferencesStoreImpl : PreferenceStore {
     }
 
     override fun getPrimaryColorName() = primaryColorName ?: SettingsDefaults.primaryColorName
+    override fun getHomeTabs() = homeTabs ?: SettingsDefaults.homeTabs
+
+    override fun setHomeTabs( homeTabs: Set<HomeTab> ) {
+        this.homeTabs = homeTabs
+    }
 }

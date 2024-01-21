@@ -3,9 +3,10 @@ package com.odesa.musically.ui.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.i18n.Language
-import com.odesa.musically.ui.settings.fontScale.scalingPresets
+import com.odesa.musically.ui.settings.appearance.fontScale.scalingPresets
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +21,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     private val _themeMode = settingsRepository.themeMode
     private val _useMaterialYou = settingsRepository.useMaterialYou
     private val _primaryColorName = settingsRepository.primaryColorName
+    private val _homeTabs = settingsRepository.homeTabs
 
     private val _uiState = MutableStateFlow(
         SettingsScreenUiState(
@@ -28,7 +30,8 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
             fontScale = _fontScale.value,
             themeMode = _themeMode.value,
             useMaterialYou = _useMaterialYou.value,
-            primaryColorName = _primaryColorName.value
+            primaryColorName = _primaryColorName.value,
+            homeTabs = _homeTabs.value
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -41,6 +44,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         viewModelScope.launch { observeThemeMode() }
         viewModelScope.launch { observeUseMaterialYou() }
         viewModelScope.launch { observePrimaryColorName() }
+        viewModelScope.launch { observeHomeTabs() }
     }
 
     private suspend fun observeLanguage() {
@@ -91,6 +95,14 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
+    private suspend fun observeHomeTabs() {
+        _homeTabs.collect {
+            _uiState.value = _uiState.value.copy(
+                homeTabs = it
+            )
+        }
+    }
+
     fun setLanguage( localeCode: String ) {
         settingsRepository.setLanguage( localeCode )
     }
@@ -118,6 +130,10 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         settingsRepository.setPrimaryColorName( primaryColorName )
     }
 
+    fun setHomeTabs( homeTabs: Set<HomeTab> ) {
+        settingsRepository.setHomeTabs( homeTabs )
+    }
+
 }
 
 @Suppress( "UNCHECKED_CAST" )
@@ -135,5 +151,6 @@ data class SettingsScreenUiState(
     val fontScale: Float,
     val themeMode: ThemeMode,
     val useMaterialYou: Boolean,
-    val primaryColorName: String
+    val primaryColorName: String,
+    val homeTabs: Set<HomeTab>
 )

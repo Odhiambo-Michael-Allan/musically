@@ -1,6 +1,7 @@
 package com.odesa.musically.data.preferences
 
 import androidx.compose.ui.text.style.TextDirection
+import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Chinese
@@ -37,6 +38,9 @@ class FakePreferences : Preferences {
     private val _primaryColorName = MutableStateFlow( SettingsDefaults.primaryColorName )
     override val primaryColorName = _primaryColorName.asStateFlow()
 
+    private val _homeTabs = MutableStateFlow( SettingsDefaults.homeTabs )
+    override val homeTabs = _homeTabs.asStateFlow()
+
     override fun setLanguage( localeCode: String ) {
         when ( localeCode ) {
             Belarusian.locale -> _language.value = Belarusian
@@ -72,6 +76,10 @@ class FakePreferences : Preferences {
 
     override fun setPrimaryColorName( primaryColorName: String ) {
         _primaryColorName.value = primaryColorName
+    }
+
+    override fun setHomeTabs( homeTabs: Set<HomeTab> ) {
+        _homeTabs.value = homeTabs
     }
 
     private fun getLanguage() : Language {

@@ -1,6 +1,6 @@
 package com.odesa.musically.services.i18n
 
-import com.odesa.musically.ui.settings.language.Language
+import com.odesa.musically.ui.settings.appearance.language.Language
 
 object Translator {
 

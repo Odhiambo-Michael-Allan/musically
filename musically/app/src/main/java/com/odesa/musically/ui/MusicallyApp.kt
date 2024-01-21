@@ -45,6 +45,9 @@ fun MusicallyApp(
                 },
                 onPrimaryColorChange = {
                     primaryColorName -> settingsViewModel.setPrimaryColorName( primaryColorName )
+                },
+                onHomeTabsChange = {
+                    homeTabs -> settingsViewModel.setHomeTabs( homeTabs )
                 }
             )
         }

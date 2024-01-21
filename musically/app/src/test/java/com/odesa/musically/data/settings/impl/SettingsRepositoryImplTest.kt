@@ -1,6 +1,7 @@
 package com.odesa.musically.data.settings.impl
 
 import com.odesa.musically.data.preferences.FakePreferences
+import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Chinese
@@ -9,7 +10,7 @@ import com.odesa.musically.services.i18n.French
 import com.odesa.musically.services.i18n.German
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.services.i18n.Spanish
-import com.odesa.musically.ui.settings.fontScale.scalingPresets
+import com.odesa.musically.ui.settings.appearance.fontScale.scalingPresets
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.MusicallyTypography
 import com.odesa.musically.ui.theme.PrimaryThemeColors
@@ -130,6 +131,26 @@ class SettingsRepositoryImplTest {
     private fun changePrimaryColorTo( primaryColorName: String ) {
         preferences.setPrimaryColorName( primaryColorName )
         assertEquals( primaryColorName, settingsRepository.primaryColorName.value )
+    }
+
+    @Test
+    fun testDefaultHomeTabsAreCorrectlySet() {
+        assertEquals( 5, settingsRepository.homeTabs.value.size )
+    }
+
+    @Test
+    fun testHomeTabsChange() {
+        changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs ) )
+        changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums ) )
+        changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums,
+            HomeTab.AlbumArtists ) )
+        changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums,
+            HomeTab.AlbumArtists, HomeTab.Genres ) )
+    }
+
+    private fun changeHomeTabsTo( homeTabs: Set<HomeTab> ) {
+        preferences.setHomeTabs( homeTabs )
+        assertEquals( homeTabs.size, settingsRepository.homeTabs.value.size )
     }
 
 }

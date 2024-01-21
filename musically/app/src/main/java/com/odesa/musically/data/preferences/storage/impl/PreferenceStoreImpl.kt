@@ -2,6 +2,7 @@ package com.odesa.musically.data.preferences.storage.impl
 
 import android.content.Context
 import androidx.core.content.edit
+import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.preferences.storage.PreferenceStore
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.ui.theme.SupportedFonts
@@ -71,6 +72,19 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
     override fun getPrimaryColorName() = getSharedPreferences()
         .getString( SettingsKeys.primaryColorName, null ) ?: SettingsDefaults.primaryColorName
 
+    override fun getHomeTabs() = getSharedPreferences()
+        .getString( SettingsKeys.homeTabs, null )
+        ?.split( "," )
+        ?.mapNotNull { parseEnumValue<HomeTab>( it ) }
+        ?.toSet()
+        ?: SettingsDefaults.homeTabs
+
+    override fun setHomeTabs( homeTabs: Set<HomeTab> ) {
+        getSharedPreferences().edit {
+            putString( SettingsKeys.homeTabs, homeTabs.joinToString( "," ) { it.name } )
+        }
+    }
+
     private fun getSharedPreferences() = context.getSharedPreferences(
         SettingsKeys.identifier,
         Context.MODE_PRIVATE
@@ -84,6 +98,13 @@ object SettingsDefaults {
     val themeMode = ThemeMode.SYSTEM
     const val useMaterialYou = true
     const val primaryColorName = "Blue"
+    val homeTabs = setOf(
+        HomeTab.ForYou,
+        HomeTab.Songs,
+        HomeTab.Albums,
+        HomeTab.Artists,
+        HomeTab.Playlists,
+    )
 }
 
 object SettingsKeys {
@@ -94,4 +115,8 @@ object SettingsKeys {
     const val themeMode = "theme_mode"
     const val useMaterialYou = "use_material_you"
     const val primaryColorName = "primary_color_name"
+    const val homeTabs = "home_tabs"
 }
+
+private inline fun <reified T : Enum<T>> parseEnumValue( value: String ): T? =
+    T::class.java.enumConstants?.find { it.name == value }

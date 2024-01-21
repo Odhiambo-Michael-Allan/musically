@@ -1,4 +1,4 @@
-package com.odesa.musically.ui.settings.fontScale
+package com.odesa.musically.ui.settings.appearance.fontScale
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
