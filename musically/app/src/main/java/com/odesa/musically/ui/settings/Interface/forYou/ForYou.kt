@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
-import com.odesa.musically.services.i18n.English
+import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.settings.components.SettingsMultiOptionTile
 
@@ -18,22 +18,28 @@ fun ForYou(
 ) {
     SettingsMultiOptionTile(
         selectedValues = forYouContent,
-        possibleValues = ForYou.entries.toSet(),
+        possibleValues = ForYou.entries.associateBy( { it }, { it.resolveName( language ) } ),
         onValueChange = onForYouContentChange ,
         leadingContentImageVector = Icons.Filled.Recommend,
         headlineContentText = language.forYou,
-        supportingContentText = forYouContent.joinToString { it.name },
+        supportingContentText = forYouContent.joinToString { it.resolveName( language ) },
         cancel = language.cancel,
         done = language.done,
         dialogTitle = language.forYou
     )
 }
 
+fun ForYou.resolveName( language: Language ) = when ( this ) {
+    ForYou.Albums -> language.suggestedAlbums
+    ForYou.Artists -> language.suggestedArtists
+    ForYou.AlbumArtists -> language.suggestedAlbumArtists
+}
+
 @Preview( showBackground = true )
 @Composable
 fun ForYouPreview() {
     com.odesa.musically.ui.settings.Interface.forYou.ForYou(
-        language = English,
+        language = Belarusian,
         forYouContent = SettingsDefaults.forYouContents,
         onForYouContentChange = {}
     )

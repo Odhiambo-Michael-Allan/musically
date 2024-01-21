@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
-import com.odesa.musically.services.i18n.English
+import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.settings.components.SettingsMultiOptionTile
 
@@ -27,12 +27,12 @@ fun HomeTabs(
 
     SettingsMultiOptionTile(
         selectedValues = homeTabs,
-        possibleValues = HomeTab.entries.toSet(),
+        possibleValues = HomeTab.entries.associateBy( { it }, { it.resolveName( language ) } ),
         satisfies = { it.size in 2..5 },
         onValueChange = onHomeTabsChange,
         leadingContentImageVector = Icons.Filled.Home,
         headlineContentText = language.homeTabs,
-        supportingContentText = homeTabs.joinToString { it.name },
+        supportingContentText = homeTabs.joinToString { it.resolveName( language ) },
         cancel = language.cancel,
         done = language.done,
         dialogTitle = language.homeTabs,
@@ -50,13 +50,25 @@ fun HomeTabs(
     )
 }
 
+fun HomeTab.resolveName( language: Language ) = when ( this ) {
+    HomeTab.Songs -> language.songs
+    HomeTab.Albums -> language.albums
+    HomeTab.Genres -> language.genres
+    HomeTab.ForYou -> language.forYou
+    HomeTab.Artists -> language.artists
+    HomeTab.AlbumArtists -> language.albumArtists
+    HomeTab.Folders -> language.folders
+    HomeTab.Playlists -> language.playlists
+    HomeTab.Tree -> language.tree
+
+}
 
 
 @Preview( showBackground = true )
 @Composable
 fun HomeTabsPreview() {
     HomeTabs(
-        language = English,
+        language = Belarusian,
         homeTabs = SettingsDefaults.homeTabs,
         onHomeTabsChange = {}
     )

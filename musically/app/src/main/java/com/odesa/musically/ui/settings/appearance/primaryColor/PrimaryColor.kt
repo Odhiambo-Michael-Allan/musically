@@ -21,7 +21,7 @@ fun PrimaryColor(
     SettingsOptionTile(
         currentValue = primaryColor,
         possibleValues = PrimaryThemeColors.entries.toSet().associateBy( { it.name }, { it.name } ),
-        enabled = useMaterialYou,
+        enabled = !useMaterialYou,
         dialogTitle = language.primaryColor,
         onValueChange = onPrimaryColorChange,
         leadingContentIcon = Icons.Filled.Colorize,

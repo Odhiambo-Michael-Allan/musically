@@ -40,7 +40,8 @@ import java.util.Collections
 fun <T> SettingsMultiOptionTile(
     topBar: ( @Composable () -> Unit )? = null,
     selectedValues: Set<T>,
-    possibleValues: Set<T>,
+    possibleValues: Map<T, String>,
+//    possibleValues: Set<T>,
     satisfies: ( Set<T> ) -> Boolean = { true },
     onValueChange: ( Set<T> ) -> Unit,
     leadingContentImageVector: ImageVector,
@@ -78,7 +79,7 @@ fun <T> SettingsMultiOptionTile(
             derivedStateOf {
                 mutableSetOf<T>().apply {
                     addAll( currentlySelectedValues )
-                    addAll( possibleValues )
+                    addAll( possibleValues.keys.toSet() )
                 }
             }
         }
@@ -105,7 +106,7 @@ fun <T> SettingsMultiOptionTile(
                                     currentlySelectedValues.add( it )
                             },
                             selected = selected,
-                            value = it.toString(),
+                            value = possibleValues[it]!!,
                             arrowUpEnabled = ( pos - 1 >= 0 ),
                             arrowDownEnabled = ( pos + 1 < currentlySelectedValues.size ),
                             arrowUpClicked = { Collections.swap( currentlySelectedValues, pos - 1, pos )},

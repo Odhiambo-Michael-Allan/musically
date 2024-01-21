@@ -124,6 +124,7 @@ object SettingsDefaults {
         ForYou.Albums,
         ForYou.Artists
     )
+    const val homePageBottomBarLabelVisibility = "home_page_bottom_bar_visibility"
 }
 
 object SettingsKeys {
