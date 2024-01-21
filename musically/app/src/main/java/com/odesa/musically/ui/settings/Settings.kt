@@ -205,6 +205,8 @@ fun SettingsScreenContent(
                         language = uiState.language,
                         onValueChange = onHomePageBottomBarLabelVisibilityChange
                     )
+                    Divider( thickness = 0.5.dp )
+                    SettingsSideHeading( text = uiState.language.player )
                 }
             }
         }
