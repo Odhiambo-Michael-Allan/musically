@@ -63,6 +63,12 @@ fun MusicallyApp(
                 },
                 onRequireAudioFocusChange = { requireAudioFocusChange ->
                     settingsViewModel.setRequireAudioFocus( requireAudioFocusChange )
+                },
+                onIgnoreAudioFocusLossChange = { ignoreAudioFocusChange ->
+                    settingsViewModel.setIgnoreAudioFocusLoss( ignoreAudioFocusChange )
+                },
+                onPlayOnHeadphonesConnectChange = { playOnHeadphonesChange ->
+                    settingsViewModel.setPlayOnHeadphonesConnect( playOnHeadphonesChange )
                 }
             )
         }

@@ -219,7 +219,7 @@ class SettingsRepositoryImplTest {
     }
 
     @Test
-    fun testDefaultRequireAudioFocusSettingIsCorrectlySet() {
+    fun testDefaultRequireAudioFocusSettingIsSetCorrectly() {
         assertTrue( settingsRepository.requireAudioFocus.value )
     }
 
@@ -229,6 +229,32 @@ class SettingsRepositoryImplTest {
         assertFalse( settingsRepository.requireAudioFocus.value )
         preferences.setRequireAudioFocus( true )
         assertTrue( settingsRepository.requireAudioFocus.value )
+    }
+
+    @Test
+    fun testDefaultIgnoreAudioFocusLossIsSetCorrectly() {
+        assertFalse( settingsRepository.ignoreAudioFocusLoss.value )
+    }
+
+    @Test
+    fun testIgnoreAudioFocusLossSettingChange() {
+        preferences.setIgnoreAudioFocusLoss( false )
+        assertFalse( settingsRepository.ignoreAudioFocusLoss.value )
+        preferences.setIgnoreAudioFocusLoss( true )
+        assertTrue( settingsRepository.ignoreAudioFocusLoss.value )
+    }
+
+    @Test
+    fun testDefaultPlayOnHeadphonesConnectSettingIsSetCorrectly() {
+        assertFalse( settingsRepository.playOnHeadphonesConnect.value )
+    }
+
+    @Test
+    fun testPlayOnHeadphonesConnectSettingChange() {
+        preferences.setPlayOnHeadphonesConnect( true )
+        assertTrue( settingsRepository.playOnHeadphonesConnect.value )
+        preferences.setPlayOnHeadphonesConnect( false )
+        assertFalse( settingsRepository.playOnHeadphonesConnect.value )
     }
 
 }

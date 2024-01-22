@@ -54,6 +54,12 @@ class FakeSettingsRepository : SettingsRepository {
     private val _requireAudioFocus = MutableStateFlow( SettingsDefaults.requireAudioFocus )
     override val requireAudioFocus = _requireAudioFocus.asStateFlow()
 
+    private val _ignoreAudioFocusLoss = MutableStateFlow( SettingsDefaults.ignoreAudioFocusLoss )
+    override val ignoreAudioFocusLoss = _ignoreAudioFocusLoss.asStateFlow()
+
+    private val _playOnHeadphoneConnect = MutableStateFlow( SettingsDefaults.playOnHeadphonesConnect )
+    override val playOnHeadphonesConnect = _playOnHeadphoneConnect.asStateFlow()
+
     override fun setLanguage( localeCode: String ) {
         _currentLanguage.value = resolveLanguage( localeCode )
     }
@@ -117,5 +123,13 @@ class FakeSettingsRepository : SettingsRepository {
 
     override fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
         _requireAudioFocus.value = requireAudioFocus
+    }
+
+    override fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean ) {
+        _ignoreAudioFocusLoss.value = ignoreAudioFocusLoss
+    }
+
+    override fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
+        _playOnHeadphoneConnect.value = playOnHeadphonesConnect
     }
 }

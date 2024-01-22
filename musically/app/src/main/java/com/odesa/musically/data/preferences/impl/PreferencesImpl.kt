@@ -62,6 +62,12 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
     private val _requireAudioFocus = MutableStateFlow( preferenceStore.getRequireAudioFocus() )
     override val requireAudioFocus = _requireAudioFocus.asStateFlow()
 
+    private val _ignoreAudioFocusLoss = MutableStateFlow( preferenceStore.getIgnoreAudioFocusLoss() )
+    override val ignoreAudioFocusLoss = _ignoreAudioFocusLoss.asStateFlow()
+
+    private val _playOnHeadphoneConnect = MutableStateFlow( preferenceStore.getPlayOnHeadphonesConnect() )
+    override val playOnHeadphonesConnect = _playOnHeadphoneConnect.asStateFlow()
+
 
     private fun getLanguage( localeCode: String ) : Language {
         return when ( localeCode ) {
@@ -166,6 +172,20 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
         preferenceStore.setRequireAudioFocus( requireAudioFocus )
         _requireAudioFocus.update {
             requireAudioFocus
+        }
+    }
+
+    override fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean ) {
+        preferenceStore.setIgnoreAudioFocusLoss( ignoreAudioFocusLoss )
+        _ignoreAudioFocusLoss.update {
+            ignoreAudioFocusLoss
+        }
+    }
+
+    override fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
+        preferenceStore.setPlayOnHeadphonesConnect( playOnHeadphonesConnect )
+        _playOnHeadphoneConnect.update {
+            playOnHeadphonesConnect
         }
     }
 

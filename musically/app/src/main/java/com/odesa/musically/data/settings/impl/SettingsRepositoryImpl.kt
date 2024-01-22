@@ -23,6 +23,8 @@ class SettingsRepositoryImpl(
     override val fadePlayback = preferences.fadePlayback
     override val fadePlaybackDuration = preferences.fadePlaybackDuration
     override val requireAudioFocus = preferences.requireAudioFocus
+    override val ignoreAudioFocusLoss = preferences.ignoreAudioFocusLoss
+    override val playOnHeadphonesConnect = preferences.playOnHeadphonesConnect
 
     override fun setLanguage( localeCode: String ) {
         preferences.setLanguage( localeCode )
@@ -70,5 +72,13 @@ class SettingsRepositoryImpl(
 
     override fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
         preferences.setRequireAudioFocus( requireAudioFocus )
+    }
+
+    override fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean ) {
+        preferences.setIgnoreAudioFocusLoss( ignoreAudioFocusLoss )
+    }
+
+    override fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
+        preferences.setPlayOnHeadphonesConnect( playOnHeadphonesConnect )
     }
 }

@@ -247,4 +247,34 @@ class PreferencesImplTest {
         assertTrue( preferenceStore.getRequireAudioFocus() )
         assertTrue( preferences.requireAudioFocus.value )
     }
+
+    @Test
+    fun testDefaultIgnoreAudioFocusSettingIsSetCorrectly() {
+        assertFalse( preferences.ignoreAudioFocusLoss.value )
+    }
+
+    @Test
+    fun testIgnoreAudioFocusSettingChange() {
+        preferences.setIgnoreAudioFocusLoss( true )
+        assertTrue( preferenceStore.getIgnoreAudioFocusLoss() )
+        assertTrue( preferences.ignoreAudioFocusLoss.value )
+        preferences.setIgnoreAudioFocusLoss( false )
+        assertFalse( preferenceStore.getIgnoreAudioFocusLoss() )
+        assertFalse( preferences.ignoreAudioFocusLoss.value )
+    }
+
+    @Test
+    fun testDefaultPlayOnHeadphonesConnectSettingIsSetCorrectly() {
+        assertFalse( preferences.playOnHeadphonesConnect.value )
+    }
+
+    @Test
+    fun testPlayOnHeadphonesConnectSettingChange() {
+        preferences.setPlayOnHeadphonesConnect( true )
+        assertTrue( preferenceStore.getPlayOnHeadphonesConnect() )
+        assertTrue( preferences.playOnHeadphonesConnect.value )
+        preferences.setPlayOnHeadphonesConnect( false )
+        assertFalse( preferenceStore.getPlayOnHeadphonesConnect() )
+        assertFalse( preferences.playOnHeadphonesConnect.value )
+    }
 }

@@ -192,7 +192,7 @@ fun CustomSlider(
                                     range
                                 )
                             )
-                            onSliderValueChange(newValue)
+                            onSliderValueChange( newValue )
                             ratio = RangeUtils.calculateRatioFromValue( newValue, range )
                         }
                     )

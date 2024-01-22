@@ -2,12 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="FadePlaybackDurationPreview">
-        <State />
-      </entry>
-      <entry key="SliderDialogPreview">
-        <State />
-      </entry>
       <entry key="app">
         <State />
       </entry>

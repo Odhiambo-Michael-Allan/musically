@@ -55,6 +55,8 @@ import com.odesa.musically.ui.settings.appearance.theme.Theme
 import com.odesa.musically.ui.settings.components.SettingsSideHeading
 import com.odesa.musically.ui.settings.player.fadePlayback.FadePlayback
 import com.odesa.musically.ui.settings.player.fadePlaybackDuration.FadePlaybackDuration
+import com.odesa.musically.ui.settings.player.ignoreAudioFocusLoss.IgnoreAudioFocusLoss
+import com.odesa.musically.ui.settings.player.playOnHeadphoneConnect.PlayOnHeadphonesConnect
 import com.odesa.musically.ui.settings.player.requireAudioFocus.RequireAudioFocus
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.MusicallyTheme
@@ -80,6 +82,8 @@ fun SettingsScreenContent(
     onFadePlaybackChange: ( Boolean ) -> Unit,
     onFadePlaybackDurationChange: ( Float ) -> Unit,
     onRequireAudioFocusChange: ( Boolean ) -> Unit,
+    onIgnoreAudioFocusLossChange: ( Boolean ) -> Unit,
+    onPlayOnHeadphonesConnectChange: ( Boolean ) -> Unit,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
@@ -229,6 +233,16 @@ fun SettingsScreenContent(
                         requireAudioFocus = uiState.requireAudioFocus,
                         onRequireAudioFocusChange = onRequireAudioFocusChange
                     )
+                    IgnoreAudioFocusLoss(
+                        language = uiState.language,
+                        ignoreAudioFocusLoss = uiState.ignoreAudioFocusLoss,
+                        onIgnoreAudioFocusLossChange = onIgnoreAudioFocusLossChange
+                    )
+                    PlayOnHeadphonesConnect(
+                        language = uiState.language,
+                        playOnHeadphonesConnect = uiState.playOnHeadphonesConnect,
+                        onPlayOnHeadphonesConnectChange = onPlayOnHeadphonesConnectChange
+                    )
                 }
             }
         }
@@ -250,7 +264,9 @@ fun SettingsScreenContentPreview() {
         homePageBottomBarLabelVisibility = SettingsDefaults.homePageBottomBarLabelVisibility,
         fadePlayback = SettingsDefaults.fadePlayback,
         fadePlaybackDuration = SettingsDefaults.fadePlaybackDuration,
-        requireAudioFocus = SettingsDefaults.requireAudioFocus
+        requireAudioFocus = SettingsDefaults.requireAudioFocus,
+        ignoreAudioFocusLoss = SettingsDefaults.ignoreAudioFocusLoss,
+        playOnHeadphonesConnect = SettingsDefaults.playOnHeadphonesConnect,
     )
     MusicallyTheme(
         uiState = uiState
@@ -268,7 +284,9 @@ fun SettingsScreenContentPreview() {
             onHomePageBottomBarLabelVisibilityChange = {},
             onFadePlaybackChange = {},
             onFadePlaybackDurationChange = {},
-            onRequireAudioFocusChange = {}
+            onRequireAudioFocusChange = {},
+            onIgnoreAudioFocusLossChange = {},
+            onPlayOnHeadphonesConnectChange = {},
         )
     }
 }

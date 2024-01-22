@@ -17,6 +17,8 @@ class FakePreferencesStoreImpl : PreferenceStore {
     private var fadePlayback: Boolean? = null
     private var fadePlaybackDuration: Float? = null
     private var requireAudioFocus: Boolean? = null
+    private var ignoreAudioFocusLoss: Boolean? = null
+    private var playOnHeadphonesConnect: Boolean? = null
 
     override fun setLanguage( localeCode: String ) {
         language = localeCode
@@ -88,5 +90,19 @@ class FakePreferencesStoreImpl : PreferenceStore {
 
     override fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
         this.requireAudioFocus = requireAudioFocus
+    }
+
+    override fun getIgnoreAudioFocusLoss() = ignoreAudioFocusLoss
+        ?: SettingsDefaults.ignoreAudioFocusLoss
+
+    override fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean ) {
+        this.ignoreAudioFocusLoss = ignoreAudioFocusLoss
+    }
+
+    override fun getPlayOnHeadphonesConnect() = playOnHeadphonesConnect
+        ?: SettingsDefaults.playOnHeadphonesConnect
+
+    override fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
+        this.playOnHeadphonesConnect = playOnHeadphonesConnect
     }
 }

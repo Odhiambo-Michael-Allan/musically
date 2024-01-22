@@ -151,6 +151,16 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         }
     }
 
+    override fun getPlayOnHeadphonesConnect() = getSharedPreferences()
+        .getBoolean( SettingsKeys.playOnHeadphonesConnect,
+            SettingsDefaults.playOnHeadphonesConnect )
+
+    override fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
+        getSharedPreferences().edit {
+            putBoolean( SettingsKeys.playOnHeadphonesConnect, playOnHeadphonesConnect )
+        }
+    }
+
     private fun getSharedPreferences() = context.getSharedPreferences(
         SettingsKeys.identifier,
         Context.MODE_PRIVATE
@@ -180,6 +190,7 @@ object SettingsDefaults {
     const val fadePlaybackDuration = 1f
     const val requireAudioFocus = true
     const val ignoreAudioFocusLoss = false
+    const val playOnHeadphonesConnect = false
 }
 
 object SettingsKeys {
@@ -197,6 +208,7 @@ object SettingsKeys {
     const val fadePlaybackDuration = "fade_playback_duration"
     const val requireAudioFocus = "require_audio_focus"
     const val ignoreAudioFocusLoss = "ignore_audio_focus_loss"
+    const val playOnHeadphonesConnect = "play_on_headphones_connect"
 }
 
 private inline fun <reified T : Enum<T>> parseEnumValue( value: String ): T? =

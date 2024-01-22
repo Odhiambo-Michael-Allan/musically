@@ -30,7 +30,9 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
             homePageBottomBarLabelVisibility = settingsRepository.homePageBottomBarLabelVisibility.value,
             fadePlayback = settingsRepository.fadePlayback.value,
             fadePlaybackDuration = settingsRepository.fadePlaybackDuration.value,
-            requireAudioFocus = settingsRepository.requireAudioFocus.value
+            requireAudioFocus = settingsRepository.requireAudioFocus.value,
+            ignoreAudioFocusLoss = settingsRepository.ignoreAudioFocusLoss.value,
+            playOnHeadphonesConnect = settingsRepository.playOnHeadphonesConnect.value,
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -49,6 +51,8 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         viewModelScope.launch { observeFadePlayback() }
         viewModelScope.launch { observeFadePlaybackDuration() }
         viewModelScope.launch { observeRequireAudioFocus() }
+        viewModelScope.launch { observeIgnoreAudioFocusLossSetting() }
+        viewModelScope.launch { observePlayOnHeadphonesConnect() }
     }
 
     private suspend fun observeLanguage() {
@@ -147,6 +151,22 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
+    private suspend fun observeIgnoreAudioFocusLossSetting() {
+        settingsRepository.ignoreAudioFocusLoss.collect {
+            _uiState.value = _uiState.value.copy(
+                ignoreAudioFocusLoss = it
+            )
+        }
+    }
+
+    private suspend fun observePlayOnHeadphonesConnect() {
+        settingsRepository.playOnHeadphonesConnect.collect {
+            _uiState.value = _uiState.value.copy(
+                playOnHeadphonesConnect = it
+            )
+        }
+    }
+
     fun setLanguage( localeCode: String ) {
         settingsRepository.setLanguage( localeCode )
     }
@@ -198,6 +218,14 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         settingsRepository.setRequireAudioFocus( requireAudioFocus )
     }
 
+    fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean ) {
+        settingsRepository.setIgnoreAudioFocusLoss( ignoreAudioFocusLoss )
+    }
+
+    fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
+        settingsRepository.setPlayOnHeadphonesConnect( playOnHeadphonesConnect )
+    }
+
 }
 
 @Suppress( "UNCHECKED_CAST" )
@@ -222,4 +250,6 @@ data class SettingsScreenUiState(
     val fadePlayback: Boolean,
     val fadePlaybackDuration: Float,
     val requireAudioFocus: Boolean,
+    val ignoreAudioFocusLoss: Boolean,
+    val playOnHeadphonesConnect: Boolean,
 )

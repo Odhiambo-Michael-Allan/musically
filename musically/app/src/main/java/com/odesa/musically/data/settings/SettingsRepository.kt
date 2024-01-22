@@ -21,6 +21,8 @@ interface SettingsRepository {
     val fadePlayback: StateFlow<Boolean>
     val fadePlaybackDuration: StateFlow<Float>
     val requireAudioFocus: StateFlow<Boolean>
+    val ignoreAudioFocusLoss: StateFlow<Boolean>
+    val playOnHeadphonesConnect: StateFlow<Boolean>
 
     fun setLanguage( localeCode: String )
     fun setFont( fontName: String )
@@ -34,4 +36,6 @@ interface SettingsRepository {
     fun setFadePlayback( fadePlayback: Boolean )
     fun setFadePlaybackDuration( fadePlaybackDuration: Float )
     fun setRequireAudioFocus( requireAudioFocus: Boolean )
+    fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean )
+    fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean )
 }

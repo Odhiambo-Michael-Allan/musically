@@ -257,5 +257,23 @@ class SettingsViewModelTest {
         assertTrue( settingsViewModel.uiState.value.requireAudioFocus )
     }
 
+    @Test
+    fun testDefaultIgnoreAudioFocusLossSettingIsSetCorrectly() {
+        assertFalse( settingsViewModel.uiState.value.ignoreAudioFocusLoss )
+    }
+
+    @Test
+    fun testDefaultPlayOnHeadphonesConnectSettingIsSetCorrectly() {
+        assertFalse( settingsViewModel.uiState.value.playOnHeadphonesConnect )
+    }
+
+    @Test
+    fun testPlayOnHeadphonesConnectSettingChange() {
+        settingsRepository.setPlayOnHeadphonesConnect( true )
+        assertTrue( settingsViewModel.uiState.value.playOnHeadphonesConnect )
+        settingsRepository.setPlayOnHeadphonesConnect( false )
+        assertFalse( settingsViewModel.uiState.value.playOnHeadphonesConnect )
+    }
+
 
 }

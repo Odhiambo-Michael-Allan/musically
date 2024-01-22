@@ -29,6 +29,8 @@ interface PreferenceStore {
     fun setRequireAudioFocus( requireAudioFocus: Boolean )
     fun getIgnoreAudioFocusLoss(): Boolean
     fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean )
+    fun getPlayOnHeadphonesConnect(): Boolean
+    fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean )
 
 
 }
