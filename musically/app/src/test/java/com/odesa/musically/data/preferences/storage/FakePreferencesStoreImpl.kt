@@ -16,6 +16,7 @@ class FakePreferencesStoreImpl : PreferenceStore {
     private var homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility? = null
     private var fadePlayback: Boolean? = null
     private var fadePlaybackDuration: Float? = null
+    private var requireAudioFocus: Boolean? = null
 
     override fun setLanguage( localeCode: String ) {
         language = localeCode
@@ -81,5 +82,11 @@ class FakePreferencesStoreImpl : PreferenceStore {
 
     override fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
         this.fadePlaybackDuration = fadePlaybackDuration
+    }
+
+    override fun getRequireAudioFocus() = requireAudioFocus ?: SettingsDefaults.requireAudioFocus
+
+    override fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
+        this.requireAudioFocus = requireAudioFocus
     }
 }

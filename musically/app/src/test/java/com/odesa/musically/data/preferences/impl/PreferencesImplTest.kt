@@ -232,4 +232,19 @@ class PreferencesImplTest {
             assertEquals( duration.toFloat(), preferences.fadePlaybackDuration.value )
         }
     }
+
+    @Test
+    fun testDefaultRequireAudioFocusSettingIsSetCorrectly() {
+        assertTrue( preferences.requireAudioFocus.value )
+    }
+
+    @Test
+    fun testRequireAudioFocusSettingChange() {
+        preferences.setRequireAudioFocus( false )
+        assertFalse( preferenceStore.getRequireAudioFocus() )
+        assertFalse( preferences.requireAudioFocus.value )
+        preferences.setRequireAudioFocus( true )
+        assertTrue( preferenceStore.getRequireAudioFocus() )
+        assertTrue( preferences.requireAudioFocus.value )
+    }
 }

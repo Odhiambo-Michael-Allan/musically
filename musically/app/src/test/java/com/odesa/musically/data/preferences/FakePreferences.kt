@@ -55,6 +55,9 @@ class FakePreferences : Preferences {
     private val _fadePlaybackDuration = MutableStateFlow( SettingsDefaults.fadePlaybackDuration )
     override val fadePlaybackDuration = _fadePlaybackDuration.asStateFlow()
 
+    private val _requireAudioFocus = MutableStateFlow( SettingsDefaults.requireAudioFocus )
+    override val requireAudioFocus = _requireAudioFocus.asStateFlow()
+
     override fun setLanguage( localeCode: String ) {
         when ( localeCode ) {
             Belarusian.locale -> _language.value = Belarusian
@@ -116,6 +119,10 @@ class FakePreferences : Preferences {
 
     override fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
         _fadePlaybackDuration.value = fadePlaybackDuration
+    }
+
+    override fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
+        _requireAudioFocus.value = requireAudioFocus
     }
 
 }

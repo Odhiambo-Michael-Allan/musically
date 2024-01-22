@@ -22,6 +22,7 @@ interface Preferences {
     val homePageBottomBarLabelVisibility: StateFlow<HomePageBottomBarLabelVisibility>
     val fadePlayback: StateFlow<Boolean>
     val fadePlaybackDuration: StateFlow<Float>
+    val requireAudioFocus: StateFlow<Boolean>
 
     fun setLanguage( localeCode: String )
     fun setFont( fontName: String )
@@ -34,5 +35,6 @@ interface Preferences {
     fun setHomePageBottomBarLabelVisibility( homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility )
     fun setFadePlayback( fadePlayback: Boolean )
     fun setFadePlaybackDuration( fadePlaybackDuration: Float )
+    fun setRequireAudioFocus( requireAudioFocus: Boolean )
 
 }

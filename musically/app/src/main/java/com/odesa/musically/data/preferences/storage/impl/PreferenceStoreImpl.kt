@@ -134,6 +134,23 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         }
     }
 
+    override fun getRequireAudioFocus() = getSharedPreferences()
+        .getBoolean( SettingsKeys.requireAudioFocus, SettingsDefaults.requireAudioFocus )
+    override fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
+        getSharedPreferences().edit {
+            putBoolean( SettingsKeys.requireAudioFocus, requireAudioFocus )
+        }
+    }
+
+    override fun getIgnoreAudioFocusLoss() = getSharedPreferences()
+        .getBoolean( SettingsKeys.ignoreAudioFocusLoss, SettingsDefaults.ignoreAudioFocusLoss )
+
+    override fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean ) {
+        getSharedPreferences().edit {
+            putBoolean( SettingsKeys.ignoreAudioFocusLoss, ignoreAudioFocusLoss )
+        }
+    }
+
     private fun getSharedPreferences() = context.getSharedPreferences(
         SettingsKeys.identifier,
         Context.MODE_PRIVATE
@@ -161,6 +178,8 @@ object SettingsDefaults {
     val homePageBottomBarLabelVisibility = HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE
     const val fadePlayback = false
     const val fadePlaybackDuration = 1f
+    const val requireAudioFocus = true
+    const val ignoreAudioFocusLoss = false
 }
 
 object SettingsKeys {
@@ -176,6 +195,8 @@ object SettingsKeys {
     const val homePageBottomBarLabelVisibility = "home_page_bottom_bar_visibility"
     const val fadePlayback = "fade_playback"
     const val fadePlaybackDuration = "fade_playback_duration"
+    const val requireAudioFocus = "require_audio_focus"
+    const val ignoreAudioFocusLoss = "ignore_audio_focus_loss"
 }
 
 private inline fun <reified T : Enum<T>> parseEnumValue( value: String ): T? =

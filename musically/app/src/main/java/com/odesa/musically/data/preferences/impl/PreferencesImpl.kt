@@ -59,6 +59,9 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
     private val _fadePlaybackDuration = MutableStateFlow( preferenceStore.getFadePlaybackDuration() )
     override val fadePlaybackDuration = _fadePlaybackDuration.asStateFlow()
 
+    private val _requireAudioFocus = MutableStateFlow( preferenceStore.getRequireAudioFocus() )
+    override val requireAudioFocus = _requireAudioFocus.asStateFlow()
+
 
     private fun getLanguage( localeCode: String ) : Language {
         return when ( localeCode ) {
@@ -156,6 +159,13 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
         preferenceStore.setFadePlaybackDuration( fadePlaybackDuration )
         _fadePlaybackDuration.update {
             fadePlaybackDuration
+        }
+    }
+
+    override fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
+        preferenceStore.setRequireAudioFocus( requireAudioFocus )
+        _requireAudioFocus.update {
+            requireAudioFocus
         }
     }
 

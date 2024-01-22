@@ -218,4 +218,17 @@ class SettingsRepositoryImplTest {
         }
     }
 
+    @Test
+    fun testDefaultRequireAudioFocusSettingIsCorrectlySet() {
+        assertTrue( settingsRepository.requireAudioFocus.value )
+    }
+
+    @Test
+    fun testRequireAudioFocusSettingChange() {
+        preferences.setRequireAudioFocus( false )
+        assertFalse( settingsRepository.requireAudioFocus.value )
+        preferences.setRequireAudioFocus( true )
+        assertTrue( settingsRepository.requireAudioFocus.value )
+    }
+
 }

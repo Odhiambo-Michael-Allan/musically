@@ -55,6 +55,7 @@ import com.odesa.musically.ui.settings.appearance.theme.Theme
 import com.odesa.musically.ui.settings.components.SettingsSideHeading
 import com.odesa.musically.ui.settings.player.fadePlayback.FadePlayback
 import com.odesa.musically.ui.settings.player.fadePlaybackDuration.FadePlaybackDuration
+import com.odesa.musically.ui.settings.player.requireAudioFocus.RequireAudioFocus
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.MusicallyTheme
 import com.odesa.musically.ui.theme.SupportedFonts
@@ -77,7 +78,8 @@ fun SettingsScreenContent(
     onForYouContentChange: ( Set<ForYou> ) -> Unit,
     onHomePageBottomBarLabelVisibilityChange: ( HomePageBottomBarLabelVisibility ) -> Unit,
     onFadePlaybackChange: ( Boolean ) -> Unit,
-    onFadePlaybackDurationChange: ( Float ) -> Unit
+    onFadePlaybackDurationChange: ( Float ) -> Unit,
+    onRequireAudioFocusChange: ( Boolean ) -> Unit,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
@@ -222,6 +224,11 @@ fun SettingsScreenContent(
                         range = 0.5f..6f,
                         onFadePlaybackDurationChange = onFadePlaybackDurationChange
                     )
+                    RequireAudioFocus(
+                        language = uiState.language,
+                        requireAudioFocus = uiState.requireAudioFocus,
+                        onRequireAudioFocusChange = onRequireAudioFocusChange
+                    )
                 }
             }
         }
@@ -236,13 +243,14 @@ fun SettingsScreenContentPreview() {
         font = SupportedFonts.ProductSans,
         fontScale = 1.75f,
         themeMode = ThemeMode.LIGHT,
-        useMaterialYou = true,
+        useMaterialYou = SettingsDefaults.useMaterialYou,
         primaryColorName = "Blue",
         homeTabs = SettingsDefaults.homeTabs,
         forYouContent = SettingsDefaults.forYouContents,
         homePageBottomBarLabelVisibility = SettingsDefaults.homePageBottomBarLabelVisibility,
         fadePlayback = SettingsDefaults.fadePlayback,
-        fadePlaybackDuration = SettingsDefaults.fadePlaybackDuration
+        fadePlaybackDuration = SettingsDefaults.fadePlaybackDuration,
+        requireAudioFocus = SettingsDefaults.requireAudioFocus
     )
     MusicallyTheme(
         uiState = uiState
@@ -259,7 +267,8 @@ fun SettingsScreenContentPreview() {
             onForYouContentChange = {},
             onHomePageBottomBarLabelVisibilityChange = {},
             onFadePlaybackChange = {},
-            onFadePlaybackDurationChange = {}
+            onFadePlaybackDurationChange = {},
+            onRequireAudioFocusChange = {}
         )
     }
 }

@@ -60,6 +60,9 @@ fun MusicallyApp(
                 },
                 onFadePlaybackDurationChange = { fadePlaybackDuration ->
                     settingsViewModel.setFadePlaybackDuration( fadePlaybackDuration )
+                },
+                onRequireAudioFocusChange = { requireAudioFocusChange ->
+                    settingsViewModel.setRequireAudioFocus( requireAudioFocusChange )
                 }
             )
         }

@@ -22,6 +22,7 @@ class SettingsRepositoryImpl(
     override val homePageBottomBarLabelVisibility = preferences.homePageBottomBarLabelVisibility
     override val fadePlayback = preferences.fadePlayback
     override val fadePlaybackDuration = preferences.fadePlaybackDuration
+    override val requireAudioFocus = preferences.requireAudioFocus
 
     override fun setLanguage( localeCode: String ) {
         preferences.setLanguage( localeCode )
@@ -65,5 +66,9 @@ class SettingsRepositoryImpl(
 
     override fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
         preferences.setFadePlaybackDuration( fadePlaybackDuration )
+    }
+
+    override fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
+        preferences.setRequireAudioFocus( requireAudioFocus )
     }
 }

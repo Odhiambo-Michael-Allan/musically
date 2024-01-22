@@ -25,6 +25,10 @@ interface PreferenceStore {
     fun setFadePlayback( fadePlayback: Boolean )
     fun getFadePlaybackDuration(): Float
     fun setFadePlaybackDuration( fadePlaybackDuration: Float )
+    fun getRequireAudioFocus(): Boolean
+    fun setRequireAudioFocus( requireAudioFocus: Boolean )
+    fun getIgnoreAudioFocusLoss(): Boolean
+    fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean )
 
 
 }

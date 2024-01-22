@@ -244,5 +244,18 @@ class SettingsViewModelTest {
         }
     }
 
+    @Test
+    fun testDefaultRequireAudioFocusSettingIsSetCorrectly() {
+        assertTrue( settingsViewModel.uiState.value.requireAudioFocus )
+    }
+
+    @Test
+    fun testRequireAudioFocusSettingChange() {
+        settingsRepository.setRequireAudioFocus( false )
+        assertFalse( settingsViewModel.uiState.value.requireAudioFocus )
+        settingsRepository.setRequireAudioFocus( true )
+        assertTrue( settingsViewModel.uiState.value.requireAudioFocus )
+    }
+
 
 }

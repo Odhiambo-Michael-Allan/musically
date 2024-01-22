@@ -51,6 +51,9 @@ class FakeSettingsRepository : SettingsRepository {
     private val _fadePlaybackDuration = MutableStateFlow( SettingsDefaults.fadePlaybackDuration )
     override val fadePlaybackDuration = _fadePlaybackDuration.asStateFlow()
 
+    private val _requireAudioFocus = MutableStateFlow( SettingsDefaults.requireAudioFocus )
+    override val requireAudioFocus = _requireAudioFocus.asStateFlow()
+
     override fun setLanguage( localeCode: String ) {
         _currentLanguage.value = resolveLanguage( localeCode )
     }
@@ -112,5 +115,7 @@ class FakeSettingsRepository : SettingsRepository {
         _fadePlaybackDuration.value = fadePlaybackDuration
     }
 
-
+    override fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
+        _requireAudioFocus.value = requireAudioFocus
+    }
 }

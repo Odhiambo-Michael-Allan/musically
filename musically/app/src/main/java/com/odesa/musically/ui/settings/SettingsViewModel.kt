@@ -29,7 +29,8 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
             forYouContent = settingsRepository.forYouContent.value,
             homePageBottomBarLabelVisibility = settingsRepository.homePageBottomBarLabelVisibility.value,
             fadePlayback = settingsRepository.fadePlayback.value,
-            fadePlaybackDuration = settingsRepository.fadePlaybackDuration.value
+            fadePlaybackDuration = settingsRepository.fadePlaybackDuration.value,
+            requireAudioFocus = settingsRepository.requireAudioFocus.value
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -47,6 +48,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         viewModelScope.launch { observeHomePageBottomBarLabelVisibility() }
         viewModelScope.launch { observeFadePlayback() }
         viewModelScope.launch { observeFadePlaybackDuration() }
+        viewModelScope.launch { observeRequireAudioFocus() }
     }
 
     private suspend fun observeLanguage() {
@@ -137,6 +139,14 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
+    private suspend fun observeRequireAudioFocus() {
+        settingsRepository.requireAudioFocus.collect {
+            _uiState.value = _uiState.value.copy(
+                requireAudioFocus = it
+            )
+        }
+    }
+
     fun setLanguage( localeCode: String ) {
         settingsRepository.setLanguage( localeCode )
     }
@@ -184,6 +194,10 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         settingsRepository.setFadePlaybackDuration( fadePlaybackDuration )
     }
 
+    fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
+        settingsRepository.setRequireAudioFocus( requireAudioFocus )
+    }
+
 }
 
 @Suppress( "UNCHECKED_CAST" )
@@ -206,5 +220,6 @@ data class SettingsScreenUiState(
     val forYouContent: Set<ForYou>,
     val homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility,
     val fadePlayback: Boolean,
-    val fadePlaybackDuration: Float
+    val fadePlaybackDuration: Float,
+    val requireAudioFocus: Boolean,
 )
