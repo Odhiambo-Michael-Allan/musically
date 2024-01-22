@@ -112,6 +112,28 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         }
     }
 
+    override fun getFadePlayback() = getSharedPreferences().getBoolean(
+        SettingsKeys.fadePlayback,
+        SettingsDefaults.fadePlayback
+    )
+
+    override fun setFadePlayback( fadePlayback: Boolean ) {
+        getSharedPreferences().edit {
+            putBoolean( SettingsKeys.fadePlayback, fadePlayback )
+        }
+    }
+
+    override fun getFadePlaybackDuration() = getSharedPreferences().getFloat(
+        SettingsKeys.fadePlaybackDuration,
+        SettingsDefaults.fadePlaybackDuration
+    )
+
+    override fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
+        getSharedPreferences().edit {
+            putFloat( SettingsKeys.fadePlaybackDuration, fadePlaybackDuration )
+        }
+    }
+
     private fun getSharedPreferences() = context.getSharedPreferences(
         SettingsKeys.identifier,
         Context.MODE_PRIVATE
@@ -137,7 +159,8 @@ object SettingsDefaults {
         ForYou.Artists
     )
     val homePageBottomBarLabelVisibility = HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE
-
+    const val fadePlayback = false
+    const val fadePlaybackDuration = 1f
 }
 
 object SettingsKeys {
@@ -151,6 +174,8 @@ object SettingsKeys {
     const val homeTabs = "home_tabs"
     const val forYouContents = "for_you_contents"
     const val homePageBottomBarLabelVisibility = "home_page_bottom_bar_visibility"
+    const val fadePlayback = "fade_playback"
+    const val fadePlaybackDuration = "fade_playback_duration"
 }
 
 private inline fun <reified T : Enum<T>> parseEnumValue( value: String ): T? =

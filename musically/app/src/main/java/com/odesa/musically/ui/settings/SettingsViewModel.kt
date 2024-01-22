@@ -17,28 +17,19 @@ import kotlinx.coroutines.launch
 
 class SettingsViewModel( private val settingsRepository: SettingsRepository ) : ViewModel() {
 
-    private val language = settingsRepository.language
-    private val font = settingsRepository.font
-    private val fontScale = settingsRepository.fontScale
-    private val themeMode = settingsRepository.themeMode
-    private val useMaterialYou = settingsRepository.useMaterialYou
-    private val primaryColorName = settingsRepository.primaryColorName
-    private val homeTabs = settingsRepository.homeTabs
-    private val forYouContent = settingsRepository.forYouContent
-    private val homePageBottomBarLabelVisibility = settingsRepository.homePageBottomBarLabelVisibility
-
-
     private val _uiState = MutableStateFlow(
         SettingsScreenUiState(
-            language = language.value,
-            font = font.value,
-            fontScale = fontScale.value,
-            themeMode = themeMode.value,
-            useMaterialYou = useMaterialYou.value,
-            primaryColorName = primaryColorName.value,
-            homeTabs = homeTabs.value,
-            forYouContent = forYouContent.value,
-            homePageBottomBarLabelVisibility = homePageBottomBarLabelVisibility.value
+            language = settingsRepository.language.value,
+            font = settingsRepository.font.value,
+            fontScale = settingsRepository.fontScale.value,
+            themeMode = settingsRepository.themeMode.value,
+            useMaterialYou = settingsRepository.useMaterialYou.value,
+            primaryColorName = settingsRepository.primaryColorName.value,
+            homeTabs = settingsRepository.homeTabs.value,
+            forYouContent = settingsRepository.forYouContent.value,
+            homePageBottomBarLabelVisibility = settingsRepository.homePageBottomBarLabelVisibility.value,
+            fadePlayback = settingsRepository.fadePlayback.value,
+            fadePlaybackDuration = settingsRepository.fadePlaybackDuration.value
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -54,10 +45,12 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         viewModelScope.launch { observeHomeTabs() }
         viewModelScope.launch { observeForYouContent() }
         viewModelScope.launch { observeHomePageBottomBarLabelVisibility() }
+        viewModelScope.launch { observeFadePlayback() }
+        viewModelScope.launch { observeFadePlaybackDuration() }
     }
 
     private suspend fun observeLanguage() {
-        language.collect {
+        settingsRepository.language.collect {
             _uiState.value = _uiState.value.copy(
                 language = it
             )
@@ -65,7 +58,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     }
 
     private suspend fun observeFont() {
-        font.collect {
+        settingsRepository.font.collect {
             _uiState.value = _uiState.value.copy(
                 font = it
             )
@@ -73,7 +66,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     }
 
     private suspend fun observeFontScale() {
-        fontScale.collect {
+        settingsRepository.fontScale.collect {
             _uiState.value = _uiState.value.copy(
                 fontScale = it
             )
@@ -81,7 +74,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     }
 
     private suspend fun observeThemeMode() {
-        themeMode.collect {
+        settingsRepository.themeMode.collect {
             _uiState.value = _uiState.value.copy(
                 themeMode = it
             )
@@ -89,7 +82,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     }
 
     private suspend fun observeUseMaterialYou() {
-        useMaterialYou.collect {
+        settingsRepository.useMaterialYou.collect {
             _uiState.value = _uiState.value.copy(
                 useMaterialYou = it
             )
@@ -97,7 +90,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     }
 
     private suspend fun observePrimaryColorName() {
-        primaryColorName.collect {
+        settingsRepository.primaryColorName.collect {
             _uiState.value = _uiState.value.copy(
                 primaryColorName = it
             )
@@ -105,7 +98,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     }
 
     private suspend fun observeHomeTabs() {
-        homeTabs.collect {
+        settingsRepository.homeTabs.collect {
             _uiState.value = _uiState.value.copy(
                 homeTabs = it
             )
@@ -113,7 +106,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     }
 
     private suspend fun observeForYouContent() {
-        forYouContent.collect {
+        settingsRepository.forYouContent.collect {
             _uiState.value = _uiState.value.copy(
                 forYouContent = it
             )
@@ -121,9 +114,25 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     }
 
     private suspend fun observeHomePageBottomBarLabelVisibility() {
-        homePageBottomBarLabelVisibility.collect {
+        settingsRepository.homePageBottomBarLabelVisibility.collect {
             _uiState.value = _uiState.value.copy(
                 homePageBottomBarLabelVisibility = it
+            )
+        }
+    }
+
+    private suspend fun observeFadePlayback() {
+        settingsRepository.fadePlayback.collect {
+            _uiState.value = _uiState.value.copy(
+                fadePlayback = it
+            )
+        }
+    }
+
+    private suspend fun observeFadePlaybackDuration() {
+        settingsRepository.fadePlaybackDuration.collect {
+            _uiState.value = _uiState.value.copy(
+                fadePlaybackDuration = it
             )
         }
     }
@@ -167,6 +176,14 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         settingsRepository.setHomePageBottomBarLabelVisibility( value )
     }
 
+    fun setFadePlayback( fadePlayback: Boolean ) {
+        settingsRepository.setFadePlayback( fadePlayback )
+    }
+
+    fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
+        settingsRepository.setFadePlaybackDuration( fadePlaybackDuration )
+    }
+
 }
 
 @Suppress( "UNCHECKED_CAST" )
@@ -187,5 +204,7 @@ data class SettingsScreenUiState(
     val primaryColorName: String,
     val homeTabs: Set<HomeTab>,
     val forYouContent: Set<ForYou>,
-    val homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility
+    val homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility,
+    val fadePlayback: Boolean,
+    val fadePlaybackDuration: Float
 )

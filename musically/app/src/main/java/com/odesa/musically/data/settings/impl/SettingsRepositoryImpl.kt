@@ -20,6 +20,8 @@ class SettingsRepositoryImpl(
     override val homeTabs = preferences.homeTabs
     override val forYouContent = preferences.forYouContents
     override val homePageBottomBarLabelVisibility = preferences.homePageBottomBarLabelVisibility
+    override val fadePlayback = preferences.fadePlayback
+    override val fadePlaybackDuration = preferences.fadePlaybackDuration
 
     override fun setLanguage( localeCode: String ) {
         preferences.setLanguage( localeCode )
@@ -55,5 +57,13 @@ class SettingsRepositoryImpl(
 
     override fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility ) {
         preferences.setHomePageBottomBarLabelVisibility( value )
+    }
+
+    override fun setFadePlayback( fadePlayback: Boolean ) {
+        preferences.setFadePlayback( fadePlayback )
+    }
+
+    override fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
+        preferences.setFadePlaybackDuration( fadePlaybackDuration )
     }
 }

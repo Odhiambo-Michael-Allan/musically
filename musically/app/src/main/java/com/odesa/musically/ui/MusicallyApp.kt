@@ -54,6 +54,12 @@ fun MusicallyApp(
                 },
                 onHomePageBottomBarLabelVisibilityChange = {
                     value -> settingsViewModel.setHomePageBottomBarLabelVisibility( value )
+                },
+                onFadePlaybackChange = {
+                    fadePlayback -> settingsViewModel.setFadePlayback( fadePlayback )
+                },
+                onFadePlaybackDurationChange = { fadePlaybackDuration ->
+                    settingsViewModel.setFadePlaybackDuration( fadePlaybackDuration )
                 }
             )
         }

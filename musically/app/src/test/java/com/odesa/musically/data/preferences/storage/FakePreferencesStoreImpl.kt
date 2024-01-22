@@ -14,6 +14,8 @@ class FakePreferencesStoreImpl : PreferenceStore {
     private var homeTabs: Set<HomeTab>? = null
     private var forYouContents: Set<ForYou>? = null
     private var homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility? = null
+    private var fadePlayback: Boolean? = null
+    private var fadePlaybackDuration: Float? = null
 
     override fun setLanguage( localeCode: String ) {
         language = localeCode
@@ -67,5 +69,17 @@ class FakePreferencesStoreImpl : PreferenceStore {
 
     override fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility ) {
         homePageBottomBarLabelVisibility = value
+    }
+
+    override fun getFadePlayback() = fadePlayback ?: SettingsDefaults.fadePlayback
+
+    override fun setFadePlayback( fadePlayback: Boolean ) {
+        this.fadePlayback = fadePlayback
+    }
+
+    override fun getFadePlaybackDuration() = fadePlaybackDuration ?: SettingsDefaults.fadePlaybackDuration
+
+    override fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
+        this.fadePlaybackDuration = fadePlaybackDuration
     }
 }

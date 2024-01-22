@@ -49,6 +49,12 @@ class FakePreferences : Preferences {
     private val _homePageBottomBarLabelVisibility = MutableStateFlow( SettingsDefaults.homePageBottomBarLabelVisibility )
     override val homePageBottomBarLabelVisibility = _homePageBottomBarLabelVisibility.asStateFlow()
 
+    private val _fadePlayback = MutableStateFlow( SettingsDefaults.fadePlayback )
+    override val fadePlayback = _fadePlayback.asStateFlow()
+
+    private val _fadePlaybackDuration = MutableStateFlow( SettingsDefaults.fadePlaybackDuration )
+    override val fadePlaybackDuration = _fadePlaybackDuration.asStateFlow()
+
     override fun setLanguage( localeCode: String ) {
         when ( localeCode ) {
             Belarusian.locale -> _language.value = Belarusian
@@ -58,6 +64,10 @@ class FakePreferences : Preferences {
             Spanish.locale -> _language.value = Spanish
             else -> _language.value = English
         }
+    }
+
+    private fun getLanguage() : Language {
+        return English
     }
 
     override fun setFont( fontName: String ) {
@@ -100,8 +110,12 @@ class FakePreferences : Preferences {
         _homePageBottomBarLabelVisibility.value = homePageBottomBarLabelVisibility
     }
 
-    private fun getLanguage() : Language {
-        return English
+    override fun setFadePlayback( fadePlayback: Boolean ) {
+        _fadePlayback.value = fadePlayback
+    }
+
+    override fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
+        _fadePlaybackDuration.value = fadePlaybackDuration
     }
 
 }

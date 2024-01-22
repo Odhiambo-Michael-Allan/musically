@@ -53,6 +53,12 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
     private val _homePageBottomBarLabelVisibility = MutableStateFlow( preferenceStore.getHomePageBottomBarLabelVisibility() )
     override val homePageBottomBarLabelVisibility = _homePageBottomBarLabelVisibility.asStateFlow()
 
+    private val _fadePlayback = MutableStateFlow( preferenceStore.getFadePlayback() )
+    override val fadePlayback = _fadePlayback.asStateFlow()
+
+    private val _fadePlaybackDuration = MutableStateFlow( preferenceStore.getFadePlaybackDuration() )
+    override val fadePlaybackDuration = _fadePlaybackDuration.asStateFlow()
+
 
     private fun getLanguage( localeCode: String ) : Language {
         return when ( localeCode ) {
@@ -136,6 +142,20 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
         preferenceStore.setHomePageBottomBarLabelVisibility( homePageBottomBarLabelVisibility )
         _homePageBottomBarLabelVisibility.update {
             homePageBottomBarLabelVisibility
+        }
+    }
+
+    override fun setFadePlayback( fadePlayback: Boolean ) {
+        preferenceStore.setFadePlayback( fadePlayback )
+        _fadePlayback.update {
+            fadePlayback
+        }
+    }
+
+    override fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
+        preferenceStore.setFadePlaybackDuration( fadePlaybackDuration )
+        _fadePlaybackDuration.update {
+            fadePlaybackDuration
         }
     }
 

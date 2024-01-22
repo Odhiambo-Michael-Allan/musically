@@ -20,6 +20,8 @@ interface Preferences {
     val homeTabs: StateFlow<Set<HomeTab>>
     val forYouContents: StateFlow<Set<ForYou>>
     val homePageBottomBarLabelVisibility: StateFlow<HomePageBottomBarLabelVisibility>
+    val fadePlayback: StateFlow<Boolean>
+    val fadePlaybackDuration: StateFlow<Float>
 
     fun setLanguage( localeCode: String )
     fun setFont( fontName: String )
@@ -30,5 +32,7 @@ interface Preferences {
     fun setHomeTabs( homeTabs: Set<HomeTab> )
     fun setForYouContents( forYouContents: Set<ForYou> )
     fun setHomePageBottomBarLabelVisibility( homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility )
+    fun setFadePlayback( fadePlayback: Boolean )
+    fun setFadePlaybackDuration( fadePlaybackDuration: Float )
 
 }

@@ -4,6 +4,7 @@ import com.odesa.musically.MainCoroutineRule
 import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
+import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
 import com.odesa.musically.data.settings.FakeSettingsRepository
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.i18n.Belarusian
@@ -20,6 +21,7 @@ import com.odesa.musically.ui.theme.PrimaryThemeColors
 import com.odesa.musically.ui.theme.SupportedFonts
 import com.odesa.musically.ui.theme.ThemeMode
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -214,5 +216,33 @@ class SettingsViewModelTest {
         settingsRepository.setHomePageBottomBarLabelVisibility( value )
         assertEquals( value, settingsViewModel.uiState.value.homePageBottomBarLabelVisibility )
     }
+
+    @Test
+    fun testDefaultFadePlaybackSettingIsSetCorrectly() {
+        assertFalse( settingsViewModel.uiState.value.fadePlayback )
+    }
+
+    @Test
+    fun testFadePlaybackSettingChange() {
+        settingsRepository.setFadePlayback( true )
+        assertTrue( settingsViewModel.uiState.value.fadePlayback )
+        settingsRepository.setFadePlayback( false )
+        assertFalse( settingsViewModel.uiState.value.fadePlayback )
+    }
+
+    @Test
+    fun testDefaultFadePlaybackDurationIsSetCorrectly() {
+        assertEquals( SettingsDefaults.fadePlaybackDuration,
+            settingsViewModel.uiState.value.fadePlaybackDuration )
+    }
+
+    @Test
+    fun testFadePlaybackDurationChange() {
+        for ( duration in 1..100 ) {
+            settingsRepository.setFadePlaybackDuration( duration.toFloat() )
+            assertEquals( duration.toFloat(), settingsViewModel.uiState.value.fadePlaybackDuration )
+        }
+    }
+
 
 }

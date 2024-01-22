@@ -4,6 +4,7 @@ import com.odesa.musically.data.preferences.FakePreferences
 import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
+import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Chinese
@@ -19,6 +20,7 @@ import com.odesa.musically.ui.theme.PrimaryThemeColors
 import com.odesa.musically.ui.theme.SupportedFonts
 import com.odesa.musically.ui.theme.ThemeMode
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -188,6 +190,32 @@ class SettingsRepositoryImplTest {
     private fun changeHomePageBottomBarLabelVisibilityTo( value: HomePageBottomBarLabelVisibility ) {
         preferences.setHomePageBottomBarLabelVisibility( value )
         assertEquals( value, settingsRepository.homePageBottomBarLabelVisibility.value )
+    }
+
+    @Test
+    fun testDefaultFadePlaybackSettingValueIsSetCorrectly() {
+        assertFalse( settingsRepository.fadePlayback.value )
+    }
+
+    @Test
+    fun testFadePlaybackSettingChange() {
+        preferences.setFadePlayback( true )
+        assertTrue( settingsRepository.fadePlayback.value )
+        preferences.setFadePlayback( false )
+        assertFalse( settingsRepository.fadePlayback.value )
+    }
+
+    @Test
+    fun testDefaultFadePlaybackIsSetCorrectly() {
+        assertEquals( SettingsDefaults.fadePlaybackDuration, settingsRepository.fadePlaybackDuration.value )
+    }
+
+    @Test
+    fun testFadePlaybackDurationChange() {
+        for ( duration in 1..100 ) {
+            preferences.setFadePlaybackDuration( duration.toFloat() )
+            assertEquals( duration.toFloat(), settingsRepository.fadePlaybackDuration.value )
+        }
     }
 
 }

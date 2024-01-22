@@ -53,6 +53,8 @@ import com.odesa.musically.ui.settings.appearance.materialYou.MaterialYou
 import com.odesa.musically.ui.settings.appearance.primaryColor.PrimaryColor
 import com.odesa.musically.ui.settings.appearance.theme.Theme
 import com.odesa.musically.ui.settings.components.SettingsSideHeading
+import com.odesa.musically.ui.settings.player.fadePlayback.FadePlayback
+import com.odesa.musically.ui.settings.player.fadePlaybackDuration.FadePlaybackDuration
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.MusicallyTheme
 import com.odesa.musically.ui.theme.SupportedFonts
@@ -73,7 +75,9 @@ fun SettingsScreenContent(
     onPrimaryColorChange: ( String ) -> Unit,
     onHomeTabsChange: ( Set<HomeTab> ) -> Unit,
     onForYouContentChange: ( Set<ForYou> ) -> Unit,
-    onHomePageBottomBarLabelVisibilityChange: ( HomePageBottomBarLabelVisibility ) -> Unit
+    onHomePageBottomBarLabelVisibilityChange: ( HomePageBottomBarLabelVisibility ) -> Unit,
+    onFadePlaybackChange: ( Boolean ) -> Unit,
+    onFadePlaybackDurationChange: ( Float ) -> Unit
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
@@ -207,6 +211,17 @@ fun SettingsScreenContent(
                     )
                     Divider( thickness = 0.5.dp )
                     SettingsSideHeading( text = uiState.language.player )
+                    FadePlayback(
+                        language = uiState.language,
+                        fadePlayback = uiState.fadePlayback,
+                        onFadePlaybackChange = onFadePlaybackChange
+                    )
+                    FadePlaybackDuration(
+                        language = uiState.language,
+                        value = uiState.fadePlaybackDuration,
+                        range = 0.5f..6f,
+                        onFadePlaybackDurationChange = onFadePlaybackDurationChange
+                    )
                 }
             }
         }
@@ -225,7 +240,9 @@ fun SettingsScreenContentPreview() {
         primaryColorName = "Blue",
         homeTabs = SettingsDefaults.homeTabs,
         forYouContent = SettingsDefaults.forYouContents,
-        homePageBottomBarLabelVisibility = SettingsDefaults.homePageBottomBarLabelVisibility
+        homePageBottomBarLabelVisibility = SettingsDefaults.homePageBottomBarLabelVisibility,
+        fadePlayback = SettingsDefaults.fadePlayback,
+        fadePlaybackDuration = SettingsDefaults.fadePlaybackDuration
     )
     MusicallyTheme(
         uiState = uiState
@@ -240,7 +257,9 @@ fun SettingsScreenContentPreview() {
             onPrimaryColorChange = {},
             onHomeTabsChange = {},
             onForYouContentChange = {},
-            onHomePageBottomBarLabelVisibilityChange = {}
+            onHomePageBottomBarLabelVisibilityChange = {},
+            onFadePlaybackChange = {},
+            onFadePlaybackDurationChange = {}
         )
     }
 }

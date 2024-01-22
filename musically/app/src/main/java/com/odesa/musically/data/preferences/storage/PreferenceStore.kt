@@ -21,6 +21,11 @@ interface PreferenceStore {
     fun setForYouContents( forYouContents: Set<ForYou> )
     fun getHomePageBottomBarLabelVisibility(): HomePageBottomBarLabelVisibility
     fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility )
+    fun getFadePlayback(): Boolean
+    fun setFadePlayback( fadePlayback: Boolean )
+    fun getFadePlaybackDuration(): Float
+    fun setFadePlaybackDuration( fadePlaybackDuration: Float )
+
 
 }
 

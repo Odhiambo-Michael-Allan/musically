@@ -45,6 +45,12 @@ class FakeSettingsRepository : SettingsRepository {
     private val _homePageBottomBarLabelVisibility = MutableStateFlow( SettingsDefaults.homePageBottomBarLabelVisibility )
     override val homePageBottomBarLabelVisibility = _homePageBottomBarLabelVisibility.asStateFlow()
 
+    private val _fadePlayback = MutableStateFlow( SettingsDefaults.fadePlayback )
+    override val fadePlayback = _fadePlayback.asStateFlow()
+
+    private val _fadePlaybackDuration = MutableStateFlow( SettingsDefaults.fadePlaybackDuration )
+    override val fadePlaybackDuration = _fadePlaybackDuration.asStateFlow()
+
     override fun setLanguage( localeCode: String ) {
         _currentLanguage.value = resolveLanguage( localeCode )
     }
@@ -60,6 +66,14 @@ class FakeSettingsRepository : SettingsRepository {
 
     override fun setFont( fontName: String ) {
         _currentFont.value = resolveFont( fontName )
+    }
+
+    private fun resolveFont( fontName: String ) = when( fontName ) {
+        SupportedFonts.DMSans.name -> SupportedFonts.DMSans
+        SupportedFonts.Inter.name -> SupportedFonts.Inter
+        SupportedFonts.Poppins.name -> SupportedFonts.Poppins
+        SupportedFonts.Roboto.name -> SupportedFonts.Roboto
+        else -> SupportedFonts.ProductSans
     }
 
     override fun setFontScale( fontScale: Float ) {
@@ -90,12 +104,12 @@ class FakeSettingsRepository : SettingsRepository {
         _homePageBottomBarLabelVisibility.value = value
     }
 
-    private fun resolveFont( fontName: String ) = when( fontName ) {
-        SupportedFonts.DMSans.name -> SupportedFonts.DMSans
-        SupportedFonts.Inter.name -> SupportedFonts.Inter
-        SupportedFonts.Poppins.name -> SupportedFonts.Poppins
-        SupportedFonts.Roboto.name -> SupportedFonts.Roboto
-        else -> SupportedFonts.ProductSans
+    override fun setFadePlayback( fadePlayback: Boolean ) {
+        _fadePlayback.value = fadePlayback
+    }
+
+    override fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
+        _fadePlaybackDuration.value = fadePlaybackDuration
     }
 
 

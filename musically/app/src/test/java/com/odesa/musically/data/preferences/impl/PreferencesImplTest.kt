@@ -5,6 +5,7 @@ import com.odesa.musically.data.preferences.storage.FakePreferencesStoreImpl
 import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
+import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Chinese
 import com.odesa.musically.services.i18n.English
@@ -19,6 +20,7 @@ import com.odesa.musically.ui.theme.PrimaryThemeColors
 import com.odesa.musically.ui.theme.SupportedFonts
 import com.odesa.musically.ui.theme.ThemeMode
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -200,5 +202,34 @@ class PreferencesImplTest {
         preferences.setHomePageBottomBarLabelVisibility( value )
         assertEquals( value, preferences.homePageBottomBarLabelVisibility.value )
         assertEquals( value, preferenceStore.getHomePageBottomBarLabelVisibility() )
+    }
+
+    @Test
+    fun testDefaultFadePlaybackSettingIsSetCorrectly() {
+        assertFalse( preferences.fadePlayback.value )
+    }
+
+    @Test
+    fun testFadePlaybackSettingChange() {
+        preferences.setFadePlayback( true )
+        assertTrue( preferenceStore.getFadePlayback() )
+        assertTrue( preferences.fadePlayback.value )
+        preferences.setFadePlayback( false )
+        assertFalse( preferenceStore.getFadePlayback() )
+        assertFalse( preferences.fadePlayback.value )
+    }
+
+    @Test
+    fun testDefaultFadePlaybackDurationIsSetCorrectly() {
+        assertEquals( SettingsDefaults.fadePlaybackDuration, preferences.fadePlaybackDuration.value )
+    }
+
+    @Test
+    fun testFadePlaybackDurationChange() {
+        for ( duration in 1..100 ) {
+            preferences.setFadePlaybackDuration( duration.toFloat() )
+            assertEquals( duration.toFloat(), preferenceStore.getFadePlaybackDuration() )
+            assertEquals( duration.toFloat(), preferences.fadePlaybackDuration.value )
+        }
     }
 }
