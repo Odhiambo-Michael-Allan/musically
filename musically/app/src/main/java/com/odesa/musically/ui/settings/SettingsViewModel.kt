@@ -228,86 +228,88 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     }
 
     fun setLanguage( localeCode: String ) {
-        settingsRepository.setLanguage( localeCode )
+        viewModelScope.launch { settingsRepository.setLanguage( localeCode ) }
     }
 
     fun setFont( fontName: String ) {
-        settingsRepository.setFont( fontName )
+        viewModelScope.launch { settingsRepository.setFont( fontName ) }
     }
 
     fun setFontScale( fontScale: String ) {
-        val float = fontScale.toFloatOrNull()
-        float?.let {
-            if ( scalingPresets.contains( it ) ) settingsRepository.setFontScale( it )
+        viewModelScope.launch {
+            val float = fontScale.toFloatOrNull()
+            float?.let {
+                if ( scalingPresets.contains( it ) ) settingsRepository.setFontScale( it )
+            }
         }
     }
 
     fun setThemeMode( themeMode: ThemeMode ) {
-        settingsRepository.setThemeMode( themeMode )
+        viewModelScope.launch { settingsRepository.setThemeMode( themeMode ) }
     }
 
     fun setUseMaterialYou( useMaterialYou: Boolean ) {
-        settingsRepository.setUseMaterialYou( useMaterialYou )
+        viewModelScope.launch { settingsRepository.setUseMaterialYou( useMaterialYou ) }
     }
 
     fun setPrimaryColorName( primaryColorName: String ) {
-        settingsRepository.setPrimaryColorName( primaryColorName )
+        viewModelScope.launch { settingsRepository.setPrimaryColorName( primaryColorName ) }
     }
 
     fun setHomeTabs( homeTabs: Set<HomeTab> ) {
-        settingsRepository.setHomeTabs( homeTabs )
+        viewModelScope.launch { settingsRepository.setHomeTabs( homeTabs ) }
     }
 
     fun setForYouContent( forYouContent: Set<ForYou> ) {
-        settingsRepository.setForYouContents( forYouContent )
+        viewModelScope.launch { settingsRepository.setForYouContents( forYouContent ) }
     }
 
     fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility ) {
-        settingsRepository.setHomePageBottomBarLabelVisibility( value )
+        viewModelScope.launch { settingsRepository.setHomePageBottomBarLabelVisibility( value ) }
     }
 
     fun setFadePlayback( fadePlayback: Boolean ) {
-        settingsRepository.setFadePlayback( fadePlayback )
+        viewModelScope.launch { settingsRepository.setFadePlayback( fadePlayback ) }
     }
 
     fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
-        settingsRepository.setFadePlaybackDuration( fadePlaybackDuration )
+        viewModelScope.launch { settingsRepository.setFadePlaybackDuration( fadePlaybackDuration ) }
     }
 
     fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
-        settingsRepository.setRequireAudioFocus( requireAudioFocus )
+        viewModelScope.launch { settingsRepository.setRequireAudioFocus( requireAudioFocus ) }
     }
 
     fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean ) {
-        settingsRepository.setIgnoreAudioFocusLoss( ignoreAudioFocusLoss )
+        viewModelScope.launch { settingsRepository.setIgnoreAudioFocusLoss( ignoreAudioFocusLoss ) }
     }
 
     fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
-        settingsRepository.setPlayOnHeadphonesConnect( playOnHeadphonesConnect )
+        viewModelScope.launch { settingsRepository.setPlayOnHeadphonesConnect( playOnHeadphonesConnect ) }
     }
 
     fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean ) {
-        settingsRepository.setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect )
+        viewModelScope.launch { settingsRepository.setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect ) }
     }
 
     fun setFastRewindDuration( fastRewindDuration: Int ) {
-        settingsRepository.setFastRewindDuration( fastRewindDuration )
+        viewModelScope.launch { settingsRepository.setFastRewindDuration( fastRewindDuration ) }
     }
 
     fun setFastForwardDuration( fastForwardDuration: Int ) {
-        settingsRepository.setFastForwardDuration( fastForwardDuration )
+        viewModelScope.launch { settingsRepository.setFastForwardDuration( fastForwardDuration ) }
     }
 
     fun setMiniPlayerShowTrackControls( showTrackControls: Boolean ) {
-        settingsRepository.setMiniPlayerShowTrackControls( showTrackControls )
+        viewModelScope.launch { settingsRepository.setMiniPlayerShowTrackControls( showTrackControls ) }
     }
 
     fun setMiniPlayerShowSeekControls( showSeekControls: Boolean ) {
-        settingsRepository.setMiniPlayerShowSeekControls( showSeekControls )
+        viewModelScope.launch { settingsRepository.setMiniPlayerShowSeekControls( showSeekControls ) }
     }
 
     fun setMiniPlayerTextMarquee( textMarquee: Boolean ) {
-        settingsRepository.setMiniPlayerTextMarquee( textMarquee )
+        viewModelScope.launch { settingsRepository.setMiniPlayerTextMarquee( textMarquee ) }
     }
 
 }

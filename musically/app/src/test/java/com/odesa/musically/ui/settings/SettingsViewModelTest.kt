@@ -23,6 +23,7 @@ import com.odesa.musically.ui.theme.ThemeMode
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -53,32 +54,32 @@ class SettingsViewModelTest {
         changeLanguageTo( Spanish, "Configuración" )
     }
 
-    private fun changeLanguageTo(language: Language, testString: String ) {
+    private fun changeLanguageTo(language: Language, testString: String ) = runTest {
         settingsRepository.setLanguage( language.locale )
         val currentLanguage = settingsViewModel.uiState.value.language
         assertEquals( testString, currentLanguage.settings )
     }
 
     @Test
-    fun testFontChange() {
+    fun testFontChange() = runTest {
         assertEquals( SupportedFonts.ProductSans.name, settingsViewModel.uiState.value.font.name )
         MusicallyTypography.all.values.forEach { changeFontTo( it ) }
     }
 
 
-    private fun changeFontTo( font: MusicallyFont ) {
+    private fun changeFontTo( font: MusicallyFont ) = runTest {
         settingsRepository.setFont( font.name )
         val currentFont = settingsViewModel.uiState.value.font
         assertEquals( font.name, currentFont.name )
     }
 
     @Test
-    fun testFontScaleChange() {
+    fun testFontScaleChange() = runTest {
         assertEquals( 1.0f, settingsViewModel.uiState.value.fontScale )
         scalingPresets.forEach { changeFontScaleTo( it )  }
     }
 
-    private fun changeFontScaleTo( fontScale: Float ) {
+    private fun changeFontScaleTo( fontScale: Float ) = runTest {
         settingsRepository.setFontScale( fontScale )
         val currentFontScale = settingsViewModel.uiState.value.fontScale
         assertEquals( fontScale, currentFontScale )
@@ -102,7 +103,7 @@ class SettingsViewModelTest {
         ThemeMode.entries.forEach { changeThemeModeTo( it ) }
     }
 
-    private fun changeThemeModeTo( themeMode: ThemeMode ) {
+    private fun changeThemeModeTo( themeMode: ThemeMode ) = runTest {
         settingsRepository.setThemeMode( themeMode )
         assertEquals( themeMode.name, settingsViewModel.uiState.value.themeMode.name )
     }
@@ -114,7 +115,7 @@ class SettingsViewModelTest {
         changeUseMaterialYouTo( false )
     }
 
-    private fun changeUseMaterialYouTo( useMaterialYou: Boolean ) {
+    private fun changeUseMaterialYouTo( useMaterialYou: Boolean ) = runTest {
         settingsRepository.setUseMaterialYou( useMaterialYou )
         assertEquals( useMaterialYou, settingsViewModel.uiState.value.useMaterialYou )
     }
@@ -127,7 +128,7 @@ class SettingsViewModelTest {
         }
     }
 
-    private fun changePrimaryColorTo( primaryColorName: String ) {
+    private fun changePrimaryColorTo( primaryColorName: String ) = runTest {
         settingsRepository.setPrimaryColorName( primaryColorName )
         assertEquals( primaryColorName, settingsViewModel.uiState.value.primaryColorName )
     }
@@ -143,7 +144,7 @@ class SettingsViewModelTest {
             HomeTab.AlbumArtists, HomeTab.Genres ) )
     }
 
-    private fun changeHomeTabsTo( homeTabs: Set<HomeTab> ) {
+    private fun changeHomeTabsTo( homeTabs: Set<HomeTab> ) = runTest {
         settingsRepository.setHomeTabs( homeTabs )
         val currentHomeTabsSize = settingsViewModel.uiState.value.homeTabs.size
         assertEquals( homeTabs.size, currentHomeTabsSize )
@@ -157,7 +158,7 @@ class SettingsViewModelTest {
         changeForYouContentsTo( setOf( ForYou.Albums, ForYou.Artists, ForYou.AlbumArtists ) )
     }
 
-    private fun changeForYouContentsTo( forYouContents: Set<ForYou> ) {
+    private fun changeForYouContentsTo( forYouContents: Set<ForYou> ) = runTest {
         settingsRepository.setForYouContents( forYouContents )
         assertEquals( forYouContents.size, settingsViewModel.uiState.value.forYouContent.size )
     }
@@ -171,13 +172,15 @@ class SettingsViewModelTest {
         changeHomePageBottomBarLabelVisibilityTo( HomePageBottomBarLabelVisibility.INVISIBLE )
     }
 
-    private fun changeHomePageBottomBarLabelVisibilityTo( value: HomePageBottomBarLabelVisibility ) {
+    private fun changeHomePageBottomBarLabelVisibilityTo(
+        value: HomePageBottomBarLabelVisibility
+    ) = runTest {
         settingsRepository.setHomePageBottomBarLabelVisibility( value )
         assertEquals( value, settingsViewModel.uiState.value.homePageBottomBarLabelVisibility )
     }
 
     @Test
-    fun testFadePlaybackSettingChange() {
+    fun testFadePlaybackSettingChange() = runTest {
         assertFalse( settingsViewModel.uiState.value.fadePlayback )
         settingsRepository.setFadePlayback( true )
         assertTrue( settingsViewModel.uiState.value.fadePlayback )
@@ -186,7 +189,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testFadePlaybackDurationChange() {
+    fun testFadePlaybackDurationChange() = runTest {
         assertEquals( SettingsDefaults.fadePlaybackDuration,
             settingsViewModel.uiState.value.fadePlaybackDuration )
         for ( duration in 1..100 ) {
@@ -197,7 +200,7 @@ class SettingsViewModelTest {
 
 
     @Test
-    fun testRequireAudioFocusSettingChange() {
+    fun testRequireAudioFocusSettingChange() = runTest {
         assertTrue( settingsViewModel.uiState.value.requireAudioFocus )
         settingsRepository.setRequireAudioFocus( false )
         assertFalse( settingsViewModel.uiState.value.requireAudioFocus )
@@ -206,7 +209,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testIgnoreAudioFocusLossSettingChange() {
+    fun testIgnoreAudioFocusLossSettingChange() = runTest {
         assertFalse( settingsViewModel.uiState.value.ignoreAudioFocusLoss )
         settingsRepository.setIgnoreAudioFocusLoss( true )
         assertTrue( settingsViewModel.uiState.value.ignoreAudioFocusLoss )
@@ -215,7 +218,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testPlayOnHeadphonesConnectSettingChange() {
+    fun testPlayOnHeadphonesConnectSettingChange() = runTest {
         assertFalse( settingsViewModel.uiState.value.playOnHeadphonesConnect )
         settingsRepository.setPlayOnHeadphonesConnect( true )
         assertTrue( settingsViewModel.uiState.value.playOnHeadphonesConnect )
@@ -224,7 +227,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testPauseOnHeadphonesDisconnectSettingChange() {
+    fun testPauseOnHeadphonesDisconnectSettingChange() = runTest {
         assertTrue( settingsViewModel.uiState.value.pauseOnHeadphonesDisconnect )
         settingsRepository.setPauseOnHeadphonesDisconnect( false )
         assertFalse( settingsViewModel.uiState.value.pauseOnHeadphonesDisconnect )
@@ -233,7 +236,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testFastRewindDurationSettingChange() {
+    fun testFastRewindDurationSettingChange() = runTest {
         assertEquals( SettingsDefaults.fastRewindDuration,
             settingsViewModel.uiState.value.fastRewindDuration )
         for ( duration in 3 .. 60 ) {
@@ -243,7 +246,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testFastForwardDurationSettingChange() {
+    fun testFastForwardDurationSettingChange() = runTest {
         assertEquals( SettingsDefaults.fastForwardDuration,
             settingsViewModel.uiState.value.fastForwardDuration )
         for ( duration in 3 .. 60 ) {
@@ -253,7 +256,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testMiniPlayerShowTrackControlsSettingChange() {
+    fun testMiniPlayerShowTrackControlsSettingChange() = runTest {
         assertTrue( settingsViewModel.uiState.value.miniPlayerShowTrackControls )
         settingsRepository.setMiniPlayerShowTrackControls( false )
         assertFalse( settingsViewModel.uiState.value.miniPlayerShowTrackControls )
@@ -262,7 +265,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testMiniPlayerShowSeekControlsSettingChange() {
+    fun testMiniPlayerShowSeekControlsSettingChange() = runTest {
         assertFalse( settingsViewModel.uiState.value.miniPlayerShowSeekControls )
         settingsRepository.setMiniPlayerShowSeekControls( true )
         assertTrue( settingsViewModel.uiState.value.miniPlayerShowSeekControls )
@@ -271,7 +274,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testMiniPlayerTextMarqueeSettingChange() {
+    fun testMiniPlayerTextMarqueeSettingChange() = runTest {
         assertTrue( settingsViewModel.uiState.value.miniPlayerTextMarquee )
         settingsRepository.setMiniPlayerTextMarquee( false )
         assertFalse( settingsViewModel.uiState.value.miniPlayerTextMarquee )

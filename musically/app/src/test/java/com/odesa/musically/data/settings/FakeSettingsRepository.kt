@@ -79,7 +79,7 @@ class FakeSettingsRepository : SettingsRepository {
     override val miniPlayerTextMarquee = _miniPlayerTextMarquee.asStateFlow()
 
 
-    override fun setLanguage( localeCode: String ) {
+    override suspend fun setLanguage( localeCode: String ) {
         _currentLanguage.value = resolveLanguage( localeCode )
     }
 
@@ -92,7 +92,7 @@ class FakeSettingsRepository : SettingsRepository {
         else -> English
     }
 
-    override fun setFont( fontName: String ) {
+    override suspend fun setFont( fontName: String ) {
         _currentFont.value = resolveFont( fontName )
     }
 
@@ -104,75 +104,75 @@ class FakeSettingsRepository : SettingsRepository {
         else -> SupportedFonts.ProductSans
     }
 
-    override fun setFontScale( fontScale: Float ) {
+    override suspend fun setFontScale( fontScale: Float ) {
         _fontScale.value = fontScale
     }
 
-    override fun setThemeMode( themeMode: ThemeMode ) {
+    override suspend fun setThemeMode( themeMode: ThemeMode ) {
         _themeMode.value = themeMode
     }
 
-    override fun setUseMaterialYou( useMaterialYou: Boolean ) {
+    override suspend fun setUseMaterialYou( useMaterialYou: Boolean ) {
         _useMaterialYou.value = useMaterialYou
     }
 
-    override fun setPrimaryColorName( primaryColorName: String ) {
+    override suspend fun setPrimaryColorName( primaryColorName: String ) {
         _primaryColorName.value = primaryColorName
     }
 
-    override fun setHomeTabs( homeTabs: Set<HomeTab> ) {
+    override suspend fun setHomeTabs( homeTabs: Set<HomeTab> ) {
         _homeTabs.value = homeTabs
     }
 
-    override fun setForYouContents( forYouContents: Set<ForYou> ) {
+    override suspend fun setForYouContents( forYouContents: Set<ForYou> ) {
         _forYouContents.value = forYouContents
     }
 
-    override fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility ) {
+    override suspend fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility ) {
         _homePageBottomBarLabelVisibility.value = value
     }
 
-    override fun setFadePlayback( fadePlayback: Boolean ) {
+    override suspend fun setFadePlayback( fadePlayback: Boolean ) {
         _fadePlayback.value = fadePlayback
     }
 
-    override fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
+    override suspend fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
         _fadePlaybackDuration.value = fadePlaybackDuration
     }
 
-    override fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
+    override suspend fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
         _requireAudioFocus.value = requireAudioFocus
     }
 
-    override fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean ) {
+    override suspend fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean ) {
         _ignoreAudioFocusLoss.value = ignoreAudioFocusLoss
     }
 
-    override fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
+    override suspend fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
         _playOnHeadphoneConnect.value = playOnHeadphonesConnect
     }
 
-    override fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean ) {
+    override suspend fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean ) {
         _pauseOnHeadphonesDisconnect.value = pauseOnHeadphonesDisconnect
     }
 
-    override fun setFastRewindDuration( fastRewindDuration: Int ) {
+    override suspend fun setFastRewindDuration( fastRewindDuration: Int ) {
         _fastRewindDuration.value = fastRewindDuration
     }
 
-    override fun setFastForwardDuration( fastForwardDuration: Int ) {
+    override suspend  fun setFastForwardDuration( fastForwardDuration: Int ) {
         _fastForwardDuration.value = fastForwardDuration
     }
 
-    override fun setMiniPlayerShowTrackControls( showTrackControls: Boolean ) {
+    override suspend fun setMiniPlayerShowTrackControls( showTrackControls: Boolean ) {
         _miniPlayerShowTrackControls.value = showTrackControls
     }
 
-    override fun setMiniPlayerShowSeekControls( showSeekControls: Boolean ) {
+    override suspend fun setMiniPlayerShowSeekControls( showSeekControls: Boolean ) {
         _miniPlayerShowSeekControls.value = showSeekControls
     }
 
-    override fun setMiniPlayerTextMarquee( textMarquee: Boolean ) {
+    override suspend fun setMiniPlayerTextMarquee( textMarquee: Boolean ) {
         _miniPlayerTextMarquee.value = textMarquee
     }
 }
