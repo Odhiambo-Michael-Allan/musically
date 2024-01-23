@@ -263,6 +263,8 @@ fun SettingsScreenContent(
                         value = uiState.fastForwardDuration.toFloat(),
                         onFastForwardDurationChange = onFastForwardDurationChange
                     )
+                    Divider( thickness = 0.5.dp )
+                    SettingsSideHeading( text = uiState.language.miniPlayer )
                 }
             }
         }
