@@ -60,6 +60,15 @@ class FakeSettingsRepository : SettingsRepository {
     private val _playOnHeadphoneConnect = MutableStateFlow( SettingsDefaults.playOnHeadphonesConnect )
     override val playOnHeadphonesConnect = _playOnHeadphoneConnect.asStateFlow()
 
+    private val _pauseOnHeadphonesDisconnect = MutableStateFlow( SettingsDefaults.pauseOnHeadphonesDisconnect )
+    override val pauseOnHeadphonesDisconnect = _pauseOnHeadphonesDisconnect.asStateFlow()
+
+    private val _fastRewindDuration = MutableStateFlow( SettingsDefaults.fastRewindDuration )
+    override val fastRewindDuration = _fastRewindDuration.asStateFlow()
+
+    private val _fastForwardDuration = MutableStateFlow( SettingsDefaults.fastForwardDuration )
+    override val fastForwardDuration = _fastForwardDuration.asStateFlow()
+
     override fun setLanguage( localeCode: String ) {
         _currentLanguage.value = resolveLanguage( localeCode )
     }
@@ -131,5 +140,17 @@ class FakeSettingsRepository : SettingsRepository {
 
     override fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
         _playOnHeadphoneConnect.value = playOnHeadphonesConnect
+    }
+
+    override fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean ) {
+        _pauseOnHeadphonesDisconnect.value = pauseOnHeadphonesDisconnect
+    }
+
+    override fun setFastRewindDuration( fastRewindDuration: Int ) {
+        _fastRewindDuration.value = fastRewindDuration
+    }
+
+    override fun setFastForwardDuration( fastForwardDuration: Int ) {
+        _fastForwardDuration.value = fastForwardDuration
     }
 }

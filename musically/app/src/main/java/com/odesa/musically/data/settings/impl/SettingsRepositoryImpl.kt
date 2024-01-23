@@ -25,6 +25,9 @@ class SettingsRepositoryImpl(
     override val requireAudioFocus = preferences.requireAudioFocus
     override val ignoreAudioFocusLoss = preferences.ignoreAudioFocusLoss
     override val playOnHeadphonesConnect = preferences.playOnHeadphonesConnect
+    override val pauseOnHeadphonesDisconnect = preferences.pauseOnHeadphonesDisconnect
+    override val fastRewindDuration = preferences.fastRewindDuration
+    override val fastForwardDuration = preferences.fastForwardDuration
 
     override fun setLanguage( localeCode: String ) {
         preferences.setLanguage( localeCode )
@@ -80,5 +83,17 @@ class SettingsRepositoryImpl(
 
     override fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
         preferences.setPlayOnHeadphonesConnect( playOnHeadphonesConnect )
+    }
+
+    override fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean ) {
+        preferences.setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect )
+    }
+
+    override fun setFastRewindDuration( fastRewindDuration: Int ) {
+        preferences.setFastRewindDuration( fastRewindDuration )
+    }
+
+    override fun setFastForwardDuration( fastForwardDuration: Int ) {
+        preferences.setFastForwardDuration( fastForwardDuration )
     }
 }

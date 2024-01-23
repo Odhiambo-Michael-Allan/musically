@@ -42,15 +42,9 @@ class SettingsViewModelTest {
         settingsViewModel = SettingsViewModel( settingsRepository )
     }
 
-
-    @Test
-    fun whenNoLanguageHasBeenSet_theDefaultIsEnglish() {
-        val currentLanguage = settingsViewModel.uiState.value.language
-        assertEquals( "Settings", currentLanguage.settings )
-    }
-
     @Test
     fun testLanguageChange() {
+        assertEquals( "Settings", settingsViewModel.uiState.value.language.settings )
         changeLanguageTo( Belarusian, "Налады" )
         changeLanguageTo( Chinese, "设置" )
         changeLanguageTo( English, "Settings" )
@@ -66,13 +60,8 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun whenNoFontHasBeenSet_theDefaultIsProductSans() {
-        val currentFont = settingsViewModel.uiState.value.font
-        assertEquals( SupportedFonts.ProductSans.name, currentFont.name )
-    }
-
-    @Test
     fun testFontChange() {
+        assertEquals( SupportedFonts.ProductSans.name, settingsViewModel.uiState.value.font.name )
         MusicallyTypography.all.values.forEach { changeFontTo( it ) }
     }
 
@@ -84,13 +73,8 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun whenNoFontScaleHasBeenSet_theDefaultIsOne() {
-        val currentFontScale = settingsViewModel.uiState.value.fontScale
-        assertEquals( 1.0f, currentFontScale )
-    }
-
-    @Test
     fun testFontScaleChange() {
+        assertEquals( 1.0f, settingsViewModel.uiState.value.fontScale )
         scalingPresets.forEach { changeFontScaleTo( it )  }
     }
 
@@ -113,13 +97,8 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun whenNoThemeModeHasBeenSet_systemIsUsedAsTheDefault() {
-        val currentThemeMode = settingsViewModel.uiState.value.themeMode
-        assertEquals( ThemeMode.SYSTEM.name, currentThemeMode.name )
-    }
-
-    @Test
     fun testThemeModeChange() {
+        assertEquals( ThemeMode.SYSTEM.name, settingsViewModel.uiState.value.themeMode.name )
         ThemeMode.entries.forEach { changeThemeModeTo( it ) }
     }
 
@@ -129,12 +108,8 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testMaterialYouIsUsedByDefault() {
-        assertTrue( settingsViewModel.uiState.value.useMaterialYou )
-    }
-
-    @Test
     fun testUseMaterialYouChange() {
+        assertTrue( settingsViewModel.uiState.value.useMaterialYou )
         changeUseMaterialYouTo( true )
         changeUseMaterialYouTo( false )
     }
@@ -145,12 +120,8 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testDefaultPrimaryColorIsBlue() {
-        assertEquals( PrimaryThemeColors.Blue.name, settingsViewModel.uiState.value.primaryColorName )
-    }
-
-    @Test
     fun testPrimaryColorNameChange() {
+        assertEquals( PrimaryThemeColors.Blue.name, settingsViewModel.uiState.value.primaryColorName )
         PrimaryThemeColors.entries.forEach {
             changePrimaryColorTo( it.name )
         }
@@ -162,12 +133,8 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testHomeTabsAreCorrectlyInitialized() {
-        assertEquals( 5, settingsViewModel.uiState.value.homeTabs.size )
-    }
-
-    @Test
     fun testHomeTabsChange() {
+        assertEquals( 5, settingsViewModel.uiState.value.homeTabs.size )
         changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs ) )
         changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums ) )
         changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums,
@@ -183,12 +150,8 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testDefaultForYouContentIsSetCorrectly() {
-        assertEquals( 2, settingsViewModel.uiState.value.forYouContent.size )
-    }
-
-    @Test
     fun testForYouContentsChange() {
+        assertEquals( 2, settingsViewModel.uiState.value.forYouContent.size )
         changeForYouContentsTo( setOf( ForYou.Albums ) )
         changeForYouContentsTo( setOf( ForYou.Albums, ForYou.Artists ) )
         changeForYouContentsTo( setOf( ForYou.Albums, ForYou.Artists, ForYou.AlbumArtists ) )
@@ -200,13 +163,9 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testDefaultHomePageBottomBarLabelVisibilityIsSetCorrectly() {
+    fun testHomePageBottomBarLabelVisibilityChange() {
         assertEquals( HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE,
             settingsViewModel.uiState.value.homePageBottomBarLabelVisibility )
-    }
-
-    @Test
-    fun testHomePageBottomBarLabelVisibilityChange() {
         changeHomePageBottomBarLabelVisibilityTo( HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE )
         changeHomePageBottomBarLabelVisibilityTo( HomePageBottomBarLabelVisibility.VISIBLE_WHEN_ACTIVE )
         changeHomePageBottomBarLabelVisibilityTo( HomePageBottomBarLabelVisibility.INVISIBLE )
@@ -218,12 +177,8 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testDefaultFadePlaybackSettingIsSetCorrectly() {
-        assertFalse( settingsViewModel.uiState.value.fadePlayback )
-    }
-
-    @Test
     fun testFadePlaybackSettingChange() {
+        assertFalse( settingsViewModel.uiState.value.fadePlayback )
         settingsRepository.setFadePlayback( true )
         assertTrue( settingsViewModel.uiState.value.fadePlayback )
         settingsRepository.setFadePlayback( false )
@@ -231,26 +186,19 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testDefaultFadePlaybackDurationIsSetCorrectly() {
+    fun testFadePlaybackDurationChange() {
         assertEquals( SettingsDefaults.fadePlaybackDuration,
             settingsViewModel.uiState.value.fadePlaybackDuration )
-    }
-
-    @Test
-    fun testFadePlaybackDurationChange() {
         for ( duration in 1..100 ) {
             settingsRepository.setFadePlaybackDuration( duration.toFloat() )
             assertEquals( duration.toFloat(), settingsViewModel.uiState.value.fadePlaybackDuration )
         }
     }
 
-    @Test
-    fun testDefaultRequireAudioFocusSettingIsSetCorrectly() {
-        assertTrue( settingsViewModel.uiState.value.requireAudioFocus )
-    }
 
     @Test
     fun testRequireAudioFocusSettingChange() {
+        assertTrue( settingsViewModel.uiState.value.requireAudioFocus )
         settingsRepository.setRequireAudioFocus( false )
         assertFalse( settingsViewModel.uiState.value.requireAudioFocus )
         settingsRepository.setRequireAudioFocus( true )
@@ -258,21 +206,50 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testDefaultIgnoreAudioFocusLossSettingIsSetCorrectly() {
+    fun testIgnoreAudioFocusLossSettingChange() {
+        assertFalse( settingsViewModel.uiState.value.ignoreAudioFocusLoss )
+        settingsRepository.setIgnoreAudioFocusLoss( true )
+        assertTrue( settingsViewModel.uiState.value.ignoreAudioFocusLoss )
+        settingsRepository.setIgnoreAudioFocusLoss( false )
         assertFalse( settingsViewModel.uiState.value.ignoreAudioFocusLoss )
     }
 
     @Test
-    fun testDefaultPlayOnHeadphonesConnectSettingIsSetCorrectly() {
-        assertFalse( settingsViewModel.uiState.value.playOnHeadphonesConnect )
-    }
-
-    @Test
     fun testPlayOnHeadphonesConnectSettingChange() {
+        assertFalse( settingsViewModel.uiState.value.playOnHeadphonesConnect )
         settingsRepository.setPlayOnHeadphonesConnect( true )
         assertTrue( settingsViewModel.uiState.value.playOnHeadphonesConnect )
         settingsRepository.setPlayOnHeadphonesConnect( false )
         assertFalse( settingsViewModel.uiState.value.playOnHeadphonesConnect )
+    }
+
+    @Test
+    fun testPauseOnHeadphonesDisconnectSettingChange() {
+        assertTrue( settingsViewModel.uiState.value.pauseOnHeadphonesDisconnect )
+        settingsRepository.setPauseOnHeadphonesDisconnect( false )
+        assertFalse( settingsViewModel.uiState.value.pauseOnHeadphonesDisconnect )
+        settingsRepository.setPauseOnHeadphonesDisconnect( true )
+        assertTrue( settingsViewModel.uiState.value.pauseOnHeadphonesDisconnect )
+    }
+
+    @Test
+    fun testFastRewindDurationSettingChange() {
+        assertEquals( SettingsDefaults.fastRewindDuration,
+            settingsViewModel.uiState.value.fastRewindDuration )
+        for ( duration in 3 .. 60 ) {
+            settingsRepository.setFastRewindDuration( duration )
+            assertEquals( duration, settingsViewModel.uiState.value.fastRewindDuration )
+        }
+    }
+
+    @Test
+    fun testFastForwardDurationSettingChange() {
+        assertEquals( SettingsDefaults.fastForwardDuration,
+            settingsViewModel.uiState.value.fastForwardDuration )
+        for ( duration in 3 .. 60 ) {
+            settingsRepository.setFastForwardDuration( duration )
+            assertEquals( duration, settingsViewModel.uiState.value.fastForwardDuration )
+        }
     }
 
 

@@ -33,29 +33,35 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
             requireAudioFocus = settingsRepository.requireAudioFocus.value,
             ignoreAudioFocusLoss = settingsRepository.ignoreAudioFocusLoss.value,
             playOnHeadphonesConnect = settingsRepository.playOnHeadphonesConnect.value,
+            pauseOnHeadphonesDisconnect = settingsRepository.pauseOnHeadphonesDisconnect.value,
+            fastRewindDuration = settingsRepository.fastRewindDuration.value,
+            fastForwardDuration = settingsRepository.fastForwardDuration.value,
         )
     )
     val uiState = _uiState.asStateFlow()
 
 
     init {
-        viewModelScope.launch { observeLanguage() }
-        viewModelScope.launch { observeFont() }
-        viewModelScope.launch { observeFontScale() }
-        viewModelScope.launch { observeThemeMode() }
-        viewModelScope.launch { observeUseMaterialYou() }
-        viewModelScope.launch { observePrimaryColorName() }
-        viewModelScope.launch { observeHomeTabs() }
-        viewModelScope.launch { observeForYouContent() }
-        viewModelScope.launch { observeHomePageBottomBarLabelVisibility() }
-        viewModelScope.launch { observeFadePlayback() }
-        viewModelScope.launch { observeFadePlaybackDuration() }
-        viewModelScope.launch { observeRequireAudioFocus() }
+        viewModelScope.launch { observeLanguageSetting() }
+        viewModelScope.launch { observeFontSetting() }
+        viewModelScope.launch { observeFontScaleSetting() }
+        viewModelScope.launch { observeThemeModeSetting() }
+        viewModelScope.launch { observeUseMaterialYouSetting() }
+        viewModelScope.launch { observePrimaryColorNameSetting() }
+        viewModelScope.launch { observeHomeTabsSetting() }
+        viewModelScope.launch { observeForYouContentSetting() }
+        viewModelScope.launch { observeHomePageBottomBarLabelVisibilitySetting() }
+        viewModelScope.launch { observeFadePlaybackSetting() }
+        viewModelScope.launch { observeFadePlaybackDurationSetting() }
+        viewModelScope.launch { observeRequireAudioFocusSetting() }
         viewModelScope.launch { observeIgnoreAudioFocusLossSetting() }
-        viewModelScope.launch { observePlayOnHeadphonesConnect() }
+        viewModelScope.launch { observePlayOnHeadphonesConnectSetting() }
+        viewModelScope.launch { observePauseOnHeadphonesDisconnectSetting() }
+        viewModelScope.launch { observeFastRewindDurationSetting() }
+        viewModelScope.launch { observeFastForwardDurationSetting() }
     }
 
-    private suspend fun observeLanguage() {
+    private suspend fun observeLanguageSetting() {
         settingsRepository.language.collect {
             _uiState.value = _uiState.value.copy(
                 language = it
@@ -63,7 +69,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
-    private suspend fun observeFont() {
+    private suspend fun observeFontSetting() {
         settingsRepository.font.collect {
             _uiState.value = _uiState.value.copy(
                 font = it
@@ -71,7 +77,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
-    private suspend fun observeFontScale() {
+    private suspend fun observeFontScaleSetting() {
         settingsRepository.fontScale.collect {
             _uiState.value = _uiState.value.copy(
                 fontScale = it
@@ -79,7 +85,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
-    private suspend fun observeThemeMode() {
+    private suspend fun observeThemeModeSetting() {
         settingsRepository.themeMode.collect {
             _uiState.value = _uiState.value.copy(
                 themeMode = it
@@ -87,7 +93,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
-    private suspend fun observeUseMaterialYou() {
+    private suspend fun observeUseMaterialYouSetting() {
         settingsRepository.useMaterialYou.collect {
             _uiState.value = _uiState.value.copy(
                 useMaterialYou = it
@@ -95,7 +101,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
-    private suspend fun observePrimaryColorName() {
+    private suspend fun observePrimaryColorNameSetting() {
         settingsRepository.primaryColorName.collect {
             _uiState.value = _uiState.value.copy(
                 primaryColorName = it
@@ -103,7 +109,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
-    private suspend fun observeHomeTabs() {
+    private suspend fun observeHomeTabsSetting() {
         settingsRepository.homeTabs.collect {
             _uiState.value = _uiState.value.copy(
                 homeTabs = it
@@ -111,7 +117,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
-    private suspend fun observeForYouContent() {
+    private suspend fun observeForYouContentSetting() {
         settingsRepository.forYouContent.collect {
             _uiState.value = _uiState.value.copy(
                 forYouContent = it
@@ -119,7 +125,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
-    private suspend fun observeHomePageBottomBarLabelVisibility() {
+    private suspend fun observeHomePageBottomBarLabelVisibilitySetting() {
         settingsRepository.homePageBottomBarLabelVisibility.collect {
             _uiState.value = _uiState.value.copy(
                 homePageBottomBarLabelVisibility = it
@@ -127,7 +133,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
-    private suspend fun observeFadePlayback() {
+    private suspend fun observeFadePlaybackSetting() {
         settingsRepository.fadePlayback.collect {
             _uiState.value = _uiState.value.copy(
                 fadePlayback = it
@@ -135,7 +141,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
-    private suspend fun observeFadePlaybackDuration() {
+    private suspend fun observeFadePlaybackDurationSetting() {
         settingsRepository.fadePlaybackDuration.collect {
             _uiState.value = _uiState.value.copy(
                 fadePlaybackDuration = it
@@ -143,7 +149,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
-    private suspend fun observeRequireAudioFocus() {
+    private suspend fun observeRequireAudioFocusSetting() {
         settingsRepository.requireAudioFocus.collect {
             _uiState.value = _uiState.value.copy(
                 requireAudioFocus = it
@@ -159,10 +165,34 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
-    private suspend fun observePlayOnHeadphonesConnect() {
+    private suspend fun observePlayOnHeadphonesConnectSetting() {
         settingsRepository.playOnHeadphonesConnect.collect {
             _uiState.value = _uiState.value.copy(
                 playOnHeadphonesConnect = it
+            )
+        }
+    }
+
+    private suspend fun observePauseOnHeadphonesDisconnectSetting() {
+        settingsRepository.pauseOnHeadphonesDisconnect.collect {
+            _uiState.value = _uiState.value.copy(
+                pauseOnHeadphonesDisconnect = it
+            )
+        }
+    }
+
+    private suspend fun observeFastRewindDurationSetting() {
+        settingsRepository.fastRewindDuration.collect {
+            _uiState.value = _uiState.value.copy(
+                fastRewindDuration = it
+            )
+        }
+    }
+
+    private suspend fun observeFastForwardDurationSetting() {
+        settingsRepository.fastForwardDuration.collect {
+            _uiState.value = _uiState.value.copy(
+                fastForwardDuration = it
             )
         }
     }
@@ -226,6 +256,18 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         settingsRepository.setPlayOnHeadphonesConnect( playOnHeadphonesConnect )
     }
 
+    fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean ) {
+        settingsRepository.setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect )
+    }
+
+    fun setFastRewindDuration( fastRewindDuration: Int ) {
+        settingsRepository.setFastRewindDuration( fastRewindDuration )
+    }
+
+    fun setFastForwardDuration( fastForwardDuration: Int ) {
+        settingsRepository.setFastForwardDuration( fastForwardDuration )
+    }
+
 }
 
 @Suppress( "UNCHECKED_CAST" )
@@ -252,4 +294,7 @@ data class SettingsScreenUiState(
     val requireAudioFocus: Boolean,
     val ignoreAudioFocusLoss: Boolean,
     val playOnHeadphonesConnect: Boolean,
+    val pauseOnHeadphonesDisconnect: Boolean,
+    val fastRewindDuration: Int,
+    val fastForwardDuration: Int,
 )

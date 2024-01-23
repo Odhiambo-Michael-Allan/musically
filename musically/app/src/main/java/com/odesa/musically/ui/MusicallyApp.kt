@@ -69,6 +69,15 @@ fun MusicallyApp(
                 },
                 onPlayOnHeadphonesConnectChange = { playOnHeadphonesChange ->
                     settingsViewModel.setPlayOnHeadphonesConnect( playOnHeadphonesChange )
+                },
+                onPauseOnHeadphonesDisconnectChange = { pauseOnHeadphonesDisconnect ->
+                    settingsViewModel.setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect )
+                },
+                onFastRewindDurationChange = { fastRewindDuration ->
+                    settingsViewModel.setFastRewindDuration( fastRewindDuration.toInt() )
+                },
+                onFastForwardDurationChange = { fastForwardDuration ->
+                    settingsViewModel.setFastForwardDuration( fastForwardDuration.toInt() )
                 }
             )
         }

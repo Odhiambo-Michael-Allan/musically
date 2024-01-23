@@ -55,7 +55,10 @@ import com.odesa.musically.ui.settings.appearance.theme.Theme
 import com.odesa.musically.ui.settings.components.SettingsSideHeading
 import com.odesa.musically.ui.settings.player.fadePlayback.FadePlayback
 import com.odesa.musically.ui.settings.player.fadePlaybackDuration.FadePlaybackDuration
+import com.odesa.musically.ui.settings.player.fastForwardDuration.FastForwardDuration
+import com.odesa.musically.ui.settings.player.fastRewindDuration.FastRewindDuration
 import com.odesa.musically.ui.settings.player.ignoreAudioFocusLoss.IgnoreAudioFocusLoss
+import com.odesa.musically.ui.settings.player.pauseOnHeadphonesDisconnect.PauseOnHeadphonesDisconnect
 import com.odesa.musically.ui.settings.player.playOnHeadphoneConnect.PlayOnHeadphonesConnect
 import com.odesa.musically.ui.settings.player.requireAudioFocus.RequireAudioFocus
 import com.odesa.musically.ui.theme.MusicallyFont
@@ -84,6 +87,9 @@ fun SettingsScreenContent(
     onRequireAudioFocusChange: ( Boolean ) -> Unit,
     onIgnoreAudioFocusLossChange: ( Boolean ) -> Unit,
     onPlayOnHeadphonesConnectChange: ( Boolean ) -> Unit,
+    onPauseOnHeadphonesDisconnectChange: ( Boolean ) -> Unit,
+    onFastRewindDurationChange: ( Float ) -> Unit,
+    onFastForwardDurationChange: ( Float ) -> Unit,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
@@ -225,7 +231,6 @@ fun SettingsScreenContent(
                     FadePlaybackDuration(
                         language = uiState.language,
                         value = uiState.fadePlaybackDuration,
-                        range = 0.5f..6f,
                         onFadePlaybackDurationChange = onFadePlaybackDurationChange
                     )
                     RequireAudioFocus(
@@ -242,6 +247,21 @@ fun SettingsScreenContent(
                         language = uiState.language,
                         playOnHeadphonesConnect = uiState.playOnHeadphonesConnect,
                         onPlayOnHeadphonesConnectChange = onPlayOnHeadphonesConnectChange
+                    )
+                    PauseOnHeadphonesDisconnect(
+                        language = uiState.language,
+                        pauseOnHeadphonesDisconnect = uiState.pauseOnHeadphonesDisconnect,
+                        onPauseOnHeadphonesDisconnectChange = onPauseOnHeadphonesDisconnectChange
+                    )
+                    FastRewindDuration(
+                        language = uiState.language,
+                        value = uiState.fastRewindDuration.toFloat(),
+                        onFastRewindDurationChange = onFastRewindDurationChange
+                    )
+                    FastForwardDuration(
+                        language = uiState.language,
+                        value = uiState.fastForwardDuration.toFloat(),
+                        onFastForwardDurationChange = onFastForwardDurationChange
                     )
                 }
             }
@@ -267,6 +287,9 @@ fun SettingsScreenContentPreview() {
         requireAudioFocus = SettingsDefaults.requireAudioFocus,
         ignoreAudioFocusLoss = SettingsDefaults.ignoreAudioFocusLoss,
         playOnHeadphonesConnect = SettingsDefaults.playOnHeadphonesConnect,
+        pauseOnHeadphonesDisconnect = SettingsDefaults.pauseOnHeadphonesDisconnect,
+        fastRewindDuration = SettingsDefaults.fastRewindDuration,
+        fastForwardDuration = SettingsDefaults.fastForwardDuration,
     )
     MusicallyTheme(
         uiState = uiState
@@ -287,6 +310,9 @@ fun SettingsScreenContentPreview() {
             onRequireAudioFocusChange = {},
             onIgnoreAudioFocusLossChange = {},
             onPlayOnHeadphonesConnectChange = {},
+            onPauseOnHeadphonesDisconnectChange = {},
+            onFastRewindDurationChange = {},
+            onFastForwardDurationChange = {},
         )
     }
 }

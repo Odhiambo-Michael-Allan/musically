@@ -19,6 +19,9 @@ class FakePreferencesStoreImpl : PreferenceStore {
     private var requireAudioFocus: Boolean? = null
     private var ignoreAudioFocusLoss: Boolean? = null
     private var playOnHeadphonesConnect: Boolean? = null
+    private var pauseOnHeadphonesDisconnect: Boolean? = null
+    private var fastRewindDuration: Int? = null
+    private var fastForwardDuration: Int? = null
 
     override fun setLanguage( localeCode: String ) {
         language = localeCode
@@ -104,5 +107,26 @@ class FakePreferencesStoreImpl : PreferenceStore {
 
     override fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
         this.playOnHeadphonesConnect = playOnHeadphonesConnect
+    }
+
+    override fun getPauseOnHeadphonesDisconnect() = pauseOnHeadphonesDisconnect
+        ?: SettingsDefaults.pauseOnHeadphonesDisconnect
+
+    override fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean ) {
+        this.pauseOnHeadphonesDisconnect = pauseOnHeadphonesDisconnect
+    }
+
+    override fun getFastRewindDuration() = fastRewindDuration
+        ?: SettingsDefaults.fastRewindDuration
+
+    override fun setFastRewindDuration( fastRewindDuration: Int ) {
+        this.fastRewindDuration = fastRewindDuration
+    }
+
+    override fun getFastForwardDuration() = fastForwardDuration
+        ?: SettingsDefaults.fastForwardDuration
+
+    override fun setFastForwardDuration( fastForwardDuration: Int ) {
+        this.fastForwardDuration = fastForwardDuration
     }
 }

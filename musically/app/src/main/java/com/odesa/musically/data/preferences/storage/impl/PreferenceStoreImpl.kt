@@ -161,6 +161,37 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         }
     }
 
+    override fun getPauseOnHeadphonesDisconnect() = getSharedPreferences()
+        .getBoolean( SettingsKeys.pauseOnHeadphonesDisconnect,
+            SettingsDefaults.pauseOnHeadphonesDisconnect )
+
+    override fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean ) {
+        getSharedPreferences().edit {
+            putBoolean( SettingsKeys.pauseOnHeadphonesDisconnect,
+                pauseOnHeadphonesDisconnect )
+        }
+    }
+
+    override fun getFastRewindDuration() = getSharedPreferences().getInt(
+        SettingsKeys.fastRewindDuration, SettingsDefaults.fastRewindDuration
+    )
+
+    override fun setFastRewindDuration( fastRewindDuration: Int ) {
+        getSharedPreferences().edit {
+            putInt( SettingsKeys.fastRewindDuration, fastRewindDuration )
+        }
+    }
+
+    override fun getFastForwardDuration() = getSharedPreferences().getInt(
+        SettingsKeys.fastForwardDuration, SettingsDefaults.fastForwardDuration
+    )
+
+    override fun setFastForwardDuration( fastForwardDuration: Int ) {
+        getSharedPreferences().edit {
+            putInt( SettingsKeys.fastForwardDuration, fastForwardDuration )
+        }
+    }
+
     private fun getSharedPreferences() = context.getSharedPreferences(
         SettingsKeys.identifier,
         Context.MODE_PRIVATE
@@ -191,6 +222,9 @@ object SettingsDefaults {
     const val requireAudioFocus = true
     const val ignoreAudioFocusLoss = false
     const val playOnHeadphonesConnect = false
+    const val pauseOnHeadphonesDisconnect = true
+    const val fastForwardDuration = 30
+    const val fastRewindDuration = 15
 }
 
 object SettingsKeys {
@@ -209,6 +243,9 @@ object SettingsKeys {
     const val requireAudioFocus = "require_audio_focus"
     const val ignoreAudioFocusLoss = "ignore_audio_focus_loss"
     const val playOnHeadphonesConnect = "play_on_headphones_connect"
+    const val pauseOnHeadphonesDisconnect = "pause_on_headphones_disconnect"
+    const val fastForwardDuration = "fast_forward_duration"
+    const val fastRewindDuration = "fast_rewind_duration"
 }
 
 private inline fun <reified T : Enum<T>> parseEnumValue( value: String ): T? =

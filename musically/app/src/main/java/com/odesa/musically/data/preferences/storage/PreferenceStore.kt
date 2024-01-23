@@ -31,6 +31,12 @@ interface PreferenceStore {
     fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean )
     fun getPlayOnHeadphonesConnect(): Boolean
     fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean )
+    fun getPauseOnHeadphonesDisconnect(): Boolean
+    fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean )
+    fun getFastRewindDuration(): Int
+    fun setFastRewindDuration( fastRewindDuration: Int )
+    fun getFastForwardDuration(): Int
+    fun setFastForwardDuration( fastForwardDuration: Int )
 
 
 }

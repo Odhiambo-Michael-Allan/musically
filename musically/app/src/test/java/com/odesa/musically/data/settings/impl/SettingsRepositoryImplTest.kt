@@ -37,12 +37,8 @@ class SettingsRepositoryImplTest {
     }
 
     @Test
-    fun whenNoLanguageHasBeenSet_englishLanguageIsUsedAsTheDefault() {
-        assertEquals( "Settings", settingsRepository.language.value.settings )
-    }
-
-    @Test
     fun testLanguageChange() {
+        assertEquals( "Settings", settingsRepository.language.value.settings )
         changeLanguageTo( Belarusian, "Налады" )
         changeLanguageTo( Chinese, "设置" )
         changeLanguageTo( English, "Settings" )
@@ -57,15 +53,9 @@ class SettingsRepositoryImplTest {
         assertEquals( testString, currentLanguage.settings )
     }
 
-
-    @Test
-    fun whenNoFontHasBeenSet_productSansIsUsedAsDefault() {
-        val currentFont = settingsRepository.font.value
-        assertEquals( SupportedFonts.ProductSans.name, currentFont.name )
-    }
-
     @Test
     fun testFontChange() {
+        assertEquals( SupportedFonts.ProductSans.name, settingsRepository.font.value.name )
         MusicallyTypography.all.values.forEach { changeFontTo( it ) }
     }
 
@@ -75,13 +65,10 @@ class SettingsRepositoryImplTest {
         assertEquals( font.name, currentFont.name )
     }
 
-    @Test
-    fun whenNoFontScaleHasBeenSet_oneIsUsedAsTheDefault() {
-        assertEquals( 1.0f, settingsRepository.fontScale.value )
-    }
 
     @Test
     fun testFontScaleChange() {
+        assertEquals( 1.0f, settingsRepository.fontScale.value )
         scalingPresets.forEach { changeFontScaleTo( it ) }
     }
 
@@ -91,12 +78,8 @@ class SettingsRepositoryImplTest {
     }
 
     @Test
-    fun whenNoThemeModeHasBeenSet_systemIsUsedAsTheDefault() {
-        assertEquals( ThemeMode.SYSTEM.name, settingsRepository.themeMode.value.name )
-    }
-
-    @Test
     fun testThemeModeChange() {
+        assertEquals( ThemeMode.SYSTEM.name, settingsRepository.themeMode.value.name )
         ThemeMode.entries.forEach { changeThemeModeTo( it ) }
     }
 
@@ -106,12 +89,8 @@ class SettingsRepositoryImplTest {
     }
 
     @Test
-    fun testMaterialYouIsUsedByDefault() {
-        assertTrue( settingsRepository.useMaterialYou.value )
-    }
-
-    @Test
     fun testUseMaterialYouChange() {
+        assertTrue( settingsRepository.useMaterialYou.value )
         changeUseMaterialYouTo( true )
         changeUseMaterialYouTo( false )
     }
@@ -121,12 +100,8 @@ class SettingsRepositoryImplTest {
     }
 
     @Test
-    fun testDefaultPrimaryColorNameIsBlue() {
-        assertEquals( PrimaryThemeColors.Blue.name, settingsRepository.primaryColorName.value )
-    }
-
-    @Test
     fun testPrimaryColorChange() {
+        assertEquals( PrimaryThemeColors.Blue.name, settingsRepository.primaryColorName.value )
         PrimaryThemeColors.entries.forEach {
             changePrimaryColorTo( it.name )
         }
@@ -138,12 +113,8 @@ class SettingsRepositoryImplTest {
     }
 
     @Test
-    fun testDefaultHomeTabsAreCorrectlySet() {
-        assertEquals( 5, settingsRepository.homeTabs.value.size )
-    }
-
-    @Test
     fun testHomeTabsChange() {
+        assertEquals( 5, settingsRepository.homeTabs.value.size )
         changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs ) )
         changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums ) )
         changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums,
@@ -158,12 +129,8 @@ class SettingsRepositoryImplTest {
     }
 
     @Test
-    fun testDefaultForYouContentsAreSetCorrectly() {
-        assertEquals( 2, settingsRepository.forYouContent.value.size )
-    }
-
-    @Test
     fun testForYouContentsChange() {
+        assertEquals( 2, settingsRepository.forYouContent.value.size )
         changeForYouContentsTo( setOf( ForYou.Albums ) )
         changeForYouContentsTo( setOf( ForYou.Albums, ForYou.Artists ) )
         changeForYouContentsTo( setOf( ForYou.Albums, ForYou.Artists, ForYou.AlbumArtists ) )
@@ -175,13 +142,9 @@ class SettingsRepositoryImplTest {
     }
 
     @Test
-    fun testDefaultHomePageBottomBarLabelVisibilityIsSetCorrectly() {
+    fun testHomePageBottomBarLabelVisibilityChange() {
         assertEquals( HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE,
             settingsRepository.homePageBottomBarLabelVisibility.value )
-    }
-
-    @Test
-    fun testHomePageBottomBarLabelVisibilityChange() {
         changeHomePageBottomBarLabelVisibilityTo( HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE )
         changeHomePageBottomBarLabelVisibilityTo( HomePageBottomBarLabelVisibility.VISIBLE_WHEN_ACTIVE )
         changeHomePageBottomBarLabelVisibilityTo( HomePageBottomBarLabelVisibility.INVISIBLE )
@@ -193,12 +156,8 @@ class SettingsRepositoryImplTest {
     }
 
     @Test
-    fun testDefaultFadePlaybackSettingValueIsSetCorrectly() {
-        assertFalse( settingsRepository.fadePlayback.value )
-    }
-
-    @Test
     fun testFadePlaybackSettingChange() {
+        assertFalse( settingsRepository.fadePlayback.value )
         preferences.setFadePlayback( true )
         assertTrue( settingsRepository.fadePlayback.value )
         preferences.setFadePlayback( false )
@@ -206,12 +165,9 @@ class SettingsRepositoryImplTest {
     }
 
     @Test
-    fun testDefaultFadePlaybackIsSetCorrectly() {
-        assertEquals( SettingsDefaults.fadePlaybackDuration, settingsRepository.fadePlaybackDuration.value )
-    }
-
-    @Test
     fun testFadePlaybackDurationChange() {
+        assertEquals( SettingsDefaults.fadePlaybackDuration,
+            settingsRepository.fadePlaybackDuration.value )
         for ( duration in 1..100 ) {
             preferences.setFadePlaybackDuration( duration.toFloat() )
             assertEquals( duration.toFloat(), settingsRepository.fadePlaybackDuration.value )
@@ -219,12 +175,8 @@ class SettingsRepositoryImplTest {
     }
 
     @Test
-    fun testDefaultRequireAudioFocusSettingIsSetCorrectly() {
-        assertTrue( settingsRepository.requireAudioFocus.value )
-    }
-
-    @Test
     fun testRequireAudioFocusSettingChange() {
+        assertTrue( settingsRepository.requireAudioFocus.value )
         preferences.setRequireAudioFocus( false )
         assertFalse( settingsRepository.requireAudioFocus.value )
         preferences.setRequireAudioFocus( true )
@@ -232,12 +184,8 @@ class SettingsRepositoryImplTest {
     }
 
     @Test
-    fun testDefaultIgnoreAudioFocusLossIsSetCorrectly() {
-        assertFalse( settingsRepository.ignoreAudioFocusLoss.value )
-    }
-
-    @Test
     fun testIgnoreAudioFocusLossSettingChange() {
+        assertFalse( settingsRepository.ignoreAudioFocusLoss.value )
         preferences.setIgnoreAudioFocusLoss( false )
         assertFalse( settingsRepository.ignoreAudioFocusLoss.value )
         preferences.setIgnoreAudioFocusLoss( true )
@@ -245,16 +193,41 @@ class SettingsRepositoryImplTest {
     }
 
     @Test
-    fun testDefaultPlayOnHeadphonesConnectSettingIsSetCorrectly() {
-        assertFalse( settingsRepository.playOnHeadphonesConnect.value )
-    }
-
-    @Test
     fun testPlayOnHeadphonesConnectSettingChange() {
+        assertFalse( settingsRepository.playOnHeadphonesConnect.value )
         preferences.setPlayOnHeadphonesConnect( true )
         assertTrue( settingsRepository.playOnHeadphonesConnect.value )
         preferences.setPlayOnHeadphonesConnect( false )
         assertFalse( settingsRepository.playOnHeadphonesConnect.value )
+    }
+
+    @Test
+    fun testPauseOnHeadphonesDisconnectSettingChange() {
+        assertTrue( settingsRepository.pauseOnHeadphonesDisconnect.value )
+        preferences.setPauseOnHeadphonesDisconnect( false )
+        assertFalse( settingsRepository.pauseOnHeadphonesDisconnect.value )
+        preferences.setPauseOnHeadphonesDisconnect( true )
+        assertTrue( settingsRepository.pauseOnHeadphonesDisconnect.value )
+    }
+
+    @Test
+    fun testFastRewindDurationSettingChange() {
+        assertEquals( SettingsDefaults.fastRewindDuration,
+            settingsRepository.fastRewindDuration.value )
+        for ( duration in 3..60 ) {
+            preferences.setFastRewindDuration( duration )
+            assertEquals( duration, settingsRepository.fastRewindDuration.value )
+        }
+    }
+
+    @Test
+    fun testFastForwardDurationSettingChange() {
+        assertEquals( SettingsDefaults.fastForwardDuration,
+            settingsRepository.fastForwardDuration.value )
+        for ( duration in 3..60 ) {
+            preferences.setFastForwardDuration( duration )
+            assertEquals( duration, settingsRepository.fastForwardDuration.value )
+        }
     }
 
 }

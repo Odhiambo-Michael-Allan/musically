@@ -23,6 +23,9 @@ interface SettingsRepository {
     val requireAudioFocus: StateFlow<Boolean>
     val ignoreAudioFocusLoss: StateFlow<Boolean>
     val playOnHeadphonesConnect: StateFlow<Boolean>
+    val pauseOnHeadphonesDisconnect: StateFlow<Boolean>
+    val fastRewindDuration: StateFlow<Int>
+    val fastForwardDuration: StateFlow<Int>
 
     fun setLanguage( localeCode: String )
     fun setFont( fontName: String )
@@ -38,4 +41,7 @@ interface SettingsRepository {
     fun setRequireAudioFocus( requireAudioFocus: Boolean )
     fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean )
     fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean )
+    fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean )
+    fun setFastRewindDuration( fastRewindDuration: Int )
+    fun setFastForwardDuration( fastForwardDuration: Int )
 }

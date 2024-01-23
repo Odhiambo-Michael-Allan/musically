@@ -64,6 +64,15 @@ class FakePreferences : Preferences {
     private val _playOnHeadphonesConnect = MutableStateFlow( SettingsDefaults.playOnHeadphonesConnect )
     override val playOnHeadphonesConnect = _playOnHeadphonesConnect.asStateFlow()
 
+    private val _pauseOnHeadphonesDisconnect = MutableStateFlow( SettingsDefaults.pauseOnHeadphonesDisconnect )
+    override val pauseOnHeadphonesDisconnect = _pauseOnHeadphonesDisconnect.asStateFlow()
+
+    private val _fastRewindDuration = MutableStateFlow( SettingsDefaults.fastRewindDuration )
+    override val fastRewindDuration = _fastRewindDuration.asStateFlow()
+
+    private val _fastForwardDuration = MutableStateFlow( SettingsDefaults.fastForwardDuration )
+    override val fastForwardDuration = _fastForwardDuration.asStateFlow()
+
     override fun setLanguage( localeCode: String ) {
         when ( localeCode ) {
             Belarusian.locale -> _language.value = Belarusian
@@ -137,6 +146,18 @@ class FakePreferences : Preferences {
 
     override fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
         _playOnHeadphonesConnect.value = playOnHeadphonesConnect
+    }
+
+    override fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean ) {
+        _pauseOnHeadphonesDisconnect.value = pauseOnHeadphonesDisconnect
+    }
+
+    override fun setFastRewindDuration( fastRewindDuration: Int ) {
+        _fastRewindDuration.value = fastRewindDuration
+    }
+
+    override fun setFastForwardDuration( fastForwardDuration: Int ) {
+        _fastForwardDuration.value = fastForwardDuration
     }
 
 }

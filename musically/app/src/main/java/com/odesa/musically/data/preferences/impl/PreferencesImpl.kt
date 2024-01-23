@@ -65,8 +65,17 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
     private val _ignoreAudioFocusLoss = MutableStateFlow( preferenceStore.getIgnoreAudioFocusLoss() )
     override val ignoreAudioFocusLoss = _ignoreAudioFocusLoss.asStateFlow()
 
-    private val _playOnHeadphoneConnect = MutableStateFlow( preferenceStore.getPlayOnHeadphonesConnect() )
-    override val playOnHeadphonesConnect = _playOnHeadphoneConnect.asStateFlow()
+    private val _playOnHeadphonesConnect = MutableStateFlow( preferenceStore.getPlayOnHeadphonesConnect() )
+    override val playOnHeadphonesConnect = _playOnHeadphonesConnect.asStateFlow()
+
+    private val _pauseOnHeadphonesDisconnect = MutableStateFlow( preferenceStore.getPauseOnHeadphonesDisconnect() )
+    override val pauseOnHeadphonesDisconnect = _pauseOnHeadphonesDisconnect.asStateFlow()
+
+    private val _fastRewindDuration = MutableStateFlow( preferenceStore.getFastRewindDuration() )
+    override val fastRewindDuration = _fastRewindDuration.asStateFlow()
+
+    private val _fastForwardDuration = MutableStateFlow( preferenceStore.getFastForwardDuration() )
+    override val fastForwardDuration = _fastForwardDuration.asStateFlow()
 
 
     private fun getLanguage( localeCode: String ) : Language {
@@ -184,8 +193,29 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
 
     override fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
         preferenceStore.setPlayOnHeadphonesConnect( playOnHeadphonesConnect )
-        _playOnHeadphoneConnect.update {
+        _playOnHeadphonesConnect.update {
             playOnHeadphonesConnect
+        }
+    }
+
+    override fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean ) {
+        preferenceStore.setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect )
+        _pauseOnHeadphonesDisconnect.update {
+            pauseOnHeadphonesDisconnect
+        }
+    }
+
+    override fun setFastRewindDuration( fastRewindDuration: Int ) {
+        preferenceStore.setFastRewindDuration( fastRewindDuration )
+        _fastRewindDuration.update {
+            fastRewindDuration
+        }
+    }
+
+    override fun setFastForwardDuration( fastForwardDuration: Int ) {
+        preferenceStore.setFastForwardDuration( fastForwardDuration )
+        _fastForwardDuration.update {
+            fastForwardDuration
         }
     }
 
