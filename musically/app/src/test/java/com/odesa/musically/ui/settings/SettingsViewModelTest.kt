@@ -14,7 +14,7 @@ import com.odesa.musically.services.i18n.French
 import com.odesa.musically.services.i18n.German
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.services.i18n.Spanish
-import com.odesa.musically.ui.settings.appearance.fontScale.scalingPresets
+import com.odesa.musically.ui.settings.appearance.scalingPresets
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.MusicallyTypography
 import com.odesa.musically.ui.theme.PrimaryThemeColors
@@ -250,6 +250,33 @@ class SettingsViewModelTest {
             settingsRepository.setFastForwardDuration( duration )
             assertEquals( duration, settingsViewModel.uiState.value.fastForwardDuration )
         }
+    }
+
+    @Test
+    fun testMiniPlayerShowTrackControlsSettingChange() {
+        assertTrue( settingsViewModel.uiState.value.miniPlayerShowTrackControls )
+        settingsRepository.setMiniPlayerShowTrackControls( false )
+        assertFalse( settingsViewModel.uiState.value.miniPlayerShowTrackControls )
+        settingsRepository.setMiniPlayerShowTrackControls( true )
+        assertTrue( settingsViewModel.uiState.value.miniPlayerShowTrackControls )
+    }
+
+    @Test
+    fun testMiniPlayerShowSeekControlsSettingChange() {
+        assertFalse( settingsViewModel.uiState.value.miniPlayerShowSeekControls )
+        settingsRepository.setMiniPlayerShowSeekControls( true )
+        assertTrue( settingsViewModel.uiState.value.miniPlayerShowSeekControls )
+        settingsRepository.setMiniPlayerShowSeekControls( false )
+        assertFalse( settingsViewModel.uiState.value.miniPlayerShowSeekControls )
+    }
+
+    @Test
+    fun testMiniPlayerTextMarqueeSettingChange() {
+        assertTrue( settingsViewModel.uiState.value.miniPlayerTextMarquee )
+        settingsRepository.setMiniPlayerTextMarquee( false )
+        assertFalse( settingsViewModel.uiState.value.miniPlayerTextMarquee )
+        settingsRepository.setMiniPlayerTextMarquee( true )
+        assertTrue( settingsViewModel.uiState.value.miniPlayerTextMarquee )
     }
 
 

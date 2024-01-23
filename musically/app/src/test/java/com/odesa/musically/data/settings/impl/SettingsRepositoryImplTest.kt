@@ -13,7 +13,7 @@ import com.odesa.musically.services.i18n.French
 import com.odesa.musically.services.i18n.German
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.services.i18n.Spanish
-import com.odesa.musically.ui.settings.appearance.fontScale.scalingPresets
+import com.odesa.musically.ui.settings.appearance.scalingPresets
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.MusicallyTypography
 import com.odesa.musically.ui.theme.PrimaryThemeColors
@@ -228,6 +228,33 @@ class SettingsRepositoryImplTest {
             preferences.setFastForwardDuration( duration )
             assertEquals( duration, settingsRepository.fastForwardDuration.value )
         }
+    }
+
+    @Test
+    fun testMiniPlayerShowTrackControlsSettingChange() {
+        assertTrue( settingsRepository.miniPlayerShowTrackControls.value )
+        preferences.setMiniPlayerShowTrackControls( false )
+        assertFalse( settingsRepository.miniPlayerShowTrackControls.value )
+        preferences.setMiniPlayerShowTrackControls( true )
+        assertTrue( settingsRepository.miniPlayerShowTrackControls.value )
+    }
+
+    @Test
+    fun testMiniPlayerShowSeekControlsSettingChange() {
+        assertFalse( settingsRepository.miniPlayerShowSeekControls.value )
+        preferences.setMiniPlayerShowSeekControls( true )
+        assertTrue( settingsRepository.miniPlayerShowSeekControls.value )
+        preferences.setMiniPlayerShowSeekControls( false )
+        assertFalse( settingsRepository.miniPlayerShowSeekControls.value )
+    }
+
+    @Test
+    fun testMiniPlayerTextMarqueeSettingChange() {
+        assertTrue( settingsRepository.miniPlayerTextMarquee.value )
+        preferences.setMiniPlayerTextMarquee( false )
+        assertFalse( settingsRepository.miniPlayerTextMarquee.value )
+        preferences.setMiniPlayerTextMarquee( true )
+        assertTrue( settingsRepository.miniPlayerTextMarquee.value)
     }
 
 }

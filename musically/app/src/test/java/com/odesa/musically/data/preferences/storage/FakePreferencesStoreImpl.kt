@@ -22,6 +22,9 @@ class FakePreferencesStoreImpl : PreferenceStore {
     private var pauseOnHeadphonesDisconnect: Boolean? = null
     private var fastRewindDuration: Int? = null
     private var fastForwardDuration: Int? = null
+    private var miniPlayerShowTrackControls: Boolean? = null
+    private var miniPlayerShowSeekControls: Boolean? = null
+    private var miniPlayerTextMarquee: Boolean? = null
 
     override fun setLanguage( localeCode: String ) {
         language = localeCode
@@ -128,5 +131,26 @@ class FakePreferencesStoreImpl : PreferenceStore {
 
     override fun setFastForwardDuration( fastForwardDuration: Int ) {
         this.fastForwardDuration = fastForwardDuration
+    }
+
+    override fun getMiniPlayerShowTrackControls() = miniPlayerShowTrackControls
+        ?: SettingsDefaults.miniPlayerShowTrackControls
+
+    override fun setMiniPlayerShowTrackControls( showTrackControls: Boolean ) {
+        miniPlayerShowTrackControls = showTrackControls
+    }
+
+    override fun getMiniPlayerShowSeekControls() = miniPlayerShowSeekControls
+        ?: SettingsDefaults.miniPlayerShowSeekControls
+
+    override fun setMiniPlayerShowSeekControls( showSeekControls: Boolean ) {
+        miniPlayerShowSeekControls = showSeekControls
+    }
+
+    override fun getMiniPlayerTextMarquee() = miniPlayerTextMarquee
+        ?: SettingsDefaults.miniPlayerTextMarquee
+
+    override fun setMiniPlayerTextMarquee( textMarquee: Boolean ) {
+        miniPlayerTextMarquee = textMarquee
     }
 }

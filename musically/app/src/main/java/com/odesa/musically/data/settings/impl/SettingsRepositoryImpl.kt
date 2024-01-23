@@ -28,6 +28,9 @@ class SettingsRepositoryImpl(
     override val pauseOnHeadphonesDisconnect = preferences.pauseOnHeadphonesDisconnect
     override val fastRewindDuration = preferences.fastRewindDuration
     override val fastForwardDuration = preferences.fastForwardDuration
+    override val miniPlayerShowTrackControls = preferences.miniPlayerShowTrackControls
+    override val miniPlayerShowSeekControls = preferences.miniPlayerShowSeekControls
+    override val miniPlayerTextMarquee = preferences.miniPlayerTextMarquee
 
     override fun setLanguage( localeCode: String ) {
         preferences.setLanguage( localeCode )
@@ -95,5 +98,17 @@ class SettingsRepositoryImpl(
 
     override fun setFastForwardDuration( fastForwardDuration: Int ) {
         preferences.setFastForwardDuration( fastForwardDuration )
+    }
+
+    override fun setMiniPlayerShowTrackControls( showTrackControls: Boolean ) {
+        preferences.setMiniPlayerShowTrackControls( showTrackControls )
+    }
+
+    override fun setMiniPlayerShowSeekControls( showSeekControls: Boolean ) {
+        preferences.setMiniPlayerShowSeekControls( showSeekControls )
+    }
+
+    override fun setMiniPlayerTextMarquee( textMarquee: Boolean ) {
+        preferences.setMiniPlayerTextMarquee( textMarquee )
     }
 }

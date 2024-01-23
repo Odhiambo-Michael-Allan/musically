@@ -1,4 +1,4 @@
-package com.odesa.musically.ui.settings.appearance.font
+package com.odesa.musically.ui.settings.appearance
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.TextFormat

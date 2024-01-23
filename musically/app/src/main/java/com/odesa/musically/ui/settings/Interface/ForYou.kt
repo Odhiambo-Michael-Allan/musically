@@ -1,4 +1,4 @@
-package com.odesa.musically.ui.settings.Interface.forYou
+package com.odesa.musically.ui.settings.Interface
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Recommend
@@ -29,7 +29,7 @@ fun ForYou(
     )
 }
 
-fun ForYou.resolveName( language: Language ) = when ( this ) {
+fun ForYou.resolveName(language: Language) = when ( this ) {
     ForYou.Albums -> language.suggestedAlbums
     ForYou.Artists -> language.suggestedArtists
     ForYou.AlbumArtists -> language.suggestedAlbumArtists
@@ -38,7 +38,7 @@ fun ForYou.resolveName( language: Language ) = when ( this ) {
 @Preview( showBackground = true )
 @Composable
 fun ForYouPreview() {
-    com.odesa.musically.ui.settings.Interface.forYou.ForYou(
+    ForYou(
         language = Belarusian,
         forYouContent = SettingsDefaults.forYouContents,
         onForYouContentChange = {}

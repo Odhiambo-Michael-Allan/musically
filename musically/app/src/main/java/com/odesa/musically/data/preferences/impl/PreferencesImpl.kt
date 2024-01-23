@@ -77,6 +77,15 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
     private val _fastForwardDuration = MutableStateFlow( preferenceStore.getFastForwardDuration() )
     override val fastForwardDuration = _fastForwardDuration.asStateFlow()
 
+    private val _miniPlayerShowTrackControls = MutableStateFlow( preferenceStore.getMiniPlayerShowTrackControls() )
+    override val miniPlayerShowTrackControls = _miniPlayerShowTrackControls.asStateFlow()
+
+    private val _miniPlayerShowSeekControls = MutableStateFlow( preferenceStore.getMiniPlayerShowSeekControls() )
+    override val miniPlayerShowSeekControls = _miniPlayerShowSeekControls.asStateFlow()
+
+    private val _miniPlayerTextMarquee = MutableStateFlow( preferenceStore.getMiniPlayerTextMarquee() )
+    override val miniPlayerTextMarquee = _miniPlayerTextMarquee.asStateFlow()
+
 
     private fun getLanguage( localeCode: String ) : Language {
         return when ( localeCode ) {
@@ -216,6 +225,27 @@ class PreferencesImpl( private val preferenceStore: PreferenceStore ) : Preferen
         preferenceStore.setFastForwardDuration( fastForwardDuration )
         _fastForwardDuration.update {
             fastForwardDuration
+        }
+    }
+
+    override fun setMiniPlayerShowTrackControls( showTrackControls: Boolean ) {
+        preferenceStore.setMiniPlayerShowTrackControls( showTrackControls )
+        _miniPlayerShowTrackControls.update {
+            showTrackControls
+        }
+    }
+
+    override fun setMiniPlayerShowSeekControls( showSeekControls: Boolean ) {
+        preferenceStore.setMiniPlayerShowSeekControls( showSeekControls )
+        _miniPlayerShowSeekControls.update {
+            showSeekControls
+        }
+    }
+
+    override fun setMiniPlayerTextMarquee( textMarquee: Boolean ) {
+        preferenceStore.setMiniPlayerTextMarquee( textMarquee )
+        _miniPlayerTextMarquee.update {
+            textMarquee
         }
     }
 

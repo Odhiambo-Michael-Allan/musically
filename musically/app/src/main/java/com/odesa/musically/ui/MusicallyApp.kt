@@ -78,6 +78,15 @@ fun MusicallyApp(
                 },
                 onFastForwardDurationChange = { fastForwardDuration ->
                     settingsViewModel.setFastForwardDuration( fastForwardDuration.toInt() )
+                },
+                onMiniPlayerShowTrackControlsChange = { showTrackControls ->
+                    settingsViewModel.setMiniPlayerShowTrackControls( showTrackControls )
+                },
+                onMiniPlayerShowSeekControlsChange = { showSeekControls ->
+                    settingsViewModel.setMiniPlayerShowSeekControls( showSeekControls )
+                },
+                onMiniPlayerTextMarqueeChange = { textMarquee ->
+                    settingsViewModel.setMiniPlayerTextMarquee( textMarquee )
                 }
             )
         }

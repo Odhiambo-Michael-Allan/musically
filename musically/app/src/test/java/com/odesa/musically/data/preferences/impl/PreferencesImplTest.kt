@@ -13,7 +13,7 @@ import com.odesa.musically.services.i18n.French
 import com.odesa.musically.services.i18n.German
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.services.i18n.Spanish
-import com.odesa.musically.ui.settings.appearance.fontScale.scalingPresets
+import com.odesa.musically.ui.settings.appearance.scalingPresets
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.MusicallyTypography
 import com.odesa.musically.ui.theme.PrimaryThemeColors
@@ -247,5 +247,38 @@ class PreferencesImplTest {
             assertEquals( duration, preferenceStore.getFastForwardDuration() )
             assertEquals( duration, preferences.fastForwardDuration.value )
         }
+    }
+
+    @Test
+    fun testMiniPlayerShowTrackControlsSettingChange() {
+        assertTrue( preferences.miniPlayerShowTrackControls.value )
+        preferences.setMiniPlayerShowTrackControls( false )
+        assertFalse( preferenceStore.getMiniPlayerShowTrackControls() )
+        assertFalse( preferences.miniPlayerShowTrackControls.value )
+        preferences.setMiniPlayerShowTrackControls( true )
+        assertTrue( preferenceStore.getMiniPlayerShowTrackControls() )
+        assertTrue( preferences.miniPlayerShowTrackControls.value )
+    }
+
+    @Test
+    fun testMiniPlayerShowSeekControlsSettingChange() {
+        assertFalse( preferences.miniPlayerShowSeekControls.value )
+        preferences.setMiniPlayerShowSeekControls( true )
+        assertTrue( preferenceStore.getMiniPlayerShowSeekControls() )
+        assertTrue( preferences.miniPlayerShowSeekControls.value )
+        preferences.setMiniPlayerShowSeekControls( false )
+        assertFalse( preferenceStore.getMiniPlayerShowSeekControls() )
+        assertFalse( preferences.miniPlayerShowSeekControls.value )
+    }
+
+    @Test
+    fun testMiniPlayerTextMarquee() {
+        assertTrue( preferences.miniPlayerTextMarquee.value )
+        preferences.setMiniPlayerTextMarquee( false )
+        assertFalse( preferenceStore.getMiniPlayerTextMarquee() )
+        assertFalse( preferences.miniPlayerTextMarquee.value )
+        preferences.setMiniPlayerTextMarquee( true )
+        assertTrue( preferenceStore.getMiniPlayerTextMarquee() )
+        assertTrue( preferences.miniPlayerTextMarquee.value )
     }
 }

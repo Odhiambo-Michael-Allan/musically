@@ -69,6 +69,16 @@ class FakeSettingsRepository : SettingsRepository {
     private val _fastForwardDuration = MutableStateFlow( SettingsDefaults.fastForwardDuration )
     override val fastForwardDuration = _fastForwardDuration.asStateFlow()
 
+    private val _miniPlayerShowTrackControls = MutableStateFlow( SettingsDefaults.miniPlayerShowTrackControls )
+    override val miniPlayerShowTrackControls = _miniPlayerShowTrackControls.asStateFlow()
+
+    private val _miniPlayerShowSeekControls = MutableStateFlow( SettingsDefaults.miniPlayerShowSeekControls )
+    override val miniPlayerShowSeekControls = _miniPlayerShowSeekControls.asStateFlow()
+
+    private val _miniPlayerTextMarquee = MutableStateFlow( SettingsDefaults.miniPlayerTextMarquee )
+    override val miniPlayerTextMarquee = _miniPlayerTextMarquee.asStateFlow()
+
+
     override fun setLanguage( localeCode: String ) {
         _currentLanguage.value = resolveLanguage( localeCode )
     }
@@ -152,5 +162,17 @@ class FakeSettingsRepository : SettingsRepository {
 
     override fun setFastForwardDuration( fastForwardDuration: Int ) {
         _fastForwardDuration.value = fastForwardDuration
+    }
+
+    override fun setMiniPlayerShowTrackControls( showTrackControls: Boolean ) {
+        _miniPlayerShowTrackControls.value = showTrackControls
+    }
+
+    override fun setMiniPlayerShowSeekControls( showSeekControls: Boolean ) {
+        _miniPlayerShowSeekControls.value = showSeekControls
+    }
+
+    override fun setMiniPlayerTextMarquee( textMarquee: Boolean ) {
+        _miniPlayerTextMarquee.value = textMarquee
     }
 }

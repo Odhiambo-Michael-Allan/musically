@@ -192,6 +192,38 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         }
     }
 
+    override fun getMiniPlayerShowTrackControls() = getSharedPreferences()
+        .getBoolean( SettingsKeys.miniPlayerShowTrackControls,
+            SettingsDefaults.miniPlayerShowTrackControls )
+
+    override fun setMiniPlayerShowTrackControls( showTrackControls: Boolean ) {
+        getSharedPreferences().edit {
+            putBoolean( SettingsKeys.miniPlayerShowTrackControls,
+                showTrackControls )
+        }
+    }
+
+    override fun getMiniPlayerShowSeekControls() = getSharedPreferences()
+        .getBoolean( SettingsKeys.miniPlayerShowSeekControls,
+            SettingsDefaults.miniPlayerShowSeekControls )
+
+    override fun setMiniPlayerShowSeekControls( showSeekControls: Boolean ) {
+        getSharedPreferences().edit {
+            putBoolean( SettingsKeys.miniPlayerShowSeekControls,
+                showSeekControls )
+        }
+    }
+
+    override fun getMiniPlayerTextMarquee() = getSharedPreferences()
+        .getBoolean( SettingsKeys.miniPlayerTextMarquee,
+            SettingsDefaults.miniPlayerTextMarquee )
+
+    override fun setMiniPlayerTextMarquee( textMarquee: Boolean ) {
+        getSharedPreferences().edit {
+            putBoolean( SettingsKeys.miniPlayerTextMarquee, textMarquee )
+        }
+    }
+
     private fun getSharedPreferences() = context.getSharedPreferences(
         SettingsKeys.identifier,
         Context.MODE_PRIVATE
@@ -225,6 +257,9 @@ object SettingsDefaults {
     const val pauseOnHeadphonesDisconnect = true
     const val fastForwardDuration = 30
     const val fastRewindDuration = 15
+    const val miniPlayerShowTrackControls = true
+    const val miniPlayerShowSeekControls = false
+    const val miniPlayerTextMarquee = true
 }
 
 object SettingsKeys {
@@ -246,6 +281,9 @@ object SettingsKeys {
     const val pauseOnHeadphonesDisconnect = "pause_on_headphones_disconnect"
     const val fastForwardDuration = "fast_forward_duration"
     const val fastRewindDuration = "fast_rewind_duration"
+    const val miniPlayerShowTrackControls = "mini_player_show_track_controls"
+    const val miniPlayerShowSeekControls = "mini_player_show_seek_controls"
+    const val miniPlayerTextMarquee = "mini_player_text_marquee"
 }
 
 private inline fun <reified T : Enum<T>> parseEnumValue( value: String ): T? =

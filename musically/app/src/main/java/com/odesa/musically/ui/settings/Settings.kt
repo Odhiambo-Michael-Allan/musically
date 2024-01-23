@@ -43,24 +43,27 @@ import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.components.AdaptiveSnackBar
 import com.odesa.musically.ui.components.TopAppBarMinimalTitle
-import com.odesa.musically.ui.settings.Interface.bottomBarLabelVisibility.BottomBarLabelVisibility
-import com.odesa.musically.ui.settings.Interface.forYou.ForYou
-import com.odesa.musically.ui.settings.Interface.homeTabs.HomeTabs
-import com.odesa.musically.ui.settings.appearance.font.Font
-import com.odesa.musically.ui.settings.appearance.fontScale.FontScale
-import com.odesa.musically.ui.settings.appearance.language.Language
-import com.odesa.musically.ui.settings.appearance.materialYou.MaterialYou
-import com.odesa.musically.ui.settings.appearance.primaryColor.PrimaryColor
-import com.odesa.musically.ui.settings.appearance.theme.Theme
+import com.odesa.musically.ui.settings.Interface.BottomBarLabelVisibility
+import com.odesa.musically.ui.settings.Interface.ForYou
+import com.odesa.musically.ui.settings.Interface.HomeTabs
+import com.odesa.musically.ui.settings.appearance.Font
+import com.odesa.musically.ui.settings.appearance.FontScale
+import com.odesa.musically.ui.settings.appearance.Language
+import com.odesa.musically.ui.settings.appearance.MaterialYou
+import com.odesa.musically.ui.settings.appearance.PrimaryColor
+import com.odesa.musically.ui.settings.appearance.Theme
 import com.odesa.musically.ui.settings.components.SettingsSideHeading
-import com.odesa.musically.ui.settings.player.fadePlayback.FadePlayback
-import com.odesa.musically.ui.settings.player.fadePlaybackDuration.FadePlaybackDuration
-import com.odesa.musically.ui.settings.player.fastForwardDuration.FastForwardDuration
-import com.odesa.musically.ui.settings.player.fastRewindDuration.FastRewindDuration
-import com.odesa.musically.ui.settings.player.ignoreAudioFocusLoss.IgnoreAudioFocusLoss
-import com.odesa.musically.ui.settings.player.pauseOnHeadphonesDisconnect.PauseOnHeadphonesDisconnect
-import com.odesa.musically.ui.settings.player.playOnHeadphoneConnect.PlayOnHeadphonesConnect
-import com.odesa.musically.ui.settings.player.requireAudioFocus.RequireAudioFocus
+import com.odesa.musically.ui.settings.miniPlayer.ShowSeekControls
+import com.odesa.musically.ui.settings.miniPlayer.ShowTrackControls
+import com.odesa.musically.ui.settings.miniPlayer.TextMarquee
+import com.odesa.musically.ui.settings.player.FadePlayback
+import com.odesa.musically.ui.settings.player.FadePlaybackDuration
+import com.odesa.musically.ui.settings.player.FastForwardDuration
+import com.odesa.musically.ui.settings.player.FastRewindDuration
+import com.odesa.musically.ui.settings.player.IgnoreAudioFocusLoss
+import com.odesa.musically.ui.settings.player.PauseOnHeadphonesDisconnect
+import com.odesa.musically.ui.settings.player.PlayOnHeadphonesConnect
+import com.odesa.musically.ui.settings.player.RequireAudioFocus
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.MusicallyTheme
 import com.odesa.musically.ui.theme.SupportedFonts
@@ -90,6 +93,9 @@ fun SettingsScreenContent(
     onPauseOnHeadphonesDisconnectChange: ( Boolean ) -> Unit,
     onFastRewindDurationChange: ( Float ) -> Unit,
     onFastForwardDurationChange: ( Float ) -> Unit,
+    onMiniPlayerShowTrackControlsChange: ( Boolean ) -> Unit,
+    onMiniPlayerShowSeekControlsChange: ( Boolean ) -> Unit,
+    onMiniPlayerTextMarqueeChange: ( Boolean ) -> Unit,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
@@ -265,6 +271,21 @@ fun SettingsScreenContent(
                     )
                     Divider( thickness = 0.5.dp )
                     SettingsSideHeading( text = uiState.language.miniPlayer )
+                    ShowTrackControls(
+                        value = uiState.miniPlayerShowTrackControls,
+                        language = uiState.language,
+                        onValueChange = onMiniPlayerShowTrackControlsChange
+                    )
+                    ShowSeekControls(
+                        language = uiState.language,
+                        value = uiState.miniPlayerShowSeekControls,
+                        onValueChange = onMiniPlayerShowSeekControlsChange
+                    )
+                    TextMarquee(
+                        language = uiState.language,
+                        value = uiState.miniPlayerTextMarquee,
+                        onValueChange = onMiniPlayerTextMarqueeChange
+                    )
                 }
             }
         }
@@ -292,6 +313,9 @@ fun SettingsScreenContentPreview() {
         pauseOnHeadphonesDisconnect = SettingsDefaults.pauseOnHeadphonesDisconnect,
         fastRewindDuration = SettingsDefaults.fastRewindDuration,
         fastForwardDuration = SettingsDefaults.fastForwardDuration,
+        miniPlayerShowTrackControls = SettingsDefaults.miniPlayerShowTrackControls,
+        miniPlayerShowSeekControls = SettingsDefaults.miniPlayerShowSeekControls,
+        miniPlayerTextMarquee = SettingsDefaults.miniPlayerTextMarquee
     )
     MusicallyTheme(
         uiState = uiState
@@ -315,6 +339,9 @@ fun SettingsScreenContentPreview() {
             onPauseOnHeadphonesDisconnectChange = {},
             onFastRewindDurationChange = {},
             onFastForwardDurationChange = {},
+            onMiniPlayerShowTrackControlsChange = {},
+            onMiniPlayerShowSeekControlsChange = {},
+            onMiniPlayerTextMarqueeChange = {}
         )
     }
 }

@@ -37,6 +37,12 @@ interface PreferenceStore {
     fun setFastRewindDuration( fastRewindDuration: Int )
     fun getFastForwardDuration(): Int
     fun setFastForwardDuration( fastForwardDuration: Int )
+    fun getMiniPlayerShowTrackControls(): Boolean
+    fun setMiniPlayerShowTrackControls( showTrackControls: Boolean )
+    fun getMiniPlayerShowSeekControls(): Boolean
+    fun setMiniPlayerShowSeekControls( showSeekControls: Boolean )
+    fun getMiniPlayerTextMarquee(): Boolean
+    fun setMiniPlayerTextMarquee( textMarquee: Boolean )
 
 
 }

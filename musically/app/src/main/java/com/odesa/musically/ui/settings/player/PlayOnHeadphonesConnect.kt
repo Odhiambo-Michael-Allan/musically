@@ -1,4 +1,4 @@
-package com.odesa.musically.ui.settings.player.playOnHeadphoneConnect
+package com.odesa.musically.ui.settings.player
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Headphones

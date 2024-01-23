@@ -1,4 +1,4 @@
-package com.odesa.musically.ui.settings.player.ignoreAudioFocusLoss
+package com.odesa.musically.ui.settings.player
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CenterFocusWeak
@@ -9,17 +9,21 @@ import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.settings.components.SettingsSwitchTile
 
 @Composable
-fun IgnoreAudioFocusLoss(
+fun RequireAudioFocus(
     language: Language,
-    ignoreAudioFocusLoss: Boolean,
-    onIgnoreAudioFocusLossChange: ( Boolean ) -> Unit
+    requireAudioFocus: Boolean,
+    onRequireAudioFocusChange: ( Boolean ) -> Unit
 ) {
     SettingsSwitchTile(
         icon = {
-            Icon( imageVector = Icons.Filled.CenterFocusWeak, contentDescription = null )
+            Icon(
+                imageVector = Icons.Filled.CenterFocusWeak,
+                contentDescription = null
+            )
         },
-        title = { Text( text = language.ignoreAudioFocusLoss ) },
-        value = ignoreAudioFocusLoss,
-        onChange = onIgnoreAudioFocusLossChange
+        title = { Text( text = language.requireAudioFocus ) },
+        value = requireAudioFocus,
+        onChange = onRequireAudioFocusChange
     )
+
 }

@@ -1,4 +1,4 @@
-package com.odesa.musically.ui.settings.Interface.bottomBarLabelVisibility
+package com.odesa.musically.ui.settings.Interface
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Label
@@ -13,7 +13,7 @@ import com.odesa.musically.ui.settings.components.SettingsOptionTile
 fun BottomBarLabelVisibility(
     value: HomePageBottomBarLabelVisibility,
     language: Language,
-    onValueChange: ( HomePageBottomBarLabelVisibility ) -> Unit
+    onValueChange: (HomePageBottomBarLabelVisibility) -> Unit
 ) {
     SettingsOptionTile(
         currentValue = value,
@@ -27,7 +27,7 @@ fun BottomBarLabelVisibility(
     )
 }
 
-fun HomePageBottomBarLabelVisibility.resolveName( language: Language ) = when ( this ) {
+fun HomePageBottomBarLabelVisibility.resolveName(language: Language) = when ( this ) {
     HomePageBottomBarLabelVisibility.INVISIBLE -> language.invisible
     HomePageBottomBarLabelVisibility.VISIBLE_WHEN_ACTIVE -> language.visibleWhenActive
     HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE -> language.alwaysVisible

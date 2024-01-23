@@ -8,7 +8,7 @@ import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibi
 import com.odesa.musically.data.preferences.storage.HomeTab
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.i18n.Language
-import com.odesa.musically.ui.settings.appearance.fontScale.scalingPresets
+import com.odesa.musically.ui.settings.appearance.scalingPresets
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,6 +36,9 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
             pauseOnHeadphonesDisconnect = settingsRepository.pauseOnHeadphonesDisconnect.value,
             fastRewindDuration = settingsRepository.fastRewindDuration.value,
             fastForwardDuration = settingsRepository.fastForwardDuration.value,
+            miniPlayerShowTrackControls = settingsRepository.miniPlayerShowTrackControls.value,
+            miniPlayerShowSeekControls = settingsRepository.miniPlayerShowSeekControls.value,
+            miniPlayerTextMarquee = settingsRepository.miniPlayerTextMarquee.value,
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -59,6 +62,9 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         viewModelScope.launch { observePauseOnHeadphonesDisconnectSetting() }
         viewModelScope.launch { observeFastRewindDurationSetting() }
         viewModelScope.launch { observeFastForwardDurationSetting() }
+        viewModelScope.launch { observeMiniPlayerShowTrackControlsSetting() }
+        viewModelScope.launch { observeMiniPlayerShowSeekControlsSetting() }
+        viewModelScope.launch { observeMiniPlayerTextMarqueeSetting() }
     }
 
     private suspend fun observeLanguageSetting() {
@@ -197,6 +203,30 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
+    private suspend fun observeMiniPlayerShowTrackControlsSetting() {
+        settingsRepository.miniPlayerShowTrackControls.collect {
+            _uiState.value = _uiState.value.copy(
+                miniPlayerShowTrackControls = it
+            )
+        }
+    }
+
+    private suspend fun observeMiniPlayerShowSeekControlsSetting() {
+        settingsRepository.miniPlayerShowSeekControls.collect {
+            _uiState.value = _uiState.value.copy(
+                miniPlayerShowSeekControls = it
+            )
+        }
+    }
+
+    private suspend fun observeMiniPlayerTextMarqueeSetting() {
+        settingsRepository.miniPlayerTextMarquee.collect {
+            _uiState.value = _uiState.value.copy(
+                miniPlayerTextMarquee = it
+            )
+        }
+    }
+
     fun setLanguage( localeCode: String ) {
         settingsRepository.setLanguage( localeCode )
     }
@@ -268,6 +298,18 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         settingsRepository.setFastForwardDuration( fastForwardDuration )
     }
 
+    fun setMiniPlayerShowTrackControls( showTrackControls: Boolean ) {
+        settingsRepository.setMiniPlayerShowTrackControls( showTrackControls )
+    }
+
+    fun setMiniPlayerShowSeekControls( showSeekControls: Boolean ) {
+        settingsRepository.setMiniPlayerShowSeekControls( showSeekControls )
+    }
+
+    fun setMiniPlayerTextMarquee( textMarquee: Boolean ) {
+        settingsRepository.setMiniPlayerTextMarquee( textMarquee )
+    }
+
 }
 
 @Suppress( "UNCHECKED_CAST" )
@@ -297,4 +339,7 @@ data class SettingsScreenUiState(
     val pauseOnHeadphonesDisconnect: Boolean,
     val fastRewindDuration: Int,
     val fastForwardDuration: Int,
+    val miniPlayerShowTrackControls: Boolean,
+    val miniPlayerShowSeekControls: Boolean,
+    val miniPlayerTextMarquee: Boolean,
 )

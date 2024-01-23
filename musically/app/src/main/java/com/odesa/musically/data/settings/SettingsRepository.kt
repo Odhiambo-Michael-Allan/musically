@@ -26,6 +26,9 @@ interface SettingsRepository {
     val pauseOnHeadphonesDisconnect: StateFlow<Boolean>
     val fastRewindDuration: StateFlow<Int>
     val fastForwardDuration: StateFlow<Int>
+    val miniPlayerShowTrackControls: StateFlow<Boolean>
+    val miniPlayerShowSeekControls: StateFlow<Boolean>
+    val miniPlayerTextMarquee: StateFlow<Boolean>
 
     fun setLanguage( localeCode: String )
     fun setFont( fontName: String )
@@ -44,4 +47,7 @@ interface SettingsRepository {
     fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean )
     fun setFastRewindDuration( fastRewindDuration: Int )
     fun setFastForwardDuration( fastForwardDuration: Int )
+    fun setMiniPlayerShowTrackControls( showTrackControls: Boolean )
+    fun setMiniPlayerShowSeekControls( showSeekControls: Boolean )
+    fun setMiniPlayerTextMarquee( textMarquee: Boolean )
 }

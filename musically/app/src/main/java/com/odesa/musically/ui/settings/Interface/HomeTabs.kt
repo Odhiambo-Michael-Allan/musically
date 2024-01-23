@@ -1,4 +1,4 @@
-package com.odesa.musically.ui.settings.Interface.homeTabs
+package com.odesa.musically.ui.settings.Interface
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -50,7 +50,7 @@ fun HomeTabs(
     )
 }
 
-fun HomeTab.resolveName( language: Language ) = when ( this ) {
+fun HomeTab.resolveName(language: Language) = when ( this ) {
     HomeTab.Songs -> language.songs
     HomeTab.Albums -> language.albums
     HomeTab.Genres -> language.genres
@@ -73,4 +73,3 @@ fun HomeTabsPreview() {
         onHomeTabsChange = {}
     )
 }
-
