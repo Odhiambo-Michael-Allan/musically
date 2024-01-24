@@ -38,6 +38,8 @@ import androidx.compose.ui.unit.dp
 import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
+import com.odesa.musically.data.preferences.storage.NowPlayingControlsLayout
+import com.odesa.musically.data.preferences.storage.NowPlayingLyricsLayout
 import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.Language
@@ -56,6 +58,9 @@ import com.odesa.musically.ui.settings.components.SettingsSideHeading
 import com.odesa.musically.ui.settings.miniPlayer.ShowSeekControls
 import com.odesa.musically.ui.settings.miniPlayer.ShowTrackControls
 import com.odesa.musically.ui.settings.miniPlayer.TextMarquee
+import com.odesa.musically.ui.settings.nowPlaying.ControlsLayout
+import com.odesa.musically.ui.settings.nowPlaying.LyricsLayout
+import com.odesa.musically.ui.settings.nowPlaying.ShowAudioInformation
 import com.odesa.musically.ui.settings.player.FadePlayback
 import com.odesa.musically.ui.settings.player.FadePlaybackDuration
 import com.odesa.musically.ui.settings.player.FastForwardDuration
@@ -96,6 +101,11 @@ fun SettingsScreenContent(
     onMiniPlayerShowTrackControlsChange: ( Boolean ) -> Unit,
     onMiniPlayerShowSeekControlsChange: ( Boolean ) -> Unit,
     onMiniPlayerTextMarqueeChange: ( Boolean ) -> Unit,
+    onNowPlayingControlsLayoutChange: ( NowPlayingControlsLayout ) -> Unit,
+    onNowPlayingLyricsLayoutChange: ( NowPlayingLyricsLayout ) -> Unit,
+    onShowNowPlayingAudioInformationChange: ( Boolean ) -> Unit,
+    onShowNowPlayingSeekControlsChange: ( Boolean ) -> Unit,
+
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
@@ -288,6 +298,28 @@ fun SettingsScreenContent(
                     )
                     Divider( thickness = 0.5.dp )
                     SettingsSideHeading( text = uiState.language.nowPlaying )
+                    ControlsLayout(
+                        nowPlayingControlsLayout = uiState.nowPlayingControlsLayout,
+                        language = uiState.language,
+                        onNowPlayingControlsLayoutChange = onNowPlayingControlsLayoutChange
+                    )
+                    LyricsLayout(
+                        nowPlayingLyricsLayout = uiState.nowPlayingLyricsLayout,
+                        language = uiState.language,
+                        onNowPlayingLyricsLayoutChange = onNowPlayingLyricsLayoutChange
+                    )
+                    ShowAudioInformation(
+                        language = uiState.language,
+                        value = uiState.showNowPlayingAudioInformation,
+                        onValueChange = onShowNowPlayingAudioInformationChange
+                    )
+                    ShowSeekControls(
+                        language = uiState.language,
+                        value = uiState.showNowPlayingSeekControls,
+                        onValueChange = onShowNowPlayingSeekControlsChange
+                    )
+                    Divider( thickness = 0.5.dp )
+                    SettingsSideHeading( text = uiState.language.groove )
                 }
             }
         }
@@ -347,7 +379,11 @@ fun SettingsScreenContentPreview() {
             onFastForwardDurationChange = {},
             onMiniPlayerShowTrackControlsChange = {},
             onMiniPlayerShowSeekControlsChange = {},
-            onMiniPlayerTextMarqueeChange = {}
+            onMiniPlayerTextMarqueeChange = {},
+            onNowPlayingControlsLayoutChange = {},
+            onNowPlayingLyricsLayoutChange = {},
+            onShowNowPlayingAudioInformationChange = {},
+            onShowNowPlayingSeekControlsChange = {}
         )
     }
 }

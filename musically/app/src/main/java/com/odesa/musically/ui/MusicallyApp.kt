@@ -87,6 +87,20 @@ fun MusicallyApp(
                 },
                 onMiniPlayerTextMarqueeChange = { textMarquee ->
                     settingsViewModel.setMiniPlayerTextMarquee( textMarquee )
+                },
+                onNowPlayingControlsLayoutChange = { nowPlayingControlsLayout ->
+                    settingsViewModel.setNowPlayingControlsLayout( nowPlayingControlsLayout )
+                },
+                onNowPlayingLyricsLayoutChange = { nowPlayingLyricsLayout ->
+                    settingsViewModel.setNowPlayingLyricsLayout( nowPlayingLyricsLayout )
+                },
+                onShowNowPlayingAudioInformationChange = { showNowPlayingAudioInformation ->
+                    settingsViewModel.setShowNowPlayingAudioInformation(
+                        showNowPlayingAudioInformation
+                    )
+                },
+                onShowNowPlayingSeekControlsChange = { showNowPlayingSeekControls ->
+                    settingsViewModel.setShowNowPlayingSeekControls( showNowPlayingSeekControls )
                 }
             )
         }
