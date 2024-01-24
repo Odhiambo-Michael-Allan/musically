@@ -286,6 +286,8 @@ fun SettingsScreenContent(
                         value = uiState.miniPlayerTextMarquee,
                         onValueChange = onMiniPlayerTextMarqueeChange
                     )
+                    Divider( thickness = 0.5.dp )
+                    SettingsSideHeading( text = uiState.language.nowPlaying )
                 }
             }
         }
@@ -315,7 +317,11 @@ fun SettingsScreenContentPreview() {
         fastForwardDuration = SettingsDefaults.fastForwardDuration,
         miniPlayerShowTrackControls = SettingsDefaults.miniPlayerShowTrackControls,
         miniPlayerShowSeekControls = SettingsDefaults.miniPlayerShowSeekControls,
-        miniPlayerTextMarquee = SettingsDefaults.miniPlayerTextMarquee
+        miniPlayerTextMarquee = SettingsDefaults.miniPlayerTextMarquee,
+        nowPlayingControlsLayout = SettingsDefaults.nowPlayingControlsLayout,
+        nowPlayingLyricsLayout = SettingsDefaults.nowPlayingLyricsLayout,
+        showNowPlayingAudioInformation = SettingsDefaults.showNowPlayingAudioInformation,
+        showNowPlayingSeekControls = SettingsDefaults.showNowPlayingSeekControls,
     )
     MusicallyTheme(
         uiState = uiState

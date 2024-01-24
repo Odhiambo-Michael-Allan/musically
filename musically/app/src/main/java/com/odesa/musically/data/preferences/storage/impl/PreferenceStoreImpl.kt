@@ -6,6 +6,8 @@ import androidx.core.content.edit
 import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
+import com.odesa.musically.data.preferences.storage.NowPlayingControlsLayout
+import com.odesa.musically.data.preferences.storage.NowPlayingLyricsLayout
 import com.odesa.musically.data.preferences.storage.PreferenceStore
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.ui.theme.SupportedFonts
@@ -224,10 +226,81 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         }
     }
 
+    override fun getNowPlayingControlsLayout() = getSharedPreferences().getEnum(
+        SettingsKeys.nowPlayingControlsLayout, null
+    ) ?: SettingsDefaults.nowPlayingControlsLayout
+
+
+    override fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout ) {
+        getSharedPreferences().edit {
+            putEnum( SettingsKeys.nowPlayingControlsLayout, nowPlayingControlsLayout )
+        }
+    }
+
+    override fun getNowPlayingLyricsLayout() = getSharedPreferences().getEnum(
+        SettingsKeys.nowPlayingLyricsLayout, null
+    ) ?: SettingsDefaults.nowPlayingLyricsLayout
+
+    override fun setNowPlayingLyricsLayout( nowPlayingLyricsLayout: NowPlayingLyricsLayout ) {
+        getSharedPreferences().edit {
+            putEnum( SettingsKeys.nowPlayingLyricsLayout, nowPlayingLyricsLayout )
+        }
+    }
+
+    override fun getShowNowPlayingAudioInformation() = getSharedPreferences().getBoolean(
+        SettingsKeys.showNowPlayingAudioInformation, SettingsDefaults.showNowPlayingAudioInformation
+    )
+
+    override fun setShowNowPlayingAudioInformation( showNowPlayingAudioInformation: Boolean ) {
+        getSharedPreferences().edit {
+            putBoolean( SettingsKeys.showNowPlayingAudioInformation,
+                showNowPlayingAudioInformation
+            )
+        }
+    }
+
+    override fun getShowNowPlayingSeekControls() = getSharedPreferences().getBoolean(
+        SettingsKeys.showNowPlayingSeekControls, SettingsDefaults.showNowPlayingSeekControls
+    )
+
+    override fun setShowNowPlayingSeekControls(showNowPlayingSeekControls: Boolean ) {
+        getSharedPreferences().edit {
+            putBoolean( SettingsKeys.showNowPlayingSeekControls, showNowPlayingSeekControls )
+        }
+    }
+
     private fun getSharedPreferences() = context.getSharedPreferences(
         SettingsKeys.identifier,
         Context.MODE_PRIVATE
     )
+}
+
+object SettingsKeys {
+    const val identifier = "musically_settings"
+    const val language = "language"
+    const val fontName = "font_name"
+    const val fontScale = "font_scale"
+    const val themeMode = "theme_mode"
+    const val useMaterialYou = "use_material_you"
+    const val primaryColorName = "primary_color_name"
+    const val homeTabs = "home_tabs"
+    const val forYouContents = "for_you_contents"
+    const val homePageBottomBarLabelVisibility = "home_page_bottom_bar_visibility"
+    const val fadePlayback = "fade_playback"
+    const val fadePlaybackDuration = "fade_playback_duration"
+    const val requireAudioFocus = "require_audio_focus"
+    const val ignoreAudioFocusLoss = "ignore_audio_focus_loss"
+    const val playOnHeadphonesConnect = "play_on_headphones_connect"
+    const val pauseOnHeadphonesDisconnect = "pause_on_headphones_disconnect"
+    const val fastForwardDuration = "fast_forward_duration"
+    const val fastRewindDuration = "fast_rewind_duration"
+    const val miniPlayerShowTrackControls = "mini_player_show_track_controls"
+    const val miniPlayerShowSeekControls = "mini_player_show_seek_controls"
+    const val miniPlayerTextMarquee = "mini_player_text_marquee"
+    const val nowPlayingControlsLayout = "now_playing_controls_layout"
+    const val nowPlayingLyricsLayout = "now_playing_lyrics_layout"
+    const val showNowPlayingAudioInformation = "show_now_playing_audio_information"
+    const val showNowPlayingSeekControls = "show_now_playing_seek_controls"
 }
 
 object SettingsDefaults {
@@ -260,30 +333,10 @@ object SettingsDefaults {
     const val miniPlayerShowTrackControls = true
     const val miniPlayerShowSeekControls = false
     const val miniPlayerTextMarquee = true
-}
-
-object SettingsKeys {
-    const val identifier = "musically_settings"
-    const val language = "language"
-    const val fontName = "font_name"
-    const val fontScale = "font_scale"
-    const val themeMode = "theme_mode"
-    const val useMaterialYou = "use_material_you"
-    const val primaryColorName = "primary_color_name"
-    const val homeTabs = "home_tabs"
-    const val forYouContents = "for_you_contents"
-    const val homePageBottomBarLabelVisibility = "home_page_bottom_bar_visibility"
-    const val fadePlayback = "fade_playback"
-    const val fadePlaybackDuration = "fade_playback_duration"
-    const val requireAudioFocus = "require_audio_focus"
-    const val ignoreAudioFocusLoss = "ignore_audio_focus_loss"
-    const val playOnHeadphonesConnect = "play_on_headphones_connect"
-    const val pauseOnHeadphonesDisconnect = "pause_on_headphones_disconnect"
-    const val fastForwardDuration = "fast_forward_duration"
-    const val fastRewindDuration = "fast_rewind_duration"
-    const val miniPlayerShowTrackControls = "mini_player_show_track_controls"
-    const val miniPlayerShowSeekControls = "mini_player_show_seek_controls"
-    const val miniPlayerTextMarquee = "mini_player_text_marquee"
+    val nowPlayingControlsLayout = NowPlayingControlsLayout.Default
+    val nowPlayingLyricsLayout = NowPlayingLyricsLayout.ReplaceArtwork
+    const val showNowPlayingAudioInformation = true
+    const val showNowPlayingSeekControls = false
 }
 
 private inline fun <reified T : Enum<T>> parseEnumValue( value: String ): T? =

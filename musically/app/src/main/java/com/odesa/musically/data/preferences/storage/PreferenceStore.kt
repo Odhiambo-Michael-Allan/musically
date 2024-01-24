@@ -43,6 +43,14 @@ interface PreferenceStore {
     fun setMiniPlayerShowSeekControls( showSeekControls: Boolean )
     fun getMiniPlayerTextMarquee(): Boolean
     fun setMiniPlayerTextMarquee( textMarquee: Boolean )
+    fun getNowPlayingControlsLayout(): NowPlayingControlsLayout
+    fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout )
+    fun getNowPlayingLyricsLayout(): NowPlayingLyricsLayout
+    fun setNowPlayingLyricsLayout( nowPlayingLyricsLayout: NowPlayingLyricsLayout )
+    fun getShowNowPlayingAudioInformation(): Boolean
+    fun setShowNowPlayingAudioInformation( showNowPlayingAudioInformation: Boolean )
+    fun getShowNowPlayingSeekControls(): Boolean
+    fun setShowNowPlayingSeekControls( showNowPlayingSeekControls: Boolean )
 
 
 }
@@ -69,4 +77,14 @@ enum class HomePageBottomBarLabelVisibility {
     ALWAYS_VISIBLE,
     VISIBLE_WHEN_ACTIVE,
     INVISIBLE
+}
+
+enum class NowPlayingControlsLayout {
+    Default,
+    Traditional
+}
+
+enum class NowPlayingLyricsLayout {
+    ReplaceArtwork,
+    SeparatePage
 }

@@ -1,7 +1,6 @@
 package com.odesa.musically.data
 
 import android.content.Context
-import com.odesa.musically.data.preferences.impl.PreferencesImpl
 import com.odesa.musically.data.preferences.storage.impl.PreferenceStoreImpl
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.data.settings.impl.SettingsRepositoryImpl
@@ -20,9 +19,7 @@ interface AppContainer {
  */
 class AppContainerImpl( private val context: Context ) : AppContainer {
 
-    private val _settingsRepository = SettingsRepositoryImpl(
-        PreferencesImpl( PreferenceStoreImpl( context ) )
-    )
+    private val _settingsRepository = SettingsRepositoryImpl( PreferenceStoreImpl( context ) )
 
     override val settingRepository: SettingsRepository
         get() = _settingsRepository

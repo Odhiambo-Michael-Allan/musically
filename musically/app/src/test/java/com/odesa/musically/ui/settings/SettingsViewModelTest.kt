@@ -4,6 +4,8 @@ import com.odesa.musically.MainCoroutineRule
 import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
+import com.odesa.musically.data.preferences.storage.NowPlayingControlsLayout
+import com.odesa.musically.data.preferences.storage.NowPlayingLyricsLayout
 import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
 import com.odesa.musically.data.settings.FakeSettingsRepository
 import com.odesa.musically.data.settings.SettingsRepository
@@ -282,5 +284,44 @@ class SettingsViewModelTest {
         assertTrue( settingsViewModel.uiState.value.miniPlayerTextMarquee )
     }
 
+    @Test
+    fun testNowPlayingControlsLayoutSettingChange() = runTest {
+        assertEquals( SettingsDefaults.nowPlayingControlsLayout,
+            settingsViewModel.uiState.value.nowPlayingControlsLayout )
+        NowPlayingControlsLayout.entries.forEach {
+            settingsRepository.setNowPlayingControlsLayout( it )
+            assertEquals( it, settingsViewModel.uiState.value.nowPlayingControlsLayout )
+        }
+    }
+
+    @Test
+    fun testNowPlayingLyricsLayoutSettingChange() = runTest {
+        assertEquals( SettingsDefaults.nowPlayingLyricsLayout,
+            settingsViewModel.uiState.value.nowPlayingLyricsLayout )
+        NowPlayingLyricsLayout.entries.forEach {
+            settingsRepository.setNowPlayingLyricsLayout( it )
+            assertEquals( it, settingsViewModel.uiState.value.nowPlayingLyricsLayout )
+        }
+    }
+
+    @Test
+    fun testShowNowPlayingAudioInformationSettingChange() = runTest {
+        assertEquals( SettingsDefaults.showNowPlayingAudioInformation,
+            settingsViewModel.uiState.value.showNowPlayingAudioInformation )
+        listOf( true, false ).forEach {
+            settingsRepository.setShowNowPlayingAudioInformation( it )
+            assertEquals( it, settingsViewModel.uiState.value.showNowPlayingAudioInformation )
+        }
+    }
+
+    @Test
+    fun testShowNowPlayingSeekControlsSettingChange() = runTest {
+        assertEquals( SettingsDefaults.showNowPlayingSeekControls,
+            settingsViewModel.uiState.value.showNowPlayingSeekControls )
+        listOf( true, false ).forEach {
+            settingsRepository.setShowNowPlayingSeekControls( it )
+            assertEquals( it, settingsViewModel.uiState.value.showNowPlayingSeekControls )
+        }
+    }
 
 }

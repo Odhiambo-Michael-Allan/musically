@@ -1,8 +1,11 @@
 package com.odesa.musically.data.settings
 
+import androidx.compose.ui.text.style.TextDirection
 import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
+import com.odesa.musically.data.preferences.storage.NowPlayingControlsLayout
+import com.odesa.musically.data.preferences.storage.NowPlayingLyricsLayout
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.ThemeMode
@@ -11,12 +14,13 @@ import kotlinx.coroutines.flow.StateFlow
 interface SettingsRepository {
     val language: StateFlow<Language>
     val font: StateFlow<MusicallyFont>
+    val textDirection: StateFlow<TextDirection>
     val fontScale: StateFlow<Float>
     val themeMode: StateFlow<ThemeMode>
     val useMaterialYou: StateFlow<Boolean>
     val primaryColorName: StateFlow<String>
     val homeTabs: StateFlow<Set<HomeTab>>
-    val forYouContent: StateFlow<Set<ForYou>>
+    val forYouContents: StateFlow<Set<ForYou>>
     val homePageBottomBarLabelVisibility: StateFlow<HomePageBottomBarLabelVisibility>
     val fadePlayback: StateFlow<Boolean>
     val fadePlaybackDuration: StateFlow<Float>
@@ -29,6 +33,10 @@ interface SettingsRepository {
     val miniPlayerShowTrackControls: StateFlow<Boolean>
     val miniPlayerShowSeekControls: StateFlow<Boolean>
     val miniPlayerTextMarquee: StateFlow<Boolean>
+    val nowPlayingControlsLayout: StateFlow<NowPlayingControlsLayout>
+    val nowPlayingLyricsLayout: StateFlow<NowPlayingLyricsLayout>
+    val showNowPlayingAudioInformation: StateFlow<Boolean>
+    val showNowPlayingSeekControls: StateFlow<Boolean>
 
     suspend fun setLanguage( localeCode: String )
     suspend fun setFont( fontName: String )
@@ -38,7 +46,7 @@ interface SettingsRepository {
     suspend fun setPrimaryColorName( primaryColorName: String )
     suspend fun setHomeTabs( homeTabs: Set<HomeTab> )
     suspend fun setForYouContents( forYouContents: Set<ForYou> )
-    suspend fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility )
+    suspend fun setHomePageBottomBarLabelVisibility( homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility )
     suspend fun setFadePlayback( fadePlayback: Boolean )
     suspend fun setFadePlaybackDuration( fadePlaybackDuration: Float )
     suspend fun setRequireAudioFocus( requireAudioFocus: Boolean )
@@ -50,4 +58,9 @@ interface SettingsRepository {
     suspend fun setMiniPlayerShowTrackControls( showTrackControls: Boolean )
     suspend fun setMiniPlayerShowSeekControls( showSeekControls: Boolean )
     suspend fun setMiniPlayerTextMarquee( textMarquee: Boolean )
+    suspend fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout )
+    suspend fun setNowPlayingLyricsLayout( nowPlayingLyricsLayout: NowPlayingLyricsLayout )
+    suspend fun setShowNowPlayingAudioInformation( showNowPlayingAudioInformation: Boolean )
+    suspend fun setShowNowPlayingSeekControls( showNowPlayingSeekControls: Boolean )
+
 }

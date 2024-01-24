@@ -1,8 +1,11 @@
 package com.odesa.musically.data.settings
 
+import androidx.compose.ui.text.style.TextDirection
 import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
+import com.odesa.musically.data.preferences.storage.NowPlayingControlsLayout
+import com.odesa.musically.data.preferences.storage.NowPlayingLyricsLayout
 import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Chinese
@@ -14,6 +17,7 @@ import com.odesa.musically.services.i18n.Spanish
 import com.odesa.musically.ui.theme.SupportedFonts
 import com.odesa.musically.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class FakeSettingsRepository : SettingsRepository {
@@ -23,6 +27,8 @@ class FakeSettingsRepository : SettingsRepository {
 
     private val _currentFont = MutableStateFlow( SupportedFonts.ProductSans )
     override val font = _currentFont.asStateFlow()
+    override val textDirection: StateFlow<TextDirection>
+        get() = TODO("Not yet implemented")
 
     private val _fontScale = MutableStateFlow( 1.0f )
     override val fontScale = _fontScale.asStateFlow()
@@ -40,9 +46,11 @@ class FakeSettingsRepository : SettingsRepository {
     override val homeTabs = _homeTabs.asStateFlow()
 
     private val _forYouContents = MutableStateFlow( SettingsDefaults.forYouContents )
-    override val forYouContent = _forYouContents.asStateFlow()
+    override val forYouContents = _forYouContents.asStateFlow()
 
-    private val _homePageBottomBarLabelVisibility = MutableStateFlow( SettingsDefaults.homePageBottomBarLabelVisibility )
+    private val _homePageBottomBarLabelVisibility = MutableStateFlow(
+        SettingsDefaults.homePageBottomBarLabelVisibility
+    )
     override val homePageBottomBarLabelVisibility = _homePageBottomBarLabelVisibility.asStateFlow()
 
     private val _fadePlayback = MutableStateFlow( SettingsDefaults.fadePlayback )
@@ -57,10 +65,14 @@ class FakeSettingsRepository : SettingsRepository {
     private val _ignoreAudioFocusLoss = MutableStateFlow( SettingsDefaults.ignoreAudioFocusLoss )
     override val ignoreAudioFocusLoss = _ignoreAudioFocusLoss.asStateFlow()
 
-    private val _playOnHeadphoneConnect = MutableStateFlow( SettingsDefaults.playOnHeadphonesConnect )
+    private val _playOnHeadphoneConnect = MutableStateFlow(
+        SettingsDefaults.playOnHeadphonesConnect
+    )
     override val playOnHeadphonesConnect = _playOnHeadphoneConnect.asStateFlow()
 
-    private val _pauseOnHeadphonesDisconnect = MutableStateFlow( SettingsDefaults.pauseOnHeadphonesDisconnect )
+    private val _pauseOnHeadphonesDisconnect = MutableStateFlow(
+        SettingsDefaults.pauseOnHeadphonesDisconnect
+    )
     override val pauseOnHeadphonesDisconnect = _pauseOnHeadphonesDisconnect.asStateFlow()
 
     private val _fastRewindDuration = MutableStateFlow( SettingsDefaults.fastRewindDuration )
@@ -69,14 +81,38 @@ class FakeSettingsRepository : SettingsRepository {
     private val _fastForwardDuration = MutableStateFlow( SettingsDefaults.fastForwardDuration )
     override val fastForwardDuration = _fastForwardDuration.asStateFlow()
 
-    private val _miniPlayerShowTrackControls = MutableStateFlow( SettingsDefaults.miniPlayerShowTrackControls )
+    private val _miniPlayerShowTrackControls = MutableStateFlow(
+        SettingsDefaults.miniPlayerShowTrackControls
+    )
     override val miniPlayerShowTrackControls = _miniPlayerShowTrackControls.asStateFlow()
 
-    private val _miniPlayerShowSeekControls = MutableStateFlow( SettingsDefaults.miniPlayerShowSeekControls )
+    private val _miniPlayerShowSeekControls = MutableStateFlow(
+        SettingsDefaults.miniPlayerShowSeekControls
+    )
     override val miniPlayerShowSeekControls = _miniPlayerShowSeekControls.asStateFlow()
 
     private val _miniPlayerTextMarquee = MutableStateFlow( SettingsDefaults.miniPlayerTextMarquee )
     override val miniPlayerTextMarquee = _miniPlayerTextMarquee.asStateFlow()
+
+    private val _nowPlayingControlsLayout = MutableStateFlow(
+        SettingsDefaults.nowPlayingControlsLayout
+    )
+    override val nowPlayingControlsLayout = _nowPlayingControlsLayout.asStateFlow()
+
+    private val _nowPlayingLyricsLayout = MutableStateFlow(
+        SettingsDefaults.nowPlayingLyricsLayout
+    )
+    override val nowPlayingLyricsLayout = _nowPlayingLyricsLayout.asStateFlow()
+
+    private val _showNowPlayingAudioInformation = MutableStateFlow(
+        SettingsDefaults.showNowPlayingAudioInformation
+    )
+    override val showNowPlayingAudioInformation = _showNowPlayingAudioInformation.asStateFlow()
+
+    private val _showNowPlayingSeekControls = MutableStateFlow(
+        SettingsDefaults.showNowPlayingSeekControls
+    )
+    override val showNowPlayingSeekControls = _showNowPlayingSeekControls.asStateFlow()
 
 
     override suspend fun setLanguage( localeCode: String ) {
@@ -128,7 +164,9 @@ class FakeSettingsRepository : SettingsRepository {
         _forYouContents.value = forYouContents
     }
 
-    override suspend fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility ) {
+    override suspend fun setHomePageBottomBarLabelVisibility(
+        value: HomePageBottomBarLabelVisibility
+    ) {
         _homePageBottomBarLabelVisibility.value = value
     }
 
@@ -174,5 +212,29 @@ class FakeSettingsRepository : SettingsRepository {
 
     override suspend fun setMiniPlayerTextMarquee( textMarquee: Boolean ) {
         _miniPlayerTextMarquee.value = textMarquee
+    }
+
+    override suspend fun setNowPlayingControlsLayout(
+        nowPlayingControlsLayout: NowPlayingControlsLayout
+    ) {
+        _nowPlayingControlsLayout.value = nowPlayingControlsLayout
+    }
+
+    override suspend fun setNowPlayingLyricsLayout(
+        nowPlayingLyricsLayout: NowPlayingLyricsLayout
+    ) {
+        _nowPlayingLyricsLayout.value = nowPlayingLyricsLayout
+    }
+
+    override suspend fun setShowNowPlayingAudioInformation(
+        showNowPlayingAudioInformation: Boolean
+    ) {
+        _showNowPlayingAudioInformation.value = showNowPlayingAudioInformation
+    }
+
+    override suspend fun setShowNowPlayingSeekControls(
+        showNowPlayingSeekControls: Boolean
+    ) {
+        _showNowPlayingSeekControls.value = showNowPlayingSeekControls
     }
 }

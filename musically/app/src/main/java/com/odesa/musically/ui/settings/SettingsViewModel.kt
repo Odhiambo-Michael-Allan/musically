@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
+import com.odesa.musically.data.preferences.storage.NowPlayingControlsLayout
+import com.odesa.musically.data.preferences.storage.NowPlayingLyricsLayout
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.settings.appearance.scalingPresets
@@ -26,7 +28,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
             useMaterialYou = settingsRepository.useMaterialYou.value,
             primaryColorName = settingsRepository.primaryColorName.value,
             homeTabs = settingsRepository.homeTabs.value,
-            forYouContent = settingsRepository.forYouContent.value,
+            forYouContent = settingsRepository.forYouContents.value,
             homePageBottomBarLabelVisibility = settingsRepository.homePageBottomBarLabelVisibility.value,
             fadePlayback = settingsRepository.fadePlayback.value,
             fadePlaybackDuration = settingsRepository.fadePlaybackDuration.value,
@@ -39,6 +41,11 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
             miniPlayerShowTrackControls = settingsRepository.miniPlayerShowTrackControls.value,
             miniPlayerShowSeekControls = settingsRepository.miniPlayerShowSeekControls.value,
             miniPlayerTextMarquee = settingsRepository.miniPlayerTextMarquee.value,
+            nowPlayingControlsLayout = settingsRepository.nowPlayingControlsLayout.value,
+            nowPlayingLyricsLayout = settingsRepository.nowPlayingLyricsLayout.value,
+            showNowPlayingAudioInformation = settingsRepository.showNowPlayingAudioInformation.value,
+            showNowPlayingSeekControls = settingsRepository.showNowPlayingSeekControls.value,
+
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -65,6 +72,10 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         viewModelScope.launch { observeMiniPlayerShowTrackControlsSetting() }
         viewModelScope.launch { observeMiniPlayerShowSeekControlsSetting() }
         viewModelScope.launch { observeMiniPlayerTextMarqueeSetting() }
+        viewModelScope.launch { observeNowPlayingControlsLayoutSetting() }
+        viewModelScope.launch { observeNowPlayingLyricsLayoutSetting() }
+        viewModelScope.launch { observeShowNowPlayingAudioInformationSetting() }
+        viewModelScope.launch { observeShowNowPlayingSeekControlsSetting() }
     }
 
     private suspend fun observeLanguageSetting() {
@@ -124,7 +135,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
     }
 
     private suspend fun observeForYouContentSetting() {
-        settingsRepository.forYouContent.collect {
+        settingsRepository.forYouContents.collect {
             _uiState.value = _uiState.value.copy(
                 forYouContent = it
             )
@@ -227,6 +238,38 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         }
     }
 
+    private suspend fun observeNowPlayingControlsLayoutSetting() {
+        settingsRepository.nowPlayingControlsLayout.collect {
+            _uiState.value = _uiState.value.copy(
+                nowPlayingControlsLayout = it
+            )
+        }
+    }
+
+    private suspend fun observeNowPlayingLyricsLayoutSetting() {
+        settingsRepository.nowPlayingLyricsLayout.collect {
+            _uiState.value = _uiState.value.copy(
+                nowPlayingLyricsLayout = it
+            )
+        }
+    }
+
+    private suspend fun observeShowNowPlayingAudioInformationSetting() {
+        settingsRepository.showNowPlayingAudioInformation.collect {
+            _uiState.value = _uiState.value.copy(
+                showNowPlayingAudioInformation = it
+            )
+        }
+    }
+
+    private suspend fun observeShowNowPlayingSeekControlsSetting() {
+        settingsRepository.showNowPlayingSeekControls.collect {
+            _uiState.value = _uiState.value.copy(
+                showNowPlayingSeekControls = it
+            )
+        }
+    }
+
     fun setLanguage( localeCode: String ) {
         viewModelScope.launch { settingsRepository.setLanguage( localeCode ) }
     }
@@ -312,6 +355,30 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         viewModelScope.launch { settingsRepository.setMiniPlayerTextMarquee( textMarquee ) }
     }
 
+    fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout ) {
+        viewModelScope.launch {
+            settingsRepository.setNowPlayingControlsLayout( nowPlayingControlsLayout )
+        }
+    }
+
+    fun setNowPlayingLyricsLayout( nowPlayingLyricsLayout: NowPlayingLyricsLayout ) {
+        viewModelScope.launch {
+            settingsRepository.setNowPlayingLyricsLayout( nowPlayingLyricsLayout )
+        }
+    }
+
+    fun setShowNowPlayingAudioInformation( showNowPlayingAudioInformation: Boolean ) {
+        viewModelScope.launch {
+            settingsRepository.setShowNowPlayingAudioInformation( showNowPlayingAudioInformation )
+        }
+    }
+
+    fun setShowNowPlayingSeekControls( showNowPlayingSeekControls: Boolean ) {
+        viewModelScope.launch {
+            settingsRepository.setShowNowPlayingSeekControls( showNowPlayingSeekControls )
+        }
+    }
+
 }
 
 @Suppress( "UNCHECKED_CAST" )
@@ -344,4 +411,8 @@ data class SettingsScreenUiState(
     val miniPlayerShowTrackControls: Boolean,
     val miniPlayerShowSeekControls: Boolean,
     val miniPlayerTextMarquee: Boolean,
+    val nowPlayingControlsLayout: NowPlayingControlsLayout,
+    val nowPlayingLyricsLayout: NowPlayingLyricsLayout,
+    val showNowPlayingAudioInformation: Boolean,
+    val showNowPlayingSeekControls: Boolean,
 )

@@ -25,6 +25,10 @@ class FakePreferencesStoreImpl : PreferenceStore {
     private var miniPlayerShowTrackControls: Boolean? = null
     private var miniPlayerShowSeekControls: Boolean? = null
     private var miniPlayerTextMarquee: Boolean? = null
+    private var nowPlayingControlsLayout: NowPlayingControlsLayout? = null
+    private var nowPlayingLyricsLayout: NowPlayingLyricsLayout? = null
+    private var showNowPlayingAudioInformation: Boolean? = null
+    private var showNowPlayingSeekControls: Boolean? = null
 
     override fun setLanguage( localeCode: String ) {
         language = localeCode
@@ -152,5 +156,33 @@ class FakePreferencesStoreImpl : PreferenceStore {
 
     override fun setMiniPlayerTextMarquee( textMarquee: Boolean ) {
         miniPlayerTextMarquee = textMarquee
+    }
+
+    override fun getNowPlayingControlsLayout() = nowPlayingControlsLayout
+        ?: SettingsDefaults.nowPlayingControlsLayout
+
+    override fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout ) {
+        this.nowPlayingControlsLayout = nowPlayingControlsLayout
+    }
+
+    override fun getNowPlayingLyricsLayout() = nowPlayingLyricsLayout
+        ?: SettingsDefaults.nowPlayingLyricsLayout
+
+    override fun setNowPlayingLyricsLayout( nowPlayingLyricsLayout: NowPlayingLyricsLayout ) {
+        this.nowPlayingLyricsLayout = nowPlayingLyricsLayout
+    }
+
+    override fun getShowNowPlayingAudioInformation() = showNowPlayingAudioInformation
+        ?: SettingsDefaults.showNowPlayingAudioInformation
+
+    override fun setShowNowPlayingAudioInformation( showNowPlayingAudioInformation: Boolean ) {
+        this.showNowPlayingAudioInformation = showNowPlayingAudioInformation
+    }
+
+    override fun getShowNowPlayingSeekControls() = showNowPlayingSeekControls
+        ?: SettingsDefaults.showNowPlayingSeekControls
+
+    override fun setShowNowPlayingSeekControls( showNowPlayingSeekControls: Boolean ) {
+        this.showNowPlayingSeekControls = showNowPlayingSeekControls
     }
 }

@@ -1,9 +1,12 @@
 package com.odesa.musically.data.settings.impl
 
-import com.odesa.musically.data.preferences.FakePreferences
+import com.odesa.musically.data.preferences.storage.FakePreferencesStoreImpl
 import com.odesa.musically.data.preferences.storage.ForYou
 import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.preferences.storage.HomeTab
+import com.odesa.musically.data.preferences.storage.NowPlayingControlsLayout
+import com.odesa.musically.data.preferences.storage.NowPlayingLyricsLayout
+import com.odesa.musically.data.preferences.storage.PreferenceStore
 import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.i18n.Belarusian
@@ -22,18 +25,19 @@ import com.odesa.musically.ui.theme.ThemeMode
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
 class SettingsRepositoryImplTest {
 
-    private lateinit var preferences: FakePreferences
+    private lateinit var preferenceStore: PreferenceStore
     private lateinit var settingsRepository: SettingsRepository
 
     @Before
     fun setup() {
-        preferences = FakePreferences()
-        settingsRepository = SettingsRepositoryImpl( preferences )
+        preferenceStore = FakePreferencesStoreImpl()
+        settingsRepository = SettingsRepositoryImpl( preferenceStore )
     }
 
     @Test
@@ -47,8 +51,9 @@ class SettingsRepositoryImplTest {
         changeLanguageTo( Spanish, "Configuración" )
     }
 
-    private fun changeLanguageTo(language: Language, testString: String ) {
-        preferences.setLanguage( language.locale )
+    private fun changeLanguageTo(language: Language, testString: String ) = runTest {
+        settingsRepository.setLanguage( language.locale )
+        assertEquals( language.locale, preferenceStore.getLanguage() )
         val currentLanguage = settingsRepository.language.value
         assertEquals( testString, currentLanguage.settings )
     }
@@ -59,8 +64,9 @@ class SettingsRepositoryImplTest {
         MusicallyTypography.all.values.forEach { changeFontTo( it ) }
     }
 
-    private fun changeFontTo( font: MusicallyFont ) {
-        preferences.setFont( font.name )
+    private fun changeFontTo( font: MusicallyFont ) = runTest {
+        settingsRepository.setFont( font.name )
+        assertEquals( font.name, preferenceStore.getFontName() )
         val currentFont = settingsRepository.font.value
         assertEquals( font.name, currentFont.name )
     }
@@ -72,8 +78,9 @@ class SettingsRepositoryImplTest {
         scalingPresets.forEach { changeFontScaleTo( it ) }
     }
 
-    private fun changeFontScaleTo( fontScale: Float ) {
-        preferences.setFontScale( fontScale )
+    private fun changeFontScaleTo( fontScale: Float ) = runTest {
+        settingsRepository.setFontScale( fontScale )
+        assertEquals( fontScale, preferenceStore.getFontScale() )
         assertEquals( fontScale, settingsRepository.fontScale.value )
     }
 
@@ -83,9 +90,10 @@ class SettingsRepositoryImplTest {
         ThemeMode.entries.forEach { changeThemeModeTo( it ) }
     }
 
-    private fun changeThemeModeTo( themeMode: ThemeMode ) {
-        preferences.setThemeMode( themeMode )
-        assertEquals( themeMode.name, settingsRepository.themeMode.value.name )
+    private fun changeThemeModeTo( themeMode: ThemeMode ) = runTest {
+        settingsRepository.setThemeMode( themeMode )
+        assertEquals( themeMode, preferenceStore.getThemeMode() )
+        assertEquals( themeMode, settingsRepository.themeMode.value )
     }
 
     @Test
@@ -94,8 +102,9 @@ class SettingsRepositoryImplTest {
         changeUseMaterialYouTo( true )
         changeUseMaterialYouTo( false )
     }
-    private fun changeUseMaterialYouTo( useMaterialYou: Boolean ) {
-        preferences.setUseMaterialYou( useMaterialYou )
+    private fun changeUseMaterialYouTo( useMaterialYou: Boolean ) = runTest {
+        settingsRepository.setUseMaterialYou( useMaterialYou )
+        assertEquals( useMaterialYou, preferenceStore.getUseMaterialYou() )
         assertEquals( useMaterialYou, settingsRepository.useMaterialYou.value )
     }
 
@@ -107,8 +116,9 @@ class SettingsRepositoryImplTest {
         }
     }
 
-    private fun changePrimaryColorTo( primaryColorName: String ) {
-        preferences.setPrimaryColorName( primaryColorName )
+    private fun changePrimaryColorTo( primaryColorName: String ) = runTest {
+        settingsRepository.setPrimaryColorName( primaryColorName )
+        assertEquals( primaryColorName, preferenceStore.getPrimaryColorName() )
         assertEquals( primaryColorName, settingsRepository.primaryColorName.value )
     }
 
@@ -123,22 +133,24 @@ class SettingsRepositoryImplTest {
             HomeTab.AlbumArtists, HomeTab.Genres ) )
     }
 
-    private fun changeHomeTabsTo( homeTabs: Set<HomeTab> ) {
-        preferences.setHomeTabs( homeTabs )
+    private fun changeHomeTabsTo( homeTabs: Set<HomeTab> ) = runTest {
+        settingsRepository.setHomeTabs( homeTabs )
+        assertEquals( homeTabs.size, preferenceStore.getHomeTabs().size )
         assertEquals( homeTabs.size, settingsRepository.homeTabs.value.size )
     }
 
     @Test
     fun testForYouContentsChange() {
-        assertEquals( 2, settingsRepository.forYouContent.value.size )
+        assertEquals( 2, settingsRepository.forYouContents.value.size )
         changeForYouContentsTo( setOf( ForYou.Albums ) )
         changeForYouContentsTo( setOf( ForYou.Albums, ForYou.Artists ) )
         changeForYouContentsTo( setOf( ForYou.Albums, ForYou.Artists, ForYou.AlbumArtists ) )
     }
 
-    private fun changeForYouContentsTo( forYouContents: Set<ForYou> ) {
-        preferences.setForYouContents( forYouContents )
-        assertEquals( forYouContents.size, settingsRepository.forYouContent.value.size )
+    private fun changeForYouContentsTo( forYouContents: Set<ForYou> ) = runTest {
+        settingsRepository.setForYouContents( forYouContents )
+        assertEquals( forYouContents.size, preferenceStore.getForYouContents().size )
+        assertEquals( forYouContents.size, settingsRepository.forYouContents.value.size )
     }
 
     @Test
@@ -150,111 +162,175 @@ class SettingsRepositoryImplTest {
         changeHomePageBottomBarLabelVisibilityTo( HomePageBottomBarLabelVisibility.INVISIBLE )
     }
 
-    private fun changeHomePageBottomBarLabelVisibilityTo( value: HomePageBottomBarLabelVisibility ) {
-        preferences.setHomePageBottomBarLabelVisibility( value )
+    private fun changeHomePageBottomBarLabelVisibilityTo(
+        value: HomePageBottomBarLabelVisibility
+    ) = runTest {
+        settingsRepository.setHomePageBottomBarLabelVisibility( value )
+        assertEquals( value, preferenceStore.getHomePageBottomBarLabelVisibility() )
         assertEquals( value, settingsRepository.homePageBottomBarLabelVisibility.value )
     }
 
     @Test
-    fun testFadePlaybackSettingChange() {
+    fun testFadePlaybackSettingChange() = runTest {
         assertFalse( settingsRepository.fadePlayback.value )
-        preferences.setFadePlayback( true )
+        settingsRepository.setFadePlayback( true )
+        assertTrue( preferenceStore.getFadePlayback() )
         assertTrue( settingsRepository.fadePlayback.value )
-        preferences.setFadePlayback( false )
+        settingsRepository.setFadePlayback( false )
+        assertFalse( preferenceStore.getFadePlayback() )
         assertFalse( settingsRepository.fadePlayback.value )
     }
 
     @Test
-    fun testFadePlaybackDurationChange() {
+    fun testFadePlaybackDurationChange() = runTest {
         assertEquals( SettingsDefaults.fadePlaybackDuration,
             settingsRepository.fadePlaybackDuration.value )
         for ( duration in 1..100 ) {
-            preferences.setFadePlaybackDuration( duration.toFloat() )
+            settingsRepository.setFadePlaybackDuration( duration.toFloat() )
+            assertEquals( duration.toFloat(), preferenceStore.getFadePlaybackDuration() )
             assertEquals( duration.toFloat(), settingsRepository.fadePlaybackDuration.value )
         }
     }
 
     @Test
-    fun testRequireAudioFocusSettingChange() {
+    fun testRequireAudioFocusSettingChange() = runTest {
         assertTrue( settingsRepository.requireAudioFocus.value )
-        preferences.setRequireAudioFocus( false )
+        settingsRepository.setRequireAudioFocus( false )
+        assertFalse( preferenceStore.getRequireAudioFocus() )
         assertFalse( settingsRepository.requireAudioFocus.value )
-        preferences.setRequireAudioFocus( true )
+        settingsRepository.setRequireAudioFocus( true )
+        assertTrue( preferenceStore.getRequireAudioFocus() )
         assertTrue( settingsRepository.requireAudioFocus.value )
     }
 
     @Test
-    fun testIgnoreAudioFocusLossSettingChange() {
+    fun testIgnoreAudioFocusLossSettingChange() = runTest {
         assertFalse( settingsRepository.ignoreAudioFocusLoss.value )
-        preferences.setIgnoreAudioFocusLoss( false )
+        settingsRepository.setIgnoreAudioFocusLoss( false )
+        assertFalse( preferenceStore.getIgnoreAudioFocusLoss() )
         assertFalse( settingsRepository.ignoreAudioFocusLoss.value )
-        preferences.setIgnoreAudioFocusLoss( true )
+        settingsRepository.setIgnoreAudioFocusLoss( true )
+        assertTrue( preferenceStore.getIgnoreAudioFocusLoss() )
         assertTrue( settingsRepository.ignoreAudioFocusLoss.value )
     }
 
     @Test
-    fun testPlayOnHeadphonesConnectSettingChange() {
+    fun testPlayOnHeadphonesConnectSettingChange() = runTest {
         assertFalse( settingsRepository.playOnHeadphonesConnect.value )
-        preferences.setPlayOnHeadphonesConnect( true )
+        settingsRepository.setPlayOnHeadphonesConnect( true )
+        assertTrue( preferenceStore.getPlayOnHeadphonesConnect() )
         assertTrue( settingsRepository.playOnHeadphonesConnect.value )
-        preferences.setPlayOnHeadphonesConnect( false )
+        settingsRepository.setPlayOnHeadphonesConnect( false )
+        assertFalse( preferenceStore.getPlayOnHeadphonesConnect() )
         assertFalse( settingsRepository.playOnHeadphonesConnect.value )
     }
 
     @Test
-    fun testPauseOnHeadphonesDisconnectSettingChange() {
+    fun testPauseOnHeadphonesDisconnectSettingChange() = runTest {
         assertTrue( settingsRepository.pauseOnHeadphonesDisconnect.value )
-        preferences.setPauseOnHeadphonesDisconnect( false )
+        settingsRepository.setPauseOnHeadphonesDisconnect( false )
+        assertFalse( preferenceStore.getPauseOnHeadphonesDisconnect() )
         assertFalse( settingsRepository.pauseOnHeadphonesDisconnect.value )
-        preferences.setPauseOnHeadphonesDisconnect( true )
+        settingsRepository.setPauseOnHeadphonesDisconnect( true )
+        assertTrue( preferenceStore.getPauseOnHeadphonesDisconnect() )
         assertTrue( settingsRepository.pauseOnHeadphonesDisconnect.value )
     }
 
     @Test
-    fun testFastRewindDurationSettingChange() {
+    fun testFastRewindDurationSettingChange() = runTest {
         assertEquals( SettingsDefaults.fastRewindDuration,
             settingsRepository.fastRewindDuration.value )
         for ( duration in 3..60 ) {
-            preferences.setFastRewindDuration( duration )
+            settingsRepository.setFastRewindDuration( duration )
+            assertEquals( duration, preferenceStore.getFastRewindDuration() )
             assertEquals( duration, settingsRepository.fastRewindDuration.value )
         }
     }
 
     @Test
-    fun testFastForwardDurationSettingChange() {
+    fun testFastForwardDurationSettingChange() = runTest {
         assertEquals( SettingsDefaults.fastForwardDuration,
             settingsRepository.fastForwardDuration.value )
         for ( duration in 3..60 ) {
-            preferences.setFastForwardDuration( duration )
+            settingsRepository.setFastForwardDuration( duration )
+            assertEquals( duration, preferenceStore.getFastForwardDuration() )
             assertEquals( duration, settingsRepository.fastForwardDuration.value )
         }
     }
 
     @Test
-    fun testMiniPlayerShowTrackControlsSettingChange() {
+    fun testMiniPlayerShowTrackControlsSettingChange() = runTest {
         assertTrue( settingsRepository.miniPlayerShowTrackControls.value )
-        preferences.setMiniPlayerShowTrackControls( false )
+        settingsRepository.setMiniPlayerShowTrackControls( false )
+        assertFalse( preferenceStore.getMiniPlayerShowTrackControls() )
         assertFalse( settingsRepository.miniPlayerShowTrackControls.value )
-        preferences.setMiniPlayerShowTrackControls( true )
+        settingsRepository.setMiniPlayerShowTrackControls( true )
+        assertTrue( preferenceStore.getMiniPlayerShowTrackControls() )
         assertTrue( settingsRepository.miniPlayerShowTrackControls.value )
     }
 
     @Test
-    fun testMiniPlayerShowSeekControlsSettingChange() {
+    fun testMiniPlayerShowSeekControlsSettingChange() = runTest {
         assertFalse( settingsRepository.miniPlayerShowSeekControls.value )
-        preferences.setMiniPlayerShowSeekControls( true )
+        settingsRepository.setMiniPlayerShowSeekControls( true )
+        assertTrue( preferenceStore.getMiniPlayerShowSeekControls() )
         assertTrue( settingsRepository.miniPlayerShowSeekControls.value )
-        preferences.setMiniPlayerShowSeekControls( false )
+        settingsRepository.setMiniPlayerShowSeekControls( false )
+        assertFalse( preferenceStore.getMiniPlayerShowSeekControls() )
         assertFalse( settingsRepository.miniPlayerShowSeekControls.value )
     }
 
     @Test
-    fun testMiniPlayerTextMarqueeSettingChange() {
+    fun testMiniPlayerTextMarqueeSettingChange() = runTest {
         assertTrue( settingsRepository.miniPlayerTextMarquee.value )
-        preferences.setMiniPlayerTextMarquee( false )
+        settingsRepository.setMiniPlayerTextMarquee( false )
+        assertFalse( preferenceStore.getMiniPlayerTextMarquee() )
         assertFalse( settingsRepository.miniPlayerTextMarquee.value )
-        preferences.setMiniPlayerTextMarquee( true )
+        settingsRepository.setMiniPlayerTextMarquee( true )
+        assertTrue( preferenceStore.getMiniPlayerTextMarquee() )
         assertTrue( settingsRepository.miniPlayerTextMarquee.value)
+    }
+
+    @Test
+    fun testNowPlayingControlsLayoutSettingChange() = runTest {
+        assertEquals( NowPlayingControlsLayout.Default,
+            settingsRepository.nowPlayingControlsLayout.value )
+        NowPlayingControlsLayout.entries.forEach {
+            settingsRepository.setNowPlayingControlsLayout( it )
+            assertEquals( it, preferenceStore.getNowPlayingControlsLayout() )
+            assertEquals( it, settingsRepository.nowPlayingControlsLayout.value )
+        }
+    }
+
+    @Test
+    fun testNowPlayingLyricsLayoutSettingChange() = runTest {
+        assertEquals( SettingsDefaults.nowPlayingLyricsLayout,
+            settingsRepository.nowPlayingLyricsLayout.value )
+        NowPlayingLyricsLayout.entries.forEach {
+            settingsRepository.setNowPlayingLyricsLayout( it )
+            assertEquals( it, preferenceStore.getNowPlayingLyricsLayout() )
+            assertEquals( it, settingsRepository.nowPlayingLyricsLayout.value )
+        }
+    }
+
+    @Test
+    fun testShowNowPlayingAudioInformationSettingChange() = runTest {
+        assertTrue( settingsRepository.showNowPlayingAudioInformation.value )
+        listOf( true, false ).forEach {
+            settingsRepository.setShowNowPlayingAudioInformation( it )
+            assertEquals( it, preferenceStore.getShowNowPlayingAudioInformation() )
+            assertEquals( it, settingsRepository.showNowPlayingAudioInformation.value )
+        }
+    }
+
+    @Test
+    fun testShowNowPlayingSeekControlsSettingChange() = runTest {
+        assertFalse( settingsRepository.showNowPlayingSeekControls.value )
+        listOf( true, false ).forEach {
+            settingsRepository.setShowNowPlayingSeekControls( it )
+            assertEquals( it, preferenceStore.getShowNowPlayingSeekControls() )
+            assertEquals( it, settingsRepository.showNowPlayingSeekControls.value )
+        }
     }
 
 }
