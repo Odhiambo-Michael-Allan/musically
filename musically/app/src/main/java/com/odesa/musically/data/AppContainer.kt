@@ -9,7 +9,7 @@ import com.odesa.musically.data.settings.impl.SettingsRepositoryImpl
  * Dependency Injection container at the application level
  */
 interface AppContainer {
-    val settingRepository: SettingsRepository
+    val settingsRepository: SettingsRepository
 }
 
 /**
@@ -17,11 +17,11 @@ interface AppContainer {
  * Variables are initialized lazily and the same instance is shared across the whole
  * app
  */
-class AppContainerImpl( private val context: Context ) : AppContainer {
+class AppContainerImpl( context: Context ) : AppContainer {
 
     private val _settingsRepository = SettingsRepositoryImpl( PreferenceStoreImpl( context ) )
 
-    override val settingRepository: SettingsRepository
+    override val settingsRepository: SettingsRepository
         get() = _settingsRepository
 
 }

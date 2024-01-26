@@ -17,7 +17,6 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.Density
 import androidx.core.view.WindowCompat
 import com.odesa.musically.services.i18n.Language
-import com.odesa.musically.ui.settings.SettingsScreenUiState
 
 const val contentScale = 1.0f
 
@@ -41,12 +40,17 @@ fun MusicallyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
-    uiState: SettingsScreenUiState,
+//    uiState: SettingsScreenUiState,
+    themeMode: ThemeMode,
+    primaryColorName: String,
+    fontName: String,
+    fontScale: Float,
+    useMaterialYou: Boolean,
     content: @Composable () -> Unit
 ) {
 
-    val colorSchemeMode = uiState.themeMode.toColorSchemeMode( isSystemInDarkTheme() )
-    val colorScheme = if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && uiState.useMaterialYou ) {
+    val colorSchemeMode = themeMode.toColorSchemeMode( isSystemInDarkTheme() )
+    val colorScheme = if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && useMaterialYou ) {
         val context = LocalContext.current
         when ( colorSchemeMode ) {
             ColorSchemeMode.LIGHT -> dynamicLightColorScheme( context )
@@ -56,7 +60,7 @@ fun MusicallyTheme(
             )
         }
     } else {
-        val primaryColor = ThemeColors.resolvePrimaryColorName( uiState.primaryColorName )
+        val primaryColor = ThemeColors.resolvePrimaryColorName( primaryColorName )
         when ( colorSchemeMode ) {
             ColorSchemeMode.LIGHT -> ThemeColorSchemes.createLightColorScheme( primaryColor )
             ColorSchemeMode.DARK -> ThemeColorSchemes.createDarkColorScheme( primaryColor )
@@ -75,7 +79,7 @@ fun MusicallyTheme(
     }
 
     val typography = MusicallyTypography.toTypography(
-        MusicallyTypography.resolveFont( uiState.font.name ),
+        MusicallyTypography.resolveFont( fontName ),
         TextDirection.Ltr
     )
 
@@ -86,7 +90,7 @@ fun MusicallyTheme(
             CompositionLocalProvider(
                 LocalDensity provides Density(
                     LocalDensity.current.density * contentScale,
-                    LocalDensity.current.fontScale * uiState.fontScale
+                    LocalDensity.current.fontScale * fontScale
 
                 )
             )

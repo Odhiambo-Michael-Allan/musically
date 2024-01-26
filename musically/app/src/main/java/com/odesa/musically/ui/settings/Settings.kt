@@ -28,6 +28,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -75,7 +77,89 @@ import com.odesa.musically.ui.theme.SupportedFonts
 import com.odesa.musically.ui.theme.ThemeMode
 
 @Composable
-fun SettingsScreen() {}
+fun SettingsScreen(
+    settingsViewModel: SettingsViewModel
+) {
+    val settingsScreenUiState by settingsViewModel.uiState.collectAsState()
+
+    SettingsScreenContent(
+        uiState = settingsScreenUiState,
+        onLanguageChange = {
+                newLanguage -> settingsViewModel.setLanguage( newLanguage.locale )
+        },
+        onFontChange = {
+                newFont -> settingsViewModel.setFont( newFont.name )
+        },
+        onFontScaleChange = {
+                newFontScale -> settingsViewModel.setFontScale( newFontScale )
+        },
+        onThemeChange = {
+                newTheme -> settingsViewModel.setThemeMode( newTheme )
+        },
+        onUseMaterialYouChange = {
+                useMaterialYou -> settingsViewModel.setUseMaterialYou( useMaterialYou )
+        },
+        onPrimaryColorChange = {
+                primaryColorName -> settingsViewModel.setPrimaryColorName( primaryColorName )
+        },
+        onHomeTabsChange = {
+                homeTabs -> settingsViewModel.setHomeTabs( homeTabs )
+        },
+        onForYouContentChange = {
+                forYouContent -> settingsViewModel.setForYouContent( forYouContent )
+        },
+        onHomePageBottomBarLabelVisibilityChange = {
+                value -> settingsViewModel.setHomePageBottomBarLabelVisibility( value )
+        },
+        onFadePlaybackChange = {
+                fadePlayback -> settingsViewModel.setFadePlayback( fadePlayback )
+        },
+        onFadePlaybackDurationChange = { fadePlaybackDuration ->
+            settingsViewModel.setFadePlaybackDuration( fadePlaybackDuration )
+        },
+        onRequireAudioFocusChange = { requireAudioFocusChange ->
+            settingsViewModel.setRequireAudioFocus( requireAudioFocusChange )
+        },
+        onIgnoreAudioFocusLossChange = { ignoreAudioFocusChange ->
+            settingsViewModel.setIgnoreAudioFocusLoss( ignoreAudioFocusChange )
+        },
+        onPlayOnHeadphonesConnectChange = { playOnHeadphonesChange ->
+            settingsViewModel.setPlayOnHeadphonesConnect( playOnHeadphonesChange )
+        },
+        onPauseOnHeadphonesDisconnectChange = { pauseOnHeadphonesDisconnect ->
+            settingsViewModel.setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect )
+        },
+        onFastRewindDurationChange = { fastRewindDuration ->
+            settingsViewModel.setFastRewindDuration( fastRewindDuration.toInt() )
+        },
+        onFastForwardDurationChange = { fastForwardDuration ->
+            settingsViewModel.setFastForwardDuration( fastForwardDuration.toInt() )
+        },
+        onMiniPlayerShowTrackControlsChange = { showTrackControls ->
+            settingsViewModel.setMiniPlayerShowTrackControls( showTrackControls )
+        },
+        onMiniPlayerShowSeekControlsChange = { showSeekControls ->
+            settingsViewModel.setMiniPlayerShowSeekControls( showSeekControls )
+        },
+        onMiniPlayerTextMarqueeChange = { textMarquee ->
+            settingsViewModel.setMiniPlayerTextMarquee( textMarquee )
+        },
+        onNowPlayingControlsLayoutChange = { nowPlayingControlsLayout ->
+            settingsViewModel.setNowPlayingControlsLayout( nowPlayingControlsLayout )
+        },
+        onNowPlayingLyricsLayoutChange = { nowPlayingLyricsLayout ->
+            settingsViewModel.setNowPlayingLyricsLayout( nowPlayingLyricsLayout )
+        },
+        onShowNowPlayingAudioInformationChange = { showNowPlayingAudioInformation ->
+            settingsViewModel.setShowNowPlayingAudioInformation(
+                showNowPlayingAudioInformation
+            )
+        },
+        onShowNowPlayingSeekControlsChange = { showNowPlayingSeekControls ->
+            settingsViewModel.setShowNowPlayingSeekControls( showNowPlayingSeekControls )
+        }
+    )
+}
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
@@ -356,7 +440,11 @@ fun SettingsScreenContentPreview() {
         showNowPlayingSeekControls = SettingsDefaults.showNowPlayingSeekControls,
     )
     MusicallyTheme(
-        uiState = uiState
+        themeMode = ThemeMode.LIGHT,
+        primaryColorName = SettingsDefaults.primaryColorName,
+        fontName = SettingsDefaults.font.name,
+        fontScale = SettingsDefaults.fontScale,
+        useMaterialYou = SettingsDefaults.useMaterialYou
     ) {
         SettingsScreenContent(
             uiState = uiState,

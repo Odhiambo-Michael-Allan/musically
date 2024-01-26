@@ -7,102 +7,73 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.odesa.musically.ui.settings.SettingsScreenContent
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.odesa.musically.data.settings.SettingsRepository
+import com.odesa.musically.ui.helpers.FadeTransition
+import com.odesa.musically.ui.helpers.Route
+import com.odesa.musically.ui.helpers.ScaleTransition
+import com.odesa.musically.ui.home.HomeScreen
+import com.odesa.musically.ui.settings.SettingsScreen
 import com.odesa.musically.ui.settings.SettingsViewModel
+import com.odesa.musically.ui.settings.SettingsViewModelFactory
 import com.odesa.musically.ui.theme.MusicallyTheme
 
 @Composable
 fun MusicallyApp(
-    settingsViewModel: SettingsViewModel
+    settingsRepository: SettingsRepository,
+    navController: NavHostController = rememberNavController()
 ) {
-
-    val settingsScreenUiState by settingsViewModel.uiState.collectAsState()
+    val themeMode by settingsRepository.themeMode.collectAsState()
+    val primaryColorName by settingsRepository.primaryColorName.collectAsState()
+    val font by settingsRepository.font.collectAsState()
+    val fontScale by settingsRepository.fontScale.collectAsState()
+    val useMaterialYou by settingsRepository.useMaterialYou.collectAsState()
 
     MusicallyTheme(
-        uiState = settingsScreenUiState
+        themeMode = themeMode,
+        primaryColorName = primaryColorName,
+        fontName = font.name,
+        fontScale = fontScale,
+        useMaterialYou = useMaterialYou
     ) {
         // A surface container using the 'background' color from the theme
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            SettingsScreenContent(
-                uiState = settingsScreenUiState,
-                onLanguageChange = {
-                    newLanguage -> settingsViewModel.setLanguage( newLanguage.locale )
-                },
-                onFontChange = {
-                    newFont -> settingsViewModel.setFont( newFont.name )
-                },
-                onFontScaleChange = {
-                    newFontScale -> settingsViewModel.setFontScale( newFontScale )
-                },
-                onThemeChange = {
-                    newTheme -> settingsViewModel.setThemeMode( newTheme )
-                },
-                onUseMaterialYouChange = {
-                    useMaterialYou -> settingsViewModel.setUseMaterialYou( useMaterialYou )
-                },
-                onPrimaryColorChange = {
-                    primaryColorName -> settingsViewModel.setPrimaryColorName( primaryColorName )
-                },
-                onHomeTabsChange = {
-                    homeTabs -> settingsViewModel.setHomeTabs( homeTabs )
-                },
-                onForYouContentChange = {
-                    forYouContent -> settingsViewModel.setForYouContent( forYouContent )
-                },
-                onHomePageBottomBarLabelVisibilityChange = {
-                    value -> settingsViewModel.setHomePageBottomBarLabelVisibility( value )
-                },
-                onFadePlaybackChange = {
-                    fadePlayback -> settingsViewModel.setFadePlayback( fadePlayback )
-                },
-                onFadePlaybackDurationChange = { fadePlaybackDuration ->
-                    settingsViewModel.setFadePlaybackDuration( fadePlaybackDuration )
-                },
-                onRequireAudioFocusChange = { requireAudioFocusChange ->
-                    settingsViewModel.setRequireAudioFocus( requireAudioFocusChange )
-                },
-                onIgnoreAudioFocusLossChange = { ignoreAudioFocusChange ->
-                    settingsViewModel.setIgnoreAudioFocusLoss( ignoreAudioFocusChange )
-                },
-                onPlayOnHeadphonesConnectChange = { playOnHeadphonesChange ->
-                    settingsViewModel.setPlayOnHeadphonesConnect( playOnHeadphonesChange )
-                },
-                onPauseOnHeadphonesDisconnectChange = { pauseOnHeadphonesDisconnect ->
-                    settingsViewModel.setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect )
-                },
-                onFastRewindDurationChange = { fastRewindDuration ->
-                    settingsViewModel.setFastRewindDuration( fastRewindDuration.toInt() )
-                },
-                onFastForwardDurationChange = { fastForwardDuration ->
-                    settingsViewModel.setFastForwardDuration( fastForwardDuration.toInt() )
-                },
-                onMiniPlayerShowTrackControlsChange = { showTrackControls ->
-                    settingsViewModel.setMiniPlayerShowTrackControls( showTrackControls )
-                },
-                onMiniPlayerShowSeekControlsChange = { showSeekControls ->
-                    settingsViewModel.setMiniPlayerShowSeekControls( showSeekControls )
-                },
-                onMiniPlayerTextMarqueeChange = { textMarquee ->
-                    settingsViewModel.setMiniPlayerTextMarquee( textMarquee )
-                },
-                onNowPlayingControlsLayoutChange = { nowPlayingControlsLayout ->
-                    settingsViewModel.setNowPlayingControlsLayout( nowPlayingControlsLayout )
-                },
-                onNowPlayingLyricsLayoutChange = { nowPlayingLyricsLayout ->
-                    settingsViewModel.setNowPlayingLyricsLayout( nowPlayingLyricsLayout )
-                },
-                onShowNowPlayingAudioInformationChange = { showNowPlayingAudioInformation ->
-                    settingsViewModel.setShowNowPlayingAudioInformation(
-                        showNowPlayingAudioInformation
+            NavHost(
+                navController = navController,
+                startDestination = Route.Home.name
+            ) {
+                composable(
+                    Route.Home.name,
+                    enterTransition = { FadeTransition.enterTransition() }
+                ) {
+                    HomeScreen(
+                        onSettingsClicked = {
+                            navController.navigate( Route.Settings.name )
+                        }
                     )
-                },
-                onShowNowPlayingSeekControlsChange = { showNowPlayingSeekControls ->
-                    settingsViewModel.setShowNowPlayingSeekControls( showNowPlayingSeekControls )
                 }
-            )
+                composable(
+                    Route.Settings.name,
+                    enterTransition= { ScaleTransition.scaleDown.enterTransition() },
+                    exitTransition = { ScaleTransition.scaleUp.exitTransition() }
+                ) {
+                    val settingsViewModel: SettingsViewModel = viewModel(
+                        factory = SettingsViewModelFactory(
+                            settingsRepository
+                        )
+                    )
+                    SettingsScreen(
+                        settingsViewModel = settingsViewModel
+                    )
+                }
+            }
         }
     }
 }
