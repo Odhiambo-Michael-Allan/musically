@@ -2,10 +2,19 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="SongsScreenContentPreview">
+      <entry key="MusicallyNavHostKtTest">
+        <State />
+      </entry>
+      <entry key="Tests in 'com.odesa.musically'">
         <State />
       </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="testNavigateToAlbumsScreen()">
+        <State />
+      </entry>
+      <entry key="testNavigateToArtistsScreen()">
         <State />
       </entry>
     </value>

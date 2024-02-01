@@ -1,4 +1,4 @@
-package com.odesa.musically.ui.helpers
+package com.odesa.musically.ui.navigation
 
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.FastOutSlowInEasing

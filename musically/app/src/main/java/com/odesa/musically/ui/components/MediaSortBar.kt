@@ -81,6 +81,7 @@ fun <T : Enum<T>> MediaSortBar(
                     onClick = { showDropdownMenu = !showDropdownMenu }
                 ) {
                     Text(
+                        style = MaterialTheme.typography.bodySmall,
                         text = sortTypes[ sortType ]!!,
                     )
                 }

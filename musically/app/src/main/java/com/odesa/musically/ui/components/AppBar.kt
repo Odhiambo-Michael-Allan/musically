@@ -29,6 +29,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,6 +54,10 @@ fun TopAppBar(
     var showOptionsDropdownMenu by remember { mutableStateOf( false ) }
     
     CenterAlignedTopAppBar(
+        modifier = Modifier
+            .clearAndSetSemantics {
+                contentDescription = "top-app-bar"
+            },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color.Transparent
         ),
@@ -182,8 +188,8 @@ fun TopAppBarMinimalTitle(
 ) {
     Box(
         modifier = modifier
-            .runFunctionIfTrueElseReturnThisObject( fillMaxWidth ) { fillMaxWidth() }
-            .padding( 8.dp ),
+            .runFunctionIfTrueElseReturnThisObject(fillMaxWidth) { fillMaxWidth() }
+            .padding(8.dp),
         contentAlignment = Alignment.Center
     ) {
         ProvideTextStyle(

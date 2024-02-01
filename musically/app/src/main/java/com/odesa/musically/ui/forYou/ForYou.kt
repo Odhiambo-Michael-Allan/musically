@@ -37,7 +37,7 @@ fun ForYouScreenContent(
     ){
         Box(
             modifier = Modifier
-                .padding(it)
+                .padding( it )
                 .fillMaxSize(),
         ) {
             Text( text = "Coming Soon!!" )
