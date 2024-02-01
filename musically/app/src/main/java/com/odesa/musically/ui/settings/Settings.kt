@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,40 +14,32 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.East
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.odesa.musically.data.preferences.storage.ForYou
-import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
-import com.odesa.musically.data.preferences.storage.HomeTab
-import com.odesa.musically.data.preferences.storage.NowPlayingControlsLayout
-import com.odesa.musically.data.preferences.storage.NowPlayingLyricsLayout
-import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
+import com.odesa.musically.data.storage.preferences.ForYou
+import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
+import com.odesa.musically.data.storage.preferences.HomeTab
+import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
+import com.odesa.musically.data.storage.preferences.NowPlayingLyricsLayout
+import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.Language
-import com.odesa.musically.ui.components.AdaptiveSnackBar
-import com.odesa.musically.ui.components.TopAppBarMinimalTitle
+import com.odesa.musically.ui.components.MinimalAppBar
 import com.odesa.musically.ui.settings.Interface.BottomBarLabelVisibility
 import com.odesa.musically.ui.settings.Interface.ForYou
 import com.odesa.musically.ui.settings.Interface.HomeTabs
@@ -78,12 +71,14 @@ import com.odesa.musically.ui.theme.ThemeMode
 
 @Composable
 fun SettingsScreen(
-    settingsViewModel: SettingsViewModel
+    settingsViewModel: SettingsViewModel,
+    onBackPressed: () -> Unit
 ) {
     val settingsScreenUiState by settingsViewModel.uiState.collectAsState()
 
     SettingsScreenContent(
         uiState = settingsScreenUiState,
+        onBackPressed = onBackPressed,
         onLanguageChange = {
                 newLanguage -> settingsViewModel.setLanguage( newLanguage.locale )
         },
@@ -165,6 +160,7 @@ fun SettingsScreen(
 @Composable
 fun SettingsScreenContent(
     uiState: SettingsScreenUiState,
+    onBackPressed: () -> Unit,
     onLanguageChange: ( Language ) -> Unit,
     onFontChange: ( MusicallyFont ) -> Unit,
     onFontScaleChange: ( String ) -> Unit,
@@ -173,7 +169,7 @@ fun SettingsScreenContent(
     onPrimaryColorChange: ( String ) -> Unit,
     onHomeTabsChange: ( Set<HomeTab> ) -> Unit,
     onForYouContentChange: ( Set<ForYou> ) -> Unit,
-    onHomePageBottomBarLabelVisibilityChange: ( HomePageBottomBarLabelVisibility ) -> Unit,
+    onHomePageBottomBarLabelVisibilityChange: (HomePageBottomBarLabelVisibility) -> Unit,
     onFadePlaybackChange: ( Boolean ) -> Unit,
     onFadePlaybackDurationChange: ( Float ) -> Unit,
     onRequireAudioFocusChange: ( Boolean ) -> Unit,
@@ -185,226 +181,200 @@ fun SettingsScreenContent(
     onMiniPlayerShowTrackControlsChange: ( Boolean ) -> Unit,
     onMiniPlayerShowSeekControlsChange: ( Boolean ) -> Unit,
     onMiniPlayerTextMarqueeChange: ( Boolean ) -> Unit,
-    onNowPlayingControlsLayoutChange: ( NowPlayingControlsLayout ) -> Unit,
-    onNowPlayingLyricsLayoutChange: ( NowPlayingLyricsLayout ) -> Unit,
+    onNowPlayingControlsLayoutChange: (NowPlayingControlsLayout) -> Unit,
+    onNowPlayingLyricsLayoutChange: (NowPlayingLyricsLayout) -> Unit,
     onShowNowPlayingAudioInformationChange: ( Boolean ) -> Unit,
     onShowNowPlayingSeekControlsChange: ( Boolean ) -> Unit,
 
-) {
+    ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        snackbarHost = {
-            SnackbarHost( snackBarHostState ) {
-                AdaptiveSnackBar( snackBarData = it )
-            }
-        },
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    TopAppBarMinimalTitle {
-                        Text( text = uiState.language.settings )
-                    }
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Transparent
-                ),
-                navigationIcon = {
-                    IconButton(
-                        onClick = { /*TODO*/ }
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        MinimalAppBar(
+            modifier = Modifier.fillMaxWidth(),
+            onNavigationIconClicked = onBackPressed,
+            title = uiState.language.settings
+        )
+        LazyColumn(
+            modifier = Modifier.weight( 1f )
+        ) {
+            item {
+                val contentColor = MaterialTheme.colorScheme.onPrimary
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.primary)
+                        .clickable { }
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(24.dp, 8.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = null
+                            imageVector = Icons.Filled.Favorite,
+                            contentDescription = null,
+                            tint = contentColor,
+                            modifier = Modifier.size( 12.dp )
+                        )
+                        Spacer( modifier = Modifier.width( 4.dp ) )
+                        Text(
+                            text = uiState.language.considerContributing,
+                            style = MaterialTheme.typography.labelLarge.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = contentColor
+                            )
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .padding(8.dp, 0.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.East,
+                            contentDescription = null,
+                            tint = contentColor,
+                            modifier = Modifier.size( 20.dp )
                         )
                     }
                 }
-            )
-        }
-    ) { contentPadding ->
-        Box(
-            modifier = Modifier
-                .padding(contentPadding)
-                .fillMaxSize()
-        ) {
-            LazyColumn {
-                item {
-                    val contentColor = MaterialTheme.colorScheme.onPrimary
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.primary)
-                            .clickable { }
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(24.dp, 8.dp),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Favorite,
-                                contentDescription = null,
-                                tint = contentColor,
-                                modifier = Modifier.size( 12.dp )
-                            )
-                            Spacer( modifier = Modifier.width( 4.dp ) )
-                            Text(
-                                text = uiState.language.considerContributing,
-                                style = MaterialTheme.typography.labelLarge.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    color = contentColor
-                                )
-                            )
-                        }
-                        Box(
-                            modifier = Modifier
-                                .align(Alignment.CenterEnd)
-                                .padding(8.dp, 0.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.East,
-                                contentDescription = null,
-                                tint = contentColor,
-                                modifier = Modifier.size( 20.dp )
-                            )
-                        }
-                    }
-                    SettingsSideHeading( text = uiState.language.appearance )
-                    Language(
-                        language = uiState.language,
-                        onLanguageChange = onLanguageChange
-                    )
-                    Font(
-                        font = uiState.font,
-                        language = uiState.language,
-                        onFontChange = onFontChange
-                    )
-                    FontScale(
-                        language = uiState.language,
-                        fontScale = uiState.fontScale,
-                        onFontScaleChange = onFontScaleChange
-                    )
-                    Theme(
-                        language = uiState.language,
-                        themeMode = uiState.themeMode,
-                        onThemeChange = onThemeChange
-                    )
-                    MaterialYou(
-                        language = uiState.language,
-                        useMaterialYou = uiState.useMaterialYou,
-                        onUseMaterialYouChange = onUseMaterialYouChange
-                    )
-                    PrimaryColor(
-                        primaryColor = uiState.primaryColorName,
-                        language = uiState.language,
-                        onPrimaryColorChange = onPrimaryColorChange,
-                        useMaterialYou = uiState.useMaterialYou
-                    )
-                    Divider( thickness = 0.5.dp )
-                    SettingsSideHeading( text = uiState.language.Interface )
-                    HomeTabs(
-                        language = uiState.language,
-                        homeTabs = uiState.homeTabs,
-                        onHomeTabsChange = onHomeTabsChange
-                    )
-                    ForYou(
-                        language = uiState.language,
-                        forYouContent = uiState.forYouContent,
-                        onForYouContentChange = onForYouContentChange
-                    )
-                    BottomBarLabelVisibility(
-                        value = uiState.homePageBottomBarLabelVisibility,
-                        language = uiState.language,
-                        onValueChange = onHomePageBottomBarLabelVisibilityChange
-                    )
-                    Divider( thickness = 0.5.dp )
-                    SettingsSideHeading( text = uiState.language.player )
-                    FadePlayback(
-                        language = uiState.language,
-                        fadePlayback = uiState.fadePlayback,
-                        onFadePlaybackChange = onFadePlaybackChange
-                    )
-                    FadePlaybackDuration(
-                        language = uiState.language,
-                        value = uiState.fadePlaybackDuration,
-                        onFadePlaybackDurationChange = onFadePlaybackDurationChange
-                    )
-                    RequireAudioFocus(
-                        language = uiState.language,
-                        requireAudioFocus = uiState.requireAudioFocus,
-                        onRequireAudioFocusChange = onRequireAudioFocusChange
-                    )
-                    IgnoreAudioFocusLoss(
-                        language = uiState.language,
-                        ignoreAudioFocusLoss = uiState.ignoreAudioFocusLoss,
-                        onIgnoreAudioFocusLossChange = onIgnoreAudioFocusLossChange
-                    )
-                    PlayOnHeadphonesConnect(
-                        language = uiState.language,
-                        playOnHeadphonesConnect = uiState.playOnHeadphonesConnect,
-                        onPlayOnHeadphonesConnectChange = onPlayOnHeadphonesConnectChange
-                    )
-                    PauseOnHeadphonesDisconnect(
-                        language = uiState.language,
-                        pauseOnHeadphonesDisconnect = uiState.pauseOnHeadphonesDisconnect,
-                        onPauseOnHeadphonesDisconnectChange = onPauseOnHeadphonesDisconnectChange
-                    )
-                    FastRewindDuration(
-                        language = uiState.language,
-                        value = uiState.fastRewindDuration.toFloat(),
-                        onFastRewindDurationChange = onFastRewindDurationChange
-                    )
-                    FastForwardDuration(
-                        language = uiState.language,
-                        value = uiState.fastForwardDuration.toFloat(),
-                        onFastForwardDurationChange = onFastForwardDurationChange
-                    )
-                    Divider( thickness = 0.5.dp )
-                    SettingsSideHeading( text = uiState.language.miniPlayer )
-                    ShowTrackControls(
-                        value = uiState.miniPlayerShowTrackControls,
-                        language = uiState.language,
-                        onValueChange = onMiniPlayerShowTrackControlsChange
-                    )
-                    ShowSeekControls(
-                        language = uiState.language,
-                        value = uiState.miniPlayerShowSeekControls,
-                        onValueChange = onMiniPlayerShowSeekControlsChange
-                    )
-                    TextMarquee(
-                        language = uiState.language,
-                        value = uiState.miniPlayerTextMarquee,
-                        onValueChange = onMiniPlayerTextMarqueeChange
-                    )
-                    Divider( thickness = 0.5.dp )
-                    SettingsSideHeading( text = uiState.language.nowPlaying )
-                    ControlsLayout(
-                        nowPlayingControlsLayout = uiState.nowPlayingControlsLayout,
-                        language = uiState.language,
-                        onNowPlayingControlsLayoutChange = onNowPlayingControlsLayoutChange
-                    )
-                    LyricsLayout(
-                        nowPlayingLyricsLayout = uiState.nowPlayingLyricsLayout,
-                        language = uiState.language,
-                        onNowPlayingLyricsLayoutChange = onNowPlayingLyricsLayoutChange
-                    )
-                    ShowAudioInformation(
-                        language = uiState.language,
-                        value = uiState.showNowPlayingAudioInformation,
-                        onValueChange = onShowNowPlayingAudioInformationChange
-                    )
-                    ShowSeekControls(
-                        language = uiState.language,
-                        value = uiState.showNowPlayingSeekControls,
-                        onValueChange = onShowNowPlayingSeekControlsChange
-                    )
-                    Divider( thickness = 0.5.dp )
-                    SettingsSideHeading( text = uiState.language.groove )
-                }
+                SettingsSideHeading( text = uiState.language.appearance )
+                Language(
+                    language = uiState.language,
+                    onLanguageChange = onLanguageChange
+                )
+                Font(
+                    font = uiState.font,
+                    language = uiState.language,
+                    onFontChange = onFontChange
+                )
+                FontScale(
+                    language = uiState.language,
+                    fontScale = uiState.fontScale,
+                    onFontScaleChange = onFontScaleChange
+                )
+                Theme(
+                    language = uiState.language,
+                    themeMode = uiState.themeMode,
+                    onThemeChange = onThemeChange
+                )
+                MaterialYou(
+                    language = uiState.language,
+                    useMaterialYou = uiState.useMaterialYou,
+                    onUseMaterialYouChange = onUseMaterialYouChange
+                )
+                PrimaryColor(
+                    primaryColor = uiState.primaryColorName,
+                    language = uiState.language,
+                    onPrimaryColorChange = onPrimaryColorChange,
+                    useMaterialYou = uiState.useMaterialYou
+                )
+                Divider( thickness = 0.5.dp )
+                SettingsSideHeading( text = uiState.language.Interface )
+                HomeTabs(
+                    language = uiState.language,
+                    homeTabs = uiState.homeTabs,
+                    onHomeTabsChange = onHomeTabsChange
+                )
+                ForYou(
+                    language = uiState.language,
+                    forYouContent = uiState.forYouContent,
+                    onForYouContentChange = onForYouContentChange
+                )
+                BottomBarLabelVisibility(
+                    value = uiState.homePageBottomBarLabelVisibility,
+                    language = uiState.language,
+                    onValueChange = onHomePageBottomBarLabelVisibilityChange
+                )
+                Divider( thickness = 0.5.dp )
+                SettingsSideHeading( text = uiState.language.player )
+                FadePlayback(
+                    language = uiState.language,
+                    fadePlayback = uiState.fadePlayback,
+                    onFadePlaybackChange = onFadePlaybackChange
+                )
+                FadePlaybackDuration(
+                    language = uiState.language,
+                    value = uiState.fadePlaybackDuration,
+                    onFadePlaybackDurationChange = onFadePlaybackDurationChange
+                )
+                RequireAudioFocus(
+                    language = uiState.language,
+                    requireAudioFocus = uiState.requireAudioFocus,
+                    onRequireAudioFocusChange = onRequireAudioFocusChange
+                )
+                IgnoreAudioFocusLoss(
+                    language = uiState.language,
+                    ignoreAudioFocusLoss = uiState.ignoreAudioFocusLoss,
+                    onIgnoreAudioFocusLossChange = onIgnoreAudioFocusLossChange
+                )
+                PlayOnHeadphonesConnect(
+                    language = uiState.language,
+                    playOnHeadphonesConnect = uiState.playOnHeadphonesConnect,
+                    onPlayOnHeadphonesConnectChange = onPlayOnHeadphonesConnectChange
+                )
+                PauseOnHeadphonesDisconnect(
+                    language = uiState.language,
+                    pauseOnHeadphonesDisconnect = uiState.pauseOnHeadphonesDisconnect,
+                    onPauseOnHeadphonesDisconnectChange = onPauseOnHeadphonesDisconnectChange
+                )
+                FastRewindDuration(
+                    language = uiState.language,
+                    value = uiState.fastRewindDuration.toFloat(),
+                    onFastRewindDurationChange = onFastRewindDurationChange
+                )
+                FastForwardDuration(
+                    language = uiState.language,
+                    value = uiState.fastForwardDuration.toFloat(),
+                    onFastForwardDurationChange = onFastForwardDurationChange
+                )
+                Divider( thickness = 0.5.dp )
+                SettingsSideHeading( text = uiState.language.miniPlayer )
+                ShowTrackControls(
+                    value = uiState.miniPlayerShowTrackControls,
+                    language = uiState.language,
+                    onValueChange = onMiniPlayerShowTrackControlsChange
+                )
+                ShowSeekControls(
+                    language = uiState.language,
+                    value = uiState.miniPlayerShowSeekControls,
+                    onValueChange = onMiniPlayerShowSeekControlsChange
+                )
+                TextMarquee(
+                    language = uiState.language,
+                    value = uiState.miniPlayerTextMarquee,
+                    onValueChange = onMiniPlayerTextMarqueeChange
+                )
+                Divider( thickness = 0.5.dp )
+                SettingsSideHeading( text = uiState.language.nowPlaying )
+                ControlsLayout(
+                    nowPlayingControlsLayout = uiState.nowPlayingControlsLayout,
+                    language = uiState.language,
+                    onNowPlayingControlsLayoutChange = onNowPlayingControlsLayoutChange
+                )
+                LyricsLayout(
+                    nowPlayingLyricsLayout = uiState.nowPlayingLyricsLayout,
+                    language = uiState.language,
+                    onNowPlayingLyricsLayoutChange = onNowPlayingLyricsLayoutChange
+                )
+                ShowAudioInformation(
+                    language = uiState.language,
+                    value = uiState.showNowPlayingAudioInformation,
+                    onValueChange = onShowNowPlayingAudioInformationChange
+                )
+                ShowSeekControls(
+                    language = uiState.language,
+                    value = uiState.showNowPlayingSeekControls,
+                    onValueChange = onShowNowPlayingSeekControlsChange
+                )
+                Divider( thickness = 0.5.dp )
+                SettingsSideHeading( text = uiState.language.groove )
             }
         }
     }
@@ -448,6 +418,7 @@ fun SettingsScreenContentPreview() {
     ) {
         SettingsScreenContent(
             uiState = uiState,
+            onBackPressed = {},
             onLanguageChange = {},
             onFontChange = {},
             onFontScaleChange = {},

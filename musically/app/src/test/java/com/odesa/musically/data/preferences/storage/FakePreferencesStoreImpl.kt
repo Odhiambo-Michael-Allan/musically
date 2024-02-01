@@ -1,6 +1,13 @@
 package com.odesa.musically.data.preferences.storage
 
-import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
+import com.odesa.musically.data.songs.impl.SortSongsBy
+import com.odesa.musically.data.storage.preferences.ForYou
+import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
+import com.odesa.musically.data.storage.preferences.HomeTab
+import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
+import com.odesa.musically.data.storage.preferences.NowPlayingLyricsLayout
+import com.odesa.musically.data.storage.preferences.PreferenceStore
+import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.ui.theme.ThemeMode
 
 class FakePreferencesStoreImpl : PreferenceStore {
@@ -29,6 +36,8 @@ class FakePreferencesStoreImpl : PreferenceStore {
     private var nowPlayingLyricsLayout: NowPlayingLyricsLayout? = null
     private var showNowPlayingAudioInformation: Boolean? = null
     private var showNowPlayingSeekControls: Boolean? = null
+    private var sortSongsBy: SortSongsBy? = null
+    private var sortSongsInReverse: Boolean? = null
 
     override fun setLanguage( localeCode: String ) {
         language = localeCode
@@ -80,7 +89,7 @@ class FakePreferencesStoreImpl : PreferenceStore {
     override fun getHomePageBottomBarLabelVisibility() = homePageBottomBarLabelVisibility
         ?: SettingsDefaults.homePageBottomBarLabelVisibility
 
-    override fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility ) {
+    override fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility) {
         homePageBottomBarLabelVisibility = value
     }
 
@@ -161,14 +170,14 @@ class FakePreferencesStoreImpl : PreferenceStore {
     override fun getNowPlayingControlsLayout() = nowPlayingControlsLayout
         ?: SettingsDefaults.nowPlayingControlsLayout
 
-    override fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout ) {
+    override fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout) {
         this.nowPlayingControlsLayout = nowPlayingControlsLayout
     }
 
     override fun getNowPlayingLyricsLayout() = nowPlayingLyricsLayout
         ?: SettingsDefaults.nowPlayingLyricsLayout
 
-    override fun setNowPlayingLyricsLayout( nowPlayingLyricsLayout: NowPlayingLyricsLayout ) {
+    override fun setNowPlayingLyricsLayout( nowPlayingLyricsLayout: NowPlayingLyricsLayout) {
         this.nowPlayingLyricsLayout = nowPlayingLyricsLayout
     }
 
@@ -185,4 +194,16 @@ class FakePreferencesStoreImpl : PreferenceStore {
     override fun setShowNowPlayingSeekControls( showNowPlayingSeekControls: Boolean ) {
         this.showNowPlayingSeekControls = showNowPlayingSeekControls
     }
+
+    override fun setSortSongsBy (sortSongsBy: SortSongsBy ) {
+        this.sortSongsBy = sortSongsBy
+    }
+
+    override fun getSortSongsBy() = sortSongsBy ?: SettingsDefaults.sortSongsBy
+
+    override fun setSortSongsInReverse( sortSongsInReverse: Boolean ) {
+        this.sortSongsInReverse = sortSongsInReverse
+    }
+
+    override fun getSortSongsInReverse() = sortSongsInReverse ?: SettingsDefaults.sortSongsInReverse
 }

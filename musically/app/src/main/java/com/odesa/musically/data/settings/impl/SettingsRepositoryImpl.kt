@@ -1,12 +1,11 @@
 package com.odesa.musically.data.settings.impl
 
-import androidx.compose.ui.text.style.TextDirection
-import com.odesa.musically.data.preferences.storage.ForYou
-import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
-import com.odesa.musically.data.preferences.storage.HomeTab
-import com.odesa.musically.data.preferences.storage.NowPlayingControlsLayout
-import com.odesa.musically.data.preferences.storage.NowPlayingLyricsLayout
-import com.odesa.musically.data.preferences.storage.PreferenceStore
+import com.odesa.musically.data.storage.preferences.ForYou
+import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
+import com.odesa.musically.data.storage.preferences.HomeTab
+import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
+import com.odesa.musically.data.storage.preferences.NowPlayingLyricsLayout
+import com.odesa.musically.data.storage.preferences.PreferenceStore
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Chinese
@@ -19,20 +18,16 @@ import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.SupportedFonts
 import com.odesa.musically.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore ) : SettingsRepository {
+class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore) : SettingsRepository {
 
     private val _language = MutableStateFlow( getLanguage( preferenceStore.getLanguage() ) )
     override val language = _language.asStateFlow()
 
     private val _font = MutableStateFlow( getFont( preferenceStore.getFontName() ) )
     override val font = _font.asStateFlow()
-
-    override val textDirection: StateFlow<TextDirection>
-        get() = TODO("Not yet implemented")
 
     private val _fontScale = MutableStateFlow( preferenceStore.getFontScale() )
     override val fontScale = _fontScale.asStateFlow()
@@ -99,18 +94,6 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore ) : S
 
     private val _showNowPlayingSeekControls = MutableStateFlow( preferenceStore.getShowNowPlayingSeekControls() )
     override val showNowPlayingSeekControls = _showNowPlayingSeekControls.asStateFlow()
-
-
-    private fun getLanguage( localeCode: String ) : Language {
-        return when ( localeCode ) {
-            Belarusian.locale -> Belarusian
-            Chinese.locale -> Chinese
-            French.locale -> French
-            German.locale -> German
-            Spanish.locale -> Spanish
-            else -> English
-        }
-    }
 
     override suspend fun setLanguage( localeCode: String ) {
         preferenceStore.setLanguage( localeCode )
@@ -179,7 +162,7 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore ) : S
         }
     }
 
-    override suspend fun setHomePageBottomBarLabelVisibility( homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility ) {
+    override suspend fun setHomePageBottomBarLabelVisibility( homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility) {
         preferenceStore.setHomePageBottomBarLabelVisibility( homePageBottomBarLabelVisibility )
         _homePageBottomBarLabelVisibility.update {
             homePageBottomBarLabelVisibility
@@ -263,14 +246,14 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore ) : S
         }
     }
 
-    override suspend fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout ) {
+    override suspend fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout) {
         preferenceStore.setNowPlayingControlsLayout( nowPlayingControlsLayout )
         _nowPlayingControlsLayout.update {
             nowPlayingControlsLayout
         }
     }
 
-    override suspend fun setNowPlayingLyricsLayout( nowPlayingLyricsLayout: NowPlayingLyricsLayout ) {
+    override suspend fun setNowPlayingLyricsLayout( nowPlayingLyricsLayout: NowPlayingLyricsLayout) {
         preferenceStore.setNowPlayingLyricsLayout( nowPlayingLyricsLayout )
         _nowPlayingLyricsLayout.update {
             nowPlayingLyricsLayout
@@ -291,4 +274,15 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore ) : S
         }
     }
 
+}
+
+fun getLanguage( localeCode: String ) : Language {
+    return when ( localeCode ) {
+        Belarusian.locale -> Belarusian
+        Chinese.locale -> Chinese
+        French.locale -> French
+        German.locale -> German
+        Spanish.locale -> Spanish
+        else -> English
+    }
 }

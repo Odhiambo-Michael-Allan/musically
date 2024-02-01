@@ -3,7 +3,7 @@ package com.odesa.musically.ui.settings.player
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FastRewind
 import androidx.compose.runtime.Composable
-import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
+import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.settings.components.SettingsSliderTile
 import kotlin.math.roundToInt

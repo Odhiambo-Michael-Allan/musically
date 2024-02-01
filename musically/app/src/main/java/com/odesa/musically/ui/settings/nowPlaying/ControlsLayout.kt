@@ -4,8 +4,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.odesa.musically.data.preferences.storage.NowPlayingControlsLayout
-import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
+import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
+import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.settings.components.SettingsOptionTile
@@ -14,7 +14,7 @@ import com.odesa.musically.ui.settings.components.SettingsOptionTile
 fun ControlsLayout(
     nowPlayingControlsLayout: NowPlayingControlsLayout,
     language: Language,
-    onNowPlayingControlsLayoutChange: ( NowPlayingControlsLayout ) -> Unit
+    onNowPlayingControlsLayoutChange: (NowPlayingControlsLayout) -> Unit
 ) {
     SettingsOptionTile(
         currentValue = nowPlayingControlsLayout,

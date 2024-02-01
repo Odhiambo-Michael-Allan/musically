@@ -4,7 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Label
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
+import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musically.services.i18n.Chinese
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.settings.components.SettingsOptionTile

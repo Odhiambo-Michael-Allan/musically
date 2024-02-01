@@ -1,14 +1,14 @@
 package com.odesa.musically.data.settings.impl
 
 import com.odesa.musically.data.preferences.storage.FakePreferencesStoreImpl
-import com.odesa.musically.data.preferences.storage.ForYou
-import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
-import com.odesa.musically.data.preferences.storage.HomeTab
-import com.odesa.musically.data.preferences.storage.NowPlayingControlsLayout
-import com.odesa.musically.data.preferences.storage.NowPlayingLyricsLayout
-import com.odesa.musically.data.preferences.storage.PreferenceStore
-import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
 import com.odesa.musically.data.settings.SettingsRepository
+import com.odesa.musically.data.storage.preferences.ForYou
+import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
+import com.odesa.musically.data.storage.preferences.HomeTab
+import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
+import com.odesa.musically.data.storage.preferences.NowPlayingLyricsLayout
+import com.odesa.musically.data.storage.preferences.PreferenceStore
+import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Chinese
 import com.odesa.musically.services.i18n.English

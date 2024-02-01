@@ -3,12 +3,12 @@ package com.odesa.musically.ui.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.odesa.musically.data.preferences.storage.ForYou
-import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
-import com.odesa.musically.data.preferences.storage.HomeTab
-import com.odesa.musically.data.preferences.storage.NowPlayingControlsLayout
-import com.odesa.musically.data.preferences.storage.NowPlayingLyricsLayout
 import com.odesa.musically.data.settings.SettingsRepository
+import com.odesa.musically.data.storage.preferences.ForYou
+import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
+import com.odesa.musically.data.storage.preferences.HomeTab
+import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
+import com.odesa.musically.data.storage.preferences.NowPlayingLyricsLayout
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.settings.appearance.scalingPresets
 import com.odesa.musically.ui.theme.MusicallyFont
@@ -17,7 +17,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class SettingsViewModel( private val settingsRepository: SettingsRepository ) : ViewModel() {
+class SettingsViewModel(
+    private val settingsRepository: SettingsRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
         SettingsScreenUiState(
@@ -49,7 +51,6 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         )
     )
     val uiState = _uiState.asStateFlow()
-
 
     init {
         viewModelScope.launch { observeLanguageSetting() }
@@ -307,7 +308,7 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         viewModelScope.launch { settingsRepository.setForYouContents( forYouContent ) }
     }
 
-    fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility ) {
+    fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility) {
         viewModelScope.launch { settingsRepository.setHomePageBottomBarLabelVisibility( value ) }
     }
 
@@ -355,13 +356,13 @@ class SettingsViewModel( private val settingsRepository: SettingsRepository ) : 
         viewModelScope.launch { settingsRepository.setMiniPlayerTextMarquee( textMarquee ) }
     }
 
-    fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout ) {
+    fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout) {
         viewModelScope.launch {
             settingsRepository.setNowPlayingControlsLayout( nowPlayingControlsLayout )
         }
     }
 
-    fun setNowPlayingLyricsLayout( nowPlayingLyricsLayout: NowPlayingLyricsLayout ) {
+    fun setNowPlayingLyricsLayout( nowPlayingLyricsLayout: NowPlayingLyricsLayout) {
         viewModelScope.launch {
             settingsRepository.setNowPlayingLyricsLayout( nowPlayingLyricsLayout )
         }

@@ -4,8 +4,10 @@ import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
@@ -73,8 +75,13 @@ fun MusicallyTheme(
         SideEffect {
             val window = ( view.context as Activity ).window
             window.statusBarColor = colorScheme.background.toArgb()
-            window.navigationBarColor = colorScheme.background.toArgb()
-            WindowCompat.getInsetsController( window, view ).isAppearanceLightStatusBars = colorSchemeMode == ColorSchemeMode.LIGHT
+            window.navigationBarColor = colorScheme.surfaceColorAtElevation(
+                NavigationBarDefaults.Elevation ).toArgb()
+            WindowCompat.getInsetsController( window, view ).apply {
+                isAppearanceLightStatusBars = colorSchemeMode == ColorSchemeMode.LIGHT
+                isAppearanceLightNavigationBars = colorSchemeMode == ColorSchemeMode.LIGHT
+            }
+
         }
     }
 

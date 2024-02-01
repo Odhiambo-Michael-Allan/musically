@@ -1,12 +1,11 @@
 package com.odesa.musically.data.settings
 
-import androidx.compose.ui.text.style.TextDirection
-import com.odesa.musically.data.preferences.storage.ForYou
-import com.odesa.musically.data.preferences.storage.HomePageBottomBarLabelVisibility
-import com.odesa.musically.data.preferences.storage.HomeTab
-import com.odesa.musically.data.preferences.storage.NowPlayingControlsLayout
-import com.odesa.musically.data.preferences.storage.NowPlayingLyricsLayout
-import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
+import com.odesa.musically.data.storage.preferences.ForYou
+import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
+import com.odesa.musically.data.storage.preferences.HomeTab
+import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
+import com.odesa.musically.data.storage.preferences.NowPlayingLyricsLayout
+import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Chinese
 import com.odesa.musically.services.i18n.English
@@ -17,7 +16,6 @@ import com.odesa.musically.services.i18n.Spanish
 import com.odesa.musically.ui.theme.SupportedFonts
 import com.odesa.musically.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class FakeSettingsRepository : SettingsRepository {
@@ -27,8 +25,6 @@ class FakeSettingsRepository : SettingsRepository {
 
     private val _currentFont = MutableStateFlow( SupportedFonts.ProductSans )
     override val font = _currentFont.asStateFlow()
-    override val textDirection: StateFlow<TextDirection>
-        get() = TODO("Not yet implemented")
 
     private val _fontScale = MutableStateFlow( 1.0f )
     override val fontScale = _fontScale.asStateFlow()

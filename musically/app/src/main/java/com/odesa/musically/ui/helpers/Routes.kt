@@ -11,7 +11,15 @@ object RoutesParameters {
 }
 
 sealed class Route( val name: String ) {
-    data object Home : Route( "home" )
+    data object ForYou : Route( "for-you" )
+    data object Songs : Route( "songs" )
+    data object Artists : Route( "artists" )
+    data object Albums : Route( "albums" )
+    data object AlbumArtists : Route( "album-artists" )
+    data object Genres : Route( "genres" )
+    data object Folders : Route( "folders" )
+    data object Playlists : Route( "playlists" )
+    data object Tree : Route( "tree" )
     data object Settings : Route( "settings" )
 }
 fun NavHostController.navigate( route: Route ) = navigate( route.name )

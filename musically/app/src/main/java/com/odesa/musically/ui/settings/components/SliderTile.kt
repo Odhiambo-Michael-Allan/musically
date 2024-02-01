@@ -32,7 +32,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.odesa.musically.data.preferences.storage.impl.SettingsDefaults
+import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.ui.components.ScaffoldDialog
 import com.odesa.musically.utils.RangeUtils
 import kotlin.math.roundToInt
