@@ -13,7 +13,10 @@ object PermissionsManager {
 
     fun requestPermissions( activity: MainActivity ) {
         val permissionState = getPermissionState( activity )
-        if ( permissionState.hasAllPermissions ) return
+        if ( permissionState.hasAllPermissions ) {
+            mediaPermissionGranted = true
+            return
+        }
         activity.registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { permissions ->
@@ -59,3 +62,4 @@ data class PermissionState(
 ) {
     val hasAllPermissions = deniedPermissions.isEmpty()
 }
+

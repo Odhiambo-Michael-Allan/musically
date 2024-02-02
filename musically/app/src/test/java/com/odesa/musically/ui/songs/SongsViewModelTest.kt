@@ -38,6 +38,7 @@ class SongsViewModelTest {
         songsViewModel = SongsViewModel(
             settingsRepository = settingsRepository,
             songsRepository = songsRepository,
+            mediaPermissionGranted = true
         )
     }
 

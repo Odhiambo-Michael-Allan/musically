@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.data.songs.SongsRepository
 import com.odesa.musically.data.songs.impl.SortSongsBy
-import com.odesa.musically.services.PermissionsManager
 import com.odesa.musically.services.audio.Song
 import com.odesa.musically.services.i18n.Language
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +14,8 @@ import kotlinx.coroutines.launch
 
 class SongsViewModel(
     private val settingsRepository: SettingsRepository,
-    private val songsRepository: SongsRepository
+    private val songsRepository: SongsRepository,
+    private val mediaPermissionGranted: Boolean,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -70,7 +70,7 @@ class SongsViewModel(
     }
 
     private suspend fun fetchSongs() {
-        if ( PermissionsManager.mediaPermissionGranted ) {
+        if ( mediaPermissionGranted ) {
             val songs = songsRepository.getSongs()
             _uiState.value = _uiState.value.copy(
                 songs = songs
@@ -98,8 +98,9 @@ data class SongsScreenUiState(
 @Suppress( "UNCHECKED_CAST" )
 class SongsViewModelFactory(
     private val settingsRepository: SettingsRepository,
-    private val songsRepository: SongsRepository
+    private val songsRepository: SongsRepository,
+    private val mediaPermissionGranted: Boolean,
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create( modelClass: Class<T> ) =
-        ( SongsViewModel( settingsRepository, songsRepository ) as T )
+        ( SongsViewModel( settingsRepository, songsRepository, mediaPermissionGranted ) as T )
 }

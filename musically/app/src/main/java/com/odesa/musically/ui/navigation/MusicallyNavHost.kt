@@ -44,6 +44,7 @@ import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.data.songs.SongsRepository
 import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.storage.preferences.HomeTab
+import com.odesa.musically.services.PermissionsManager
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.albumArtists.AlbumArtistsScreen
 import com.odesa.musically.ui.albumArtists.AlbumArtistsViewModel
@@ -124,7 +125,9 @@ fun MusicallyNavHost(
             enterTransition = { SlideTransition.slideUp.enterTransition() },
         ) {
             val songsViewModel: SongsViewModel = viewModel(
-                factory = SongsViewModelFactory( settingsRepository, songsRepository )
+                factory = SongsViewModelFactory(
+                    settingsRepository, songsRepository, PermissionsManager.mediaPermissionGranted
+                )
             )
             SongsScreen(
                 viewModel = songsViewModel,

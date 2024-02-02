@@ -50,7 +50,7 @@ class SongsRepositoryImplTest {
 
     @Test
     fun testRetrieveSongs() = runTest {
-        assertTrue( songsRepository.isLoadingSongs.value )
+        assertFalse( songsRepository.isLoadingSongs.value )
         assertEquals( 100, songsRepository.getSongs().size )
         assertFalse( songsRepository.isLoadingSongs.value )
     }

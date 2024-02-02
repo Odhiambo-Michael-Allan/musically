@@ -5,6 +5,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.provider.MediaStore.Audio.AudioColumns
 import com.odesa.musically.utils.CursorUtil
+import com.odesa.musically.utils.Logger
 
 data class Song(
     val id: Long,
@@ -34,7 +35,7 @@ data class Song(
             cursorUtil: CursorUtil,
             artistTagSeparators: Set<String>
         ): Song {
-            return Song(
+            val song = Song(
                 id = cursorUtil.getLongFrom( AudioColumns._ID ),
                 title = cursorUtil.getStringFrom( AudioColumns.TITLE ),
                 trackNumber = cursorUtil.getIntNullableFrom( AudioColumns.TRACK )?.takeIf { it > 1000 },
@@ -53,6 +54,8 @@ data class Song(
                 path = cursorUtil.getStringFrom( AudioColumns.DATA )
 
             )
+            Logger.warn( "SONG", "TITLE: ${song.title}" )
+            return song
         }
 
         private fun parseArtistStringIntoIndividualArtists(artistString: String, separators: Set<String> ) =

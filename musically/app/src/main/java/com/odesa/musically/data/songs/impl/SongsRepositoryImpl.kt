@@ -16,7 +16,7 @@ class SongsRepositoryImpl(
     private val musicDatabase: MusicDatabase,
 ) : SongsRepository {
 
-    private val _isLoadingSongs = MutableStateFlow( true )
+    private val _isLoadingSongs = MutableStateFlow( false )
     override val isLoadingSongs = _isLoadingSongs.asStateFlow()
 
     private val _sortSongsInReverse = MutableStateFlow( preferenceStore.getSortSongsInReverse() )
