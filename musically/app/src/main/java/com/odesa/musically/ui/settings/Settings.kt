@@ -386,7 +386,7 @@ fun SettingsScreenContentPreview() {
     val uiState = SettingsScreenUiState(
         language = English,
         font = SupportedFonts.ProductSans,
-        fontScale = 1.75f,
+        fontScale = SettingsDefaults.fontScale,
         themeMode = ThemeMode.LIGHT,
         useMaterialYou = SettingsDefaults.useMaterialYou,
         primaryColorName = "Blue",

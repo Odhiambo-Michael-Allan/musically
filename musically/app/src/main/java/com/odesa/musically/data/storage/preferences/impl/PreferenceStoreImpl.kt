@@ -343,7 +343,7 @@ object SettingsKeys {
 object SettingsDefaults {
     val language = English
     val font = SupportedFonts.ProductSans
-    const val fontScale = 1.0f
+    const val fontScale = 1.25f
     val themeMode = ThemeMode.SYSTEM
     const val useMaterialYou = true
     const val primaryColorName = "Blue"

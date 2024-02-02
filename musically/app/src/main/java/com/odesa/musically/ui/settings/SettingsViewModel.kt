@@ -31,7 +31,8 @@ class SettingsViewModel(
             primaryColorName = settingsRepository.primaryColorName.value,
             homeTabs = settingsRepository.homeTabs.value,
             forYouContent = settingsRepository.forYouContents.value,
-            homePageBottomBarLabelVisibility = settingsRepository.homePageBottomBarLabelVisibility.value,
+            homePageBottomBarLabelVisibility = settingsRepository
+                .homePageBottomBarLabelVisibility.value,
             fadePlayback = settingsRepository.fadePlayback.value,
             fadePlaybackDuration = settingsRepository.fadePlaybackDuration.value,
             requireAudioFocus = settingsRepository.requireAudioFocus.value,
@@ -329,11 +330,15 @@ class SettingsViewModel(
     }
 
     fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
-        viewModelScope.launch { settingsRepository.setPlayOnHeadphonesConnect( playOnHeadphonesConnect ) }
+        viewModelScope.launch {
+            settingsRepository.setPlayOnHeadphonesConnect( playOnHeadphonesConnect )
+        }
     }
 
     fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean ) {
-        viewModelScope.launch { settingsRepository.setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect ) }
+        viewModelScope.launch {
+            settingsRepository.setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect )
+        }
     }
 
     fun setFastRewindDuration( fastRewindDuration: Int ) {
@@ -345,11 +350,15 @@ class SettingsViewModel(
     }
 
     fun setMiniPlayerShowTrackControls( showTrackControls: Boolean ) {
-        viewModelScope.launch { settingsRepository.setMiniPlayerShowTrackControls( showTrackControls ) }
+        viewModelScope.launch {
+            settingsRepository.setMiniPlayerShowTrackControls( showTrackControls )
+        }
     }
 
     fun setMiniPlayerShowSeekControls( showSeekControls: Boolean ) {
-        viewModelScope.launch { settingsRepository.setMiniPlayerShowSeekControls( showSeekControls ) }
+        viewModelScope.launch {
+            settingsRepository.setMiniPlayerShowSeekControls( showSeekControls )
+        }
     }
 
     fun setMiniPlayerTextMarquee( textMarquee: Boolean ) {

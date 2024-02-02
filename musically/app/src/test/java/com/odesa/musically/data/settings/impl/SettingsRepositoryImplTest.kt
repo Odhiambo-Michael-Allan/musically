@@ -74,7 +74,7 @@ class SettingsRepositoryImplTest {
 
     @Test
     fun testFontScaleChange() {
-        assertEquals( 1.0f, settingsRepository.fontScale.value )
+        assertEquals( SettingsDefaults.fontScale, settingsRepository.fontScale.value )
         scalingPresets.forEach { changeFontScaleTo( it ) }
     }
 

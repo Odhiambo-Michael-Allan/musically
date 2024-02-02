@@ -87,6 +87,7 @@ fun MusicallyNavHost(
     visibleTabs: Set<HomeTab>,
     language: Language,
     labelVisibility: HomePageBottomBarLabelVisibility,
+    nowPlayingBottomBar: @Composable () -> Unit,
 ) {
 
     var showTabsSheet by remember { mutableStateOf( false ) }
@@ -94,7 +95,7 @@ fun MusicallyNavHost(
 
     navController.addOnDestinationChangedListener { _, destination, _ ->
         Destination.entries.forEach {
-            if (destination.route == it.route.name)
+            if ( destination.route == it.route.name )
                 currentTab = it
         }
     }
@@ -230,125 +231,128 @@ fun MusicallyNavHost(
             )
         }
     }
-    NavigationBar(
-        modifier = Modifier
-            .fillMaxWidth()
-            .pointerInput(Unit) {
-                detectTapGestures {
-                    showTabsSheet = true
-                }
-            }
-            .swipeable(
-                onSwipeUp = {
-                    showTabsSheet = true
-                }
-            )
-    ) {
-        Spacer( modifier = Modifier.width( 2.dp ) )
-        visibleTabs.map { it.toDestination() }.forEach { tab ->
-            val isSelected = currentTab == tab
-            val label = tab.label( language )
-            NavigationBarItem(
-                selected = isSelected,
-                alwaysShowLabel = labelVisibility == HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE,
-                onClick = {
-                    showTabsSheet = isSelected
-                    currentTab = tab
-                    navController.navigate( tab.route )
-                },
-                icon = {
-                    Crossfade(
-                        targetState = isSelected,
-                        label = "home-bottom-bar"
-                    ) {
-                        Icon(
-                            imageVector = if ( it ) tab.selectedIcon() else tab.unselectedIcon(),
-                            contentDescription = tab.iconContentDescription
-                        )
+    Column {
+        nowPlayingBottomBar()
+        NavigationBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .pointerInput( Unit ) {
+                    detectTapGestures {
+                        showTabsSheet = true
                     }
-                },
-                label = when ( labelVisibility ) {
-                    HomePageBottomBarLabelVisibility.INVISIBLE -> null
-                    else -> ( {
-                        Text(
-                            text = label,
-                            style = MaterialTheme.typography.labelSmall,
-                            textAlign = TextAlign.Center,
-                            overflow = TextOverflow.Ellipsis,
-                            softWrap = false,
-                        )
-                    } )
                 }
-            )
-        }
-        Spacer( modifier = Modifier.width( 2.dp ) )
-    }
-    if ( showTabsSheet ) {
-        val sheetState = rememberModalBottomSheetState()
-        val orderedTabs = remember {
-            setOf( *visibleTabs.map { it.toDestination() }.toTypedArray(),
-                *Destination.entries.toTypedArray() )
-        }
-
-        ModalBottomSheet(
-            sheetState = sheetState,
-            onDismissRequest = { showTabsSheet = false }
+                .swipeable(
+                    onSwipeUp = {
+                        showTabsSheet = true
+                    }
+                )
         ) {
-            LazyVerticalGrid(
-                modifier = Modifier.padding( 6.dp ),
-                columns = GridCells.Fixed( visibleTabs.size ),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalArrangement = Arrangement.spacedBy( 8.dp ),
-            ) {
-                items( orderedTabs.toList(), key = { it.ordinal } ) {
-                    val isSelected = it == currentTab
-                    val label = it.label( language )
-                    val containerColor = when {
-                        isSelected -> MaterialTheme.colorScheme.secondaryContainer
-                        else -> Color.Unspecified
-                    }
-                    val contentColor = when {
-                        isSelected -> MaterialTheme.colorScheme.onSecondaryContainer
-                        else -> Color.Unspecified
-                    }
-                    Column (
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(2.dp, 0.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .clickable {
-                                currentTab = it
-                                navController.navigate(it.route)
-                                showTabsSheet = false
-                            }
-                            .background(containerColor)
-                            .padding(0.dp, 8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        when {
-                            isSelected -> Icon(
-                                imageVector = it.selectedIcon(),
-                                contentDescription = it.iconContentDescription,
-                                tint = contentColor
-                            )
-                            else -> Icon(
-                                imageVector = it.unselectedIcon(),
-                                contentDescription = it.iconContentDescription
+            Spacer( modifier = Modifier.width( 2.dp ) )
+            visibleTabs.map { it.toDestination() }.forEach { tab ->
+                val isSelected = currentTab == tab
+                val label = tab.label( language )
+                NavigationBarItem(
+                    selected = isSelected,
+                    alwaysShowLabel = labelVisibility == HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE,
+                    onClick = {
+                        showTabsSheet = isSelected
+                        navController.navigate( tab.route )
+                    },
+                    icon = {
+                        Crossfade(
+                            targetState = isSelected,
+                            label = "home-bottom-bar"
+                        ) {
+                            Icon(
+                                imageVector = if ( it ) tab.selectedIcon() else tab.unselectedIcon(),
+                                contentDescription = tab.iconContentDescription
                             )
                         }
-                        Spacer( modifier = Modifier.height( 8.dp ) )
-                        Text(
-                            text = label,
-                            style = MaterialTheme.typography.bodySmall.copy( color = contentColor ),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                    },
+                    label = when ( labelVisibility ) {
+                        HomePageBottomBarLabelVisibility.INVISIBLE -> null
+                        else -> ( {
+                            Text(
+                                text = label,
+                                style = MaterialTheme.typography.labelSmall,
+                                textAlign = TextAlign.Center,
+                                overflow = TextOverflow.Ellipsis,
+                                softWrap = false,
+                            )
+                        } )
+                    }
+                )
+            }
+            Spacer( modifier = Modifier.width( 2.dp ) )
+        }
+
+        if ( showTabsSheet ) {
+            val sheetState = rememberModalBottomSheetState()
+            val orderedTabs = remember {
+                setOf( *visibleTabs.map { it.toDestination() }.toTypedArray(),
+                    *Destination.entries.toTypedArray() )
+            }
+
+            ModalBottomSheet(
+                sheetState = sheetState,
+                onDismissRequest = { showTabsSheet = false }
+            ) {
+                LazyVerticalGrid(
+                    modifier = Modifier.padding( 6.dp ),
+                    columns = GridCells.Fixed( visibleTabs.size ),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalArrangement = Arrangement.spacedBy( 8.dp ),
+                ) {
+                    items( orderedTabs.toList(), key = { it.ordinal } ) {
+                        val isSelected = it == currentTab
+                        val label = it.label( language )
+                        val containerColor = when {
+                            isSelected -> MaterialTheme.colorScheme.secondaryContainer
+                            else -> Color.Unspecified
+                        }
+                        val contentColor = when {
+                            isSelected -> MaterialTheme.colorScheme.onSecondaryContainer
+                            else -> Color.Unspecified
+                        }
+                        Column (
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(2.dp, 0.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .clickable {
+                                    navController.navigate(it.route)
+                                    showTabsSheet = false
+                                }
+                                .background(containerColor)
+                                .padding(0.dp, 8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            when {
+                                isSelected -> Icon(
+                                    imageVector = it.selectedIcon(),
+                                    contentDescription = it.iconContentDescription,
+                                    tint = contentColor
+                                )
+                                else -> Icon(
+                                    imageVector = it.unselectedIcon(),
+                                    contentDescription = it.iconContentDescription
+                                )
+                            }
+                            Spacer( modifier = Modifier.height( 8.dp ) )
+                            Text(
+                                text = label,
+                                style = MaterialTheme.typography.bodySmall.copy( color = contentColor ),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
                     }
                 }
+                Spacer( modifier = Modifier.height( 48.dp ) )
             }
-            Spacer( modifier = Modifier.height( 48.dp ) )
         }
     }
+
 }
 
 fun HomeTab.toDestination() = when( this ) {

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.data.songs.SongsRepository
 import com.odesa.musically.data.songs.impl.SortSongsBy
+import com.odesa.musically.services.PermissionsManager
 import com.odesa.musically.services.audio.Song
 import com.odesa.musically.services.i18n.Language
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,10 +70,12 @@ class SongsViewModel(
     }
 
     private suspend fun fetchSongs() {
-        val songs = songsRepository.getSongs()
-        _uiState.value = _uiState.value.copy(
-            songs = songs
-        )
+        if ( PermissionsManager.mediaPermissionGranted ) {
+            val songs = songsRepository.getSongs()
+            _uiState.value = _uiState.value.copy(
+                songs = songs
+            )
+        }
     }
 
     fun setSortSongsInReverse( sortSongsInReverse: Boolean ) {

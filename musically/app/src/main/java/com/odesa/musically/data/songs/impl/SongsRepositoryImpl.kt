@@ -41,7 +41,7 @@ class SongsRepositoryImpl(
 
     override suspend fun getSongs(): List<Song> {
         _isLoadingSongs.update { true }
-        val songs = musicDatabase.songs
+        val songs = musicDatabase.getSongs()
         _isLoadingSongs.update { false }
         return songs
     }

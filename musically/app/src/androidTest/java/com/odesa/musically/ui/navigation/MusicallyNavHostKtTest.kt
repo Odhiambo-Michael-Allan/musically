@@ -46,7 +46,7 @@ class MusicallyNavHostKtTest {
                 visibleTabs = SettingsDefaults.homeTabs,
                 labelVisibility = SettingsDefaults.homePageBottomBarLabelVisibility,
                 language = SettingsDefaults.language,
-            )
+            ) {}
         }
     }
 

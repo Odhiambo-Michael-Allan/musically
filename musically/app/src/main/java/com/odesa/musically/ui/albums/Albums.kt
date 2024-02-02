@@ -38,7 +38,7 @@ fun AlbumsScreenContent(
         Box(
             modifier = Modifier
                 .padding(it)
-                .fillMaxSize(),
+                .fillMaxSize()
         ) {
             Text( text = "Coming Soon!!" )
         }
