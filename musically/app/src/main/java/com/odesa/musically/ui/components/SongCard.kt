@@ -41,11 +41,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.odesa.musically.R
 import com.odesa.musically.data.songs.impl.testSongs
 import com.odesa.musically.services.audio.Song
@@ -57,12 +58,11 @@ import com.odesa.musically.services.i18n.Language
 fun SongCard(
     language: Language,
     song: Song,
-    asyncImageModel: String,
-    @DrawableRes fallbackImageResId:  Int,
-    highlighted: Boolean = false,
+    isHighlighted: Boolean = false,
     isCurrentlyPlaying: Boolean = false,
     disableHeartIcon: Boolean = true,
     isFavorite: Boolean = false,
+    @DrawableRes fallbackResourceId: Int,
     onFavoriteButtonClicked: ( Long ) -> Unit,
     onClick: () -> Unit,
     onFavorite: ( Long ) -> Unit,
@@ -84,13 +84,16 @@ fun SongCard(
             Row( verticalAlignment = Alignment.CenterVertically ) {
                 Box {
                     AsyncImage(
+                        model = ImageRequest.Builder( LocalContext.current ).apply {
+                            data( song.artworkUri )
+                            placeholder( fallbackResourceId )
+                            fallback( fallbackResourceId )
+                            error( fallbackResourceId )
+                            crossfade( true )
+                        }.build(),
                         modifier = Modifier
-                            .size(45.dp)
-                            .clip(RoundedCornerShape(10.dp)),
-                        model = asyncImageModel,
-                        placeholder = painterResource( id = fallbackImageResId ),
-                        error = painterResource( id = fallbackImageResId ),
-                        fallback = painterResource( id = fallbackImageResId ),
+                            .size( 45.dp )
+                            .clip( RoundedCornerShape( 10.dp ) ),
                         contentDescription = null
                     )
                 }
@@ -100,7 +103,7 @@ fun SongCard(
                         text = song.title,
                         style = MaterialTheme.typography.bodyMedium.copy(
                             color = when {
-                                highlighted || isCurrentlyPlaying -> MaterialTheme.colorScheme.primary
+                                isHighlighted || isCurrentlyPlaying -> MaterialTheme.colorScheme.primary
                                 else -> LocalTextStyle.current.color
                             }
                         ),
@@ -323,12 +326,10 @@ fun SongCardPreview() {
     SongCard(
         language = English,
         song = testSongs.first(),
-        asyncImageModel = "",
-        fallbackImageResId = R.drawable.placeholder,
-        highlighted = true,
         isCurrentlyPlaying = true,
         isFavorite = true,
         disableHeartIcon = false,
+        fallbackResourceId = R.drawable.placeholder_light,
         onFavoriteButtonClicked = {},
         onClick = {},
         onFavorite = {},

@@ -14,6 +14,7 @@ import com.odesa.musically.services.i18n.French
 import com.odesa.musically.services.i18n.German
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.services.i18n.Spanish
+import com.odesa.musically.ui.theme.ThemeMode
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
@@ -80,6 +81,15 @@ class SongsViewModelTest {
         SortSongsBy.entries.forEach {
             songsRepository.setSortSongsBy( it )
             assertEquals( it, songsViewModel.uiState.value.sortSongsBy )
+        }
+    }
+
+    @Test
+    fun testThemeModeChange() = runTest {
+        assertEquals( SettingsDefaults.themeMode, songsViewModel.uiState.value.themeMode )
+        ThemeMode.entries.forEach {
+            settingsRepository.setThemeMode( it )
+            assertEquals( it, songsViewModel.uiState.value.themeMode )
         }
     }
 

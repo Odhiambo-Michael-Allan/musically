@@ -24,12 +24,22 @@ data class Song(
 
     val uri: Uri
         get() = buildUri( id )
+    val artworkUri: Uri?
+        get() = buildArtworkUri( id )
 
     companion object {
 
         fun buildUri( id: Long ) = ContentUris.withAppendedId(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id
         )
+
+        fun buildArtworkUri( id: Long ): Uri? = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+            .buildUpon()
+            .run {
+                appendPath( id.toString() )
+                appendPath( "albumart" )
+                build()
+            }
 
         fun fromCursor(
             cursorUtil: CursorUtil,

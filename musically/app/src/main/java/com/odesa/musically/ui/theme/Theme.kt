@@ -1,6 +1,8 @@
 package com.odesa.musically.ui.theme
 
 import android.app.Activity
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -123,3 +125,12 @@ fun ThemeMode.toColorSchemeMode( isSystemInDarkTheme: Boolean ) = when ( this ) 
     ThemeMode.DARK -> ColorSchemeMode.DARK
     ThemeMode.BLACK -> ColorSchemeMode.BLACK
 }
+
+fun ThemeMode.isLight( context: Context ) =
+    context.resources.configuration.uiMode.let {
+        val isSystemInDarkTheme =
+            ( it and Configuration.UI_MODE_NIGHT_MASK ) == Configuration.UI_MODE_NIGHT_YES
+        toColorSchemeMode( isSystemInDarkTheme ).isLight()
+    }
+
+fun ColorSchemeMode.isLight() = this == ColorSchemeMode.LIGHT

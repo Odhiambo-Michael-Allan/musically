@@ -1,15 +1,20 @@
 package com.odesa.musically.ui.components
 
 import android.os.Build
+import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.odesa.musically.R
@@ -26,7 +31,9 @@ fun SongList(
     sortType: SortSongsBy,
     onSortTypeChange: (SortSongsBy ) -> Unit,
     language: Language,
-    songs: List<Song>
+    songs: List<Song>,
+    onShufflePlay: () -> Unit,
+    @DrawableRes fallbackResourceId: Int,
 ) {
 
     MediaSortBarScaffold(
@@ -39,7 +46,8 @@ fun SongList(
                 onSortTypeChange = onSortTypeChange,
                 label = {
                     Text( text = language.xSongs( songs.size.toString() ) )
-                }
+                },
+                onShufflePlay = onShufflePlay
             )
         }
     ) {
@@ -58,19 +66,22 @@ fun SongList(
             )
             else -> {
                 val lazyListState = rememberLazyListState()
+                var highlightedCardPosition by remember { mutableIntStateOf( -1 ) }
 
                 LazyColumn(
                     state = lazyListState,
                     modifier = Modifier.drawScrollBar( lazyListState )
                 ) {
-                    items( songs ) {
+                    itemsIndexed( songs ) { index, song ->
                         SongCard(
                             language = language,
-                            song = it,
-                            asyncImageModel = "",
-                            fallbackImageResId = R.drawable.placeholder,
+                            song = song,
+                            isHighlighted = highlightedCardPosition == index,
                             onFavoriteButtonClicked = {},
-                            onClick = { },
+                            fallbackResourceId = fallbackResourceId,
+                            onClick = {
+                                highlightedCardPosition = index
+                            },
                             onFavorite = {},
                             onPlayNext = { /*TODO*/ },
                             onAddToQueue = {},
@@ -109,7 +120,9 @@ fun SongListPreview() {
         sortType = SortSongsBy.TITLE,
         onSortTypeChange = {},
         language = English,
-        songs = testSongs
+        songs = testSongs,
+        onShufflePlay = {},
+        fallbackResourceId = R.drawable.placeholder_light
     )
 }
 

@@ -8,6 +8,7 @@ import com.odesa.musically.data.songs.SongsRepository
 import com.odesa.musically.data.songs.impl.SortSongsBy
 import com.odesa.musically.services.audio.Song
 import com.odesa.musically.services.i18n.Language
+import com.odesa.musically.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -24,6 +25,7 @@ class SongsViewModel(
             isLoadingSongs = songsRepository.isLoadingSongs.value,
             sortSongsInReverse = songsRepository.sortSongsInReverse.value,
             sortSongsBy = songsRepository.sortSongsBy.value,
+            themeMode = settingsRepository.themeMode.value,
             songs = emptyList()
         )
     )
@@ -34,6 +36,7 @@ class SongsViewModel(
         viewModelScope.launch { observeIsLoadingSongsChange() }
         viewModelScope.launch { observeSortSongsInReverse() }
         viewModelScope.launch { observeSortSongsBy() }
+        viewModelScope.launch { observeThemeMode() }
         viewModelScope.launch { fetchSongs() }
     }
 
@@ -69,6 +72,14 @@ class SongsViewModel(
         }
     }
 
+    private suspend fun observeThemeMode() {
+        settingsRepository.themeMode.collect {
+            _uiState.value = _uiState.value.copy(
+                themeMode = it
+            )
+        }
+    }
+
     private suspend fun fetchSongs() {
         if ( mediaPermissionGranted ) {
             val songs = songsRepository.getSongs()
@@ -92,6 +103,7 @@ data class SongsScreenUiState(
     val isLoadingSongs: Boolean,
     val sortSongsInReverse: Boolean,
     val sortSongsBy: SortSongsBy,
+    val themeMode: ThemeMode,
     val songs: List<Song>,
 )
 
