@@ -18,7 +18,10 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
+@RunWith( RobolectricTestRunner::class )
 class SongsViewModelTest {
 
     @get:Rule
@@ -91,7 +94,7 @@ class SongsViewModelTest {
     @Test
     fun testWhenMusicServiceConnectionIsConnected_mediaItemsAreRetrieved() {
         musicServiceConnection.setConnected( true )
-        assertEquals( 0, songsViewModel.uiState.value.songs.size )
+        assertEquals( 100, songsViewModel.uiState.value.songs.size )
     }
 
 

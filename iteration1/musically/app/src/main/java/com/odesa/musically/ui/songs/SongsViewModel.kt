@@ -51,10 +51,9 @@ class SongsViewModel(
                 val artist = extras?.getString( MediaMetadataCompat.METADATA_KEY_ARTIST )
                 val genre = extras?.getString( MediaMetadataCompat.METADATA_KEY_GENRE )
                 val duration = extras?.getLong( MediaMetadataCompat.METADATA_KEY_DURATION )
-                val trackNumber = extras?.getString( MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER )
-                val year = extras?.getString( MediaMetadataCompat.METADATA_KEY_YEAR )
+                val trackNumber = extras?.getLong( MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER )
+                val year = extras?.getLong( MediaMetadataCompat.METADATA_KEY_YEAR )
                 val composer = extras?.getString( MediaMetadataCompat.METADATA_KEY_COMPOSER )
-                val dateAdded = extras?.getLong( MediaMetadataCompat.METADATA_KEY_DATE )
                 val dateModified = extras?.getLong( METADATA_KEY_DATE_MODIFIED )
                 val path = extras?.getString( METADATA_KEY_PATH )
                 val size = extras?.getLong( METADATA_KEY_SIZE )
@@ -68,7 +67,6 @@ class SongsViewModel(
                     album = album,
                     artists = artist,
                     composers = composer,
-                    dateAdded = dateAdded!!,
                     dateModified = dateModified!!,
                     size = size!!,
                     path = path!!,

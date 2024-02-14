@@ -3,12 +3,20 @@ package com.odesa.musically.fakes
 import android.support.v4.media.MediaBrowserCompat.MediaItem
 import android.support.v4.media.MediaMetadataCompat
 import com.odesa.musically.services.media.extensions.album
+import com.odesa.musically.services.media.extensions.albumArtist
 import com.odesa.musically.services.media.extensions.albumId
 import com.odesa.musically.services.media.extensions.artist
+import com.odesa.musically.services.media.extensions.composer
+import com.odesa.musically.services.media.extensions.dateModified
+import com.odesa.musically.services.media.extensions.duration
 import com.odesa.musically.services.media.extensions.flag
 import com.odesa.musically.services.media.extensions.genre
 import com.odesa.musically.services.media.extensions.id
+import com.odesa.musically.services.media.extensions.path
+import com.odesa.musically.services.media.extensions.size
 import com.odesa.musically.services.media.extensions.title
+import com.odesa.musically.services.media.extensions.trackNumber
+import com.odesa.musically.services.media.extensions.year
 import com.odesa.musically.services.media.library.AbstractMusicSource
 import com.odesa.musically.services.media.library.STATE_INITIALIZED
 
@@ -294,7 +302,7 @@ val correspondingTrackList = listOf(
 
 val tracksMetadataList = mutableListOf<MediaMetadataCompat>().apply {
     albumTitles.forEachIndexed { index, albumTitle ->
-        val albumArtist = correspondingAlbumArtists[ index ]
+        val _albumArtist = correspondingAlbumArtists[ index ]
         val albumGenre = correspondingAlbumGenre[ index ]
         val trackList = correspondingTrackList[ index ]
         val currentAlbumId = ++currentAlbumId
@@ -302,11 +310,20 @@ val tracksMetadataList = mutableListOf<MediaMetadataCompat>().apply {
             MediaMetadataCompat.Builder().apply {
                 id = ++currentTrackId
                 title = it
-                artist = albumArtist
+                artist = _albumArtist
+                albumArtist = _albumArtist
                 genre = albumGenre
                 album = albumTitle
                 albumId = currentAlbumId
                 flag = MediaItem.FLAG_PLAYABLE
+                dateModified = 0L
+                size = 0L
+                path = ""
+                composer = ""
+                albumId = 0L
+                trackNumber = 1L
+                year = 0L
+                duration = 0L
             }.build().also { add( it ) }
         }
     }

@@ -6,9 +6,16 @@ import com.odesa.musically.services.media.extensions.album
 import com.odesa.musically.services.media.extensions.albumArtist
 import com.odesa.musically.services.media.extensions.albumId
 import com.odesa.musically.services.media.extensions.artist
+import com.odesa.musically.services.media.extensions.composer
+import com.odesa.musically.services.media.extensions.dateModified
+import com.odesa.musically.services.media.extensions.duration
 import com.odesa.musically.services.media.extensions.flag
 import com.odesa.musically.services.media.extensions.id
+import com.odesa.musically.services.media.extensions.path
+import com.odesa.musically.services.media.extensions.size
 import com.odesa.musically.services.media.extensions.title
+import com.odesa.musically.services.media.extensions.trackNumber
+import com.odesa.musically.services.media.extensions.year
 
 /**
  * Represents a tree of media that's used by [MusicService.onLoadChildren].
@@ -48,8 +55,8 @@ class BrowseTree(
         val trackList = mutableListOf<MediaMetadataCompat>()
         musicSource.forEach { mediaMetadataCompat ->
             trackList.add( mediaMetadataCompat )
-            val mediaMetadataCompatAlbumId = mediaMetadataCompat.albumId.toString()
-            val albumChildren = mediaIdToChildren[ mediaMetadataCompatAlbumId ]
+            val albumId = mediaMetadataCompat.albumId.toString()
+            val albumChildren = mediaIdToChildren[ albumId ]
                 ?: buildAlbumRoot( mediaMetadataCompat )
             albumChildren += mediaMetadataCompat
         }
@@ -74,6 +81,15 @@ class BrowseTree(
             title = mediaMetadataCompat.album
             artist = mediaMetadataCompat.albumArtist
             flag = MediaItem.FLAG_BROWSABLE
+            dateModified = 0L
+            size = 0L
+            path = ""
+            albumArtist = ""
+            composer = ""
+            albumId = 0L
+            trackNumber = 1L
+            year = 0L
+            duration = 0L
         }.build()
         addAlbumMetadataToAlbumsList( albumMetadata )
         // Insert the album's root with an empty list for its children, and return the list

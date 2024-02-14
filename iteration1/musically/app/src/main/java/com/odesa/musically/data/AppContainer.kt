@@ -8,6 +8,7 @@ import com.odesa.musically.data.storage.preferences.PreferenceStore
 import com.odesa.musically.data.storage.preferences.impl.PreferenceStoreImpl
 import com.odesa.musically.services.media.MusicService
 import com.odesa.musically.services.media.connection.MusicServiceConnection
+import com.odesa.musically.services.media.connection.MusicServiceConnectionImpl
 
 /**
  * Dependency Injection container at the application level
@@ -30,7 +31,7 @@ class AppContainerImpl( context: Context ) : AppContainer {
     override val preferenceStore = _preferenceStore
     override val settingsRepository = _settingsRepository
 
-    private val _musicServiceConnection = MusicServiceConnection(
+    private val _musicServiceConnection = MusicServiceConnectionImpl(
         context,
         ComponentName( context, MusicService::class.java )
     )

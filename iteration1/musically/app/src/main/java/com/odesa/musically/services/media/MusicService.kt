@@ -8,6 +8,7 @@ import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.media.MediaBrowserServiceCompat
+import com.odesa.musically.services.PermissionsManager
 import com.odesa.musically.services.media.extensions.METADATA_KEY_DATE_MODIFIED
 import com.odesa.musically.services.media.extensions.METADATA_KEY_PATH
 import com.odesa.musically.services.media.extensions.METADATA_KEY_SIZE
@@ -49,7 +50,6 @@ class MusicService : MediaBrowserServiceCompat() {
 
     private val serviceJob = SupervisorJob()
     private val serviceScope = CoroutineScope( Dispatchers.Main + serviceJob )
-
     private lateinit var mediaSession: MediaSessionCompat
 
     /**
@@ -88,7 +88,19 @@ class MusicService : MediaBrowserServiceCompat() {
 
         musicSource = LocalMusicSource( applicationContext )
         serviceScope.launch {
-            musicSource.load()
+            observePermissions()
+        }
+    }
+
+    private suspend fun observePermissions() {
+        PermissionsManager.mediaPermissionGranted.collect { permissionGranted ->
+            if ( permissionGranted ) {
+                Timber.tag( TAG ).d( "PERMISSION GRANTED, LOADING MUSIC SOURCE" )
+                musicSource.load()
+            }
+            else {
+                Timber.tag( TAG ).d( "PERMISSION DENIED" )
+            }
         }
     }
 

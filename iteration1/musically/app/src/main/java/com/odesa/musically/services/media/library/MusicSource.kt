@@ -133,7 +133,7 @@ abstract class AbstractMusicSource : MusicSource {
                 val artist = extras[ MediaStore.EXTRA_MEDIA_ARTIST ]
                 val album = extras[ MediaStore.EXTRA_MEDIA_ALBUM ]
                 Timber.tag( TAG ).d( "Focused album search: album = '$album' artist = '$artist' ")
-                filter {song ->
+                filter { song ->
                     ( song.artist == artist || song.albumArtist == artist ) && song.album == album
                 }
             }

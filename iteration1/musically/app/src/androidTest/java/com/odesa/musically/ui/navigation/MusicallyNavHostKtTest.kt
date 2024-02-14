@@ -1,5 +1,6 @@
 package com.odesa.musically.ui.navigation
 
+import android.support.v4.media.MediaBrowserCompat
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescription
@@ -14,11 +15,12 @@ import androidx.compose.ui.test.printToLog
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.odesa.musically.data.FakeSettingsRepository
-import com.odesa.musically.data.FakeSongsRepository
 import com.odesa.musically.data.settings.SettingsRepository
-import com.odesa.musically.data.songs.SongsRepository
 import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.English
+import com.odesa.musically.services.media.connection.MusicServiceConnection
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -29,12 +31,12 @@ class MusicallyNavHostKtTest {
     val composeTestRule = createComposeRule()
     private lateinit var navController: TestNavHostController
     private lateinit var settingsRepository: SettingsRepository
-    private lateinit var songsRepository: SongsRepository
+    private lateinit var musicServiceConnection: MusicServiceConnection
 
     @Before
     fun setup() {
         settingsRepository = FakeSettingsRepository()
-        songsRepository = FakeSongsRepository()
+        musicServiceConnection = FakeMusicServiceConnection()
 
         composeTestRule.setContent {
             navController = TestNavHostController( LocalContext.current )
@@ -42,7 +44,7 @@ class MusicallyNavHostKtTest {
             MusicallyNavHost(
                 navController = navController,
                 settingsRepository = settingsRepository,
-                songsRepository = songsRepository,
+                musicServiceConnection = musicServiceConnection,
                 visibleTabs = SettingsDefaults.homeTabs,
                 labelVisibility = SettingsDefaults.homePageBottomBarLabelVisibility,
                 language = SettingsDefaults.language,
@@ -189,4 +191,15 @@ class MusicallyNavHostKtTest {
                 useUnmergedTree = true
             ).performClick()
     }
+}
+
+class FakeMusicServiceConnection : MusicServiceConnection {
+
+    private val _isConnected = MutableStateFlow( false )
+    override val isConnected = _isConnected.asStateFlow()
+
+    override fun subscribe( parentId: String, callback: MediaBrowserCompat.SubscriptionCallback ) {}
+
+    override fun unsubscribe(parentId: String, callback: MediaBrowserCompat.SubscriptionCallback) {}
+
 }

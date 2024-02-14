@@ -13,12 +13,16 @@ import com.odesa.musically.data.storage.preferences.SortSongsBy
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.ui.theme.SupportedFonts
 import com.odesa.musically.ui.theme.ThemeMode
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
 
-    override fun setLanguage( localeCode: String ) {
-        getSharedPreferences().edit {
-            putString(SettingsKeys.language, localeCode )
+    override suspend fun setLanguage( localeCode: String ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putString(SettingsKeys.language, localeCode )
+            }
         }
     }
 
@@ -29,9 +33,11 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         return language ?: SettingsDefaults.language.locale
     }
 
-    override fun setFontName( fontName: String ) {
-        getSharedPreferences().edit {
-            putString(SettingsKeys.fontName, fontName )
+    override suspend fun setFontName( fontName: String ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putString(SettingsKeys.fontName, fontName )
+            }
         }
     }
 
@@ -39,9 +45,11 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         SettingsKeys.fontName, SettingsDefaults.font.name
     ) ?: SettingsDefaults.font.name
 
-    override fun setFontScale( fontScale: Float ) {
-        getSharedPreferences().edit {
-            putFloat(SettingsKeys.fontScale, fontScale )
+    override suspend fun setFontScale( fontScale: Float ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putFloat(SettingsKeys.fontScale, fontScale )
+            }
         }
     }
 
@@ -49,9 +57,11 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         SettingsKeys.fontScale, SettingsDefaults.fontScale
     )
 
-    override fun setThemeMode( themeMode: ThemeMode ) {
-        getSharedPreferences().edit {
-            putString(SettingsKeys.themeMode, themeMode.name )
+    override suspend fun setThemeMode( themeMode: ThemeMode ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putString(SettingsKeys.themeMode, themeMode.name )
+            }
         }
     }
 
@@ -63,15 +73,19 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         SettingsKeys.useMaterialYou, SettingsDefaults.useMaterialYou
     )
 
-    override fun setUseMaterialYou( useMaterialYou: Boolean ) {
-        getSharedPreferences().edit {
-            putBoolean(SettingsKeys.useMaterialYou, useMaterialYou )
+    override suspend fun setUseMaterialYou( useMaterialYou: Boolean ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putBoolean(SettingsKeys.useMaterialYou, useMaterialYou )
+            }
         }
     }
 
-    override fun setPrimaryColorName( primaryColorName: String ) {
-        getSharedPreferences().edit {
-            putString(SettingsKeys.primaryColorName, primaryColorName )
+    override suspend fun setPrimaryColorName( primaryColorName: String ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putString(SettingsKeys.primaryColorName, primaryColorName )
+            }
         }
     }
 
@@ -85,9 +99,11 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         ?.toSet()
         ?: SettingsDefaults.homeTabs
 
-    override fun setHomeTabs( homeTabs: Set<HomeTab> ) {
-        getSharedPreferences().edit {
-            putString(SettingsKeys.homeTabs, homeTabs.joinToString( "," ) { it.name } )
+    override suspend fun setHomeTabs( homeTabs: Set<HomeTab> ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putString(SettingsKeys.homeTabs, homeTabs.joinToString( "," ) { it.name } )
+            }
         }
     }
 
@@ -98,11 +114,13 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         ?.toSet()
         ?: SettingsDefaults.forYouContents
 
-    override fun setForYouContents(forYouContents: Set<ForYou>) {
-        getSharedPreferences().edit {
-            putString(
-                SettingsKeys.forYouContents,
-                forYouContents.joinToString( "," ) { it.name } )
+    override suspend fun setForYouContents(forYouContents: Set<ForYou>) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putString(
+                    SettingsKeys.forYouContents,
+                    forYouContents.joinToString( "," ) { it.name } )
+            }
         }
     }
 
@@ -110,9 +128,11 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         .getEnum(SettingsKeys.homePageBottomBarLabelVisibility, null )
         ?: SettingsDefaults.homePageBottomBarLabelVisibility
 
-    override fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility) {
-        getSharedPreferences().edit {
-            putEnum(SettingsKeys.homePageBottomBarLabelVisibility, value )
+    override suspend fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putEnum(SettingsKeys.homePageBottomBarLabelVisibility, value )
+            }
         }
     }
 
@@ -121,9 +141,11 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         SettingsDefaults.fadePlayback
     )
 
-    override fun setFadePlayback( fadePlayback: Boolean ) {
-        getSharedPreferences().edit {
-            putBoolean(SettingsKeys.fadePlayback, fadePlayback )
+    override suspend fun setFadePlayback( fadePlayback: Boolean ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putBoolean(SettingsKeys.fadePlayback, fadePlayback )
+            }
         }
     }
 
@@ -132,26 +154,33 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         SettingsDefaults.fadePlaybackDuration
     )
 
-    override fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
-        getSharedPreferences().edit {
-            putFloat(SettingsKeys.fadePlaybackDuration, fadePlaybackDuration )
+    override suspend fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putFloat(SettingsKeys.fadePlaybackDuration, fadePlaybackDuration )
+            }
         }
     }
 
     override fun getRequireAudioFocus() = getSharedPreferences()
-        .getBoolean(SettingsKeys.requireAudioFocus, SettingsDefaults.requireAudioFocus)
-    override fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
-        getSharedPreferences().edit {
-            putBoolean(SettingsKeys.requireAudioFocus, requireAudioFocus )
+        .getBoolean( SettingsKeys.requireAudioFocus, SettingsDefaults.requireAudioFocus )
+
+    override suspend fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putBoolean(SettingsKeys.requireAudioFocus, requireAudioFocus )
+            }
         }
     }
 
     override fun getIgnoreAudioFocusLoss() = getSharedPreferences()
         .getBoolean(SettingsKeys.ignoreAudioFocusLoss, SettingsDefaults.ignoreAudioFocusLoss)
 
-    override fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean ) {
-        getSharedPreferences().edit {
-            putBoolean(SettingsKeys.ignoreAudioFocusLoss, ignoreAudioFocusLoss )
+    override suspend fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putBoolean(SettingsKeys.ignoreAudioFocusLoss, ignoreAudioFocusLoss )
+            }
         }
     }
 
@@ -161,9 +190,11 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
             SettingsDefaults.playOnHeadphonesConnect
         )
 
-    override fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
-        getSharedPreferences().edit {
-            putBoolean(SettingsKeys.playOnHeadphonesConnect, playOnHeadphonesConnect )
+    override suspend fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putBoolean(SettingsKeys.playOnHeadphonesConnect, playOnHeadphonesConnect )
+            }
         }
     }
 
@@ -173,11 +204,13 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
             SettingsDefaults.pauseOnHeadphonesDisconnect
         )
 
-    override fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean ) {
-        getSharedPreferences().edit {
-            putBoolean(
-                SettingsKeys.pauseOnHeadphonesDisconnect,
-                pauseOnHeadphonesDisconnect )
+    override suspend fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putBoolean(
+                    SettingsKeys.pauseOnHeadphonesDisconnect,
+                    pauseOnHeadphonesDisconnect )
+            }
         }
     }
 
@@ -185,9 +218,11 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         SettingsKeys.fastRewindDuration, SettingsDefaults.fastRewindDuration
     )
 
-    override fun setFastRewindDuration( fastRewindDuration: Int ) {
-        getSharedPreferences().edit {
-            putInt(SettingsKeys.fastRewindDuration, fastRewindDuration )
+    override suspend fun setFastRewindDuration( fastRewindDuration: Int ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putInt(SettingsKeys.fastRewindDuration, fastRewindDuration )
+            }
         }
     }
 
@@ -195,9 +230,11 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         SettingsKeys.fastForwardDuration, SettingsDefaults.fastForwardDuration
     )
 
-    override fun setFastForwardDuration( fastForwardDuration: Int ) {
-        getSharedPreferences().edit {
-            putInt(SettingsKeys.fastForwardDuration, fastForwardDuration )
+    override suspend fun setFastForwardDuration( fastForwardDuration: Int ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putInt(SettingsKeys.fastForwardDuration, fastForwardDuration )
+            }
         }
     }
 
@@ -207,11 +244,13 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
             SettingsDefaults.miniPlayerShowTrackControls
         )
 
-    override fun setMiniPlayerShowTrackControls( showTrackControls: Boolean ) {
-        getSharedPreferences().edit {
-            putBoolean(
-                SettingsKeys.miniPlayerShowTrackControls,
-                showTrackControls )
+    override suspend fun setMiniPlayerShowTrackControls( showTrackControls: Boolean ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putBoolean(
+                    SettingsKeys.miniPlayerShowTrackControls,
+                    showTrackControls )
+            }
         }
     }
 
@@ -221,11 +260,13 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
             SettingsDefaults.miniPlayerShowSeekControls
         )
 
-    override fun setMiniPlayerShowSeekControls( showSeekControls: Boolean ) {
-        getSharedPreferences().edit {
-            putBoolean(
-                SettingsKeys.miniPlayerShowSeekControls,
-                showSeekControls )
+    override suspend fun setMiniPlayerShowSeekControls( showSeekControls: Boolean ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putBoolean(
+                    SettingsKeys.miniPlayerShowSeekControls,
+                    showSeekControls )
+            }
         }
     }
 
@@ -235,9 +276,11 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
             SettingsDefaults.miniPlayerTextMarquee
         )
 
-    override fun setMiniPlayerTextMarquee( textMarquee: Boolean ) {
-        getSharedPreferences().edit {
-            putBoolean(SettingsKeys.miniPlayerTextMarquee, textMarquee )
+    override suspend fun setMiniPlayerTextMarquee( textMarquee: Boolean ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putBoolean(SettingsKeys.miniPlayerTextMarquee, textMarquee )
+            }
         }
     }
 
@@ -246,9 +289,11 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
     ) ?: SettingsDefaults.nowPlayingControlsLayout
 
 
-    override fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout) {
-        getSharedPreferences().edit {
-            putEnum(SettingsKeys.nowPlayingControlsLayout, nowPlayingControlsLayout )
+    override suspend fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putEnum(SettingsKeys.nowPlayingControlsLayout, nowPlayingControlsLayout )
+            }
         }
     }
 
@@ -256,9 +301,11 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         SettingsKeys.nowPlayingLyricsLayout, null
     ) ?: SettingsDefaults.nowPlayingLyricsLayout
 
-    override fun setNowPlayingLyricsLayout( nowPlayingLyricsLayout: NowPlayingLyricsLayout) {
-        getSharedPreferences().edit {
-            putEnum(SettingsKeys.nowPlayingLyricsLayout, nowPlayingLyricsLayout )
+    override suspend fun setNowPlayingLyricsLayout( nowPlayingLyricsLayout: NowPlayingLyricsLayout) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putEnum(SettingsKeys.nowPlayingLyricsLayout, nowPlayingLyricsLayout )
+            }
         }
     }
 
@@ -266,12 +313,14 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         SettingsKeys.showNowPlayingAudioInformation, SettingsDefaults.showNowPlayingAudioInformation
     )
 
-    override fun setShowNowPlayingAudioInformation( showNowPlayingAudioInformation: Boolean ) {
-        getSharedPreferences().edit {
-            putBoolean(
-                SettingsKeys.showNowPlayingAudioInformation,
-                showNowPlayingAudioInformation
-            )
+    override suspend fun setShowNowPlayingAudioInformation( showNowPlayingAudioInformation: Boolean ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putBoolean(
+                    SettingsKeys.showNowPlayingAudioInformation,
+                    showNowPlayingAudioInformation
+                )
+            }
         }
     }
 
@@ -279,24 +328,30 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         SettingsKeys.showNowPlayingSeekControls, SettingsDefaults.showNowPlayingSeekControls
     )
 
-    override fun setShowNowPlayingSeekControls( showNowPlayingSeekControls: Boolean ) {
-        getSharedPreferences().edit {
-            putBoolean(SettingsKeys.showNowPlayingSeekControls, showNowPlayingSeekControls )
+    override suspend fun setShowNowPlayingSeekControls( showNowPlayingSeekControls: Boolean ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putBoolean(SettingsKeys.showNowPlayingSeekControls, showNowPlayingSeekControls )
+            }
         }
     }
 
-    override fun setSortSongsBy(sortSongsBy: SortSongsBy) {
-        getSharedPreferences().edit {
-            putEnum(SettingsKeys.sortSongsBy, sortSongsBy )
+    override suspend fun setSortSongsBy(sortSongsBy: SortSongsBy) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putEnum(SettingsKeys.sortSongsBy, sortSongsBy )
+            }
         }
     }
 
     override fun getSortSongsBy() = getSharedPreferences()
         .getEnum(SettingsKeys.sortSongsBy, null ) ?: SettingsDefaults.sortSongsBy
 
-    override fun setSortSongsInReverse(sortSongsInReverse: Boolean ) {
-        getSharedPreferences().edit {
-            putBoolean(SettingsKeys.sortSongsInReverse, sortSongsInReverse )
+    override suspend fun setSortSongsInReverse(sortSongsInReverse: Boolean ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putBoolean(SettingsKeys.sortSongsInReverse, sortSongsInReverse )
+            }
         }
     }
 

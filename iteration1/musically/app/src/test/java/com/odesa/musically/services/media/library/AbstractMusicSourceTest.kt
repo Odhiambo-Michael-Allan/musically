@@ -4,10 +4,19 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.media.MediaMetadataCompat
 import com.odesa.musically.services.media.extensions.album
+import com.odesa.musically.services.media.extensions.albumArtist
+import com.odesa.musically.services.media.extensions.albumId
 import com.odesa.musically.services.media.extensions.artist
+import com.odesa.musically.services.media.extensions.composer
+import com.odesa.musically.services.media.extensions.dateModified
+import com.odesa.musically.services.media.extensions.duration
 import com.odesa.musically.services.media.extensions.genre
 import com.odesa.musically.services.media.extensions.id
+import com.odesa.musically.services.media.extensions.path
+import com.odesa.musically.services.media.extensions.size
 import com.odesa.musically.services.media.extensions.title
+import com.odesa.musically.services.media.extensions.trackNumber
+import com.odesa.musically.services.media.extensions.year
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
@@ -18,7 +27,7 @@ import org.robolectric.RobolectricTestRunner
 
 /**
  * A set of Android integration tests for ( primarily ) [AbstractMusicSource]. The tests all use an
- * extension of [AbstractMusicSource] which is defined at the bottom of this file: [TestMusicSource]
+ * extension of [AbstractMusicSource] which is defined at the bottom of this file: [FakeMusicSource]
  */
 @RunWith( RobolectricTestRunner::class )
 class AbstractMusicSourceTest {
@@ -30,6 +39,15 @@ class AbstractMusicSourceTest {
             album = "Speechless"
             artist = "Jemand"
             genre = "Folk"
+            dateModified = 0L
+            size = 0L
+            path = ""
+            albumArtist = ""
+            composer = ""
+            albumId = 0L
+            trackNumber = 1L
+            year = 0L
+            duration = 0L
         }.build(),
 
         MediaMetadataCompat.Builder().apply {
@@ -38,14 +56,24 @@ class AbstractMusicSourceTest {
             album = "Tales from the Render Farm"
             artist = "7 Developers and a Pastry Chef"
             genre = "Rock"
+            dateModified = 0L
+            size = 0L
+            path = ""
+            albumArtist = ""
+            composer = ""
+            albumId = 0L
+            trackNumber = 1L
+            year = 0L
+            duration = 0L
+
         }.build()
     )
 
-    private lateinit var testSource: TestMusicSource
+    private lateinit var testSource: FakeMusicSource
 
     @Before
     fun setup() {
-        testSource = TestMusicSource( musicList )
+        testSource = FakeMusicSource( musicList )
     }
 
 
@@ -123,7 +151,7 @@ class AbstractMusicSourceTest {
     }
 }
 
-class TestMusicSource(
+class FakeMusicSource (
     private val music: List<MediaMetadataCompat>
 ) : AbstractMusicSource(), Iterable<MediaMetadataCompat> by music {
 
@@ -136,6 +164,4 @@ class TestMusicSource(
     fun error() {
         state = STATE_ERROR
     }
-
-
 }

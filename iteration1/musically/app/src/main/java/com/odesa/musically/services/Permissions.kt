@@ -5,23 +5,27 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts
 import com.odesa.musically.MainActivity
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 
 object PermissionsManager {
 
-    var mediaPermissionGranted = false
+//    var mediaPermissionGranted = false
+    private val _mediaPermissionGranted = MutableStateFlow( false )
+    val mediaPermissionGranted = _mediaPermissionGranted.asStateFlow()
 
     fun requestPermissions( activity: MainActivity ) {
         val permissionState = getPermissionState( activity )
         if ( permissionState.hasAllPermissions ) {
-            mediaPermissionGranted = true
+            _mediaPermissionGranted.value = true
             return
         }
         activity.registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { permissions ->
             if ( permissions.count { it.value } > 0 )
-                mediaPermissionGranted = true
+                _mediaPermissionGranted.value = true
         }.launch( permissionState.deniedPermissions.toTypedArray() )
     }
 

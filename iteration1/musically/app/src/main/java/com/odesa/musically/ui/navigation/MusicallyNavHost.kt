@@ -92,12 +92,16 @@ fun MusicallyNavHost(
 
     var showTabsSheet by remember { mutableStateOf( false ) }
     var currentTab by remember { mutableStateOf( visibleTabs.first().toDestination() ) }
+    var navigationTriggeredFromBottomBar = false
 
     navController.addOnDestinationChangedListener { _, destination, _ ->
         Destination.entries.forEach {
-            if ( destination.route == it.route.name )
-                currentTab = it
+            if ( !navigationTriggeredFromBottomBar ) {
+                if ( destination.route == it.route.name )
+                    currentTab = it
+            }
         }
+        navigationTriggeredFromBottomBar = false
     }
 
     NavHost(
@@ -259,7 +263,9 @@ fun MusicallyNavHost(
                     alwaysShowLabel = labelVisibility == HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE,
                     onClick = {
                         showTabsSheet = isSelected
+                        navigationTriggeredFromBottomBar = true
                         navController.navigate( tab.route )
+                        currentTab = tab
                     },
                     icon = {
                         Crossfade(

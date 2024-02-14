@@ -3,7 +3,6 @@ package com.odesa.musically.services.media.library
 import android.content.Context
 import android.provider.MediaStore
 import android.support.v4.media.MediaMetadataCompat
-import com.odesa.musically.services.PermissionsManager
 import com.odesa.musically.services.media.extensions.from
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -40,8 +39,6 @@ class LocalMusicSource( private val context: Context ) : AbstractMusicSource() {
             Timber.tag( LocalMusicSourceTag ).d( "READING MEDIA ITEMS FROM STORAGE" )
             val mediaMetadataCompatList = mutableListOf<MediaMetadataCompat>()
             try {
-                if ( !PermissionsManager.mediaPermissionGranted )
-                    throw Exception( "PERMISSION NOT GRANTED" )
                 val cursor = context.contentResolver.query(
                     MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                     columnsOfInterest.toTypedArray(),
