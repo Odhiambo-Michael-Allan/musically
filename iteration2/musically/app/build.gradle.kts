@@ -53,6 +53,8 @@ android {
 dependencies {
 
     val navVersion = "2.7.6"
+    val androidxMediaVersion = "1.5.0"
+    val androidxMedia3Version =  "1.2.1"
 
     implementation( "androidx.core:core-ktx:1.12.0" )
     implementation( "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2" )
@@ -65,12 +67,13 @@ dependencies {
     implementation( "androidx.compose.material:material-icons-extended:1.5.4" )
     implementation( "androidx.navigation:navigation-compose:$navVersion" )
     implementation( "io.coil-kt:coil-compose:2.5.0" )
-    implementation( "androidx.media:media:1.7.0" )
+    implementation( "androidx.media:media:$androidxMediaVersion" )
     implementation( "com.jakewharton.timber:timber:5.0.1" )
-    implementation( "com.google.android.exoplayer:exoplayer:2.19.1" )
-    implementation( "com.google.android.exoplayer:extension-mediasession:2.19.1" )
-    implementation( "com.google.android.exoplayer:extension-cast:2.19.1" )
     implementation( "com.github.bumptech.glide:glide:4.16.0" )
+
+    // Androidx Media3 Dependencies
+    implementation( "androidx.media3:media3-common:$androidxMedia3Version" )
+
 
     testImplementation( "junit:junit:4.13.2" )
     testImplementation( "androidx.test.ext:junit:1.1.5" )
