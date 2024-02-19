@@ -31,7 +31,7 @@ class AppContainerImpl( context: Context ) : AppContainer {
     override val preferenceStore = _preferenceStore
     override val settingsRepository = _settingsRepository
 
-    private val _musicServiceConnection = MusicServiceConnectionImpl(
+    private val _musicServiceConnection = MusicServiceConnectionImpl.getInstance(
         context,
         ComponentName( context, MusicService::class.java )
     )

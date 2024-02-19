@@ -33,7 +33,8 @@ class SongsViewModel(
             language = settingsRepository.language.value,
             themeMode = settingsRepository.themeMode.value,
             songs = emptyList(),
-            currentlyPlayingSongId = musicServiceConnection.nowPlaying.value.mediaId
+            currentlyPlayingSongId = musicServiceConnection.nowPlaying.value.mediaId,
+            isLoading = true
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -49,6 +50,9 @@ class SongsViewModel(
         playlist = musicServiceConnection.getChildren( MUSICALLY_TRACKS_ROOT )
         _uiState.value = _uiState.value.copy(
             songs = playlist.map { it.toSong() }
+        )
+        _uiState.value = _uiState.value.copy (
+            isLoading = false
         )
     }
 
@@ -79,7 +83,6 @@ class SongsViewModel(
     fun playMedia(
         mediaItem: MediaItem,
         pauseThenPlaying: Boolean,
-        parentMediaId: String?
     ) {
         val player = musicServiceConnection.player ?: return
         val nowPlaying = musicServiceConnection.nowPlaying.value
@@ -110,7 +113,8 @@ data class SongsScreenUiState(
     val language: Language,
     val themeMode: ThemeMode,
     val songs: List<Song>,
-    val currentlyPlayingSongId: String
+    val currentlyPlayingSongId: String,
+    val isLoading: Boolean
 )
 
 @Suppress( "UNCHECKED_CAST" )

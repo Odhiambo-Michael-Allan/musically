@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -75,18 +76,21 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
 
     init {
         scope.launch {
-            val newBrowser =
-                MediaBrowser.Builder( context, SessionToken( context, serviceComponentName ) )
-                    .setListener( BrowserListener() )
-                    .buildAsync()
-                    .await()
-            newBrowser.addListener( playerListener )
-            browser = newBrowser
-            _rootMediaItem.value = newBrowser.getLibraryRoot( /* params = */ null ).await().value!!
-            newBrowser.currentMediaItem?.let {
-                _nowPlaying.value = it
-            }
+            initializeMediaBrowser( context, serviceComponentName )
+        }
+    }
 
+    private suspend fun initializeMediaBrowser( context: Context, serviceComponentName: ComponentName ) {
+        val newBrowser =
+            MediaBrowser.Builder( context, SessionToken( context, serviceComponentName ) )
+                .setListener( BrowserListener() )
+                .buildAsync()
+                .await()
+        newBrowser.addListener( playerListener )
+        browser = newBrowser
+        _rootMediaItem.value = newBrowser.getLibraryRoot( /* params = */ null ).await().value!!
+        newBrowser.currentMediaItem?.let {
+            _nowPlaying.value = it
         }
     }
 
@@ -109,7 +113,6 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
         }
         true
     } else false
-
 
     fun release() {
         _rootMediaItem.value = MediaItem.EMPTY
@@ -168,6 +171,7 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
                 || events.contains( EVENT_PLAYBACK_STATE_CHANGED )
                 || events.contains( EVENT_MEDIA_ITEM_TRANSITION ) ) {
                 updatePlaybackState( player )
+                Timber.tag( TAG ).d( "PLAYBACK STATE CHANGED" )
             }
             if ( events.contains(Player.EVENT_MEDIA_METADATA_CHANGED )
                 || events.contains( EVENT_MEDIA_ITEM_TRANSITION )
@@ -204,6 +208,7 @@ class PlaybackState(
 
 val EMPTY_PLAYBACK_STATE: PlaybackState = PlaybackState()
 val NOTHING_PLAYING: MediaItem = MediaItem.EMPTY
+private const val POSITION_UPDATE_INTERVAL_MILLIS = 1L
 
 const val TAG = "MUSIC-SERVICE-CONNECTION-TAG"
 const val MEDIA_CONTROLLER_TAG = "MEDIA-CONTROLLER"

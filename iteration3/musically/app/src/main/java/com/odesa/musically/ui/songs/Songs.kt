@@ -14,7 +14,6 @@ import com.odesa.musically.data.storage.preferences.SortSongsBy
 import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.media.Song
-import com.odesa.musically.services.media.library.MUSICALLY_TRACKS_ROOT
 import com.odesa.musically.ui.components.LoaderScaffold
 import com.odesa.musically.ui.components.SongList
 import com.odesa.musically.ui.components.TopAppBar
@@ -39,8 +38,8 @@ fun SongsScreen(
         playSong = {
             songsViewModel.playMedia(
             it.mediaItem,
-            true,
-            parentMediaId = MUSICALLY_TRACKS_ROOT )
+            true
+            )
         }
     )
 }
@@ -70,7 +69,7 @@ fun SongsScreenContent(
             onSettingsClicked = onSettingsClicked
         )
         LoaderScaffold(
-            isLoading = true,
+            isLoading = uiState.isLoading,
             loading = uiState.language.loading
         ) {
             SongList(
@@ -116,5 +115,6 @@ val uiState = SongsScreenUiState(
     language = English,
     songs = testSongs,
     themeMode = ThemeMode.LIGHT,
-    currentlyPlayingSongId = testSongs.first().id
+    currentlyPlayingSongId = testSongs.first().id,
+    isLoading = true
 )

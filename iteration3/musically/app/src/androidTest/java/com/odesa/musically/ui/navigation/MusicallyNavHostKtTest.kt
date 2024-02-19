@@ -1,6 +1,6 @@
 package com.odesa.musically.ui.navigation
 
-import android.support.v4.media.MediaBrowserCompat
+import android.os.Bundle
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescription
@@ -12,15 +12,19 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.printToLog
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
+import com.google.common.collect.ImmutableList
 import com.odesa.musically.data.FakeSettingsRepository
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.media.connection.MusicServiceConnection
+import com.odesa.musically.services.media.connection.PlaybackState
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -196,10 +200,27 @@ class MusicallyNavHostKtTest {
 class FakeMusicServiceConnection : MusicServiceConnection {
 
     private val _isConnected = MutableStateFlow( false )
-    override val isConnected = _isConnected.asStateFlow()
+    override val nowPlaying: StateFlow<MediaItem>
+        get() = TODO("Not yet implemented")
+    override val playbackState: StateFlow<PlaybackState>
+        get() = TODO("Not yet implemented")
+    override val player: Player?
+        get() = TODO("Not yet implemented")
 
-    override fun subscribe( parentId: String, callback: MediaBrowserCompat.SubscriptionCallback ) {}
+    override suspend fun getChildren(parentId: String): ImmutableList<MediaItem> {
+        TODO("Not yet implemented")
+    }
 
-    override fun unsubscribe(parentId: String, callback: MediaBrowserCompat.SubscriptionCallback) {}
+    override suspend fun sendCommand(command: String, parameters: Bundle?): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun sendCommand(
+        command: String,
+        parameters: Bundle?,
+        resultCallback: (Int, Bundle?) -> Unit
+    ): Boolean {
+        TODO("Not yet implemented")
+    }
 
 }

@@ -13,6 +13,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.media3.common.MediaItem
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.odesa.musically.MainActivityViewModel
+import com.odesa.musically.NowPlayingUiState
 import com.odesa.musically.R
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.media.Song
@@ -31,12 +33,14 @@ fun MusicallyApp(
     navController: NavHostController = rememberNavController(),
     settingsRepository: SettingsRepository,
     musicServiceConnection: MusicServiceConnection,
+    mainActivityViewModel: MainActivityViewModel
 ) {
     val themeMode by settingsRepository.themeMode.collectAsState()
     val primaryColorName by settingsRepository.primaryColorName.collectAsState()
     val font by settingsRepository.font.collectAsState()
     val fontScale by settingsRepository.fontScale.collectAsState()
     val useMaterialYou by settingsRepository.useMaterialYou.collectAsState()
+    val nowPlayingUiState by mainActivityViewModel.nowPlayingUiState.collectAsState()
 
     MusicallyTheme(
         themeMode = themeMode,
@@ -50,6 +54,7 @@ fun MusicallyApp(
                 navController = navController,
                 settingsRepository = settingsRepository,
                 musicServiceConnection = musicServiceConnection,
+                nowPlayingUiState = nowPlayingUiState
             )
         }
     }
@@ -59,7 +64,8 @@ fun MusicallyApp(
 fun MusicallyAppContent(
     navController: NavHostController,
     settingsRepository: SettingsRepository,
-    musicServiceConnection: MusicServiceConnection
+    musicServiceConnection: MusicServiceConnection,
+    nowPlayingUiState: NowPlayingUiState
 ) {
 
     val homeTabs by settingsRepository.homeTabs.collectAsState()
@@ -90,7 +96,7 @@ fun MusicallyAppContent(
         ) {
             NowPlayingBottomBar(
                 currentlyPlayingSong = if ( nowPlayingMediaItem == NOTHING_PLAYING ) null else nowPlayingMediaItem.toSong(),
-                playbackPosition = PlaybackPosition( 3, 5 ),
+                playbackPosition = PlaybackPosition( nowPlayingUiState.currentMediaPosition, nowPlayingUiState.currentMediaDuration ),
                 onNowPlayingBottomBarSwipeUp = { /*TODO*/ },
                 onNowPlayingBottomBarSwipeDown = { /*TODO*/ },
                 onNowPlayingBottomBarClick = { /*TODO*/ },
