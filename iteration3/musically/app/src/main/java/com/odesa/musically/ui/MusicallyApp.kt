@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.media3.common.MediaItem
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -16,10 +17,13 @@ import com.odesa.musically.R
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.media.Song
 import com.odesa.musically.services.media.connection.MusicServiceConnection
+import com.odesa.musically.services.media.connection.NOTHING_PLAYING
+import com.odesa.musically.services.media.extensions.toSong
 import com.odesa.musically.ui.components.NowPlayingBottomBar
 import com.odesa.musically.ui.components.PlaybackPosition
 import com.odesa.musically.ui.navigation.MusicallyNavHost
 import com.odesa.musically.ui.theme.MusicallyTheme
+import com.odesa.musically.ui.theme.isLight
 import java.util.UUID
 
 @Composable
@@ -64,6 +68,13 @@ fun MusicallyAppContent(
     val textMarquee by settingsRepository.miniPlayerTextMarquee.collectAsState()
     val showTrackControls by settingsRepository.miniPlayerShowTrackControls.collectAsState()
     val showSeekControls by settingsRepository.miniPlayerShowSeekControls.collectAsState()
+    val nowPlayingMediaItem by musicServiceConnection.nowPlaying.collectAsState()
+    val themeMode by settingsRepository.themeMode.collectAsState()
+
+    val fallbackResourceId =
+        if ( themeMode.isLight( LocalContext.current ) )
+            R.drawable.placeholder_light else R.drawable.placeholder
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -78,12 +89,12 @@ fun MusicallyAppContent(
             labelVisibility = labelVisibility,
         ) {
             NowPlayingBottomBar(
-                currentlyPlayingSong = testSongs.first(),
+                currentlyPlayingSong = if ( nowPlayingMediaItem == NOTHING_PLAYING ) null else nowPlayingMediaItem.toSong(),
                 playbackPosition = PlaybackPosition( 3, 5 ),
                 onNowPlayingBottomBarSwipeUp = { /*TODO*/ },
                 onNowPlayingBottomBarSwipeDown = { /*TODO*/ },
                 onNowPlayingBottomBarClick = { /*TODO*/ },
-                loadSongArtwork = { R.drawable.placeholder },
+                fallbackResourceId = fallbackResourceId,
                 nextSong = { true },
                 previousSong = { true },
                 textMarquee = textMarquee,

@@ -37,11 +37,11 @@
             android:name=".services.media.MusicService"
             android:enabled="true"
             android:exported="true"
-            android:foregroundServiceType="mediaPlayback"
-            tools:ignore="ExportedService">
+            android:foregroundServiceType="mediaPlayback">
 
             <intent-filter>
-                <action android:name="android.media.browse.MediaBrowserService" />
+                <action android:name="androidx.media3.session.MediaSessionService"/>
+                <action android:name="android.media.browse.MediaBrowserService"/>
             </intent-filter>
         </service>
 

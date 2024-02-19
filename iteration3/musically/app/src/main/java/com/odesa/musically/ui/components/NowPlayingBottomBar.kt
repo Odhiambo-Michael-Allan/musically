@@ -1,5 +1,6 @@
 package com.odesa.musically.ui.components
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -58,12 +59,14 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.odesa.musically.R
 import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.services.media.Song
@@ -81,7 +84,7 @@ fun NowPlayingBottomBar(
     onNowPlayingBottomBarSwipeUp: () -> Unit,
     onNowPlayingBottomBarSwipeDown: () -> Unit,
     onNowPlayingBottomBarClick: () -> Unit,
-    loadSongArtwork: ( Song ) -> Int,
+    @DrawableRes fallbackResourceId: Int,
     nextSong: () -> Boolean,
     previousSong: () -> Boolean,
     textMarquee: Boolean,
@@ -140,11 +143,17 @@ fun NowPlayingBottomBar(
                             },
                         ) { song ->
                             AsyncImage(
-                                model = loadSongArtwork( song ),
-                                contentDescription = null,
+                                model = ImageRequest.Builder( LocalContext.current ).apply {
+                                    data( song.artworkUri )
+                                    placeholder( fallbackResourceId )
+                                    fallback( fallbackResourceId )
+                                    error( fallbackResourceId )
+                                    crossfade( true )
+                                }.build(),
                                 modifier = Modifier
                                     .size( 45.dp )
-                                    .clip( RoundedCornerShape( 10.dp ) )
+                                    .clip( RoundedCornerShape( 10.dp ) ),
+                                contentDescription = null
                             )
                         }
                         Spacer( modifier = Modifier.width( 15.dp ) )
@@ -406,7 +415,7 @@ fun NowPlayingBottomBarPreview() {
         onNowPlayingBottomBarSwipeUp = {},
         onNowPlayingBottomBarSwipeDown = {},
         onNowPlayingBottomBarClick = {},
-        loadSongArtwork = { R.drawable.placeholder },
+        fallbackResourceId = R.drawable.placeholder,
         nextSong = { true },
         previousSong = { true },
         textMarquee = SettingsDefaults.miniPlayerTextMarquee,

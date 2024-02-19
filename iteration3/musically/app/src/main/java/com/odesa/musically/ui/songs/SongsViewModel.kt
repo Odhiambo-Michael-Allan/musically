@@ -13,7 +13,6 @@ import com.odesa.musically.services.media.connection.MusicServiceConnection
 import com.odesa.musically.services.media.connection.TAG
 import com.odesa.musically.services.media.extensions.isEnded
 import com.odesa.musically.services.media.extensions.isPlayEnabled
-import com.odesa.musically.services.media.extensions.stringRep
 import com.odesa.musically.services.media.extensions.toSong
 import com.odesa.musically.services.media.library.MUSICALLY_TRACKS_ROOT
 import com.odesa.musically.ui.theme.ThemeMode
@@ -27,11 +26,14 @@ class SongsViewModel(
     private val musicServiceConnection: MusicServiceConnection,
 ) : ViewModel() {
 
+    private var playlist = emptyList<MediaItem>()
+
     private val _uiState = MutableStateFlow(
         SongsScreenUiState(
             language = settingsRepository.language.value,
             themeMode = settingsRepository.themeMode.value,
-            songs = emptyList()
+            songs = emptyList(),
+            currentlyPlayingSongId = musicServiceConnection.nowPlaying.value.mediaId
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -40,15 +42,13 @@ class SongsViewModel(
         viewModelScope.launch { fetchMediaItems() }
         viewModelScope.launch { observeLanguageChange() }
         viewModelScope.launch { observeThemeMode() }
+        viewModelScope.launch { observeCurrentlyPlayingSong() }
     }
 
     private suspend fun fetchMediaItems() {
-        val mediaItemList = musicServiceConnection.getChildren( MUSICALLY_TRACKS_ROOT )
-        mediaItemList.forEach {
-            Timber.tag( SongsViewModelTag ).d( it.stringRep() )
-        }
+        playlist = musicServiceConnection.getChildren( MUSICALLY_TRACKS_ROOT )
         _uiState.value = _uiState.value.copy(
-            songs = mediaItemList.map { it.toSong() }
+            songs = playlist.map { it.toSong() }
         )
     }
 
@@ -64,6 +64,14 @@ class SongsViewModel(
         settingsRepository.themeMode.collect {
             _uiState.value = _uiState.value.copy(
                 themeMode = it
+            )
+        }
+    }
+
+    private suspend fun observeCurrentlyPlayingSong() {
+        musicServiceConnection.nowPlaying.collect {
+            _uiState.value = _uiState.value.copy(
+                currentlyPlayingSongId = it.mediaId
             )
         }
     }
@@ -88,21 +96,9 @@ class SongsViewModel(
             }
         } else {
             viewModelScope.launch {
-                var playlist: MutableList<MediaItem> = arrayListOf()
-                // Load the children of the parent if requested.
-                parentMediaId?.let {
-                    playlist = musicServiceConnection.getChildren( parentMediaId ).let { children ->
-                        children.filter {
-                            it.mediaMetadata.isPlayable ?: false
-                        }
-                    }.toMutableList()
-                }
-                if ( playlist.isEmpty() ) {
-                    playlist.add( mediaItem )
-                }
-                val indexOf = playlist.indexOf( mediaItem )
-                val startWindowIndex = if ( indexOf >= 0 ) indexOf else 0
-                player.setMediaItems( playlist, startWindowIndex, /* startPositionMs*/ C.TIME_UNSET )
+                val indexOfSelectedMediaItem = playlist.indexOf( mediaItem )
+                Timber.tag( TAG ).d( "INDEX OF MEDIA ITEM TO PLAY: $indexOfSelectedMediaItem" )
+                player.setMediaItems( playlist, indexOfSelectedMediaItem, C.TIME_UNSET )
                 player.prepare()
                 player.play()
             }
@@ -114,6 +110,7 @@ data class SongsScreenUiState(
     val language: Language,
     val themeMode: ThemeMode,
     val songs: List<Song>,
+    val currentlyPlayingSongId: String
 )
 
 @Suppress( "UNCHECKED_CAST" )

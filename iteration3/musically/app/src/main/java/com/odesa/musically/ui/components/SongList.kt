@@ -9,10 +9,6 @@ import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.odesa.musically.R
@@ -32,6 +28,7 @@ fun SongList(
     onShufflePlay: () -> Unit,
     onSortTypeChange: (SortSongsBy ) -> Unit,
     onSortReverseChange: ( Boolean ) -> Unit,
+    currentlyPlayingSongId: String,
     playSong: ( Song ) -> Unit,
 ) {
 
@@ -65,7 +62,6 @@ fun SongList(
             )
             else -> {
                 val lazyListState = rememberLazyListState()
-                var highlightedCardPosition by remember { mutableIntStateOf( -1 ) }
 
                 LazyColumn(
                     state = lazyListState,
@@ -75,13 +71,10 @@ fun SongList(
                         SongCard(
                             language = language,
                             song = song,
-                            isHighlighted = highlightedCardPosition == index,
+                            isHighlighted = currentlyPlayingSongId == song.id,
                             onFavoriteButtonClicked = {},
                             fallbackResourceId = fallbackResourceId,
-                            onClick = {
-                                highlightedCardPosition = index
-                                playSong( song )
-                            },
+                            onClick = { playSong( song ) },
                             onFavorite = {},
                             onPlayNext = { /*TODO*/ },
                             onAddToQueue = {},
@@ -124,6 +117,7 @@ fun SongListPreview() {
         onShufflePlay = {},
         onSortTypeChange = {},
         onSortReverseChange = {},
+        currentlyPlayingSongId = testSongs.first().id,
         playSong = {}
     )
 }

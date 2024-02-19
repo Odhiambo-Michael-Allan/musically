@@ -39,7 +39,7 @@ fun SongsScreen(
         playSong = {
             songsViewModel.playMedia(
             it.mediaItem,
-            false,
+            true,
             parentMediaId = MUSICALLY_TRACKS_ROOT )
         }
     )
@@ -49,10 +49,10 @@ fun SongsScreen(
 fun SongsScreenContent(
     uiState: SongsScreenUiState,
     onSortReverseChange: ( Boolean ) -> Unit,
-    onSortTypeChange: (SortSongsBy) -> Unit,
+    onSortTypeChange: ( SortSongsBy ) -> Unit,
     onSettingsClicked: () -> Unit,
     onShufflePlay: () -> Unit,
-    playSong: (Song) -> Unit,
+    playSong: ( Song ) -> Unit,
 ) {
     val fallbackResourceId =
         if ( uiState.themeMode.isLight( LocalContext.current ) )
@@ -82,6 +82,7 @@ fun SongsScreenContent(
                 songs = uiState.songs,
                 onShufflePlay = onShufflePlay,
                 fallbackResourceId = fallbackResourceId,
+                currentlyPlayingSongId = uiState.currentlyPlayingSongId,
                 playSong = playSong,
             )
         }
@@ -113,9 +114,7 @@ fun SongsScreenContentPreview() {
 
 val uiState = SongsScreenUiState(
     language = English,
-//    isLoadingSongs = true,
-//    sortSongsInReverse = false,
-//    sortSongsBy = SortSongsBy.TITLE,
     songs = testSongs,
-    themeMode = ThemeMode.LIGHT
+    themeMode = ThemeMode.LIGHT,
+    currentlyPlayingSongId = testSongs.first().id
 )
