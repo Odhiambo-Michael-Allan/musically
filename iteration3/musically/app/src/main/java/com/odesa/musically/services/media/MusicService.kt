@@ -25,6 +25,7 @@ import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import com.odesa.musically.R
+import com.odesa.musically.services.PermissionsManager
 import com.odesa.musically.services.media.extensions.stringRep
 import com.odesa.musically.services.media.library.BrowseTree
 import com.odesa.musically.services.media.library.LocalMusicSource
@@ -132,7 +133,9 @@ class MusicService : MediaLibraryService() {
 
         musicSource = LocalMusicSource( applicationContext )
         serviceScope.launch {
-            musicSource.load()
+            PermissionsManager.mediaPermissionGranted.collect {
+                if ( it ) musicSource.load()
+            }
         }
         setMediaNotificationProvider( MusicallyMediaNotificationProvider( applicationContext ) )
     }
