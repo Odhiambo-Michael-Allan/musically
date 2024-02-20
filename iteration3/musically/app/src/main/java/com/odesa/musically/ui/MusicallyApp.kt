@@ -76,6 +76,8 @@ fun MusicallyAppContent(
     val showSeekControls by settingsRepository.miniPlayerShowSeekControls.collectAsState()
     val nowPlayingMediaItem by musicServiceConnection.nowPlaying.collectAsState()
     val themeMode by settingsRepository.themeMode.collectAsState()
+    val playbackState by musicServiceConnection.playbackState.collectAsState()
+    val player = musicServiceConnection.player
 
     val fallbackResourceId =
         if ( themeMode.isLight( LocalContext.current ) )
@@ -101,15 +103,25 @@ fun MusicallyAppContent(
                 onNowPlayingBottomBarSwipeDown = { /*TODO*/ },
                 onNowPlayingBottomBarClick = { /*TODO*/ },
                 fallbackResourceId = fallbackResourceId,
-                nextSong = { true },
-                previousSong = { true },
+                nextSong = {
+                    player?.let {
+                        it.seekToNext()
+                        true
+                    } ?: false
+                },
+                previousSong = {
+                    player?.let {
+                        it.seekToPrevious()
+                        true
+                    } ?: false
+                },
                 textMarquee = textMarquee,
                 showTrackControls = showTrackControls,
                 showSeekControls = showSeekControls,
-                seekBack = {},
-                seekForward = {},
-                playPause = {},
-                isPlaying = true
+                seekBack = { player?.seekBack() },
+                seekForward = { player?.seekForward() },
+                playPause = { if ( playbackState.isPlaying ) player?.pause() else player?.play() },
+                isPlaying = playbackState.isPlaying
             )
         }
     }

@@ -5,6 +5,8 @@ import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.fakes.FakeMusicServiceConnection
 import com.odesa.musically.fakes.FakeSettingsRepository
+import com.odesa.musically.fakes.id1
+import com.odesa.musically.fakes.testMediaItems
 import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Chinese
 import com.odesa.musically.services.i18n.English
@@ -65,5 +67,18 @@ class SongsViewModelTest {
             settingsRepository.setThemeMode( it )
             assertEquals( it, songsViewModel.uiState.value.themeMode )
         }
+    }
+
+    @Test
+    fun testMediaItemsAreCorrectlyLoadedFromTheMusicServiceConnection() {
+        val uiState = songsViewModel.uiState.value
+        assertEquals( 3, uiState.songs.size )
+    }
+
+    @Test
+    fun testNowPlayingMediaItemIsCorrectlyUpdated() {
+        assertEquals( "", songsViewModel.uiState.value.currentlyPlayingSongId )
+        musicServiceConnection.setNowPlaying( testMediaItems.first() )
+        assertEquals( id1, songsViewModel.uiState.value.currentlyPlayingSongId )
     }
 }
