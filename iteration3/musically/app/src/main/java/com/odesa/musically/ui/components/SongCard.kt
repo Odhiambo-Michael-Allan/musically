@@ -111,7 +111,7 @@ fun SongCard(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = song.artist ?: "<Unknown>",
+                        text = song.artists.joinToString(),
                         style = MaterialTheme.typography.bodySmall,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
@@ -248,7 +248,7 @@ fun SongDropdownMenu(
             },
             text = {
                 Text(
-                    text = "${language.viewArtist}: ${song.artist ?: "<Unknown>"}"
+                    text = "${language.viewArtist}: ${song.artists ?: "<Unknown>"}"
                 )
             },
             onClick = {

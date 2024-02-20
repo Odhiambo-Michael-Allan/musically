@@ -79,6 +79,9 @@ fun MusicallyAppContent(
     val playbackState by musicServiceConnection.playbackState.collectAsState()
     val player = musicServiceConnection.player
 
+
+    val artistTagSeparators = setOf( "feat.", ";", "+", ",", "ft", "/", ", .", "(,", ")" )
+
     val fallbackResourceId =
         if ( themeMode.isLight( LocalContext.current ) )
             R.drawable.placeholder_light else R.drawable.placeholder
@@ -97,7 +100,7 @@ fun MusicallyAppContent(
             labelVisibility = labelVisibility,
         ) {
             NowPlayingBottomBar(
-                currentlyPlayingSong = if ( nowPlayingMediaItem == NOTHING_PLAYING ) null else nowPlayingMediaItem.toSong(),
+                currentlyPlayingSong = if ( nowPlayingMediaItem == NOTHING_PLAYING ) null else nowPlayingMediaItem.toSong( artistTagSeparators ),
                 playbackPosition = PlaybackPosition( nowPlayingUiState.currentMediaPosition, nowPlayingUiState.currentMediaDuration ),
                 onNowPlayingBottomBarSwipeUp = { /*TODO*/ },
                 onNowPlayingBottomBarSwipeDown = { /*TODO*/ },
@@ -136,8 +139,8 @@ val testSongs = List( 100 ) {
         year = 0,
         duration = 180000L,
         albumTitle = "Best of Levels",
-        artist = "The Weekend",
-        composers = "Abel \"The Weekend\" Tesfaye",
+        artists = setOf( "The Weekend", "Doja Cat" ),
+        composer = "Abel \"The Weekend\" Tesfaye",
         dateModified = 1000000,
         size = 1000,
         path = "/storage/emulated/0/Music/Telegram/DojaCat - You Right.mp3",

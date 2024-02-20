@@ -169,7 +169,7 @@ fun getArtworkUriWith(cursor: Cursor ): Uri? = MediaStore.Audio.Media.EXTERNAL_C
         build()
     }
 
-fun MediaItem.toSong() = Song(
+fun MediaItem.toSong( artistTagSeparators: Set<String> ) = Song(
     id = mediaId,
     mediaUri = Uri.parse( mediaId ),
     title = mediaMetadata.title.toString(),
@@ -178,14 +178,19 @@ fun MediaItem.toSong() = Song(
     year = mediaMetadata.extras?.getInt( RELEASE_YEAR_KEY ),
     duration = mediaMetadata.extras?.getLong( SONG_DURATION ) ?: UNKNOWN_LONG_VALUE,
     albumTitle = mediaMetadata.extras?.getString( ALBUM_TITLE_KEY ),
-    artist = mediaMetadata.extras?.getString( ARTIST_KEY ),
-    composers = mediaMetadata.composer.toString(),
+    artists = parseArtistStringIntoIndividualArtists( artistTagSeparators ),
+    composer = mediaMetadata.composer.toString(),
     dateModified = mediaMetadata.extras?.getLong( DATE_KEY ) ?: UNKNOWN_LONG_VALUE ,
     size = mediaMetadata.extras?.getLong( SIZE_KEY ) ?: UNKNOWN_LONG_VALUE,
     path = mediaMetadata.extras?.getString( PATH_KEY ) ?: UNKNOWN_STRING_VALUE,
     artworkUri = mediaMetadata.artworkUri,
     mediaItem = this
 )
+
+fun MediaItem.parseArtistStringIntoIndividualArtists( separators: Set<String> ) =
+    mediaMetadata.extras?.getString( ARTIST_KEY )?.split( *separators.toTypedArray() )
+        ?.mapNotNull { x -> x.trim().takeIf { it.isNotEmpty() } }
+        ?.toSet() ?: setOf()
 
 fun MediaItem.stringRep() = StringBuilder().apply {
     appendWithLineBreak( "Media Id: $mediaId" )

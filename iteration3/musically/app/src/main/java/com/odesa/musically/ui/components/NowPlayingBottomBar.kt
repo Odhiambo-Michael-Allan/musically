@@ -325,7 +325,7 @@ private fun NowPlayingBottomBarContent(
 
                 )
                 NowPlayingBottomBarContentText(
-                    song.artist ?: "<Unknown>",
+                    song.artists.joinToString(),
                     style = MaterialTheme.typography.bodySmall,
                     textMarquee = textMarquee
                 )

@@ -39,6 +39,8 @@ class SongsViewModel(
     )
     val uiState = _uiState.asStateFlow()
 
+    val artistTagSeparators = setOf( "feat.", ";", "+", ",", "ft", "/", ", .", "(,", ")" )
+
     init {
         viewModelScope.launch { fetchMediaItems() }
         viewModelScope.launch { observeLanguageChange() }
@@ -49,7 +51,7 @@ class SongsViewModel(
     private suspend fun fetchMediaItems() {
         playlist = musicServiceConnection.getChildren( MUSICALLY_TRACKS_ROOT )
         _uiState.value = _uiState.value.copy(
-            songs = playlist.map { it.toSong() }
+            songs = playlist.map { it.toSong( artistTagSeparators ) }
         )
         _uiState.value = _uiState.value.copy (
             isLoading = false
