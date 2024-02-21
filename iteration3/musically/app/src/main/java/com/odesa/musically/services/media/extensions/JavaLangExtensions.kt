@@ -1,6 +1,5 @@
 package com.odesa.musically.services.media.extensions
 
-import android.net.Uri
 import java.net.URLEncoder
 import java.nio.charset.Charset
 import java.util.Locale
@@ -29,7 +28,17 @@ inline val String?.urlEncoded: String
         URLEncoder.encode( this ?: "" )
     }
 
-/**
- * Helper extension to convert a potentially null [String] to a [Uri] falling back to [Uri.EMPTY]
- */
-fun String?.toUri(): Uri = this?.let { Uri.parse( it ) } ?: Uri.EMPTY
+
+
+fun Long.formatMilliseconds() = formatToMinAndSec(
+    this.div( 1000 ),
+    this.div( 60 ),
+    this.div( 60 ),
+    this.div( 24 )
+)
+
+private fun formatToMinAndSec( duration: Long, hours: Long, minutes: Long, seconds: Long ) = when {
+    duration == 0L && hours == 0L -> String.format( "%02d:%0sd", minutes, seconds )
+    duration == 0L -> String.format( "%02d:%02d:%02d", hours, minutes, seconds )
+    else -> String.format( "%02d:%02d:%02d:%02d", duration, hours, minutes, seconds )
+}

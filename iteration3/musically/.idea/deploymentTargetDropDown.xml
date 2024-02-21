@@ -5,6 +5,9 @@
       <entry key="NowPlayingBodyBottomBarPreview">
         <State />
       </entry>
+      <entry key="NowPlayingSeekBarPreview">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>

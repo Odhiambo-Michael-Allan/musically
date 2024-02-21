@@ -1,9 +1,7 @@
 package com.odesa.musically.ui.components
 
 import android.net.Uri
-import android.os.Build
 import androidx.annotation.DrawableRes
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -336,7 +334,6 @@ fun SongCardPreview() {
     )
 }
 
-@RequiresApi( Build.VERSION_CODES.O )
 @Preview( showBackground = true )
 @Composable
 fun SongDropdownMenuPreview() {
