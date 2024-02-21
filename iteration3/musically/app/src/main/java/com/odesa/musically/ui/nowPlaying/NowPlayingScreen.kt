@@ -42,6 +42,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -68,17 +69,61 @@ import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.services.media.LoopMode
 import com.odesa.musically.services.media.Song
+import com.odesa.musically.services.media.extensions.formatMilliseconds
+import com.odesa.musically.services.media.testSongs
 import com.odesa.musically.services.media.toSamplingInfoString
 import com.odesa.musically.ui.components.PlaybackPosition
 import com.odesa.musically.ui.components.SongDropdownMenu
 import com.odesa.musically.ui.components.swipeable
 import com.odesa.musically.ui.navigation.FadeTransition
-import com.odesa.musically.ui.testSongs
 
 
 @Composable
-fun NowPlayingScreen() {
+fun NowPlayingScreen(
+    nowPlayingViewModel: NowPlayingViewModel,
+    onCreateEqualizerActivityContract: () -> ActivityResultContract<Unit, Unit>
+) {
 
+    val uiState by nowPlayingViewModel.nowPlayingUiState.collectAsState()
+
+    NowPlayingScreenContent(
+        currentlyPlayingSong = uiState.currentlyPlayingSong,
+        currentlyPlayingSongIndex = uiState.currentlyPlayingSongIndex,
+        queueSize = uiState.queueSize,
+        language = uiState.language,
+        isFavorite = uiState.currentlyPlayingSongIsFavorite,
+        controlsLayoutIsDefault = uiState.controlsLayoutIsDefault,
+        isPlaying = uiState.isPlaying,
+        enableSeekControls = uiState.enableSeekControls,
+        showLyrics = uiState.showLyrics,
+        fallbackResourceId = uiState.fallbackResourceId,
+        playbackPosition = uiState.playbackPosition,
+        shuffle = uiState.shuffle,
+        currentLoopMode = uiState.currentLoopMode,
+        pauseOnCurrentSongEnd = uiState.pauseOnCurrentSongEnd,
+        currentPlayingSpeed = uiState.currentPlayingSpeed,
+        currentPlayingPitch = uiState.currentPlayingPitch,
+        durationFormatter = { it.formatMilliseconds() },
+        onArtistClicked = {},
+        onFavorite = { nowPlayingViewModel.onFavorite( it ) },
+        onPausePlayButtonClick = { nowPlayingViewModel.playPause() },
+        onPreviousButtonClick = { nowPlayingViewModel.playPreviousSong() },
+        onNextButtonClick = { nowPlayingViewModel.playNextSong() },
+        onFastRewindButtonClick = { nowPlayingViewModel.fastRewind() },
+        onFastForwardButtonClick = { nowPlayingViewModel.fastForward() },
+        onSeekEnd = { nowPlayingViewModel.onSeekEnd( it ) },
+        onArtworkClicked = { nowPlayingViewModel.onArtworkClicked() },
+        onSwipeArtworkLeft = { nowPlayingViewModel.playPreviousSong() },
+        onSwipeArtworkRight = { nowPlayingViewModel.playNextSong() },
+        onQueueClicked = {},
+        onShowLyrics = {},
+        onToggleLoopMode = { nowPlayingViewModel.toggleLoopMode() },
+        onToggleShuffleMode = { nowPlayingViewModel.toggleShuffleMode() },
+        onTogglePauseOnCurrentSongEnd = { nowPlayingViewModel.togglePauseOnCurrentSongEnd() },
+        onPlayingSpeedChange = { nowPlayingViewModel.onPlayingSpeedChange( it ) },
+        onPlayingPitchChange = { nowPlayingViewModel.onPlayingPitchChange( it ) },
+        onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
+    )
 }
 
 
@@ -86,7 +131,7 @@ fun NowPlayingScreen() {
 @Composable
 fun NowPlayingScreenContent(
     currentlyPlayingSong: Song,
-    currentlyPlayingSongIndex: Int,
+    currentlyPlayingSongIndex: Long,
     queueSize: Int,
     language: Language,
     isFavorite: Boolean,

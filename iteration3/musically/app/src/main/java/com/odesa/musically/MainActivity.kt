@@ -8,19 +8,19 @@ import androidx.core.view.WindowCompat
 import com.odesa.musically.data.AppContainer
 import com.odesa.musically.services.PermissionsManager
 import com.odesa.musically.ui.MusicallyApp
+import com.odesa.musically.ui.nowPlaying.NowPlayingViewModel
 import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var appContainer: AppContainer
-    private lateinit var mainActivityViewModel: MainActivityViewModel
 
     override fun onCreate( savedInstanceState: Bundle? ) {
         super.onCreate( savedInstanceState )
         Timber.plant( Timber.DebugTree() )
         appContainer = ( application as MusicallyApplication ).container
-        val mainActivityViewModel: MainActivityViewModel by viewModels {
-            MainActivityViewModel.MainActivityViewModelFactory(
+        val nowPlayingViewModel: NowPlayingViewModel by viewModels {
+            NowPlayingViewModel.MainActivityViewModelFactory(
                 application,
                 appContainer.musicServiceConnection
             )
@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
             MusicallyApp(
                 settingsRepository = appContainer.settingsRepository,
                 musicServiceConnection = appContainer.musicServiceConnection,
-                mainActivityViewModel = mainActivityViewModel
+                nowPlayingViewModel = nowPlayingViewModel
             )
         }
     }

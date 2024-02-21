@@ -56,7 +56,7 @@ import timber.log.Timber
 @Composable
 fun NowPlayingBodyBottomBar(
     language: Language,
-    currentSongIndex: Int,
+    currentSongIndex: Long,
     queueSize: Int,
     showLyrics: Boolean,
     currentLoopMode: LoopMode,

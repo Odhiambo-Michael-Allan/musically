@@ -1,6 +1,5 @@
 package com.odesa.musically.ui
 
-import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -8,39 +7,39 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.media3.common.MediaItem
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.odesa.musically.MainActivityViewModel
-import com.odesa.musically.NowPlayingUiState
 import com.odesa.musically.R
 import com.odesa.musically.data.settings.SettingsRepository
-import com.odesa.musically.services.media.Song
 import com.odesa.musically.services.media.connection.MusicServiceConnection
 import com.odesa.musically.services.media.connection.NOTHING_PLAYING
 import com.odesa.musically.services.media.extensions.toSong
 import com.odesa.musically.ui.components.NowPlayingBottomBar
 import com.odesa.musically.ui.components.PlaybackPosition
 import com.odesa.musically.ui.navigation.MusicallyNavHost
+import com.odesa.musically.ui.nowPlaying.NowPlayingUiState
+import com.odesa.musically.ui.nowPlaying.NowPlayingViewModel
 import com.odesa.musically.ui.theme.MusicallyTheme
 import com.odesa.musically.ui.theme.isLight
-import java.util.UUID
 
 @Composable
 fun MusicallyApp(
     navController: NavHostController = rememberNavController(),
     settingsRepository: SettingsRepository,
     musicServiceConnection: MusicServiceConnection,
-    mainActivityViewModel: MainActivityViewModel
+    nowPlayingViewModel: NowPlayingViewModel
 ) {
     val themeMode by settingsRepository.themeMode.collectAsState()
     val primaryColorName by settingsRepository.primaryColorName.collectAsState()
     val font by settingsRepository.font.collectAsState()
     val fontScale by settingsRepository.fontScale.collectAsState()
     val useMaterialYou by settingsRepository.useMaterialYou.collectAsState()
-    val nowPlayingUiState by mainActivityViewModel.nowPlayingUiState.collectAsState()
+    val nowPlayingUiState by nowPlayingViewModel.nowPlayingUiState.collectAsState()
 
     MusicallyTheme(
         themeMode = themeMode,
@@ -78,6 +77,7 @@ fun MusicallyAppContent(
     val themeMode by settingsRepository.themeMode.collectAsState()
     val playbackState by musicServiceConnection.playbackState.collectAsState()
     val player = musicServiceConnection.player
+    var showNowPlayingBottomSheet by remember { mutableStateOf( false ) }
 
 
     val artistTagSeparators = setOf( "feat.", ";", "+", ",", "ft", "/", ", .", "(,", ")" )
@@ -130,23 +130,5 @@ fun MusicallyAppContent(
     }
 }
 
-val testSongs = List( 100 ) {
-    Song(
-        id = UUID.randomUUID().toString(),
-        title = "You Right",
-        displayTitle = "You Right",
-        trackNumber = 1,
-        year = 0,
-        duration = 180000L,
-        albumTitle = "Best of Levels",
-        artists = setOf( "The Weekend", "Doja Cat" ),
-        composer = "Abel \"The Weekend\" Tesfaye",
-        dateModified = 1000000,
-        size = 1000,
-        path = "/storage/emulated/0/Music/Telegram/DojaCat - You Right.mp3",
-        mediaUri = Uri.EMPTY,
-        artworkUri = Uri.EMPTY,
-        mediaItem = MediaItem.EMPTY
-    )
-}
+
 

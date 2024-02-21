@@ -8,6 +8,7 @@ import com.odesa.musically.services.media.extensions.BITS_PER_SAMPLE_KEY
 import com.odesa.musically.services.media.extensions.CODEC_KEY
 import com.odesa.musically.services.media.extensions.SAMPLING_RATE_KEY
 import java.math.RoundingMode
+import java.util.UUID
 
 data class Song(
     val id: String,
@@ -45,4 +46,24 @@ fun Song.toSamplingInfoString( language: Language ): String? {
         values.isNotEmpty() -> values.joinToString( ", " )
         else -> null
     }
+}
+
+val testSongs = List( 100 ) {
+    Song(
+        id = UUID.randomUUID().toString(),
+        title = "You Right",
+        displayTitle = "You Right",
+        trackNumber = 1,
+        year = 0,
+        duration = 180000L,
+        albumTitle = "Best of Levels",
+        artists = setOf( "The Weekend", "Doja Cat" ),
+        composer = "Abel \"The Weekend\" Tesfaye",
+        dateModified = 1000000,
+        size = 1000,
+        path = "/storage/emulated/0/Music/Telegram/DojaCat - You Right.mp3",
+        mediaUri = Uri.EMPTY,
+        artworkUri = Uri.EMPTY,
+        mediaItem = MediaItem.EMPTY
+    )
 }

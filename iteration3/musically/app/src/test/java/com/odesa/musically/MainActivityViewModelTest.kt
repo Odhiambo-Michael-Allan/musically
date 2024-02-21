@@ -6,6 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.odesa.musically.fakes.FakeMusicServiceConnection
 import com.odesa.musically.services.media.connection.EMPTY_PLAYBACK_STATE
 import com.odesa.musically.services.media.connection.PlaybackState
+import com.odesa.musically.ui.nowPlaying.NowPlayingViewModel
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -15,12 +16,12 @@ import org.junit.runner.RunWith
 class MainActivityViewModelTest {
 
     private lateinit var musicServiceConnection: FakeMusicServiceConnection
-    private lateinit var mainActivityViewModel: MainActivityViewModel
+    private lateinit var mainActivityViewModel: NowPlayingViewModel
 
     @Before
     fun setup() {
         musicServiceConnection = FakeMusicServiceConnection()
-        mainActivityViewModel = MainActivityViewModel(
+        mainActivityViewModel = NowPlayingViewModel(
             application = ApplicationProvider.getApplicationContext(),
             musicServiceConnection = musicServiceConnection
         )
