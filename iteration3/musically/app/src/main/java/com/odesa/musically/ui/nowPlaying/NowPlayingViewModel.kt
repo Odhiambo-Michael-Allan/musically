@@ -6,6 +6,7 @@ import android.os.Looper
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.Language
@@ -19,6 +20,8 @@ import com.odesa.musically.ui.components.PlaybackPosition
 import com.odesa.musically.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class NowPlayingViewModel(
     application: Application,
@@ -26,8 +29,6 @@ class NowPlayingViewModel(
     settingsRepository: SettingsRepository,
 ) : AndroidViewModel( application ) {
 
-    private val playbackPosition = MutableStateFlow( PlaybackPosition.zero )
-    private var updatePlaybackPosition = true
     private val handler = Handler( Looper.getMainLooper() )
     private val _bottomSheetUiState = MutableStateFlow(
         NowPlayingBottomSheetUiState(
@@ -40,7 +41,7 @@ class NowPlayingViewModel(
             isPlaying = true,
             showSeekControls = true,
             showLyrics = false,
-            playbackPosition = playbackPosition.value,
+            playbackPosition = PlaybackPosition.zero,
             shuffle = true,
             currentLoopMode = LoopMode.Song,
             pauseOnCurrentSongEnd = false,
@@ -64,41 +65,59 @@ class NowPlayingViewModel(
     val bottomSheetUiState = _bottomSheetUiState.asStateFlow()
     val bottomBarUiState = _bottomBarUiState.asStateFlow()
 
-//    init {
-//        viewModelScope.launch { observePlaybackState() }
-////        viewModelScope.launch { observeNowPlaying() }
-//        checkPlaybackPosition( POSITION_UPDATE_INTERVAL_MILLIS )
-//    }
+    private val _updatePlaybackPosition = MutableStateFlow( false )
+    var updatePlaybackPosition = _updatePlaybackPosition.asStateFlow()
 
-//    private suspend fun observePlaybackState() {
-//        musicServiceConnection.playbackState.collect {
-//            _nowPlayingUiState.value = _nowPlayingUiState.value.copy(
-//                currentMediaDuration = it.duration
-//            )
-//        }
-//    }
+    init {
+        viewModelScope.launch { observePlaybackState() }
+        viewModelScope.launch { observeUpdatePlaybackPosition() }
+    }
 
-//    private suspend fun observeNowPlaying() {
-//        musicServiceConnection.nowPlaying.collect {
-//            updatePlaybackPosition = it != NOTHING_PLAYING
-//        }
-//    }
+    private suspend fun observePlaybackState() {
+        musicServiceConnection.playbackState.collect {
+            if ( it.isPlaying ) {
+                _updatePlaybackPosition.value = true
+                updateBottomSheetPlaybackState( it.duration )
+                updateBottomBarPlaybackState( it.duration )
+            } else
+                _updatePlaybackPosition.value = false
+        }
+    }
+
+    private fun updateBottomSheetPlaybackState( duration: Long ) {
+        _bottomSheetUiState.value = _bottomSheetUiState.value.copy(
+            playbackPosition = PlaybackPosition( 0L, duration )
+        )
+    }
+
+    private fun updateBottomBarPlaybackState( duration: Long ) {
+        _bottomBarUiState.value = _bottomBarUiState.value.copy(
+            playbackPosition = PlaybackPosition( 0L, duration )
+        )
+    }
+
+    private suspend fun observeUpdatePlaybackPosition() {
+        viewModelScope.launch {
+            updatePlaybackPosition.collect {
+                if ( it ) checkPlaybackPosition( POSITION_UPDATE_INTERVAL_MILLIS )
+            }
+        }
+    }
 
     /**
      * Internal function that recursively calls itself to check the current playback position and
      * updates the corresponding state value
      */
-//    private fun checkPlaybackPosition( delayMs: Long ): Boolean = handler.postDelayed( {
-//        val currentPosition = musicServiceConnection.player?.currentPosition ?: 0
-//        Timber.tag( "MAIN-ACTIVITY-VIEW-MODEL" ).d( "CURRENT POSITION: $currentPosition" )
-//        if ( currentMediaPosition.value != currentPosition ) {
-//            _nowPlayingUiState.value = _nowPlayingUiState.value.copy(
-//                currentMediaPosition = currentPosition
-//            )
-//        }
-//        if ( updatePlaybackPosition )
-//            checkPlaybackPosition( 1000 - ( currentPosition % 1000 ) )
-//    }, delayMs )
+    private fun checkPlaybackPosition( delayMs: Long ): Boolean = handler.postDelayed( {
+        val currentPosition = musicServiceConnection.player?.currentPosition ?: 0
+        Timber.tag( "NOW-PLAYING-VIEW-MODEL" ).d( "CURRENT POSITION: $currentPosition" )
+        if ( _bottomBarUiState.value.playbackPosition.played != currentPosition ) {
+            updateBottomBarPlaybackState( currentPosition )
+            updateBottomSheetPlaybackState( currentPosition )
+        }
+        if ( updatePlaybackPosition.value )
+            checkPlaybackPosition( 1000 - ( currentPosition % 1000 ) )
+    }, delayMs )
 
     fun onFavorite( songId: String ) {}
 
@@ -132,7 +151,7 @@ class NowPlayingViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        updatePlaybackPosition = false // Stop updating the position.
+        _updatePlaybackPosition.value = false // Stop updating the position.
     }
 
     private fun getCurrentlyPlayingSong(): Song? {

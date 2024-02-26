@@ -9,6 +9,8 @@ import com.odesa.musically.fakes.FakeSettingsRepository
 import com.odesa.musically.services.media.connection.PlaybackState
 import com.odesa.musically.ui.components.PlaybackPosition
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -50,7 +52,7 @@ class NowPlayingViewModelTest {
             nowPlayingViewModel.bottomBarUiState.value.playbackPosition.total
         )
         musicServiceConnection.setPlaybackState(
-            PlaybackState( Player.STATE_IDLE, duration = 30000L )
+            PlaybackState( Player.STATE_READY, playWhenReady = true, duration = 30000L )
         )
         assertEquals(
             30000L,
@@ -60,6 +62,17 @@ class NowPlayingViewModelTest {
             30000L,
             nowPlayingViewModel.bottomBarUiState.value.playbackPosition.total
         )
+    }
+
+    @Test
+    fun testUpdatePlaybackPositionIsCorrectlyUpdated() {
+        assertFalse( nowPlayingViewModel.updatePlaybackPosition.value )
+        musicServiceConnection.setPlaybackState(
+            PlaybackState( Player.STATE_READY, playWhenReady = true, duration = 50000L )
+        )
+        assertTrue( nowPlayingViewModel.updatePlaybackPosition.value )
+        musicServiceConnection.setPlaybackState( PlaybackState( Player.STATE_ENDED ) )
+        assertFalse( nowPlayingViewModel.updatePlaybackPosition.value )
     }
 
 }
