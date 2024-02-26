@@ -26,6 +26,9 @@ class FakeMusicServiceConnection : MusicServiceConnection {
     private val _currentlyPlayingMediaItemIndex = MutableStateFlow( 0 )
     override val currentlyPlayingMediaItemIndex = _currentlyPlayingMediaItemIndex.asStateFlow()
 
+    private val _isPlaying = MutableStateFlow( false )
+    override val isPlaying = _isPlaying.asStateFlow()
+
     override val player: Player? = null
 
     private val playlist = ArrayList<MediaItem>()
@@ -57,6 +60,10 @@ class FakeMusicServiceConnection : MusicServiceConnection {
 
     fun setCurrentMediaItemIndex( index: Int ) {
         _currentlyPlayingMediaItemIndex.value = index
+    }
+
+    fun setIsPlaying( isPlaying: Boolean ) {
+        _isPlaying.value = isPlaying
     }
 
 }

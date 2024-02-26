@@ -31,7 +31,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -74,6 +73,9 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
     private val _currentPlayingMediaItemIndex = MutableStateFlow(
         player?.currentMediaItemIndex ?: 0 )
     override val currentlyPlayingMediaItemIndex = _currentPlayingMediaItemIndex.asStateFlow()
+
+    private val _isPlaying = MutableStateFlow( player?.isPlaying ?: false )
+    override val isPlaying = _isPlaying.asStateFlow()
 
     private var browser: MediaBrowser? = null
     private val playerListener: PlayerListener = PlayerListener()
@@ -154,6 +156,10 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
         )
     }
 
+    private fun updateIsPlaying() {
+        _isPlaying.value = player?.isPlaying ?: false
+    }
+
     companion object {
         // For Singleton instantiation
         @Volatile
@@ -178,9 +184,9 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
                 || events.contains( EVENT_PLAYBACK_STATE_CHANGED )
                 || events.contains( EVENT_MEDIA_ITEM_TRANSITION ) ) {
                 updatePlaybackState( player )
-                Timber.tag( TAG ).d( "PLAYBACK STATE CHANGED" )
+                updateIsPlaying()
             }
-            if ( events.contains(Player.EVENT_MEDIA_METADATA_CHANGED )
+            if ( events.contains( Player.EVENT_MEDIA_METADATA_CHANGED )
                 || events.contains( EVENT_MEDIA_ITEM_TRANSITION )
                 || events.contains( EVENT_PLAY_WHEN_READY_CHANGED ) ) {
                 updateNowPlaying( player )

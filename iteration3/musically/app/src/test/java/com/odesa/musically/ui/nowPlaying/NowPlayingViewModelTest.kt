@@ -8,6 +8,13 @@ import com.odesa.musically.fakes.FakeMusicServiceConnection
 import com.odesa.musically.fakes.FakeSettingsRepository
 import com.odesa.musically.fakes.id1
 import com.odesa.musically.fakes.testMediaItems
+import com.odesa.musically.services.i18n.Belarusian
+import com.odesa.musically.services.i18n.Chinese
+import com.odesa.musically.services.i18n.English
+import com.odesa.musically.services.i18n.French
+import com.odesa.musically.services.i18n.German
+import com.odesa.musically.services.i18n.Language
+import com.odesa.musically.services.i18n.Spanish
 import com.odesa.musically.services.media.connection.PlaybackState
 import com.odesa.musically.ui.components.PlaybackPosition
 import junit.framework.TestCase.assertEquals
@@ -15,6 +22,7 @@ import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertNull
 import junit.framework.TestCase.assertTrue
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -105,6 +113,33 @@ class NowPlayingViewModelTest {
         musicServiceConnection.setCurrentMediaItemIndex( 10 )
         assertEquals( 10,
             nowPlayingViewModel.bottomSheetUiState.value.currentlyPlayingSongIndex )
+    }
+
+    @Test
+    fun testLanguageChange() {
+        assertEquals( "Settings",
+            nowPlayingViewModel.bottomSheetUiState.value.language.settings )
+        changeLanguageTo( Belarusian, "Налады" )
+        changeLanguageTo( Chinese, "设置" )
+        changeLanguageTo( English, "Settings" )
+        changeLanguageTo( French, "Paramètres" )
+        changeLanguageTo( German, "Einstellungen" )
+        changeLanguageTo( Spanish, "Configuración" )
+    }
+
+    private fun changeLanguageTo(language: Language, testString: String ) = runTest {
+        settingsRepository.setLanguage( language.locale )
+        val currentLanguage = nowPlayingViewModel.bottomSheetUiState.value.language
+        assertEquals( testString, currentLanguage.settings )
+    }
+
+    @Test
+    fun testIsPlayingChange() {
+        assertFalse( nowPlayingViewModel.bottomSheetUiState.value.isPlaying )
+        assertFalse( nowPlayingViewModel.bottomBarUiState.value.isPlaying )
+        musicServiceConnection.setIsPlaying( true )
+        assertTrue( nowPlayingViewModel.bottomSheetUiState.value.isPlaying )
+        assertTrue( nowPlayingViewModel.bottomBarUiState.value.isPlaying )
     }
 
 }

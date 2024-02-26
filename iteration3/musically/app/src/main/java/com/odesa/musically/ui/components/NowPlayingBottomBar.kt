@@ -207,8 +207,8 @@ fun NowPlayingBottomBar(
                         IconButton( onClick = playPause ) {
                             Icon(
                                 imageVector = when {
-                                    !nowPlayingBottomBarUiState.isPlaying -> Icons.Filled.PlayArrow
-                                    else -> Icons.Filled.Pause
+                                    nowPlayingBottomBarUiState.isPlaying -> Icons.Filled.Pause
+                                    else -> Icons.Filled.PlayArrow
                                 },
                                 contentDescription = null
                             )
@@ -425,6 +425,6 @@ val uiState = NowPlayingBottomBarUiState(
     textMarquee = true,
     showTrackControls = true,
     showSeekControls = true,
-    isPlaying = true,
+    isPlaying = false,
     themeMode = SettingsDefaults.themeMode
 )

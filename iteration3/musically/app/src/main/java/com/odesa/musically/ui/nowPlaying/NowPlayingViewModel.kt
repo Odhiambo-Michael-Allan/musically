@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.odesa.musically.data.settings.SettingsRepository
-import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.services.media.LoopMode
 import com.odesa.musically.services.media.Song
@@ -26,7 +25,7 @@ import timber.log.Timber
 class NowPlayingViewModel(
     application: Application,
     private val musicServiceConnection: MusicServiceConnection,
-    settingsRepository: SettingsRepository,
+    private val settingsRepository: SettingsRepository,
 ) : AndroidViewModel( application ) {
 
     private val handler = Handler( Looper.getMainLooper() )
@@ -36,7 +35,7 @@ class NowPlayingViewModel(
             currentlyPlayingSongIndex = musicServiceConnection.currentlyPlayingMediaItemIndex.value,
             playbackPosition = PlaybackPosition.zero,
             queueSize = musicServiceConnection.queueSize.value,
-            language = English,
+            language = settingsRepository.language.value,
             currentlyPlayingSongIsFavorite = true,
             controlsLayoutIsDefault = false,
             isPlaying = true,
@@ -74,6 +73,8 @@ class NowPlayingViewModel(
         viewModelScope.launch { observeUpdatePlaybackPosition() }
         viewModelScope.launch { observeQueueSize() }
         viewModelScope.launch { observeCurrentlyPlayingMediaItemIndex() }
+        viewModelScope.launch { observeLanguage() }
+        viewModelScope.launch { observeIsPlaying() }
     }
 
     private suspend fun observeNowPlaying() {
@@ -161,23 +162,68 @@ class NowPlayingViewModel(
         }
     }
 
+    private suspend fun observeLanguage() {
+        settingsRepository.language.collect {
+            _bottomSheetUiState.value = _bottomSheetUiState.value.copy(
+                language = it
+            )
+        }
+    }
+
+    private suspend fun observeIsPlaying() {
+        musicServiceConnection.isPlaying.collect {
+            updateBottomSheetIsPlaying( it )
+            updateBottomBarIsPlaying( it )
+        }
+    }
+
+    private fun updateBottomSheetIsPlaying( isPlaying: Boolean ) {
+        _bottomSheetUiState.value = _bottomSheetUiState.value.copy(
+            isPlaying = isPlaying
+        )
+    }
+
+    private fun updateBottomBarIsPlaying( isPlaying: Boolean ) {
+        _bottomBarUiState.value = _bottomBarUiState.value.copy(
+            isPlaying = isPlaying
+        )
+    }
+
     fun onFavorite( songId: String ) {}
 
-    fun playPause() {}
+    fun playPause() {
+        musicServiceConnection.player?.let {
+           if ( it.isPlaying ) it.pause() else it.play()
+        }
+    }
 
     fun playPreviousSong(): Boolean {
-        return true
+        musicServiceConnection.player?.let {
+            it.seekToPrevious()
+            return true
+        }
+        return false
     }
 
     fun playNextSong(): Boolean {
-        return true
+        musicServiceConnection.player?.let {
+            it.seekToNext()
+            return true
+        }
+        return false
     }
 
-    fun fastRewind() {}
+    fun fastRewind() {
+        musicServiceConnection.player?.seekBack()
+    }
 
-    fun fastForward() {}
+    fun fastForward() {
+        musicServiceConnection.player?.seekForward()
+    }
 
-    fun onSeekEnd( position: Long ) {}
+    fun onSeekEnd( position: Long ) {
+        musicServiceConnection.player?.seekTo( position )
+    }
 
     fun onArtworkClicked() {}
 

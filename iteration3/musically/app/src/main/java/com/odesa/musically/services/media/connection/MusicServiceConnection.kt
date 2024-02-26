@@ -11,6 +11,7 @@ interface MusicServiceConnection {
     val playbackState: StateFlow<PlaybackState>
     val queueSize: StateFlow<Int>
     val currentlyPlayingMediaItemIndex: StateFlow<Int>
+    val isPlaying: StateFlow<Boolean>
     val player: Player?
     suspend fun getChildren( parentId: String ): ImmutableList<MediaItem>
     suspend fun sendCommand( command: String, parameters: Bundle? ) : Boolean
