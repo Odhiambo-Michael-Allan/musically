@@ -48,6 +48,8 @@ fun Song.toSamplingInfoString( language: Language ): String? {
     }
 }
 
+val artistTagSeparators = setOf( "feat.", ";", "+", ",", "ft", "/", ", .", "(,", ")" )
+
 val testSongs = List( 100 ) {
     Song(
         id = UUID.randomUUID().toString(),

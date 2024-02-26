@@ -14,10 +14,10 @@ import com.odesa.musically.data.storage.preferences.SortSongsBy
 import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.media.Song
+import com.odesa.musically.services.media.testSongs
 import com.odesa.musically.ui.components.LoaderScaffold
 import com.odesa.musically.ui.components.SongList
 import com.odesa.musically.ui.components.TopAppBar
-import com.odesa.musically.ui.testSongs
 import com.odesa.musically.ui.theme.MusicallyTheme
 import com.odesa.musically.ui.theme.ThemeMode
 import com.odesa.musically.ui.theme.isLight
@@ -55,7 +55,7 @@ fun SongsScreenContent(
 ) {
     val fallbackResourceId =
         if ( uiState.themeMode.isLight( LocalContext.current ) )
-            R.drawable.placeholder_light else R.drawable.placeholder
+            R.drawable.placeholder_light else R.drawable.placeholder_dark
 
     Column (
         modifier = Modifier.fillMaxSize()

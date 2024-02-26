@@ -16,7 +16,7 @@ import com.odesa.musically.data.storage.preferences.SortSongsBy
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.services.media.Song
-import com.odesa.musically.ui.testSongs
+import com.odesa.musically.services.media.testSongs
 
 @Composable
 fun SongList(

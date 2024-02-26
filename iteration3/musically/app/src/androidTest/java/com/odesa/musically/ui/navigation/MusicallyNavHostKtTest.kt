@@ -22,9 +22,11 @@ import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.media.connection.MusicServiceConnection
+import com.odesa.musically.services.media.connection.NOTHING_PLAYING
 import com.odesa.musically.services.media.connection.PlaybackState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -199,17 +201,16 @@ class MusicallyNavHostKtTest {
 
 class FakeMusicServiceConnection : MusicServiceConnection {
 
-    private val _isConnected = MutableStateFlow( false )
-    override val nowPlaying: StateFlow<MediaItem>
-        get() = TODO("Not yet implemented")
+    private val _nowPlaying = MutableStateFlow( NOTHING_PLAYING )
+    override val nowPlaying = _nowPlaying.asStateFlow()
+
     override val playbackState: StateFlow<PlaybackState>
         get() = TODO("Not yet implemented")
     override val player: Player?
         get() = TODO("Not yet implemented")
 
-    override suspend fun getChildren(parentId: String): ImmutableList<MediaItem> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getChildren( parentId: String ): ImmutableList<MediaItem> =
+        ImmutableList.of<MediaItem>()
 
     override suspend fun sendCommand(command: String, parameters: Bundle?): Boolean {
         TODO("Not yet implemented")

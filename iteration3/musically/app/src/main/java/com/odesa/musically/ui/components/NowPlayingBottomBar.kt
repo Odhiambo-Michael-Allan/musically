@@ -1,6 +1,5 @@
 package com.odesa.musically.ui.components
 
-import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -70,35 +69,35 @@ import coil.request.ImageRequest
 import com.odesa.musically.R
 import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.services.media.Song
+import com.odesa.musically.services.media.testSongs
 import com.odesa.musically.ui.navigation.FadeTransition
 import com.odesa.musically.ui.navigation.TransitionDurations
-import com.odesa.musically.ui.testSongs
+import com.odesa.musically.ui.nowPlaying.NowPlayingBottomBarUiState
+import com.odesa.musically.ui.theme.isLight
 import com.odesa.musically.utils.runFunctionIfTrueElseReturnThisObject
 import kotlin.math.absoluteValue
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun NowPlayingBottomBar(
-    currentlyPlayingSong: Song?,
-    playbackPosition: PlaybackPosition,
+    nowPlayingBottomBarUiState: NowPlayingBottomBarUiState,
     onNowPlayingBottomBarSwipeUp: () -> Unit,
-    onNowPlayingBottomBarSwipeDown: () -> Unit,
     onNowPlayingBottomBarClick: () -> Unit,
-    @DrawableRes fallbackResourceId: Int,
     nextSong: () -> Boolean,
     previousSong: () -> Boolean,
-    textMarquee: Boolean,
-    showTrackControls: Boolean,
-    showSeekControls: Boolean,
     seekBack: () -> Unit,
     seekForward: () -> Unit,
     playPause: () -> Unit,
-    isPlaying: Boolean,
 ) {
+
+    val fallbackResourceId = if (
+        nowPlayingBottomBarUiState.themeMode.isLight( LocalContext.current )
+        ) R.drawable.placeholder_light else R.drawable.placeholder_dark
+
     AnimatedContent(
         modifier = Modifier.fillMaxWidth(),
         label = "now-playing-container",
-        targetState = currentlyPlayingSong,
+        targetState = nowPlayingBottomBarUiState.currentlyPlayingSong,
         contentKey = { true },
         transitionSpec = {
             slideInVertically().plus( fadeIn() )
@@ -117,7 +116,6 @@ fun NowPlayingBottomBar(
                         .wrapContentHeight()
                         .swipeable(
                             onSwipeUp = onNowPlayingBottomBarSwipeUp,
-                            onSwipeDown = onNowPlayingBottomBarSwipeDown
                         ),
                     shape = RectangleShape,
                     onClick = onNowPlayingBottomBarClick
@@ -151,8 +149,8 @@ fun NowPlayingBottomBar(
                                     crossfade( true )
                                 }.build(),
                                 modifier = Modifier
-                                    .size( 45.dp )
-                                    .clip( RoundedCornerShape( 10.dp ) ),
+                                    .size(45.dp)
+                                    .clip(RoundedCornerShape(10.dp)),
                                 contentDescription = null
                             )
                         }
@@ -182,11 +180,11 @@ fun NowPlayingBottomBar(
                                 song = it,
                                 nextSong = nextSong,
                                 previousSong = previousSong,
-                                textMarquee = textMarquee
+                                textMarquee = nowPlayingBottomBarUiState.textMarquee
                             )
                         }
                         Spacer( modifier = Modifier.width( 15.dp ) )
-                        if ( showTrackControls ) {
+                        if ( nowPlayingBottomBarUiState.showTrackControls ) {
                             IconButton(
                                 onClick = { previousSong() }
                             ) {
@@ -196,7 +194,7 @@ fun NowPlayingBottomBar(
                                 )
                             }
                         }
-                        if ( showSeekControls ) {
+                        if ( nowPlayingBottomBarUiState.showSeekControls ) {
                             IconButton(
                                 onClick = seekBack
                             ) {
@@ -209,13 +207,13 @@ fun NowPlayingBottomBar(
                         IconButton( onClick = playPause ) {
                             Icon(
                                 imageVector = when {
-                                    !isPlaying -> Icons.Filled.PlayArrow
+                                    !nowPlayingBottomBarUiState.isPlaying -> Icons.Filled.PlayArrow
                                     else -> Icons.Filled.Pause
                                 },
                                 contentDescription = null
                             )
                         }
-                        if ( showSeekControls ) {
+                        if ( nowPlayingBottomBarUiState.showSeekControls ) {
                             IconButton(
                                 onClick = seekForward
                             ) {
@@ -225,7 +223,7 @@ fun NowPlayingBottomBar(
                                 )
                             }
                         }
-                        if ( showTrackControls ) {
+                        if ( nowPlayingBottomBarUiState.showTrackControls ) {
                             IconButton(
                                 onClick = { nextSong() }
                             ) {
@@ -254,7 +252,7 @@ fun NowPlayingBottomBar(
                         modifier = Modifier
                             .align( Alignment.CenterStart )
                             .background( MaterialTheme.colorScheme.primary )
-                            .fillMaxWidth( playbackPosition.ratio )
+                            .fillMaxWidth( nowPlayingBottomBarUiState.playbackPosition.ratio )
                             .fillMaxHeight()
                     )
                 }
@@ -284,23 +282,23 @@ private fun NowPlayingBottomBarContent(
 
         Box(
             modifier = Modifier
-                .alpha( cardOpacity.value )
+                .alpha(cardOpacity.value)
                 .absoluteOffset {
-                    IntOffset( cardOffsetX.value.div( 2 ), 0 )
+                    IntOffset(cardOffsetX.value.div(2), 0)
                 }
-                .pointerInput( Unit ) {
+                .pointerInput(Unit) {
                     detectHorizontalDragGestures(
                         onDragEnd = {
                             val threshHold = cardWidthInPixels / 4
                             offsetX = when {
                                 -offsetX > threshHold -> {
                                     val changed = nextSong()
-                                    if ( changed ) -cardWidthInPixels.toFloat() else 0f
+                                    if (changed) -cardWidthInPixels.toFloat() else 0f
                                 }
 
                                 offsetX > threshHold -> {
                                     val changed = previousSong()
-                                    if ( changed ) cardWidthInPixels.toFloat() else 0f
+                                    if (changed) cardWidthInPixels.toFloat() else 0f
                                 }
 
                                 else -> 0f
@@ -352,8 +350,8 @@ private fun NowPlayingBottomBarContentText(
                 else -> TextOverflow.Ellipsis
             },
             modifier = Modifier
-                .runFunctionIfTrueElseReturnThisObject<Modifier>( textMarquee ) {
-                    basicMarquee( iterations = Int.MAX_VALUE )
+                .runFunctionIfTrueElseReturnThisObject<Modifier>(textMarquee) {
+                    basicMarquee(iterations = Int.MAX_VALUE)
                 }
                 .onGloballyPositioned {
                     val offsetX = it.boundsInParent().centerLeft.x
@@ -370,22 +368,22 @@ private fun NowPlayingBottomBarContentText(
             Row {
                 Box(
                     modifier = Modifier
-                        .width( 12.dp )
+                        .width(12.dp)
                         .fillMaxHeight()
                         .background(
                             brush = Brush.horizontalGradient(
-                                colors = listOf( backgroundColor, Color.Transparent )
+                                colors = listOf(backgroundColor, Color.Transparent)
                             )
                         )
                 )
                 Spacer( modifier = Modifier.weight( 1f ) )
                 Box (
                     modifier = Modifier
-                        .width( 12.dp )
+                        .width(12.dp)
                         .fillMaxHeight()
                         .background(
                             brush = Brush.horizontalGradient(
-                                colors = listOf( Color.Transparent, backgroundColor )
+                                colors = listOf(Color.Transparent, backgroundColor)
                             )
                         )
                 )
@@ -410,20 +408,23 @@ data class PlaybackPosition(
 @Composable
 fun NowPlayingBottomBarPreview() {
     NowPlayingBottomBar(
-        currentlyPlayingSong = testSongs.first(),
-        playbackPosition = PlaybackPosition( 3L, 5L ),
+        nowPlayingBottomBarUiState = uiState,
         onNowPlayingBottomBarSwipeUp = {},
-        onNowPlayingBottomBarSwipeDown = {},
         onNowPlayingBottomBarClick = {},
-        fallbackResourceId = R.drawable.placeholder,
         nextSong = { true },
         previousSong = { true },
-        textMarquee = SettingsDefaults.miniPlayerTextMarquee,
         seekBack = {},
         seekForward = {},
-        showTrackControls = SettingsDefaults.miniPlayerShowTrackControls,
-        showSeekControls = true,
         playPause = {},
-        isPlaying = true
     )
 }
+
+val uiState = NowPlayingBottomBarUiState(
+    currentlyPlayingSong = testSongs.first(),
+    playbackPosition = PlaybackPosition( 3, 5 ),
+    textMarquee = true,
+    showTrackControls = true,
+    showSeekControls = true,
+    isPlaying = true,
+    themeMode = SettingsDefaults.themeMode
+)

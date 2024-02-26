@@ -20,9 +20,10 @@ class MainActivity : ComponentActivity() {
         Timber.plant( Timber.DebugTree() )
         appContainer = ( application as MusicallyApplication ).container
         val nowPlayingViewModel: NowPlayingViewModel by viewModels {
-            NowPlayingViewModel.MainActivityViewModelFactory(
+            NowPlayingViewModel.NowPlayingViewModelFactory(
                 application,
-                appContainer.musicServiceConnection
+                appContainer.musicServiceConnection,
+                appContainer.settingsRepository
             )
         }
 

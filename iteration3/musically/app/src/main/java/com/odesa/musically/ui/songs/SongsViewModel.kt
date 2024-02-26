@@ -9,6 +9,7 @@ import androidx.media3.common.Player
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.services.media.Song
+import com.odesa.musically.services.media.artistTagSeparators
 import com.odesa.musically.services.media.connection.MusicServiceConnection
 import com.odesa.musically.services.media.connection.TAG
 import com.odesa.musically.services.media.extensions.isEnded
@@ -38,8 +39,6 @@ class SongsViewModel(
         )
     )
     val uiState = _uiState.asStateFlow()
-
-    val artistTagSeparators = setOf( "feat.", ";", "+", ",", "ft", "/", ", .", "(,", ")" )
 
     init {
         viewModelScope.launch { fetchMediaItems() }
