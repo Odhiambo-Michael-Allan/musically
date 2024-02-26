@@ -33,9 +33,9 @@ class NowPlayingViewModel(
     private val _bottomSheetUiState = MutableStateFlow(
         NowPlayingBottomSheetUiState(
             currentlyPlayingSong = getCurrentlyPlayingSong(),
-            currentlyPlayingSongIndex = 5,
+            currentlyPlayingSongIndex = musicServiceConnection.currentlyPlayingMediaItemIndex.value,
             playbackPosition = PlaybackPosition.zero,
-            queueSize = 126,
+            queueSize = musicServiceConnection.queueSize.value,
             language = English,
             currentlyPlayingSongIsFavorite = true,
             controlsLayoutIsDefault = false,
@@ -72,6 +72,8 @@ class NowPlayingViewModel(
         viewModelScope.launch { observeNowPlaying() }
         viewModelScope.launch { observePlaybackState() }
         viewModelScope.launch { observeUpdatePlaybackPosition() }
+        viewModelScope.launch { observeQueueSize() }
+        viewModelScope.launch { observeCurrentlyPlayingMediaItemIndex() }
     }
 
     private suspend fun observeNowPlaying() {
@@ -143,6 +145,22 @@ class NowPlayingViewModel(
             checkPlaybackPosition( 1000 - ( currentPosition % 1000 ) )
     }, delayMs )
 
+    private suspend fun observeQueueSize() {
+        musicServiceConnection.queueSize.collect {
+            _bottomSheetUiState.value = _bottomSheetUiState.value.copy(
+                queueSize = it
+            )
+        }
+    }
+
+    private suspend fun observeCurrentlyPlayingMediaItemIndex() {
+        musicServiceConnection.currentlyPlayingMediaItemIndex.collect {
+            _bottomSheetUiState.value = _bottomSheetUiState.value.copy(
+                currentlyPlayingSongIndex = it
+            )
+        }
+    }
+
     fun onFavorite( songId: String ) {}
 
     fun playPause() {}
@@ -204,7 +222,7 @@ class NowPlayingViewModel(
 data class NowPlayingBottomSheetUiState(
     val currentlyPlayingSong: Song?,
     val playbackPosition: PlaybackPosition,
-    val currentlyPlayingSongIndex: Long,
+    val currentlyPlayingSongIndex: Int,
     val queueSize: Int,
     val language: Language,
     val currentlyPlayingSongIsFavorite: Boolean,

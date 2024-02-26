@@ -91,4 +91,20 @@ class NowPlayingViewModelTest {
         assertFalse( nowPlayingViewModel.updatePlaybackPosition.value )
     }
 
+    @Test
+    fun testQueueSizeIsCorrectlyUpdated() {
+        assertEquals( 0, nowPlayingViewModel.bottomSheetUiState.value.queueSize )
+        musicServiceConnection.setMediaItems( testMediaItems )
+        assertEquals( 3, nowPlayingViewModel.bottomSheetUiState.value.queueSize )
+    }
+
+    @Test
+    fun testCurrentlyPlayingSongIndexIsCorrectlyUpdated() {
+        assertEquals( 0,
+            nowPlayingViewModel.bottomSheetUiState.value.currentlyPlayingSongIndex )
+        musicServiceConnection.setCurrentMediaItemIndex( 10 )
+        assertEquals( 10,
+            nowPlayingViewModel.bottomSheetUiState.value.currentlyPlayingSongIndex )
+    }
+
 }

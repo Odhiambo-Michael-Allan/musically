@@ -20,7 +20,15 @@ class FakeMusicServiceConnection : MusicServiceConnection {
     private val _playbackState = MutableStateFlow( PlaybackState() )
     override val playbackState = _playbackState.asStateFlow()
 
+    private val _queueSize = MutableStateFlow( 0 )
+    override val queueSize = _queueSize.asStateFlow()
+
+    private val _currentlyPlayingMediaItemIndex = MutableStateFlow( 0 )
+    override val currentlyPlayingMediaItemIndex = _currentlyPlayingMediaItemIndex.asStateFlow()
+
     override val player: Player? = null
+
+    private val playlist = ArrayList<MediaItem>()
 
     override suspend fun getChildren( parentId: String ): ImmutableList<MediaItem> {
         return testMediaItems
@@ -41,6 +49,16 @@ class FakeMusicServiceConnection : MusicServiceConnection {
     fun setPlaybackState( playbackState: PlaybackState ) {
         _playbackState.value = playbackState
     }
+
+    fun setMediaItems( mediaItemList: List<MediaItem> ) {
+        playlist.addAll( mediaItemList )
+        _queueSize.value = mediaItemList.size
+    }
+
+    fun setCurrentMediaItemIndex( index: Int ) {
+        _currentlyPlayingMediaItemIndex.value = index
+    }
+
 }
 
 val id1 = UUID.randomUUID().toString()

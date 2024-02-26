@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.StateFlow
 interface MusicServiceConnection {
     val nowPlaying: StateFlow<MediaItem>
     val playbackState: StateFlow<PlaybackState>
+    val queueSize: StateFlow<Int>
+    val currentlyPlayingMediaItemIndex: StateFlow<Int>
     val player: Player?
     suspend fun getChildren( parentId: String ): ImmutableList<MediaItem>
     suspend fun sendCommand( command: String, parameters: Bundle? ) : Boolean

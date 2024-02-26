@@ -146,7 +146,7 @@ fun NowPlayingBottomSheet(
 @Composable
 fun NowPlayingScreenContent(
     currentlyPlayingSong: Song,
-    currentlyPlayingSongIndex: Long,
+    currentlyPlayingSongIndex: Int,
     fallbackResourceId: Int,
     queueSize: Int,
     language: Language,
@@ -184,7 +184,7 @@ fun NowPlayingScreenContent(
 ) {
 
     var showOptionsMenu by remember { mutableStateOf( false ) }
-    Column ( modifier = Modifier.padding( 16.dp )) {
+    Column ( modifier = Modifier.padding( start = 16.dp, end = 16.dp, top = 0.dp, bottom = 0.dp )) {
         NowPlayingArtwork(
             showLyrics = showLyrics,
             artworkUri = currentlyPlayingSong.artworkUri,
@@ -208,9 +208,9 @@ fun NowPlayingScreenContent(
                 ) {
                     Text(
                         text = target.title,
-                        style = MaterialTheme.typography.headlineSmall
+                        style = MaterialTheme.typography.titleLarge
                             .copy( fontWeight = FontWeight.Bold ),
-                        maxLines = 3,
+                        maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
                     FlowRow {
@@ -281,13 +281,13 @@ fun NowPlayingScreenContent(
                 }
             }
         }
-        Spacer( modifier = Modifier.height( 32.dp ) )
+        Spacer( modifier = Modifier.height( 24.dp ) )
         NowPlayingSeekBar(
             playbackPosition = playbackPosition,
             durationFormatter = durationFormatter,
             onSeekEnd = onSeekEnd
         )
-        Spacer( modifier = Modifier.height( 32.dp ) )
+        Spacer( modifier = Modifier.height( 24.dp ) )
         when {
             controlsLayoutIsDefault ->
                 NowPlayingDefaultControlsLayout(

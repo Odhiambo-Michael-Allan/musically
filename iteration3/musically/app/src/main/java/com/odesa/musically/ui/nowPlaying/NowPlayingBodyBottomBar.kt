@@ -37,7 +37,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,7 +55,7 @@ import timber.log.Timber
 @Composable
 fun NowPlayingBodyBottomBar(
     language: Language,
-    currentSongIndex: Long,
+    currentSongIndex: Int,
     queueSize: Int,
     showLyrics: Boolean,
     currentLoopMode: LoopMode,
@@ -74,7 +73,6 @@ fun NowPlayingBodyBottomBar(
     onCreateEqualizerActivityContract: () -> ActivityResultContract<Unit, Unit>,
 ) {
 
-    val coroutineScope = rememberCoroutineScope()
     val equalizerActivity = rememberLauncherForActivityResult(
         contract = onCreateEqualizerActivityContract(),
         onResult = {}
@@ -88,8 +86,8 @@ fun NowPlayingBodyBottomBar(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                start = 8.dp,
-                end = 8.dp,
+                start = 4.dp,
+                end = 4.dp,
                 bottom = 4.dp
             ),
         verticalAlignment = Alignment.CenterVertically,
@@ -101,7 +99,7 @@ fun NowPlayingBodyBottomBar(
                 imageVector = Icons.Filled.Sort,
                 contentDescription = null
             )
-            Spacer( modifier = Modifier.width( 8.dp ) )
+            Spacer( modifier = Modifier.width( 4.dp ) )
             Text(
                 text = language.playingXofY(
                     ( currentSongIndex + 1 ).toString(),
