@@ -6,10 +6,14 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.fakes.FakeMusicServiceConnection
 import com.odesa.musically.fakes.FakeSettingsRepository
+import com.odesa.musically.fakes.id1
+import com.odesa.musically.fakes.testMediaItems
 import com.odesa.musically.services.media.connection.PlaybackState
 import com.odesa.musically.ui.components.PlaybackPosition
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertNotNull
+import junit.framework.TestCase.assertNull
 import junit.framework.TestCase.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -31,6 +35,18 @@ class NowPlayingViewModelTest {
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository
         )
+    }
+
+    @Test
+    fun testCurrentlyPlayingSongIsCorrectlyUpdated() {
+        assertNull( nowPlayingViewModel.bottomSheetUiState.value.currentlyPlayingSong )
+        assertNull( nowPlayingViewModel.bottomBarUiState.value.currentlyPlayingSong )
+        musicServiceConnection.setNowPlaying( testMediaItems.first() )
+        assertNotNull( nowPlayingViewModel.bottomSheetUiState.value.currentlyPlayingSong )
+        assertNotNull( nowPlayingViewModel.bottomBarUiState.value.currentlyPlayingSong )
+        assertEquals( id1, nowPlayingViewModel.bottomSheetUiState.value.currentlyPlayingSong!!.id )
+        assertEquals( id1, nowPlayingViewModel.bottomBarUiState.value.currentlyPlayingSong!!.id )
+
     }
 
     @Test

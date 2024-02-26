@@ -34,6 +34,7 @@ class NowPlayingViewModel(
         NowPlayingBottomSheetUiState(
             currentlyPlayingSong = getCurrentlyPlayingSong(),
             currentlyPlayingSongIndex = 5,
+            playbackPosition = PlaybackPosition.zero,
             queueSize = 126,
             language = English,
             currentlyPlayingSongIsFavorite = true,
@@ -41,7 +42,6 @@ class NowPlayingViewModel(
             isPlaying = true,
             showSeekControls = true,
             showLyrics = false,
-            playbackPosition = PlaybackPosition.zero,
             shuffle = true,
             currentLoopMode = LoopMode.Song,
             pauseOnCurrentSongEnd = false,
@@ -69,30 +69,51 @@ class NowPlayingViewModel(
     var updatePlaybackPosition = _updatePlaybackPosition.asStateFlow()
 
     init {
+        viewModelScope.launch { observeNowPlaying() }
         viewModelScope.launch { observePlaybackState() }
         viewModelScope.launch { observeUpdatePlaybackPosition() }
+    }
+
+    private suspend fun observeNowPlaying() {
+        musicServiceConnection.nowPlaying.collect {
+            val song = getCurrentlyPlayingSong()
+            updateBottomSheetCurrentlyPlayingSong( song )
+            updateBottomBarCurrentlyPlayingSong( song )
+        }
+    }
+
+    private fun updateBottomSheetCurrentlyPlayingSong( song: Song? ) {
+        _bottomSheetUiState.value = _bottomSheetUiState.value.copy(
+            currentlyPlayingSong = song
+        )
+    }
+
+    private fun updateBottomBarCurrentlyPlayingSong( song: Song? ) {
+        _bottomBarUiState.value = _bottomBarUiState.value.copy(
+            currentlyPlayingSong = song
+        )
     }
 
     private suspend fun observePlaybackState() {
         musicServiceConnection.playbackState.collect {
             if ( it.isPlaying ) {
                 _updatePlaybackPosition.value = true
-                updateBottomSheetPlaybackState( it.duration )
-                updateBottomBarPlaybackState( it.duration )
+                updateBottomSheetPlaybackState( 0L, it.duration )
+                updateBottomBarPlaybackState( 0L, it.duration )
             } else
                 _updatePlaybackPosition.value = false
         }
     }
 
-    private fun updateBottomSheetPlaybackState( duration: Long ) {
+    private fun updateBottomSheetPlaybackState( played: Long, total: Long ) {
         _bottomSheetUiState.value = _bottomSheetUiState.value.copy(
-            playbackPosition = PlaybackPosition( 0L, duration )
+            playbackPosition = PlaybackPosition( played, total )
         )
     }
 
-    private fun updateBottomBarPlaybackState( duration: Long ) {
+    private fun updateBottomBarPlaybackState( played: Long, total: Long ) {
         _bottomBarUiState.value = _bottomBarUiState.value.copy(
-            playbackPosition = PlaybackPosition( 0L, duration )
+            playbackPosition = PlaybackPosition( played, total )
         )
     }
 
@@ -112,8 +133,11 @@ class NowPlayingViewModel(
         val currentPosition = musicServiceConnection.player?.currentPosition ?: 0
         Timber.tag( "NOW-PLAYING-VIEW-MODEL" ).d( "CURRENT POSITION: $currentPosition" )
         if ( _bottomBarUiState.value.playbackPosition.played != currentPosition ) {
-            updateBottomBarPlaybackState( currentPosition )
-            updateBottomSheetPlaybackState( currentPosition )
+            Timber.tag( "NOW-PLAYING-VIEW-MODEL" ).d( "UPDATING PLAYBACK STATE" )
+            updateBottomBarPlaybackState( currentPosition,
+                _bottomBarUiState.value.playbackPosition.total )
+            updateBottomSheetPlaybackState( currentPosition,
+                _bottomSheetUiState.value.playbackPosition.total )
         }
         if ( updatePlaybackPosition.value )
             checkPlaybackPosition( 1000 - ( currentPosition % 1000 ) )

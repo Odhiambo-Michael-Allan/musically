@@ -383,7 +383,7 @@ private fun NowPlayingBottomBarContentText(
                         .fillMaxHeight()
                         .background(
                             brush = Brush.horizontalGradient(
-                                colors = listOf(Color.Transparent, backgroundColor)
+                                colors = listOf( Color.Transparent, backgroundColor )
                             )
                         )
                 )
