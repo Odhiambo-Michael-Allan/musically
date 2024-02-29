@@ -67,8 +67,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.odesa.musically.R
+import com.odesa.musically.data.storage.preferences.impl.LoopMode
 import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
-import com.odesa.musically.services.media.LoopMode
 import com.odesa.musically.services.media.Song
 import com.odesa.musically.services.media.testSongs
 import com.odesa.musically.ui.navigation.FadeTransition

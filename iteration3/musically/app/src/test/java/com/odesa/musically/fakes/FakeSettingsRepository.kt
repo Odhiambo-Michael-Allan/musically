@@ -4,8 +4,8 @@ import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.data.storage.preferences.ForYou
 import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.storage.preferences.HomeTab
-import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
 import com.odesa.musically.data.storage.preferences.NowPlayingLyricsLayout
+import com.odesa.musically.data.storage.preferences.impl.LoopMode
 import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Chinese
@@ -91,11 +91,6 @@ class FakeSettingsRepository : SettingsRepository {
     private val _miniPlayerTextMarquee = MutableStateFlow( SettingsDefaults.miniPlayerTextMarquee )
     override val miniPlayerTextMarquee = _miniPlayerTextMarquee.asStateFlow()
 
-    private val _nowPlayingControlsLayout = MutableStateFlow(
-        SettingsDefaults.nowPlayingControlsLayout
-    )
-    override val nowPlayingControlsLayout = _nowPlayingControlsLayout.asStateFlow()
-
     private val _nowPlayingLyricsLayout = MutableStateFlow(
         SettingsDefaults.nowPlayingLyricsLayout
     )
@@ -110,6 +105,34 @@ class FakeSettingsRepository : SettingsRepository {
         SettingsDefaults.showNowPlayingSeekControls
     )
     override val showNowPlayingSeekControls = _showNowPlayingSeekControls.asStateFlow()
+
+    private val _currentPlayingSpeed = MutableStateFlow(
+        SettingsDefaults.currentPlayingSpeed
+    )
+    override val currentPlayingSpeed = _currentPlayingSpeed.asStateFlow()
+
+    private val _currentPlayingPitch = MutableStateFlow(
+        SettingsDefaults.currentPlayingPitch
+    )
+    override val currentPlayingPitch = _currentPlayingPitch.asStateFlow()
+
+    private val _pauseOnCurrentSongEnd = MutableStateFlow(
+        SettingsDefaults.pauseOnCurrentSongEnd
+    )
+    override val pauseOnCurrentSongEnd = _pauseOnCurrentSongEnd.asStateFlow()
+
+    private val _currentLoopMode = MutableStateFlow( SettingsDefaults.loopMode )
+    override val currentLoopMode = _currentLoopMode.asStateFlow()
+
+    private val _shuffle = MutableStateFlow( SettingsDefaults.shuffle )
+    override val shuffle = _shuffle.asStateFlow()
+
+    private val _showLyrics = MutableStateFlow( SettingsDefaults.showLyrics )
+    override val showLyrics = _showLyrics.asStateFlow()
+
+    private val _controlsLayoutIsDefault = MutableStateFlow(
+        SettingsDefaults.controlsLayoutIsDefault )
+    override val controlsLayoutIsDefault = _controlsLayoutIsDefault.asStateFlow()
 
 
     override suspend fun setLanguage( localeCode: String ) {
@@ -162,9 +185,9 @@ class FakeSettingsRepository : SettingsRepository {
     }
 
     override suspend fun setHomePageBottomBarLabelVisibility(
-        value: HomePageBottomBarLabelVisibility
+        homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility
     ) {
-        _homePageBottomBarLabelVisibility.value = value
+        _homePageBottomBarLabelVisibility.value = homePageBottomBarLabelVisibility
     }
 
     override suspend fun setFadePlayback( fadePlayback: Boolean ) {
@@ -211,12 +234,6 @@ class FakeSettingsRepository : SettingsRepository {
         _miniPlayerTextMarquee.value = textMarquee
     }
 
-    override suspend fun setNowPlayingControlsLayout(
-        nowPlayingControlsLayout: NowPlayingControlsLayout
-    ) {
-        _nowPlayingControlsLayout.value = nowPlayingControlsLayout
-    }
-
     override suspend fun setNowPlayingLyricsLayout(
         nowPlayingLyricsLayout: NowPlayingLyricsLayout
     ) {
@@ -233,5 +250,33 @@ class FakeSettingsRepository : SettingsRepository {
         showNowPlayingSeekControls: Boolean
     ) {
         _showNowPlayingSeekControls.value = showNowPlayingSeekControls
+    }
+
+    override suspend fun setCurrentPlayingSpeed( currentPlayingSpeed: Float ) {
+        _currentPlayingSpeed.value = currentPlayingSpeed
+    }
+
+    override suspend fun setCurrentPlayingPitch( currentPlayingPitch: Float ) {
+        _currentPlayingPitch.value = currentPlayingPitch
+    }
+
+    override suspend fun setPauseOnCurrentSongEnd( pauseOnCurrentSongEnd: Boolean ) {
+        _pauseOnCurrentSongEnd.value = pauseOnCurrentSongEnd
+    }
+
+    override suspend fun setCurrentLoopMode( currentLoopMode: LoopMode ) {
+        _currentLoopMode.value = currentLoopMode
+    }
+
+    override suspend fun setShuffle( shuffle: Boolean ) {
+        _shuffle.value = shuffle
+    }
+
+    override suspend fun setShowLyrics( showLyrics: Boolean ) {
+        _showLyrics.value = showLyrics
+    }
+
+    override suspend fun setControlsLayoutIsDefault( controlsLayoutIsDefault: Boolean ) {
+        _controlsLayoutIsDefault.value = controlsLayoutIsDefault
     }
 }

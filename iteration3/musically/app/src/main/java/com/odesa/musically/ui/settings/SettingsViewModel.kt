@@ -7,7 +7,6 @@ import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.data.storage.preferences.ForYou
 import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.storage.preferences.HomeTab
-import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
 import com.odesa.musically.data.storage.preferences.NowPlayingLyricsLayout
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.settings.appearance.scalingPresets
@@ -44,7 +43,7 @@ class SettingsViewModel(
             miniPlayerShowTrackControls = settingsRepository.miniPlayerShowTrackControls.value,
             miniPlayerShowSeekControls = settingsRepository.miniPlayerShowSeekControls.value,
             miniPlayerTextMarquee = settingsRepository.miniPlayerTextMarquee.value,
-            nowPlayingControlsLayout = settingsRepository.nowPlayingControlsLayout.value,
+            controlsLayoutIsDefault = settingsRepository.controlsLayoutIsDefault.value,
             nowPlayingLyricsLayout = settingsRepository.nowPlayingLyricsLayout.value,
             showNowPlayingAudioInformation = settingsRepository.showNowPlayingAudioInformation.value,
             showNowPlayingSeekControls = settingsRepository.showNowPlayingSeekControls.value,
@@ -241,9 +240,9 @@ class SettingsViewModel(
     }
 
     private suspend fun observeNowPlayingControlsLayoutSetting() {
-        settingsRepository.nowPlayingControlsLayout.collect {
+        settingsRepository.controlsLayoutIsDefault.collect {
             _uiState.value = _uiState.value.copy(
-                nowPlayingControlsLayout = it
+                controlsLayoutIsDefault = it
             )
         }
     }
@@ -365,9 +364,9 @@ class SettingsViewModel(
         viewModelScope.launch { settingsRepository.setMiniPlayerTextMarquee( textMarquee ) }
     }
 
-    fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout) {
+    fun setControlsLayoutIsDefault( controlsLayoutIsDefault: Boolean ) {
         viewModelScope.launch {
-            settingsRepository.setNowPlayingControlsLayout( nowPlayingControlsLayout )
+            settingsRepository.setControlsLayoutIsDefault( controlsLayoutIsDefault )
         }
     }
 
@@ -421,7 +420,7 @@ data class SettingsScreenUiState(
     val miniPlayerShowTrackControls: Boolean,
     val miniPlayerShowSeekControls: Boolean,
     val miniPlayerTextMarquee: Boolean,
-    val nowPlayingControlsLayout: NowPlayingControlsLayout,
+    val controlsLayoutIsDefault: Boolean,
     val nowPlayingLyricsLayout: NowPlayingLyricsLayout,
     val showNowPlayingAudioInformation: Boolean,
     val showNowPlayingSeekControls: Boolean,

@@ -5,7 +5,6 @@ import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.data.storage.preferences.ForYou
 import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.storage.preferences.HomeTab
-import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
 import com.odesa.musically.data.storage.preferences.NowPlayingLyricsLayout
 import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.fakes.FakeSettingsRepository
@@ -286,11 +285,11 @@ class SettingsViewModelTest {
 
     @Test
     fun testNowPlayingControlsLayoutSettingChange() = runTest {
-        assertEquals( SettingsDefaults.nowPlayingControlsLayout,
-            settingsViewModel.uiState.value.nowPlayingControlsLayout )
-        NowPlayingControlsLayout.entries.forEach {
-            settingsRepository.setNowPlayingControlsLayout( it )
-            assertEquals( it, settingsViewModel.uiState.value.nowPlayingControlsLayout )
+        assertEquals( SettingsDefaults.controlsLayoutIsDefault,
+            settingsViewModel.uiState.value.controlsLayoutIsDefault )
+        listOf( true, false ).forEach {
+            settingsRepository.setControlsLayoutIsDefault( it )
+            assertEquals( it, settingsViewModel.uiState.value.controlsLayoutIsDefault )
         }
     }
 

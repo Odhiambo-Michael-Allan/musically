@@ -4,9 +4,9 @@ import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.data.storage.preferences.ForYou
 import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.storage.preferences.HomeTab
-import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
 import com.odesa.musically.data.storage.preferences.NowPlayingLyricsLayout
 import com.odesa.musically.data.storage.preferences.PreferenceStore
+import com.odesa.musically.data.storage.preferences.impl.LoopMode
 import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Chinese
 import com.odesa.musically.services.i18n.English
@@ -14,12 +14,10 @@ import com.odesa.musically.services.i18n.French
 import com.odesa.musically.services.i18n.German
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.services.i18n.Spanish
-import com.odesa.musically.services.media.LoopMode
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.SupportedFonts
 import com.odesa.musically.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
@@ -85,9 +83,6 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore) : Se
     private val _miniPlayerTextMarquee = MutableStateFlow( preferenceStore.getMiniPlayerTextMarquee() )
     override val miniPlayerTextMarquee = _miniPlayerTextMarquee.asStateFlow()
 
-    private val _nowPlayingControlsLayout = MutableStateFlow( preferenceStore.getNowPlayingControlsLayout() )
-    override val nowPlayingControlsLayout = _nowPlayingControlsLayout.asStateFlow()
-
     private val _nowPlayingLyricsLayout = MutableStateFlow( preferenceStore.getNowPlayingLyricsLayout() )
     override val nowPlayingLyricsLayout = _nowPlayingLyricsLayout.asStateFlow()
 
@@ -115,7 +110,7 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore) : Se
     private val _showLyrics = MutableStateFlow( preferenceStore.getShowLyrics() )
     override val showLyrics = _showLyrics.asStateFlow()
 
-    private val _controlsLayoutIsDefault = MutableStateFlow( preferenceStore.getNowPlayingControlsLayout() )
+    private val _controlsLayoutIsDefault = MutableStateFlow( preferenceStore.getControlsLayoutIsDefault() )
     override val controlsLayoutIsDefault = _controlsLayoutIsDefault.asStateFlow()
 
     override suspend fun setLanguage( localeCode: String ) {
@@ -269,13 +264,6 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore) : Se
         }
     }
 
-    override suspend fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout) {
-        preferenceStore.setNowPlayingControlsLayout( nowPlayingControlsLayout )
-        _nowPlayingControlsLayout.update {
-            nowPlayingControlsLayout
-        }
-    }
-
     override suspend fun setNowPlayingLyricsLayout( nowPlayingLyricsLayout: NowPlayingLyricsLayout) {
         preferenceStore.setNowPlayingLyricsLayout( nowPlayingLyricsLayout )
         _nowPlayingLyricsLayout.update {
@@ -297,32 +285,53 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore) : Se
         }
     }
 
-    override suspend fun setCurrentPlayingSpeed(currentPlayingSpeed: Float) {
-        TODO("Not yet implemented")
+    override suspend fun setCurrentPlayingSpeed( currentPlayingSpeed: Float ) {
+        preferenceStore.setCurrentPlayingSpeed( currentPlayingSpeed )
+        _currentPlayingSpeed.update {
+            currentPlayingSpeed
+        }
     }
 
-    override suspend fun setCurrentPlayingPitch(currentPlayingPitch: Float) {
-        TODO("Not yet implemented")
+    override suspend fun setCurrentPlayingPitch( currentPlayingPitch: Float ) {
+        preferenceStore.setCurrentPlayingPitch( currentPlayingPitch )
+        _currentPlayingPitch.update {
+            currentPlayingPitch
+        }
     }
 
-    override suspend fun setPauseOnCurrentSongEnd(pauseOnCurrentSongEnd: Boolean) {
-        TODO("Not yet implemented")
+    override suspend fun setPauseOnCurrentSongEnd( pauseOnCurrentSongEnd: Boolean ) {
+        preferenceStore.setPauseOnCurrentSongEnd( pauseOnCurrentSongEnd )
+        _pauseOnCurrentSongEnd.update {
+            pauseOnCurrentSongEnd
+        }
     }
 
-    override suspend fun setCurrentLoopMode(currentLoopMode: LoopMode) {
-        TODO("Not yet implemented")
+    override suspend fun setCurrentLoopMode( currentLoopMode: LoopMode) {
+        preferenceStore.setCurrentLoopMode( currentLoopMode )
+        _currentLoopMode.update {
+            currentLoopMode
+        }
     }
 
-    override suspend fun setShuffle(shuffle: Boolean) {
-        TODO("Not yet implemented")
+    override suspend fun setShuffle( shuffle: Boolean ) {
+        preferenceStore.setShuffle( shuffle )
+        _shuffle.update {
+            shuffle
+        }
     }
 
-    override suspend fun setShowLyrics(showLyrics: Boolean) {
-        TODO("Not yet implemented")
+    override suspend fun setShowLyrics( showLyrics: Boolean ) {
+        preferenceStore.setShowLyrics( showLyrics )
+        _showLyrics.update {
+            showLyrics
+        }
     }
 
-    override suspend fun setControlsLayoutIsDefault(controlsLayoutIsDefault: Boolean) {
-        TODO("Not yet implemented")
+    override suspend fun setControlsLayoutIsDefault( controlsLayoutIsDefault: Boolean ) {
+        preferenceStore.setControlsLayoutIsDefault( controlsLayoutIsDefault )
+        _controlsLayoutIsDefault.update {
+            controlsLayoutIsDefault
+        }
     }
 
 }

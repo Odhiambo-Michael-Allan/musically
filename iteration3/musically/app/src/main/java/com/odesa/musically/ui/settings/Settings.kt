@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import com.odesa.musically.data.storage.preferences.ForYou
 import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.storage.preferences.HomeTab
-import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
 import com.odesa.musically.data.storage.preferences.NowPlayingLyricsLayout
 import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.English
@@ -139,8 +138,8 @@ fun SettingsScreen(
         onMiniPlayerTextMarqueeChange = { textMarquee ->
             settingsViewModel.setMiniPlayerTextMarquee( textMarquee )
         },
-        onNowPlayingControlsLayoutChange = { nowPlayingControlsLayout ->
-            settingsViewModel.setNowPlayingControlsLayout( nowPlayingControlsLayout )
+        onNowPlayingControlsLayoutChange = { controlsLayoutIsDefault ->
+            settingsViewModel.setControlsLayoutIsDefault( controlsLayoutIsDefault )
         },
         onNowPlayingLyricsLayoutChange = { nowPlayingLyricsLayout ->
             settingsViewModel.setNowPlayingLyricsLayout( nowPlayingLyricsLayout )
@@ -181,7 +180,7 @@ fun SettingsScreenContent(
     onMiniPlayerShowTrackControlsChange: ( Boolean ) -> Unit,
     onMiniPlayerShowSeekControlsChange: ( Boolean ) -> Unit,
     onMiniPlayerTextMarqueeChange: ( Boolean ) -> Unit,
-    onNowPlayingControlsLayoutChange: (NowPlayingControlsLayout) -> Unit,
+    onNowPlayingControlsLayoutChange: ( Boolean ) -> Unit,
     onNowPlayingLyricsLayoutChange: (NowPlayingLyricsLayout) -> Unit,
     onShowNowPlayingAudioInformationChange: ( Boolean ) -> Unit,
     onShowNowPlayingSeekControlsChange: ( Boolean ) -> Unit,
@@ -354,7 +353,7 @@ fun SettingsScreenContent(
                 Divider( thickness = 0.5.dp )
                 SettingsSideHeading( text = uiState.language.nowPlaying )
                 ControlsLayout(
-                    nowPlayingControlsLayout = uiState.nowPlayingControlsLayout,
+                    controlsLayoutIsDefault = uiState.controlsLayoutIsDefault,
                     language = uiState.language,
                     onNowPlayingControlsLayoutChange = onNowPlayingControlsLayoutChange
                 )
@@ -404,7 +403,7 @@ fun SettingsScreenContentPreview() {
         miniPlayerShowTrackControls = SettingsDefaults.miniPlayerShowTrackControls,
         miniPlayerShowSeekControls = SettingsDefaults.miniPlayerShowSeekControls,
         miniPlayerTextMarquee = SettingsDefaults.miniPlayerTextMarquee,
-        nowPlayingControlsLayout = SettingsDefaults.nowPlayingControlsLayout,
+        controlsLayoutIsDefault = SettingsDefaults.controlsLayoutIsDefault,
         nowPlayingLyricsLayout = SettingsDefaults.nowPlayingLyricsLayout,
         showNowPlayingAudioInformation = SettingsDefaults.showNowPlayingAudioInformation,
         showNowPlayingSeekControls = SettingsDefaults.showNowPlayingSeekControls,

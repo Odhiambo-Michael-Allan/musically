@@ -3,10 +3,10 @@ package com.odesa.musically.fakes
 import com.odesa.musically.data.storage.preferences.ForYou
 import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.storage.preferences.HomeTab
-import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
 import com.odesa.musically.data.storage.preferences.NowPlayingLyricsLayout
 import com.odesa.musically.data.storage.preferences.PreferenceStore
 import com.odesa.musically.data.storage.preferences.SortSongsBy
+import com.odesa.musically.data.storage.preferences.impl.LoopMode
 import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.ui.theme.ThemeMode
 
@@ -32,12 +32,18 @@ class FakePreferencesStoreImpl : PreferenceStore {
     private var miniPlayerShowTrackControls: Boolean? = null
     private var miniPlayerShowSeekControls: Boolean? = null
     private var miniPlayerTextMarquee: Boolean? = null
-    private var nowPlayingControlsLayout: NowPlayingControlsLayout? = null
     private var nowPlayingLyricsLayout: NowPlayingLyricsLayout? = null
     private var showNowPlayingAudioInformation: Boolean? = null
     private var showNowPlayingSeekControls: Boolean? = null
     private var sortSongsBy: SortSongsBy? = null
     private var sortSongsInReverse: Boolean? = null
+    private var currentPlayingSpeed: Float? = null
+    private var currentPlayingPitch: Float? = null
+    private var pauseOnCurrentSongEnd: Boolean? = null
+    private var currentLoopMode: LoopMode? = null
+    private var shuffle: Boolean? = null
+    private var showLyrics: Boolean? = null
+    private var controlsLayoutIsDefault: Boolean? = null
 
     override suspend fun setLanguage( localeCode: String ) {
         language = localeCode
@@ -167,11 +173,11 @@ class FakePreferencesStoreImpl : PreferenceStore {
         miniPlayerTextMarquee = textMarquee
     }
 
-    override fun getNowPlayingControlsLayout() = nowPlayingControlsLayout
-        ?: SettingsDefaults.nowPlayingControlsLayout
+    override fun getControlsLayoutIsDefault() = controlsLayoutIsDefault
+        ?: SettingsDefaults.controlsLayoutIsDefault
 
-    override suspend fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout) {
-        this.nowPlayingControlsLayout = nowPlayingControlsLayout
+    override suspend fun setControlsLayoutIsDefault( controlsLayoutIsDefault: Boolean ) {
+        this.controlsLayoutIsDefault = controlsLayoutIsDefault
     }
 
     override fun getNowPlayingLyricsLayout() = nowPlayingLyricsLayout
@@ -206,4 +212,43 @@ class FakePreferencesStoreImpl : PreferenceStore {
     }
 
     override fun getSortSongsInReverse() = sortSongsInReverse ?: SettingsDefaults.sortSongsInReverse
+
+    override suspend fun setCurrentPlayingSpeed( currentPlayingSpeed: Float ) {
+        this.currentPlayingSpeed = currentPlayingSpeed
+    }
+
+    override fun getCurrentPlayingSpeed() = currentPlayingSpeed
+        ?: SettingsDefaults.currentPlayingSpeed
+
+    override suspend fun setCurrentPlayingPitch( currentPlayingPitch: Float ) {
+        this.currentPlayingPitch = currentPlayingPitch
+    }
+
+    override fun getCurrentPlayingPitch() = currentPlayingPitch
+        ?: SettingsDefaults.currentPlayingPitch
+
+    override suspend fun setPauseOnCurrentSongEnd( pauseOnCurrentSongEnd: Boolean ) {
+        this.pauseOnCurrentSongEnd = pauseOnCurrentSongEnd
+    }
+
+    override fun getPauseOnCurrentSongEnd() = pauseOnCurrentSongEnd
+        ?: SettingsDefaults.pauseOnCurrentSongEnd
+
+    override suspend fun setCurrentLoopMode( loopMode: LoopMode ) {
+        this.currentLoopMode = loopMode
+    }
+
+    override fun getCurrentLoopMode() = currentLoopMode ?: SettingsDefaults.loopMode
+
+    override suspend fun setShuffle( shuffle: Boolean ) {
+        this.shuffle = shuffle
+    }
+
+    override fun getShuffle() = shuffle ?: SettingsDefaults.shuffle
+
+    override suspend fun setShowLyrics( showLyrics: Boolean ) {
+        this.showLyrics = showLyrics
+    }
+
+    override fun getShowLyrics() = showLyrics ?: SettingsDefaults.showLyrics
 }

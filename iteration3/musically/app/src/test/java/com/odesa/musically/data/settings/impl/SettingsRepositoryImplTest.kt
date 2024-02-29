@@ -4,10 +4,11 @@ import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.data.storage.preferences.ForYou
 import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.storage.preferences.HomeTab
-import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
 import com.odesa.musically.data.storage.preferences.NowPlayingLyricsLayout
 import com.odesa.musically.data.storage.preferences.PreferenceStore
+import com.odesa.musically.data.storage.preferences.impl.LoopMode
 import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
+import com.odesa.musically.data.storage.preferences.impl.allowedSpeedPitchValues
 import com.odesa.musically.fakes.FakePreferencesStoreImpl
 import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Chinese
@@ -293,13 +294,14 @@ class SettingsRepositoryImplTest {
 
     @Test
     fun testNowPlayingControlsLayoutSettingChange() = runTest {
-        assertEquals( NowPlayingControlsLayout.Default,
-            settingsRepository.nowPlayingControlsLayout.value )
-        NowPlayingControlsLayout.entries.forEach {
-            settingsRepository.setNowPlayingControlsLayout( it )
-            assertEquals( it, preferenceStore.getNowPlayingControlsLayout() )
-            assertEquals( it, settingsRepository.nowPlayingControlsLayout.value )
-        }
+        assertEquals( SettingsDefaults.controlsLayoutIsDefault,
+            settingsRepository.controlsLayoutIsDefault.value )
+        settingsRepository.setControlsLayoutIsDefault( false )
+        assertFalse( preferenceStore.getControlsLayoutIsDefault() )
+        assertFalse( settingsRepository.controlsLayoutIsDefault.value )
+        settingsRepository.setControlsLayoutIsDefault( true )
+        assertTrue( preferenceStore.getControlsLayoutIsDefault() )
+        assertTrue( settingsRepository.controlsLayoutIsDefault.value )
     }
 
     @Test
@@ -330,6 +332,69 @@ class SettingsRepositoryImplTest {
             settingsRepository.setShowNowPlayingSeekControls( it )
             assertEquals( it, preferenceStore.getShowNowPlayingSeekControls() )
             assertEquals( it, settingsRepository.showNowPlayingSeekControls.value )
+        }
+    }
+
+    @Test
+    fun testShowLyricsSettingChange() = runTest {
+        assertFalse( settingsRepository.showLyrics.value )
+        listOf( true, false ).forEach {
+            settingsRepository.setShowLyrics( it )
+            assertEquals( it, preferenceStore.getShowLyrics() )
+            assertEquals( it, settingsRepository.showLyrics.value )
+        }
+    }
+
+    @Test
+    fun testShuffleChange() = runTest {
+        assertFalse( settingsRepository.shuffle.value )
+        listOf( true, false ).forEach {
+            settingsRepository.setShuffle( it )
+            assertEquals( it, preferenceStore.getShuffle() )
+            assertEquals( it, settingsRepository.shuffle.value )
+        }
+    }
+
+    @Test
+    fun testLoopModeChange() = runTest {
+        assertEquals( SettingsDefaults.loopMode, settingsRepository.currentLoopMode.value )
+        LoopMode.entries.forEach {
+            settingsRepository.setCurrentLoopMode( it )
+            assertEquals( it, preferenceStore.getCurrentLoopMode() )
+            assertEquals( it, settingsRepository.currentLoopMode.value )
+        }
+    }
+
+    @Test
+    fun testPauseOnCurrentSongEndChange() = runTest {
+        assertEquals( SettingsDefaults.pauseOnCurrentSongEnd,
+            settingsRepository.pauseOnCurrentSongEnd.value )
+        listOf( true, false ).forEach {
+            settingsRepository.setPauseOnCurrentSongEnd( it )
+            assertEquals( it, preferenceStore.getPauseOnCurrentSongEnd() )
+            assertEquals( it, settingsRepository.pauseOnCurrentSongEnd.value )
+        }
+    }
+
+    @Test
+    fun testCurrentPlayingSpeedChange() = runTest {
+        assertEquals( SettingsDefaults.currentPlayingSpeed,
+            settingsRepository.currentPlayingSpeed.value )
+        allowedSpeedPitchValues.forEach {
+            settingsRepository.setCurrentPlayingSpeed( it )
+            assertEquals( it, preferenceStore.getCurrentPlayingSpeed() )
+            assertEquals( it, settingsRepository.currentPlayingSpeed.value )
+        }
+    }
+
+    @Test
+    fun testCurrentPlayingPitchChange() = runTest {
+        assertEquals( SettingsDefaults.currentPlayingPitch,
+            settingsRepository.currentPlayingPitch.value )
+        allowedSpeedPitchValues.forEach {
+            settingsRepository.setCurrentPlayingPitch( it )
+            assertEquals( it, preferenceStore.getCurrentPlayingPitch() )
+            assertEquals( it, settingsRepository.currentPlayingPitch.value )
         }
     }
 

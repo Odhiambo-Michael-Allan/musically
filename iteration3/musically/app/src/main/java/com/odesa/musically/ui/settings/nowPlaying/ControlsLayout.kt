@@ -4,7 +4,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
 import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.Language
@@ -12,19 +11,20 @@ import com.odesa.musically.ui.settings.components.SettingsOptionTile
 
 @Composable
 fun ControlsLayout(
-    nowPlayingControlsLayout: NowPlayingControlsLayout,
+    controlsLayoutIsDefault: Boolean,
     language: Language,
-    onNowPlayingControlsLayoutChange: (NowPlayingControlsLayout) -> Unit
+    onNowPlayingControlsLayoutChange: ( Boolean ) -> Unit
 ) {
+    val currentValue = if ( controlsLayoutIsDefault ) NowPlayingControlsLayout.Default else NowPlayingControlsLayout.Traditional
     SettingsOptionTile(
-        currentValue = nowPlayingControlsLayout,
-        possibleValues = NowPlayingControlsLayout.entries.toList().associateBy({ it }, { it.name }),
+        currentValue = currentValue,
+        possibleValues = NowPlayingControlsLayout.entries.toList().associateBy( { it }, { it.name } ),
         enabled = true,
         dialogTitle = language.controlsLayout,
-        onValueChange = onNowPlayingControlsLayoutChange,
+        onValueChange = { if ( it == NowPlayingControlsLayout.Default ) onNowPlayingControlsLayoutChange( true ) else onNowPlayingControlsLayoutChange( false ) },
         leadingContentIcon = Icons.Filled.Dashboard,
         headlineContentText = language.controlsLayout,
-        supportingContentText = nowPlayingControlsLayout.name
+        supportingContentText = if ( controlsLayoutIsDefault ) NowPlayingControlsLayout.Default.name else NowPlayingControlsLayout.Traditional.name
     )
 }
 
@@ -32,8 +32,12 @@ fun ControlsLayout(
 @Composable
 fun ControlsLayoutPreview() {
     ControlsLayout(
-        nowPlayingControlsLayout = SettingsDefaults.nowPlayingControlsLayout,
+        controlsLayoutIsDefault = SettingsDefaults.controlsLayoutIsDefault,
         language = English,
         onNowPlayingControlsLayoutChange = {}
     )
+}
+
+enum class NowPlayingControlsLayout {
+    Default, Traditional
 }

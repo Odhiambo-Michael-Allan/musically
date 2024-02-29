@@ -64,9 +64,9 @@ import androidx.compose.ui.unit.min
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.odesa.musically.R
+import com.odesa.musically.data.storage.preferences.impl.LoopMode
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.Language
-import com.odesa.musically.services.media.LoopMode
 import com.odesa.musically.services.media.Song
 import com.odesa.musically.services.media.extensions.formatMilliseconds
 import com.odesa.musically.services.media.testSongs

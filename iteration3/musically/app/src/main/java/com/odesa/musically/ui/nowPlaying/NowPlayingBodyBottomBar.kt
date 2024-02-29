@@ -43,10 +43,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.odesa.musically.data.storage.preferences.impl.LoopMode
+import com.odesa.musically.data.storage.preferences.impl.allowedSpeedPitchValues
 import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.Language
-import com.odesa.musically.services.media.LoopMode
-import com.odesa.musically.services.media.allowedSpeedPitchValues
 import com.odesa.musically.ui.components.ScaffoldDialog
 import com.odesa.musically.ui.settings.components.SettingsTileDefaults
 import timber.log.Timber

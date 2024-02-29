@@ -3,10 +3,9 @@ package com.odesa.musically.data.settings
 import com.odesa.musically.data.storage.preferences.ForYou
 import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.storage.preferences.HomeTab
-import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
 import com.odesa.musically.data.storage.preferences.NowPlayingLyricsLayout
+import com.odesa.musically.data.storage.preferences.impl.LoopMode
 import com.odesa.musically.services.i18n.Language
-import com.odesa.musically.services.media.LoopMode
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.StateFlow
@@ -32,7 +31,6 @@ interface SettingsRepository {
     val miniPlayerShowTrackControls: StateFlow<Boolean>
     val miniPlayerShowSeekControls: StateFlow<Boolean>
     val miniPlayerTextMarquee: StateFlow<Boolean>
-    val nowPlayingControlsLayout: StateFlow<NowPlayingControlsLayout>
     val nowPlayingLyricsLayout: StateFlow<NowPlayingLyricsLayout>
     val showNowPlayingAudioInformation: StateFlow<Boolean>
     val showNowPlayingSeekControls: StateFlow<Boolean>
@@ -65,14 +63,13 @@ interface SettingsRepository {
     suspend fun setMiniPlayerShowTrackControls( showTrackControls: Boolean )
     suspend fun setMiniPlayerShowSeekControls( showSeekControls: Boolean )
     suspend fun setMiniPlayerTextMarquee( textMarquee: Boolean )
-    suspend fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout)
     suspend fun setNowPlayingLyricsLayout( nowPlayingLyricsLayout: NowPlayingLyricsLayout)
     suspend fun setShowNowPlayingAudioInformation( showNowPlayingAudioInformation: Boolean )
     suspend fun setShowNowPlayingSeekControls( showNowPlayingSeekControls: Boolean )
     suspend fun setCurrentPlayingSpeed( currentPlayingSpeed: Float )
     suspend fun setCurrentPlayingPitch( currentPlayingPitch: Float )
     suspend fun setPauseOnCurrentSongEnd( pauseOnCurrentSongEnd: Boolean )
-    suspend fun setCurrentLoopMode( currentLoopMode: LoopMode )
+    suspend fun setCurrentLoopMode( currentLoopMode: LoopMode)
     suspend fun setShuffle( shuffle: Boolean )
     suspend fun setShowLyrics( showLyrics: Boolean )
     suspend fun setControlsLayoutIsDefault( controlsLayoutIsDefault: Boolean )

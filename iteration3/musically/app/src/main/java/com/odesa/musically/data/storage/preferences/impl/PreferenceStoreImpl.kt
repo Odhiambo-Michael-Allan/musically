@@ -6,7 +6,6 @@ import androidx.core.content.edit
 import com.odesa.musically.data.storage.preferences.ForYou
 import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.storage.preferences.HomeTab
-import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
 import com.odesa.musically.data.storage.preferences.NowPlayingLyricsLayout
 import com.odesa.musically.data.storage.preferences.PreferenceStore
 import com.odesa.musically.data.storage.preferences.SortSongsBy
@@ -284,19 +283,6 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         }
     }
 
-    override fun getNowPlayingControlsLayout() = getSharedPreferences().getEnum(
-        SettingsKeys.nowPlayingControlsLayout, null
-    ) ?: SettingsDefaults.nowPlayingControlsLayout
-
-
-    override suspend fun setNowPlayingControlsLayout( nowPlayingControlsLayout: NowPlayingControlsLayout) {
-        withContext( Dispatchers.IO ) {
-            getSharedPreferences().edit {
-                putEnum(SettingsKeys.nowPlayingControlsLayout, nowPlayingControlsLayout )
-            }
-        }
-    }
-
     override fun getNowPlayingLyricsLayout() = getSharedPreferences().getEnum(
         SettingsKeys.nowPlayingLyricsLayout, null
     ) ?: SettingsDefaults.nowPlayingLyricsLayout
@@ -356,7 +342,89 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
     }
 
     override fun getSortSongsInReverse() = getSharedPreferences()
-        .getBoolean(SettingsKeys.sortSongsInReverse, SettingsDefaults.sortSongsInReverse)
+        .getBoolean( SettingsKeys.sortSongsInReverse, SettingsDefaults.sortSongsInReverse )
+
+    override suspend fun setCurrentPlayingSpeed( currentPlayingSpeed: Float ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putFloat( SettingsKeys.currentPlayingSpeed, currentPlayingSpeed )
+            }
+        }
+    }
+
+    override fun getCurrentPlayingSpeed() = getSharedPreferences()
+        .getFloat( SettingsKeys.currentPlayingSpeed, SettingsDefaults.currentPlayingSpeed )
+
+    override suspend fun setCurrentPlayingPitch( currentPlayingPitch: Float ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putFloat( SettingsKeys.currentPlayingPitch, currentPlayingPitch )
+            }
+        }
+    }
+
+    override fun getCurrentPlayingPitch() = getSharedPreferences()
+        .getFloat( SettingsKeys.currentPlayingPitch, SettingsDefaults.currentPlayingPitch )
+
+    override suspend fun setPauseOnCurrentSongEnd( pauseOnCurrentSongEnd: Boolean ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putBoolean( SettingsKeys.pauseOnCurrentSongEnd, pauseOnCurrentSongEnd )
+            }
+        }
+    }
+
+    override fun getPauseOnCurrentSongEnd() = getSharedPreferences().getBoolean(
+        SettingsKeys.pauseOnCurrentSongEnd, SettingsDefaults.pauseOnCurrentSongEnd
+    )
+
+    override suspend fun setCurrentLoopMode( loopMode: LoopMode ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putEnum( SettingsKeys.loopMode, loopMode )
+            }
+        }
+    }
+
+    override fun getCurrentLoopMode() = getSharedPreferences().getEnum(
+        SettingsKeys.loopMode, null
+    ) ?: SettingsDefaults.loopMode
+
+    override suspend fun setShuffle( shuffle: Boolean ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putBoolean( SettingsKeys.shuffle, shuffle )
+            }
+        }
+    }
+
+    override fun getShuffle() = getSharedPreferences().getBoolean(
+        SettingsKeys.shuffle, SettingsDefaults.shuffle
+    )
+
+    override suspend fun setShowLyrics( showLyrics: Boolean ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putBoolean( SettingsKeys.showLyrics, showLyrics )
+            }
+        }
+    }
+
+    override fun getShowLyrics() = getSharedPreferences().getBoolean(
+        SettingsKeys.showLyrics, SettingsDefaults.showLyrics
+    )
+
+    override fun getControlsLayoutIsDefault() = getSharedPreferences().getBoolean(
+        SettingsKeys.controlsLayoutIsDefault, SettingsDefaults.controlsLayoutIsDefault
+    )
+
+    override suspend fun setControlsLayoutIsDefault( controlsLayoutIsDefault: Boolean ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putBoolean( SettingsKeys.controlsLayoutIsDefault, controlsLayoutIsDefault )
+            }
+        }
+    }
 
     private fun getSharedPreferences() = context.getSharedPreferences(
         SettingsKeys.identifier,
@@ -386,13 +454,19 @@ object SettingsKeys {
     const val miniPlayerShowTrackControls = "mini_player_show_track_controls"
     const val miniPlayerShowSeekControls = "mini_player_show_seek_controls"
     const val miniPlayerTextMarquee = "mini_player_text_marquee"
-    const val nowPlayingControlsLayout = "now_playing_controls_layout"
     const val nowPlayingLyricsLayout = "now_playing_lyrics_layout"
     const val showNowPlayingAudioInformation = "show_now_playing_audio_information"
     const val showNowPlayingSeekControls = "show_now_playing_seek_controls"
-
     const val sortSongsBy = "sort_songs_by"
     const val sortSongsInReverse = "sort_songs_in_reverse"
+
+    const val controlsLayoutIsDefault = "now_playing_controls_layout_is_default"
+    const val showLyrics = "show_lyrics"
+    const val shuffle = "shuffle"
+    const val loopMode = "loop_mode"
+    const val pauseOnCurrentSongEnd = "pause_on_current_song_end"
+    const val currentPlayingSpeed = "current_playing_speed"
+    const val currentPlayingPitch = "current_playing_pitch"
 }
 
 object SettingsDefaults {
@@ -425,14 +499,31 @@ object SettingsDefaults {
     const val miniPlayerShowTrackControls = true
     const val miniPlayerShowSeekControls = false
     const val miniPlayerTextMarquee = true
-    val nowPlayingControlsLayout = NowPlayingControlsLayout.Default
+    const val controlsLayoutIsDefault = true
     val nowPlayingLyricsLayout = NowPlayingLyricsLayout.ReplaceArtwork
     const val showNowPlayingAudioInformation = true
     const val showNowPlayingSeekControls = false
-
     val sortSongsBy = SortSongsBy.TITLE
     const val sortSongsInReverse = false
+    const val showLyrics = false
+    const val shuffle = false
+    val loopMode = LoopMode.None
+    const val pauseOnCurrentSongEnd = false
+    const val currentPlayingSpeed = 1f
+    const val currentPlayingPitch = 1f
 }
+
+enum class LoopMode {
+    None,
+    Queue,
+    Song;
+
+    companion object {
+        val all = entries.toTypedArray()
+    }
+}
+
+val allowedSpeedPitchValues = listOf( 0.5f, 1f, 1.5f, 2f, )
 
 private inline fun <reified T : Enum<T>> parseEnumValue( value: String ): T? =
     T::class.java.enumConstants?.find { it.name == value }

@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.odesa.musically.data.settings.SettingsRepository
+import com.odesa.musically.data.storage.preferences.impl.LoopMode
 import com.odesa.musically.services.i18n.Language
-import com.odesa.musically.services.media.LoopMode
 import com.odesa.musically.services.media.Song
 import com.odesa.musically.services.media.artistTagSeparators
 import com.odesa.musically.services.media.connection.MusicServiceConnection
