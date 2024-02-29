@@ -3,6 +3,9 @@ package com.odesa.musically.data.storage.preferences.impl
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import androidx.media3.common.Player.REPEAT_MODE_ALL
+import androidx.media3.common.Player.REPEAT_MODE_OFF
+import androidx.media3.common.Player.REPEAT_MODE_ONE
 import com.odesa.musically.data.storage.preferences.ForYou
 import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.storage.preferences.HomeTab
@@ -515,12 +518,18 @@ object SettingsDefaults {
 
 enum class LoopMode {
     None,
-    Queue,
-    Song;
+    Song,
+    Queue;
 
     companion object {
         val all = entries.toTypedArray()
     }
+}
+
+fun LoopMode.toRepeatMode() = when ( this ) {
+    LoopMode.None -> REPEAT_MODE_OFF
+    LoopMode.Song -> REPEAT_MODE_ONE
+    LoopMode.Queue -> REPEAT_MODE_ALL
 }
 
 val allowedSpeedPitchValues = listOf( 0.5f, 1f, 1.5f, 2f, )

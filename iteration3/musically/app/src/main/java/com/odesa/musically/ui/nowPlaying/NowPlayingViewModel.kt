@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.data.storage.preferences.impl.LoopMode
+import com.odesa.musically.data.storage.preferences.impl.toRepeatMode
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.services.media.Song
 import com.odesa.musically.services.media.artistTagSeparators
@@ -29,7 +30,7 @@ class NowPlayingViewModel(
 ) : AndroidViewModel( application ) {
 
     private val handler = Handler( Looper.getMainLooper() )
-    private val _nowPlayingScreenUiState = MutableStateFlow(
+    private val _uiState = MutableStateFlow(
         NowPlayingScreenUiState(
             currentlyPlayingSong = getCurrentlyPlayingSong(),
             currentlyPlayingSongIndex = musicServiceConnection.currentlyPlayingMediaItemIndex.value,
@@ -37,22 +38,22 @@ class NowPlayingViewModel(
             queueSize = musicServiceConnection.queueSize.value,
             language = settingsRepository.language.value,
             currentlyPlayingSongIsFavorite = true,
-            controlsLayoutIsDefault = false,
-            isPlaying = true,
+            controlsLayoutIsDefault = settingsRepository.controlsLayoutIsDefault.value,
+            isPlaying = musicServiceConnection.isPlaying.value,
             showTrackControls = settingsRepository.miniPlayerShowTrackControls.value,
             showSeekControls = settingsRepository.miniPlayerShowSeekControls.value,
-            showLyrics = false,
-            shuffle = true,
-            currentLoopMode = LoopMode.Song,
-            pauseOnCurrentSongEnd = false,
-            currentPlayingSpeed = 2f,
-            currentPlayingPitch = 2f,
+            showLyrics = settingsRepository.showLyrics.value,
+            shuffle = settingsRepository.shuffle.value,
+            currentLoopMode = settingsRepository.currentLoopMode.value,
+            pauseOnCurrentSongEnd = settingsRepository.pauseOnCurrentSongEnd.value,
+            currentPlayingSpeed = settingsRepository.currentPlayingSpeed.value,
+            currentPlayingPitch = settingsRepository.currentPlayingPitch.value,
             themeMode = settingsRepository.themeMode.value,
             textMarquee = settingsRepository.miniPlayerTextMarquee.value,
         )
     )
 
-    val nowPlayingScreenUiState = _nowPlayingScreenUiState.asStateFlow()
+    val uiState = _uiState.asStateFlow()
 
     private val _updatePlaybackPosition = MutableStateFlow( false )
     var updatePlaybackPosition = _updatePlaybackPosition.asStateFlow()
@@ -69,12 +70,19 @@ class NowPlayingViewModel(
         viewModelScope.launch { observeTextMarquee() }
         viewModelScope.launch { observeShowTrackControls() }
         viewModelScope.launch { observeShowSeekControls() }
+        viewModelScope.launch { observeControlsLayoutIsDefault() }
+        viewModelScope.launch { observeShowLyrics() }
+        viewModelScope.launch { observeShuffle() }
+        viewModelScope.launch { observeLoopMode() }
+        viewModelScope.launch { observePauseOnCurrentSongEnd() }
+        viewModelScope.launch { observeCurrentPlayingSpeed() }
+        viewModelScope.launch { observeCurrentPlayingPitch() }
     }
 
     private suspend fun observeNowPlaying() {
         musicServiceConnection.nowPlaying.collect {
             val song = getCurrentlyPlayingSong()
-            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
+            _uiState.value = _uiState.value.copy(
                 currentlyPlayingSong = song
             )
         }
@@ -92,13 +100,13 @@ class NowPlayingViewModel(
     }
 
     private fun updateBottomSheetPlaybackState( played: Long, total: Long ) {
-        _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
+        _uiState.value = _uiState.value.copy(
             playbackPosition = PlaybackPosition( played, total )
         )
     }
 
     private fun updatePlaybackState(played: Long, total: Long ) {
-        _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
+        _uiState.value = _uiState.value.copy(
             playbackPosition = PlaybackPosition( played, total )
         )
     }
@@ -118,9 +126,9 @@ class NowPlayingViewModel(
     private fun checkPlaybackPosition( delayMs: Long ): Boolean = handler.postDelayed( {
         val currentPosition = musicServiceConnection.player?.currentPosition ?: 0
         Timber.tag( "NOW-PLAYING-VIEW-MODEL" ).d( "CURRENT POSITION: $currentPosition" )
-        if ( _nowPlayingScreenUiState.value.playbackPosition.played != currentPosition ) {
+        if ( _uiState.value.playbackPosition.played != currentPosition ) {
             updatePlaybackState( currentPosition,
-                _nowPlayingScreenUiState.value.playbackPosition.total )
+                _uiState.value.playbackPosition.total )
         }
         if ( updatePlaybackPosition.value )
             checkPlaybackPosition( 1000 - ( currentPosition % 1000 ) )
@@ -128,7 +136,7 @@ class NowPlayingViewModel(
 
     private suspend fun observeQueueSize() {
         musicServiceConnection.queueSize.collect {
-            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
+            _uiState.value = _uiState.value.copy(
                 queueSize = it
             )
         }
@@ -136,7 +144,7 @@ class NowPlayingViewModel(
 
     private suspend fun observeCurrentlyPlayingMediaItemIndex() {
         musicServiceConnection.currentlyPlayingMediaItemIndex.collect {
-            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
+            _uiState.value = _uiState.value.copy(
                 currentlyPlayingSongIndex = it
             )
         }
@@ -144,7 +152,7 @@ class NowPlayingViewModel(
 
     private suspend fun observeLanguage() {
         settingsRepository.language.collect {
-            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
+            _uiState.value = _uiState.value.copy(
                 language = it
             )
         }
@@ -152,7 +160,7 @@ class NowPlayingViewModel(
 
     private suspend fun observeIsPlaying() {
         musicServiceConnection.isPlaying.collect {
-            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
+            _uiState.value = _uiState.value.copy(
                 isPlaying = it
             )
         }
@@ -160,7 +168,7 @@ class NowPlayingViewModel(
 
     private suspend fun observeThemeMode() {
         settingsRepository.themeMode.collect {
-            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
+            _uiState.value = _uiState.value.copy(
                 themeMode = it
             )
         }
@@ -168,7 +176,7 @@ class NowPlayingViewModel(
 
     private suspend fun observeTextMarquee() {
         settingsRepository.miniPlayerTextMarquee.collect {
-            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
+            _uiState.value = _uiState.value.copy(
                 textMarquee = it
             )
         }
@@ -176,7 +184,7 @@ class NowPlayingViewModel(
 
     private suspend fun observeShowTrackControls() {
         settingsRepository.miniPlayerShowTrackControls.collect {
-            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
+            _uiState.value = _uiState.value.copy(
                 showTrackControls = it
             )
         }
@@ -184,9 +192,68 @@ class NowPlayingViewModel(
 
     private suspend fun observeShowSeekControls() {
         settingsRepository.miniPlayerShowSeekControls.collect {
-            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
+            _uiState.value = _uiState.value.copy(
                 showSeekControls = it
             )
+        }
+    }
+
+    private suspend fun observeControlsLayoutIsDefault() {
+        settingsRepository.controlsLayoutIsDefault.collect {
+            _uiState.value = _uiState.value.copy(
+                controlsLayoutIsDefault = it
+            )
+        }
+    }
+
+    private suspend fun observeShowLyrics() {
+        settingsRepository.showLyrics.collect {
+            _uiState.value = _uiState.value.copy(
+                showLyrics = it
+            )
+        }
+    }
+
+    private suspend fun observeShuffle() {
+        settingsRepository.shuffle.collect {
+            _uiState.value = _uiState.value.copy(
+                shuffle = it
+            )
+        }
+    }
+
+    private suspend fun observeLoopMode() {
+        settingsRepository.currentLoopMode.collect {
+            _uiState.value = _uiState.value.copy(
+                currentLoopMode = it
+            )
+            musicServiceConnection.setRepeatMode( it.toRepeatMode() )
+        }
+    }
+
+    private suspend fun observePauseOnCurrentSongEnd() {
+        settingsRepository.pauseOnCurrentSongEnd.collect {
+            _uiState.value = _uiState.value.copy(
+                pauseOnCurrentSongEnd = it
+            )
+        }
+    }
+
+    private suspend fun observeCurrentPlayingSpeed() {
+        settingsRepository.currentPlayingSpeed.collect {
+            _uiState.value = _uiState.value.copy(
+                currentPlayingSpeed = it
+            )
+            musicServiceConnection.setPlaybackSpeed( it )
+        }
+    }
+
+    private suspend fun observeCurrentPlayingPitch() {
+        settingsRepository.currentPlayingPitch.collect {
+            _uiState.value = _uiState.value.copy(
+                currentPlayingPitch = it
+            )
+            musicServiceConnection.setPlaybackPitch( it )
         }
     }
 
@@ -228,15 +295,30 @@ class NowPlayingViewModel(
 
     fun onArtworkClicked() {}
 
-    fun toggleLoopMode() {}
+    fun toggleLoopMode() {
+        val currentLoopModePosition = LoopMode.entries.indexOf(
+            settingsRepository.currentLoopMode.value )
+        val nextLoopModePosition = ( currentLoopModePosition + 1 ) % LoopMode.entries.size
+        viewModelScope.launch {
+            settingsRepository.setCurrentLoopMode( LoopMode.entries[ nextLoopModePosition ] )
+        }
+    }
 
     fun toggleShuffleMode() {}
 
     fun togglePauseOnCurrentSongEnd() {}
 
-    fun onPlayingSpeedChange( playingSpeed: Float ) {}
+    fun onPlayingSpeedChange( playingSpeed: Float ) {
+        viewModelScope.launch {
+            settingsRepository.setCurrentPlayingSpeed( playingSpeed )
+        }
+    }
 
-    fun onPlayingPitchChange( playingPitch: Float ) {}
+    fun onPlayingPitchChange( playingPitch: Float ) {
+        viewModelScope.launch {
+            settingsRepository.setCurrentPlayingPitch( playingPitch )
+        }
+    }
 
     override fun onCleared() {
         super.onCleared()

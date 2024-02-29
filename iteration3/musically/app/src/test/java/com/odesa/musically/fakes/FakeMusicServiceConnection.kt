@@ -45,6 +45,10 @@ class FakeMusicServiceConnection : MusicServiceConnection {
         resultCallback: ( Int, Bundle? ) -> Unit
     ) = true
 
+    override fun setPlaybackSpeed( playbackSpeed: Float ) {}
+
+    override fun setPlaybackPitch( playbackPitch: Float ) {}
+    override fun setRepeatMode( repeatMode: Int ) {}
     fun setNowPlaying( mediaItem: MediaItem ) {
         _nowPlaying.value = mediaItem
     }

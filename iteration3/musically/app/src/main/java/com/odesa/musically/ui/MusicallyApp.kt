@@ -70,7 +70,7 @@ fun MusicallyAppContent(
     val homeTabs by settingsRepository.homeTabs.collectAsState()
     val language by settingsRepository.language.collectAsState()
     val labelVisibility by settingsRepository.homePageBottomBarLabelVisibility.collectAsState()
-    val nowPlayingScreenUiState by nowPlayingViewModel.nowPlayingScreenUiState.collectAsState()
+    val nowPlayingScreenUiState by nowPlayingViewModel.uiState.collectAsState()
     var showNowPlayingBottomSheet by remember { mutableStateOf( false ) }
 
     Column(

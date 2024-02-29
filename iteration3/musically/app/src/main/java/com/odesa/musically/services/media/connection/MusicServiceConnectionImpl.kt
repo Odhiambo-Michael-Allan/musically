@@ -14,6 +14,7 @@ import androidx.media3.common.PlaybackException.ERROR_CODE_IO_CLEARTEXT_NOT_PERM
 import androidx.media3.common.PlaybackException.ERROR_CODE_IO_INVALID_HTTP_CONTENT_TYPE
 import androidx.media3.common.PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED
 import androidx.media3.common.PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT
+import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
 import androidx.media3.common.Player.EVENT_MEDIA_ITEM_TRANSITION
 import androidx.media3.common.Player.EVENT_PLAYBACK_STATE_CHANGED
@@ -122,6 +123,32 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
         }
         true
     } else false
+
+    override fun setPlaybackSpeed( playbackSpeed: Float ) {
+        kotlin.runCatching {
+            player?.let {
+                val currentPitch = it.playbackParameters.pitch
+                it.playbackParameters = PlaybackParameters( playbackSpeed, currentPitch )
+            }
+        }
+    }
+
+    override fun setPlaybackPitch( playbackPitch: Float ) {
+        kotlin.runCatching {
+            player?.let {
+                val currentSpeed = it.playbackParameters.speed
+                it.playbackParameters = PlaybackParameters( currentSpeed, playbackPitch )
+            }
+        }
+    }
+
+    override fun setRepeatMode( @Player.RepeatMode repeatMode: Int ) {
+        kotlin.runCatching {
+            player?.let {
+                it.repeatMode = repeatMode
+            }
+        }
+    }
 
     fun release() {
         _rootMediaItem.value = MediaItem.EMPTY

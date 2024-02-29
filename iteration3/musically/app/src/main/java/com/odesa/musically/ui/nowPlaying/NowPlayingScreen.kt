@@ -59,6 +59,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import coil.compose.AsyncImage
@@ -92,8 +93,8 @@ fun NowPlayingBottomSheet(
     toggleLoopMode: () -> Unit,
     toggleShuffleMode: () -> Unit,
     togglePauseOnCurrentSongEnd: () -> Unit,
-    onPlayingSpeedChange: (Float ) -> Unit,
-    onPlayingPitchChange: (Float ) -> Unit,
+    onPlayingSpeedChange: ( Float ) -> Unit,
+    onPlayingPitchChange: ( Float ) -> Unit,
     onCreateEqualizerActivityContract: () -> ActivityResultContract<Unit, Unit>
 ) {
 
@@ -135,8 +136,8 @@ fun NowPlayingBottomSheet(
         onToggleLoopMode = toggleLoopMode,
         onToggleShuffleMode = toggleShuffleMode,
         onTogglePauseOnCurrentSongEnd = togglePauseOnCurrentSongEnd,
-        onPlayingSpeedChange = { onPlayingSpeedChange( it ) },
-        onPlayingPitchChange = { onPlayingPitchChange( it ) },
+        onPlayingSpeedChange = onPlayingSpeedChange,
+        onPlayingPitchChange = onPlayingPitchChange,
         onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
     )
 }
@@ -468,27 +469,27 @@ fun NowPlayingDefaultControlsLayout(
         )
         NowPlayingSkipPreviousButton(
             style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Transparent
+                color = NowPlayingControlButtonColors.Surface
             ),
             onClick = onPreviousButtonClick
         )
         if ( enableSeekControls ) {
             NowPlayingFastRewindButton(
                 style = NowPlayingControlButtonStyle(
-                    color = NowPlayingControlButtonColors.Transparent
+                    color = NowPlayingControlButtonColors.Surface
                 ),
                 onClick = onFastRewindButtonClick
             )
             NowPlayingFastForwardButton(
                 style = NowPlayingControlButtonStyle(
-                    color = NowPlayingControlButtonColors.Transparent
+                    color = NowPlayingControlButtonColors.Surface
                 ),
                 onClick = onFastForwardButtonClick
             )
         }
         NowPlayingSkipNextButton(
             style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Transparent
+                color = NowPlayingControlButtonColors.Surface
             ),
             onClick = onNextButtonClick
         )
@@ -531,21 +532,21 @@ fun NowPlayingTraditionalControlsLayout(
     ) {
         NowPlayingSkipPreviousButton(
             style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Transparent
+                color = NowPlayingControlButtonColors.Surface
             ),
             onClick = onPreviousButtonClick
         )
         if ( enableSeekControls ) {
             NowPlayingFastRewindButton(
                 style = NowPlayingControlButtonStyle(
-                    color = NowPlayingControlButtonColors.Transparent
+                    color = NowPlayingControlButtonColors.Surface
                 ),
                 onClick = onFastRewindButtonClick
             )
         }
         NowPlayingPlayPauseButton(
             style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Surface,
+                color = NowPlayingControlButtonColors.Primary,
                 size = NowPlayingControlButtonSize.Large
             ),
             isPlaying = isPlaying,
@@ -554,14 +555,14 @@ fun NowPlayingTraditionalControlsLayout(
         if ( enableSeekControls ) {
             NowPlayingFastForwardButton(
                 style = NowPlayingControlButtonStyle(
-                    color = NowPlayingControlButtonColors.Transparent
+                    color = NowPlayingControlButtonColors.Surface
                 ),
                 onClick = onFastForwardButtonClick
             )
         }
         NowPlayingSkipNextButton(
             style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Transparent
+                color = NowPlayingControlButtonColors.Surface
             ),
             onClick = onNextButtonClick
         )
@@ -782,7 +783,8 @@ private fun NowPlayingFastForwardButton(
 ) {
     NowPlayingControlButton(
         style = style,
-        icon = Icons.Filled.FastForward
+        icon = Icons.Filled.FastForward,
+        roundedCornerSizeDp = 30.dp
     ) {
         onClick()
     }
@@ -795,7 +797,8 @@ private fun NowPlayingFastRewindButton(
 ) {
     NowPlayingControlButton(
         style = style,
-        icon = Icons.Filled.FastRewind
+        icon = Icons.Filled.FastRewind,
+        roundedCornerSizeDp = 30.dp
     ) {
         onClick()
     }
@@ -808,7 +811,8 @@ private fun NowPlayingSkipNextButton(
 ) {
     NowPlayingControlButton(
         style = style,
-        icon = Icons.Filled.SkipNext
+        icon = Icons.Filled.SkipNext,
+        roundedCornerSizeDp = 30.dp
     ) {
         onClick()
     }
@@ -821,7 +825,8 @@ private fun NowPlayingSkipPreviousButton(
 ) {
     NowPlayingControlButton(
         style = style,
-        icon = Icons.Filled.SkipPrevious
+        icon = Icons.Filled.SkipPrevious,
+        roundedCornerSizeDp = 30.dp
     ) {
         onClick()
     }
@@ -838,7 +843,8 @@ private fun NowPlayingPlayPauseButton(
         icon = when {
             isPlaying -> Icons.Filled.Pause
             else -> Icons.Filled.PlayArrow
-        }
+        },
+        roundedCornerSizeDp = 8.dp
     ) {
         onClick()
     }
@@ -852,13 +858,13 @@ fun NowPlayingControlButtonsPreview() {
     ) {
         NowPlayingSkipPreviousButton(
             style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Transparent
+                color = NowPlayingControlButtonColors.Surface
             ),
             onClick = {}
         )
         NowPlayingFastRewindButton(
             style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Transparent
+                color = NowPlayingControlButtonColors.Surface
             )
         ) {}
         NowPlayingPlayPauseButton(
@@ -870,12 +876,12 @@ fun NowPlayingControlButtonsPreview() {
         )
         NowPlayingFastForwardButton(
             style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Transparent
+                color = NowPlayingControlButtonColors.Surface
             )
         ) {}
         NowPlayingSkipNextButton(
             style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Transparent
+                color = NowPlayingControlButtonColors.Surface
             )
         ) {}
     }
@@ -885,6 +891,7 @@ fun NowPlayingControlButtonsPreview() {
 private fun NowPlayingControlButton(
     style: NowPlayingControlButtonStyle,
     icon: ImageVector,
+    roundedCornerSizeDp: Dp,
     onClick: () -> Unit
 ) {
     val backgroundColor = when ( style.color ) {
@@ -901,7 +908,7 @@ private fun NowPlayingControlButton(
         NowPlayingControlButtonSize.Large -> 32.dp
     }
     IconButton(
-        modifier = Modifier.background( backgroundColor, RoundedCornerShape( 8.dp ) ),
+        modifier = Modifier.background( backgroundColor, RoundedCornerShape( roundedCornerSizeDp ) ),
         onClick = onClick
     ) {
         Icon(
