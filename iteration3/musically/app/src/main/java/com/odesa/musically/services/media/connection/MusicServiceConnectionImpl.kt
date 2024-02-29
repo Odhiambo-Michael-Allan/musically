@@ -156,8 +156,8 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
         )
     }
 
-    private fun updateIsPlaying() {
-        _isPlaying.value = player?.isPlaying ?: false
+    private fun updateIsPlaying( isPlaying: Boolean ) {
+        _isPlaying.value = isPlaying
     }
 
     companion object {
@@ -184,7 +184,6 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
                 || events.contains( EVENT_PLAYBACK_STATE_CHANGED )
                 || events.contains( EVENT_MEDIA_ITEM_TRANSITION ) ) {
                 updatePlaybackState( player )
-                updateIsPlaying()
             }
             if ( events.contains( Player.EVENT_MEDIA_METADATA_CHANGED )
                 || events.contains( EVENT_MEDIA_ITEM_TRANSITION )
@@ -196,6 +195,10 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
                 _queueSize.value = player.mediaItemCount
                 _currentPlayingMediaItemIndex.value = player.currentMediaItemIndex
             }
+        }
+
+        override fun onIsPlayingChanged( isPlaying: Boolean ) {
+            updateIsPlaying( isPlaying )
         }
 
         override fun onPlayerErrorChanged( error: PlaybackException? ) {

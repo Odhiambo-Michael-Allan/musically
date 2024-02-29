@@ -70,9 +70,7 @@ fun MusicallyAppContent(
     val homeTabs by settingsRepository.homeTabs.collectAsState()
     val language by settingsRepository.language.collectAsState()
     val labelVisibility by settingsRepository.homePageBottomBarLabelVisibility.collectAsState()
-
-    val nowPlayingBottomBarUiState by nowPlayingViewModel.bottomBarUiState.collectAsState()
-    val nowPlayingBottomSheetUiState by nowPlayingViewModel.bottomSheetUiState.collectAsState()
+    val nowPlayingScreenUiState by nowPlayingViewModel.nowPlayingScreenUiState.collectAsState()
     var showNowPlayingBottomSheet by remember { mutableStateOf( false ) }
 
     Column(
@@ -88,7 +86,7 @@ fun MusicallyAppContent(
             labelVisibility = labelVisibility,
         ) {
             NowPlayingBottomBar(
-                nowPlayingBottomBarUiState = nowPlayingBottomBarUiState,
+                nowPlayingScreenUiState = nowPlayingScreenUiState,
                 onNowPlayingBottomBarSwipeUp = { showNowPlayingBottomSheet = true },
                 onNowPlayingBottomBarClick = { showNowPlayingBottomSheet = true },
                 nextSong = { nowPlayingViewModel.playNextSong() },
@@ -106,7 +104,7 @@ fun MusicallyAppContent(
                     onDismissRequest = { showNowPlayingBottomSheet = false }
                 ) {
                     NowPlayingBottomSheet(
-                        nowPlayingBottomSheetUiState = nowPlayingBottomSheetUiState,
+                        nowPlayingBottomSheetUiState = nowPlayingScreenUiState,
                         onFavorite = { nowPlayingViewModel.onFavorite( it ) },
                         playPause = { nowPlayingViewModel.playPause() },
                         playPreviousSong = { nowPlayingViewModel.playPreviousSong() },

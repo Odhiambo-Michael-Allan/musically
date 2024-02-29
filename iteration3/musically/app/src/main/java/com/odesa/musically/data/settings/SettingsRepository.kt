@@ -6,6 +6,7 @@ import com.odesa.musically.data.storage.preferences.HomeTab
 import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
 import com.odesa.musically.data.storage.preferences.NowPlayingLyricsLayout
 import com.odesa.musically.services.i18n.Language
+import com.odesa.musically.services.media.LoopMode
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.StateFlow
@@ -36,6 +37,14 @@ interface SettingsRepository {
     val showNowPlayingAudioInformation: StateFlow<Boolean>
     val showNowPlayingSeekControls: StateFlow<Boolean>
 
+    val currentPlayingSpeed: StateFlow<Float>
+    val currentPlayingPitch: StateFlow<Float>
+    val pauseOnCurrentSongEnd: StateFlow<Boolean>
+    val currentLoopMode: StateFlow<LoopMode>
+    val shuffle: StateFlow<Boolean>
+    val showLyrics: StateFlow<Boolean>
+    val controlsLayoutIsDefault: StateFlow<Boolean>
+
     suspend fun setLanguage( localeCode: String )
     suspend fun setFont( fontName: String )
     suspend fun setFontScale( fontScale: Float )
@@ -60,5 +69,12 @@ interface SettingsRepository {
     suspend fun setNowPlayingLyricsLayout( nowPlayingLyricsLayout: NowPlayingLyricsLayout)
     suspend fun setShowNowPlayingAudioInformation( showNowPlayingAudioInformation: Boolean )
     suspend fun setShowNowPlayingSeekControls( showNowPlayingSeekControls: Boolean )
+    suspend fun setCurrentPlayingSpeed( currentPlayingSpeed: Float )
+    suspend fun setCurrentPlayingPitch( currentPlayingPitch: Float )
+    suspend fun setPauseOnCurrentSongEnd( pauseOnCurrentSongEnd: Boolean )
+    suspend fun setCurrentLoopMode( currentLoopMode: LoopMode )
+    suspend fun setShuffle( shuffle: Boolean )
+    suspend fun setShowLyrics( showLyrics: Boolean )
+    suspend fun setControlsLayoutIsDefault( controlsLayoutIsDefault: Boolean )
 
 }

@@ -68,11 +68,12 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.odesa.musically.R
 import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
+import com.odesa.musically.services.media.LoopMode
 import com.odesa.musically.services.media.Song
 import com.odesa.musically.services.media.testSongs
 import com.odesa.musically.ui.navigation.FadeTransition
 import com.odesa.musically.ui.navigation.TransitionDurations
-import com.odesa.musically.ui.nowPlaying.NowPlayingBottomBarUiState
+import com.odesa.musically.ui.nowPlaying.NowPlayingScreenUiState
 import com.odesa.musically.ui.theme.isLight
 import com.odesa.musically.utils.runFunctionIfTrueElseReturnThisObject
 import kotlin.math.absoluteValue
@@ -80,7 +81,7 @@ import kotlin.math.absoluteValue
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun NowPlayingBottomBar(
-    nowPlayingBottomBarUiState: NowPlayingBottomBarUiState,
+    nowPlayingScreenUiState: NowPlayingScreenUiState,
     onNowPlayingBottomBarSwipeUp: () -> Unit,
     onNowPlayingBottomBarClick: () -> Unit,
     nextSong: () -> Boolean,
@@ -91,13 +92,13 @@ fun NowPlayingBottomBar(
 ) {
 
     val fallbackResourceId = if (
-        nowPlayingBottomBarUiState.themeMode.isLight( LocalContext.current )
+        nowPlayingScreenUiState.themeMode.isLight( LocalContext.current )
         ) R.drawable.placeholder_light else R.drawable.placeholder_dark
 
     AnimatedContent(
         modifier = Modifier.fillMaxWidth(),
         label = "now-playing-container",
-        targetState = nowPlayingBottomBarUiState.currentlyPlayingSong,
+        targetState = nowPlayingScreenUiState.currentlyPlayingSong,
         contentKey = { true },
         transitionSpec = {
             slideInVertically().plus( fadeIn() )
@@ -180,11 +181,11 @@ fun NowPlayingBottomBar(
                                 song = it,
                                 nextSong = nextSong,
                                 previousSong = previousSong,
-                                textMarquee = nowPlayingBottomBarUiState.textMarquee
+                                textMarquee = nowPlayingScreenUiState.textMarquee
                             )
                         }
                         Spacer( modifier = Modifier.width( 15.dp ) )
-                        if ( nowPlayingBottomBarUiState.showTrackControls ) {
+                        if ( nowPlayingScreenUiState.showTrackControls ) {
                             IconButton(
                                 onClick = { previousSong() }
                             ) {
@@ -194,7 +195,7 @@ fun NowPlayingBottomBar(
                                 )
                             }
                         }
-                        if ( nowPlayingBottomBarUiState.showSeekControls ) {
+                        if ( nowPlayingScreenUiState.showSeekControls ) {
                             IconButton(
                                 onClick = seekBack
                             ) {
@@ -207,13 +208,13 @@ fun NowPlayingBottomBar(
                         IconButton( onClick = playPause ) {
                             Icon(
                                 imageVector = when {
-                                    nowPlayingBottomBarUiState.isPlaying -> Icons.Filled.Pause
+                                    nowPlayingScreenUiState.isPlaying -> Icons.Filled.Pause
                                     else -> Icons.Filled.PlayArrow
                                 },
                                 contentDescription = null
                             )
                         }
-                        if ( nowPlayingBottomBarUiState.showSeekControls ) {
+                        if ( nowPlayingScreenUiState.showSeekControls ) {
                             IconButton(
                                 onClick = seekForward
                             ) {
@@ -223,7 +224,7 @@ fun NowPlayingBottomBar(
                                 )
                             }
                         }
-                        if ( nowPlayingBottomBarUiState.showTrackControls ) {
+                        if ( nowPlayingScreenUiState.showTrackControls ) {
                             IconButton(
                                 onClick = { nextSong() }
                             ) {
@@ -252,7 +253,7 @@ fun NowPlayingBottomBar(
                         modifier = Modifier
                             .align( Alignment.CenterStart )
                             .background( MaterialTheme.colorScheme.primary )
-                            .fillMaxWidth( nowPlayingBottomBarUiState.playbackPosition.ratio )
+                            .fillMaxWidth( nowPlayingScreenUiState.playbackPosition.ratio )
                             .fillMaxHeight()
                     )
                 }
@@ -408,7 +409,7 @@ data class PlaybackPosition(
 @Composable
 fun NowPlayingBottomBarPreview() {
     NowPlayingBottomBar(
-        nowPlayingBottomBarUiState = uiState,
+        nowPlayingScreenUiState = uiState,
         onNowPlayingBottomBarSwipeUp = {},
         onNowPlayingBottomBarClick = {},
         nextSong = { true },
@@ -419,12 +420,23 @@ fun NowPlayingBottomBarPreview() {
     )
 }
 
-val uiState = NowPlayingBottomBarUiState(
+val uiState = NowPlayingScreenUiState(
     currentlyPlayingSong = testSongs.first(),
     playbackPosition = PlaybackPosition( 3, 5 ),
-    textMarquee = true,
+    currentlyPlayingSongIndex = 100,
+    queueSize = 150,
+    language = SettingsDefaults.language,
+    currentlyPlayingSongIsFavorite = true,
+    controlsLayoutIsDefault = false,
+    isPlaying = true,
     showTrackControls = true,
     showSeekControls = true,
-    isPlaying = false,
-    themeMode = SettingsDefaults.themeMode
+    showLyrics = false,
+    shuffle = true,
+    currentLoopMode = LoopMode.Song,
+    pauseOnCurrentSongEnd = false,
+    currentPlayingSpeed = 1f,
+    currentPlayingPitch = 1f,
+    themeMode = SettingsDefaults.themeMode,
+    textMarquee = true
 )

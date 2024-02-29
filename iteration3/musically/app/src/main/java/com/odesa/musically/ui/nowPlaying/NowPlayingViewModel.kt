@@ -29,8 +29,8 @@ class NowPlayingViewModel(
 ) : AndroidViewModel( application ) {
 
     private val handler = Handler( Looper.getMainLooper() )
-    private val _bottomSheetUiState = MutableStateFlow(
-        NowPlayingBottomSheetUiState(
+    private val _nowPlayingScreenUiState = MutableStateFlow(
+        NowPlayingScreenUiState(
             currentlyPlayingSong = getCurrentlyPlayingSong(),
             currentlyPlayingSongIndex = musicServiceConnection.currentlyPlayingMediaItemIndex.value,
             playbackPosition = PlaybackPosition.zero,
@@ -39,30 +39,20 @@ class NowPlayingViewModel(
             currentlyPlayingSongIsFavorite = true,
             controlsLayoutIsDefault = false,
             isPlaying = true,
-            showSeekControls = true,
+            showTrackControls = settingsRepository.miniPlayerShowTrackControls.value,
+            showSeekControls = settingsRepository.miniPlayerShowSeekControls.value,
             showLyrics = false,
             shuffle = true,
             currentLoopMode = LoopMode.Song,
             pauseOnCurrentSongEnd = false,
             currentPlayingSpeed = 2f,
             currentPlayingPitch = 2f,
-            themeMode = settingsRepository.themeMode.value
+            themeMode = settingsRepository.themeMode.value,
+            textMarquee = settingsRepository.miniPlayerTextMarquee.value,
         )
     )
 
-    private val _bottomBarUiState = MutableStateFlow(
-        NowPlayingBottomBarUiState(
-            currentlyPlayingSong = getCurrentlyPlayingSong(),
-            playbackPosition = PlaybackPosition.zero,
-            textMarquee = settingsRepository.miniPlayerTextMarquee.value,
-            showTrackControls = settingsRepository.miniPlayerShowTrackControls.value,
-            showSeekControls = settingsRepository.miniPlayerShowSeekControls.value,
-            isPlaying = musicServiceConnection.playbackState.value.isPlaying,
-            themeMode = settingsRepository.themeMode.value
-        )
-    )
-    val bottomSheetUiState = _bottomSheetUiState.asStateFlow()
-    val bottomBarUiState = _bottomBarUiState.asStateFlow()
+    val nowPlayingScreenUiState = _nowPlayingScreenUiState.asStateFlow()
 
     private val _updatePlaybackPosition = MutableStateFlow( false )
     var updatePlaybackPosition = _updatePlaybackPosition.asStateFlow()
@@ -75,26 +65,19 @@ class NowPlayingViewModel(
         viewModelScope.launch { observeCurrentlyPlayingMediaItemIndex() }
         viewModelScope.launch { observeLanguage() }
         viewModelScope.launch { observeIsPlaying() }
+        viewModelScope.launch { observeThemeMode() }
+        viewModelScope.launch { observeTextMarquee() }
+        viewModelScope.launch { observeShowTrackControls() }
+        viewModelScope.launch { observeShowSeekControls() }
     }
 
     private suspend fun observeNowPlaying() {
         musicServiceConnection.nowPlaying.collect {
             val song = getCurrentlyPlayingSong()
-            updateBottomSheetCurrentlyPlayingSong( song )
-            updateBottomBarCurrentlyPlayingSong( song )
+            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
+                currentlyPlayingSong = song
+            )
         }
-    }
-
-    private fun updateBottomSheetCurrentlyPlayingSong( song: Song? ) {
-        _bottomSheetUiState.value = _bottomSheetUiState.value.copy(
-            currentlyPlayingSong = song
-        )
-    }
-
-    private fun updateBottomBarCurrentlyPlayingSong( song: Song? ) {
-        _bottomBarUiState.value = _bottomBarUiState.value.copy(
-            currentlyPlayingSong = song
-        )
     }
 
     private suspend fun observePlaybackState() {
@@ -102,20 +85,20 @@ class NowPlayingViewModel(
             if ( it.isPlaying ) {
                 _updatePlaybackPosition.value = true
                 updateBottomSheetPlaybackState( 0L, it.duration )
-                updateBottomBarPlaybackState( 0L, it.duration )
+                updatePlaybackState( 0L, it.duration )
             } else
                 _updatePlaybackPosition.value = false
         }
     }
 
     private fun updateBottomSheetPlaybackState( played: Long, total: Long ) {
-        _bottomSheetUiState.value = _bottomSheetUiState.value.copy(
+        _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
             playbackPosition = PlaybackPosition( played, total )
         )
     }
 
-    private fun updateBottomBarPlaybackState( played: Long, total: Long ) {
-        _bottomBarUiState.value = _bottomBarUiState.value.copy(
+    private fun updatePlaybackState(played: Long, total: Long ) {
+        _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
             playbackPosition = PlaybackPosition( played, total )
         )
     }
@@ -135,12 +118,9 @@ class NowPlayingViewModel(
     private fun checkPlaybackPosition( delayMs: Long ): Boolean = handler.postDelayed( {
         val currentPosition = musicServiceConnection.player?.currentPosition ?: 0
         Timber.tag( "NOW-PLAYING-VIEW-MODEL" ).d( "CURRENT POSITION: $currentPosition" )
-        if ( _bottomBarUiState.value.playbackPosition.played != currentPosition ) {
-            Timber.tag( "NOW-PLAYING-VIEW-MODEL" ).d( "UPDATING PLAYBACK STATE" )
-            updateBottomBarPlaybackState( currentPosition,
-                _bottomBarUiState.value.playbackPosition.total )
-            updateBottomSheetPlaybackState( currentPosition,
-                _bottomSheetUiState.value.playbackPosition.total )
+        if ( _nowPlayingScreenUiState.value.playbackPosition.played != currentPosition ) {
+            updatePlaybackState( currentPosition,
+                _nowPlayingScreenUiState.value.playbackPosition.total )
         }
         if ( updatePlaybackPosition.value )
             checkPlaybackPosition( 1000 - ( currentPosition % 1000 ) )
@@ -148,7 +128,7 @@ class NowPlayingViewModel(
 
     private suspend fun observeQueueSize() {
         musicServiceConnection.queueSize.collect {
-            _bottomSheetUiState.value = _bottomSheetUiState.value.copy(
+            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
                 queueSize = it
             )
         }
@@ -156,7 +136,7 @@ class NowPlayingViewModel(
 
     private suspend fun observeCurrentlyPlayingMediaItemIndex() {
         musicServiceConnection.currentlyPlayingMediaItemIndex.collect {
-            _bottomSheetUiState.value = _bottomSheetUiState.value.copy(
+            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
                 currentlyPlayingSongIndex = it
             )
         }
@@ -164,7 +144,7 @@ class NowPlayingViewModel(
 
     private suspend fun observeLanguage() {
         settingsRepository.language.collect {
-            _bottomSheetUiState.value = _bottomSheetUiState.value.copy(
+            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
                 language = it
             )
         }
@@ -172,21 +152,42 @@ class NowPlayingViewModel(
 
     private suspend fun observeIsPlaying() {
         musicServiceConnection.isPlaying.collect {
-            updateBottomSheetIsPlaying( it )
-            updateBottomBarIsPlaying( it )
+            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
+                isPlaying = it
+            )
         }
     }
 
-    private fun updateBottomSheetIsPlaying( isPlaying: Boolean ) {
-        _bottomSheetUiState.value = _bottomSheetUiState.value.copy(
-            isPlaying = isPlaying
-        )
+    private suspend fun observeThemeMode() {
+        settingsRepository.themeMode.collect {
+            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
+                themeMode = it
+            )
+        }
     }
 
-    private fun updateBottomBarIsPlaying( isPlaying: Boolean ) {
-        _bottomBarUiState.value = _bottomBarUiState.value.copy(
-            isPlaying = isPlaying
-        )
+    private suspend fun observeTextMarquee() {
+        settingsRepository.miniPlayerTextMarquee.collect {
+            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
+                textMarquee = it
+            )
+        }
+    }
+
+    private suspend fun observeShowTrackControls() {
+        settingsRepository.miniPlayerShowTrackControls.collect {
+            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
+                showTrackControls = it
+            )
+        }
+    }
+
+    private suspend fun observeShowSeekControls() {
+        settingsRepository.miniPlayerShowSeekControls.collect {
+            _nowPlayingScreenUiState.value = _nowPlayingScreenUiState.value.copy(
+                showSeekControls = it
+            )
+        }
     }
 
     fun onFavorite( songId: String ) {}
@@ -265,7 +266,7 @@ class NowPlayingViewModel(
     }
 }
 
-data class NowPlayingBottomSheetUiState(
+data class NowPlayingScreenUiState(
     val currentlyPlayingSong: Song?,
     val playbackPosition: PlaybackPosition,
     val currentlyPlayingSongIndex: Int,
@@ -274,6 +275,7 @@ data class NowPlayingBottomSheetUiState(
     val currentlyPlayingSongIsFavorite: Boolean,
     val controlsLayoutIsDefault: Boolean,
     val isPlaying: Boolean,
+    val showTrackControls: Boolean,
     val showSeekControls: Boolean,
     val showLyrics: Boolean,
     val shuffle: Boolean,
@@ -281,17 +283,9 @@ data class NowPlayingBottomSheetUiState(
     val pauseOnCurrentSongEnd: Boolean,
     val currentPlayingSpeed: Float,
     val currentPlayingPitch: Float,
-    val themeMode: ThemeMode
+    val themeMode: ThemeMode,
+    val textMarquee: Boolean,
 )
 
-data class NowPlayingBottomBarUiState(
-    val currentlyPlayingSong: Song?,
-    val playbackPosition: PlaybackPosition,
-    val textMarquee: Boolean,
-    val showTrackControls: Boolean,
-    val showSeekControls: Boolean,
-    val isPlaying: Boolean,
-    val themeMode: ThemeMode
-)
 
 private const val POSITION_UPDATE_INTERVAL_MILLIS = 1L

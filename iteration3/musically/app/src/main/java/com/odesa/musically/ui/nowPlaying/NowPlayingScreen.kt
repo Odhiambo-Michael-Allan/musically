@@ -80,7 +80,7 @@ import com.odesa.musically.ui.theme.isLight
 
 @Composable
 fun NowPlayingBottomSheet(
-    nowPlayingBottomSheetUiState: NowPlayingBottomSheetUiState,
+    nowPlayingBottomSheetUiState: NowPlayingScreenUiState,
     onFavorite: ( String ) -> Unit,
     playPause: () -> Unit,
     playPreviousSong: () -> Unit,
@@ -184,7 +184,7 @@ fun NowPlayingScreenContent(
 ) {
 
     var showOptionsMenu by remember { mutableStateOf( false ) }
-    Column ( modifier = Modifier.padding( start = 16.dp, end = 16.dp, top = 0.dp, bottom = 0.dp )) {
+    Column ( modifier = Modifier.padding( start = 8.dp, end = 8.dp, top = 0.dp, bottom = 0.dp )) {
         NowPlayingArtwork(
             showLyrics = showLyrics,
             artworkUri = currentlyPlayingSong.artworkUri,

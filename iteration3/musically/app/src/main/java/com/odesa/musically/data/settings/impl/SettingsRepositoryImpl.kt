@@ -1,12 +1,12 @@
 package com.odesa.musically.data.settings.impl
 
+import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.data.storage.preferences.ForYou
 import com.odesa.musically.data.storage.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musically.data.storage.preferences.HomeTab
 import com.odesa.musically.data.storage.preferences.NowPlayingControlsLayout
 import com.odesa.musically.data.storage.preferences.NowPlayingLyricsLayout
 import com.odesa.musically.data.storage.preferences.PreferenceStore
-import com.odesa.musically.data.settings.SettingsRepository
 import com.odesa.musically.services.i18n.Belarusian
 import com.odesa.musically.services.i18n.Chinese
 import com.odesa.musically.services.i18n.English
@@ -14,10 +14,12 @@ import com.odesa.musically.services.i18n.French
 import com.odesa.musically.services.i18n.German
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.services.i18n.Spanish
+import com.odesa.musically.services.media.LoopMode
 import com.odesa.musically.ui.theme.MusicallyFont
 import com.odesa.musically.ui.theme.SupportedFonts
 import com.odesa.musically.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
@@ -94,6 +96,27 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore) : Se
 
     private val _showNowPlayingSeekControls = MutableStateFlow( preferenceStore.getShowNowPlayingSeekControls() )
     override val showNowPlayingSeekControls = _showNowPlayingSeekControls.asStateFlow()
+
+    private val _currentPlayingSpeed = MutableStateFlow( preferenceStore.getCurrentPlayingSpeed() )
+    override val currentPlayingSpeed = _currentPlayingSpeed.asStateFlow()
+
+    private val _currentPlayingPitch = MutableStateFlow( preferenceStore.getCurrentPlayingPitch() )
+    override val currentPlayingPitch = _currentPlayingPitch.asStateFlow()
+
+    private val _pauseOnCurrentSongEnd = MutableStateFlow( preferenceStore.getPauseOnCurrentSongEnd() )
+    override val pauseOnCurrentSongEnd = _pauseOnCurrentSongEnd.asStateFlow()
+
+    private val _currentLoopMode = MutableStateFlow( preferenceStore.getCurrentLoopMode() )
+    override val currentLoopMode = _currentLoopMode.asStateFlow()
+
+    private val _shuffle = MutableStateFlow( preferenceStore.getShuffle() )
+    override val shuffle = _shuffle.asStateFlow()
+
+    private val _showLyrics = MutableStateFlow( preferenceStore.getShowLyrics() )
+    override val showLyrics = _showLyrics.asStateFlow()
+
+    private val _controlsLayoutIsDefault = MutableStateFlow( preferenceStore.getNowPlayingControlsLayout() )
+    override val controlsLayoutIsDefault = _controlsLayoutIsDefault.asStateFlow()
 
     override suspend fun setLanguage( localeCode: String ) {
         preferenceStore.setLanguage( localeCode )
@@ -272,6 +295,34 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore) : Se
         _showNowPlayingSeekControls.update {
             showNowPlayingSeekControls
         }
+    }
+
+    override suspend fun setCurrentPlayingSpeed(currentPlayingSpeed: Float) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setCurrentPlayingPitch(currentPlayingPitch: Float) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setPauseOnCurrentSongEnd(pauseOnCurrentSongEnd: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setCurrentLoopMode(currentLoopMode: LoopMode) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setShuffle(shuffle: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setShowLyrics(showLyrics: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setControlsLayoutIsDefault(controlsLayoutIsDefault: Boolean) {
+        TODO("Not yet implemented")
     }
 
 }

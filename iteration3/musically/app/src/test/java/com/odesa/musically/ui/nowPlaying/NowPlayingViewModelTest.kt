@@ -4,6 +4,7 @@ import androidx.media3.common.Player
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.odesa.musically.data.settings.SettingsRepository
+import com.odesa.musically.data.storage.preferences.impl.SettingsDefaults
 import com.odesa.musically.fakes.FakeMusicServiceConnection
 import com.odesa.musically.fakes.FakeSettingsRepository
 import com.odesa.musically.fakes.id1
@@ -17,6 +18,7 @@ import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.services.i18n.Spanish
 import com.odesa.musically.services.media.connection.PlaybackState
 import com.odesa.musically.ui.components.PlaybackPosition
+import com.odesa.musically.ui.theme.ThemeMode
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertNotNull
@@ -47,13 +49,10 @@ class NowPlayingViewModelTest {
 
     @Test
     fun testCurrentlyPlayingSongIsCorrectlyUpdated() {
-        assertNull( nowPlayingViewModel.bottomSheetUiState.value.currentlyPlayingSong )
-        assertNull( nowPlayingViewModel.bottomBarUiState.value.currentlyPlayingSong )
+        assertNull( nowPlayingViewModel.nowPlayingScreenUiState.value.currentlyPlayingSong )
         musicServiceConnection.setNowPlaying( testMediaItems.first() )
-        assertNotNull( nowPlayingViewModel.bottomSheetUiState.value.currentlyPlayingSong )
-        assertNotNull( nowPlayingViewModel.bottomBarUiState.value.currentlyPlayingSong )
-        assertEquals( id1, nowPlayingViewModel.bottomSheetUiState.value.currentlyPlayingSong!!.id )
-        assertEquals( id1, nowPlayingViewModel.bottomBarUiState.value.currentlyPlayingSong!!.id )
+        assertNotNull( nowPlayingViewModel.nowPlayingScreenUiState.value.currentlyPlayingSong )
+        assertEquals( id1, nowPlayingViewModel.nowPlayingScreenUiState.value.currentlyPlayingSong!!.id )
 
     }
 
@@ -61,30 +60,18 @@ class NowPlayingViewModelTest {
     fun testPlaybackStateIsCorrectlyUpdated() {
         assertEquals(
             PlaybackPosition.zero.played,
-            nowPlayingViewModel.bottomSheetUiState.value.playbackPosition.played
-        )
-        assertEquals(
-            PlaybackPosition.zero.played,
-            nowPlayingViewModel.bottomBarUiState.value.playbackPosition.played
+            nowPlayingViewModel.nowPlayingScreenUiState.value.playbackPosition.played
         )
         assertEquals(
             PlaybackPosition.zero.total,
-            nowPlayingViewModel.bottomSheetUiState.value.playbackPosition.total
-        )
-        assertEquals(
-            PlaybackPosition.zero.total,
-            nowPlayingViewModel.bottomBarUiState.value.playbackPosition.total
+            nowPlayingViewModel.nowPlayingScreenUiState.value.playbackPosition.total
         )
         musicServiceConnection.setPlaybackState(
             PlaybackState( Player.STATE_READY, playWhenReady = true, duration = 30000L )
         )
         assertEquals(
             30000L,
-            nowPlayingViewModel.bottomSheetUiState.value.playbackPosition.total
-        )
-        assertEquals(
-            30000L,
-            nowPlayingViewModel.bottomBarUiState.value.playbackPosition.total
+            nowPlayingViewModel.nowPlayingScreenUiState.value.playbackPosition.total
         )
     }
 
@@ -101,24 +88,24 @@ class NowPlayingViewModelTest {
 
     @Test
     fun testQueueSizeIsCorrectlyUpdated() {
-        assertEquals( 0, nowPlayingViewModel.bottomSheetUiState.value.queueSize )
+        assertEquals( 0, nowPlayingViewModel.nowPlayingScreenUiState.value.queueSize )
         musicServiceConnection.setMediaItems( testMediaItems )
-        assertEquals( 3, nowPlayingViewModel.bottomSheetUiState.value.queueSize )
+        assertEquals( 3, nowPlayingViewModel.nowPlayingScreenUiState.value.queueSize )
     }
 
     @Test
     fun testCurrentlyPlayingSongIndexIsCorrectlyUpdated() {
         assertEquals( 0,
-            nowPlayingViewModel.bottomSheetUiState.value.currentlyPlayingSongIndex )
+            nowPlayingViewModel.nowPlayingScreenUiState.value.currentlyPlayingSongIndex )
         musicServiceConnection.setCurrentMediaItemIndex( 10 )
         assertEquals( 10,
-            nowPlayingViewModel.bottomSheetUiState.value.currentlyPlayingSongIndex )
+            nowPlayingViewModel.nowPlayingScreenUiState.value.currentlyPlayingSongIndex )
     }
 
     @Test
     fun testLanguageChange() {
         assertEquals( "Settings",
-            nowPlayingViewModel.bottomSheetUiState.value.language.settings )
+            nowPlayingViewModel.nowPlayingScreenUiState.value.language.settings )
         changeLanguageTo( Belarusian, "Налады" )
         changeLanguageTo( Chinese, "设置" )
         changeLanguageTo( English, "Settings" )
@@ -129,17 +116,55 @@ class NowPlayingViewModelTest {
 
     private fun changeLanguageTo(language: Language, testString: String ) = runTest {
         settingsRepository.setLanguage( language.locale )
-        val currentLanguage = nowPlayingViewModel.bottomSheetUiState.value.language
+        val currentLanguage = nowPlayingViewModel.nowPlayingScreenUiState.value.language
         assertEquals( testString, currentLanguage.settings )
     }
 
     @Test
     fun testIsPlayingChange() {
-        assertFalse( nowPlayingViewModel.bottomSheetUiState.value.isPlaying )
-        assertFalse( nowPlayingViewModel.bottomBarUiState.value.isPlaying )
+        assertFalse( nowPlayingViewModel.nowPlayingScreenUiState.value.isPlaying )
         musicServiceConnection.setIsPlaying( true )
-        assertTrue( nowPlayingViewModel.bottomSheetUiState.value.isPlaying )
-        assertTrue( nowPlayingViewModel.bottomBarUiState.value.isPlaying )
+        assertTrue( nowPlayingViewModel.nowPlayingScreenUiState.value.isPlaying )
+    }
+
+    @Test
+    fun testThemeModeChange() = runTest {
+        assertEquals( SettingsDefaults.themeMode,
+            nowPlayingViewModel.nowPlayingScreenUiState.value.themeMode )
+        ThemeMode.entries.forEach {
+            settingsRepository.setThemeMode( it )
+            assertEquals( it, nowPlayingViewModel.nowPlayingScreenUiState.value.themeMode )
+        }
+    }
+
+    @Test
+    fun testTextMarqueeChange() = runTest {
+        assertEquals( SettingsDefaults.miniPlayerTextMarquee,
+            nowPlayingViewModel.nowPlayingScreenUiState.value.textMarquee )
+        settingsRepository.setMiniPlayerTextMarquee( false )
+        assertFalse( nowPlayingViewModel.nowPlayingScreenUiState.value.textMarquee )
+        settingsRepository.setMiniPlayerTextMarquee( true )
+        assertTrue( nowPlayingViewModel.nowPlayingScreenUiState.value.textMarquee )
+    }
+
+    @Test
+    fun testShowTrackControlsChange() = runTest {
+        assertEquals( SettingsDefaults.miniPlayerShowTrackControls,
+            nowPlayingViewModel.nowPlayingScreenUiState.value.showTrackControls )
+        settingsRepository.setMiniPlayerShowTrackControls( false )
+        assertFalse( nowPlayingViewModel.nowPlayingScreenUiState.value.showTrackControls )
+        settingsRepository.setMiniPlayerShowTrackControls( true )
+        assertTrue( nowPlayingViewModel.nowPlayingScreenUiState.value.showTrackControls )
+    }
+
+    @Test
+    fun testShowSeekControlsChange() = runTest {
+        assertEquals( SettingsDefaults.miniPlayerShowSeekControls,
+            nowPlayingViewModel.nowPlayingScreenUiState.value.showSeekControls )
+        settingsRepository.setMiniPlayerShowSeekControls( true )
+        assertTrue( nowPlayingViewModel.nowPlayingScreenUiState.value.showSeekControls )
+        settingsRepository.setMiniPlayerShowSeekControls( false )
+        assertFalse( nowPlayingViewModel.nowPlayingScreenUiState.value.showSeekControls )
     }
 
 }
