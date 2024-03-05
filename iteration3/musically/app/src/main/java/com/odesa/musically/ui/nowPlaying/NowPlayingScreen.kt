@@ -95,7 +95,7 @@ fun NowPlayingBottomSheet(
     togglePauseOnCurrentSongEnd: () -> Unit,
     onPlayingSpeedChange: ( Float ) -> Unit,
     onPlayingPitchChange: ( Float ) -> Unit,
-    onCreateEqualizerActivityContract: () -> ActivityResultContract<Unit, Unit>
+    onCreateEqualizerActivityContract: () -> Unit
 ) {
 
     val fallbackResourceId = if ( nowPlayingBottomSheetUiState.themeMode.isLight(
@@ -181,7 +181,7 @@ fun NowPlayingScreenContent(
     onTogglePauseOnCurrentSongEnd: () -> Unit,
     onPlayingSpeedChange: ( Float ) -> Unit,
     onPlayingPitchChange: ( Float ) -> Unit,
-    onCreateEqualizerActivityContract: () -> ActivityResultContract<Unit, Unit>
+    onCreateEqualizerActivityContract: () -> Unit
 ) {
 
     var showOptionsMenu by remember { mutableStateOf( false ) }

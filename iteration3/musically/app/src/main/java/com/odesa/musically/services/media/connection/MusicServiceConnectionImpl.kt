@@ -150,6 +150,12 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
         }
     }
 
+    override fun setShuffleMode( shuffleMode: Boolean ) {
+        kotlin.runCatching {
+            player?.shuffle( shuffleMode )
+        }
+    }
+
     fun release() {
         _rootMediaItem.value = MediaItem.EMPTY
         _nowPlaying.value = NOTHING_PLAYING
@@ -177,7 +183,8 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
             Runnable {
                 val fullMediaItem = mediaItemFuture.get().value ?: return@Runnable
                 _nowPlaying.value = mediaItem.buildUpon().setMediaMetadata(
-                    fullMediaItem.mediaMetadata ).build()
+                    fullMediaItem.mediaMetadata
+                ).build()
             },
             MoreExecutors.directExecutor()
         )
@@ -254,9 +261,14 @@ class PlaybackState(
         }
 }
 
+fun Player.shuffle( shuffle: Boolean ) {
+    if ( availableCommands.contains( Player.COMMAND_SET_SHUFFLE_MODE ) ) {
+        this.shuffleModeEnabled = shuffle
+    } else {
+        throw Exception( "SHUFFLE MODE IS NOT ENABLED ON THIS DEVICE" )
+    }
+}
+
 val EMPTY_PLAYBACK_STATE: PlaybackState = PlaybackState()
 val NOTHING_PLAYING: MediaItem = MediaItem.EMPTY
-private const val POSITION_UPDATE_INTERVAL_MILLIS = 1L
-
 const val TAG = "MUSIC-SERVICE-CONNECTION-TAG"
-const val MEDIA_CONTROLLER_TAG = "MEDIA-CONTROLLER"

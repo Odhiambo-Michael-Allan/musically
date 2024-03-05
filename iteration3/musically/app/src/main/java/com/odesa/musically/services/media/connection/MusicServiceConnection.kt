@@ -22,4 +22,5 @@ interface MusicServiceConnection {
     fun setPlaybackSpeed( playbackSpeed: Float )
     fun setPlaybackPitch( playbackPitch: Float )
     fun setRepeatMode( @Player.RepeatMode repeatMode: Int )
+    fun setShuffleMode( shuffleMode: Boolean )
 }

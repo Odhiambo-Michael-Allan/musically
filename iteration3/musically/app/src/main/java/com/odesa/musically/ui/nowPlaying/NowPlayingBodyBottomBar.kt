@@ -2,9 +2,7 @@ package com.odesa.musically.ui.nowPlaying
 
 import android.content.Context
 import android.content.Intent
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
-import androidx.activity.result.launch
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -48,7 +46,6 @@ import com.odesa.musically.services.i18n.English
 import com.odesa.musically.services.i18n.Language
 import com.odesa.musically.ui.components.ScaffoldDialog
 import com.odesa.musically.ui.settings.components.SettingsTileDefaults
-import timber.log.Timber
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
@@ -69,13 +66,8 @@ fun NowPlayingBodyBottomBar(
     onTogglePauseOnCurrentSongEnd: () -> Unit,
     onSpeedChange: ( Float ) -> Unit,
     onPitchChange: ( Float ) -> Unit,
-    onCreateEqualizerActivityContract: () -> ActivityResultContract<Unit, Unit>,
+    onCreateEqualizerActivityContract: () -> Unit,
 ) {
-
-    val equalizerActivity = rememberLauncherForActivityResult(
-        contract = onCreateEqualizerActivityContract(),
-        onResult = {}
-    )
 
     var showExtraOptions by remember { mutableStateOf( false ) }
     var showSpeedDialog by remember { mutableStateOf( false ) }
@@ -164,14 +156,7 @@ fun NowPlayingBodyBottomBar(
                 Card (
                     onClick = {
                         showExtraOptions = false
-                        try {
-                            equalizerActivity.launch()
-                        } catch ( exception: Exception ) {
-                            Timber.tag( "NOW-PLAYING-BOTTOM-BAR" ).d(
-                                "Launching equalizer failed: $exception"
-                            )
-
-                        }
+                        onCreateEqualizerActivityContract()
                     }
                 ) {
                     ListItem(

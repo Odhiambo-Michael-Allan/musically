@@ -255,4 +255,13 @@ class NowPlayingViewModelTest {
         assertEquals( SettingsDefaults.loopMode, nowPlayingViewModel.uiState.value.currentLoopMode )
     }
 
+    @Test
+    fun testToggleShuffleMode() {
+        assertEquals( SettingsDefaults.shuffle, nowPlayingViewModel.uiState.value.shuffle )
+        nowPlayingViewModel.toggleShuffleMode()
+        assertEquals( !SettingsDefaults.shuffle, nowPlayingViewModel.uiState.value.shuffle )
+        nowPlayingViewModel.toggleShuffleMode()
+        assertEquals( SettingsDefaults.shuffle, nowPlayingViewModel.uiState.value.shuffle )
+    }
+
 }

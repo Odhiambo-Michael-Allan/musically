@@ -2,7 +2,10 @@ package com.odesa.musically.ui
 
 import android.content.Context
 import android.content.Intent
+import android.media.audiofx.AudioEffect
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.launch
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.odesa.musically.data.settings.SettingsRepository
@@ -26,6 +30,7 @@ import com.odesa.musically.ui.navigation.MusicallyNavHost
 import com.odesa.musically.ui.nowPlaying.NowPlayingBottomSheet
 import com.odesa.musically.ui.nowPlaying.NowPlayingViewModel
 import com.odesa.musically.ui.theme.MusicallyTheme
+import timber.log.Timber
 
 @Composable
 fun MusicallyApp(
@@ -73,6 +78,20 @@ fun MusicallyAppContent(
     val nowPlayingScreenUiState by nowPlayingViewModel.uiState.collectAsState()
     var showNowPlayingBottomSheet by remember { mutableStateOf( false ) }
 
+    val packageName = LocalContext.current.packageName
+    val equalizerActivity = rememberLauncherForActivityResult( object : ActivityResultContract<Unit, Unit>() {
+        override fun createIntent( context: Context, input: Unit ) = Intent(
+            AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL
+        ).apply {
+            putExtra( AudioEffect.EXTRA_PACKAGE_NAME, packageName )
+            putExtra( AudioEffect.EXTRA_AUDIO_SESSION, 0 )
+            putExtra( AudioEffect.EXTRA_CONTENT_TYPE, AudioEffect.CONTENT_TYPE_MUSIC )
+        }
+
+        override fun parseResult( resultCode: Int, intent: Intent? ) {}
+
+    } ) {}
+
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -118,7 +137,15 @@ fun MusicallyAppContent(
                         togglePauseOnCurrentSongEnd = { nowPlayingViewModel.togglePauseOnCurrentSongEnd() },
                         onPlayingSpeedChange = { nowPlayingViewModel.onPlayingSpeedChange( it ) },
                         onPlayingPitchChange = { nowPlayingViewModel.onPlayingPitchChange( it ) },
-                        onCreateEqualizerActivityContract = { emptyActivityResultContract }
+                        onCreateEqualizerActivityContract = {
+                            try {
+                                equalizerActivity.launch()
+                            } catch ( exception: Exception ) {
+                                Timber.tag( "NOW-PLAYING-BOTTOM-BAR" ).d(
+                                    "Launching equalizer failed: $exception"
+                                )
+                            }
+                        }
                     )
                 }
 

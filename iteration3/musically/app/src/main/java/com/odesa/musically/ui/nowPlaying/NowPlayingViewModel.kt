@@ -92,17 +92,10 @@ class NowPlayingViewModel(
         musicServiceConnection.playbackState.collect {
             if ( it.isPlaying ) {
                 _updatePlaybackPosition.value = true
-                updateBottomSheetPlaybackState( 0L, it.duration )
                 updatePlaybackState( 0L, it.duration )
             } else
                 _updatePlaybackPosition.value = false
         }
-    }
-
-    private fun updateBottomSheetPlaybackState( played: Long, total: Long ) {
-        _uiState.value = _uiState.value.copy(
-            playbackPosition = PlaybackPosition( played, total )
-        )
     }
 
     private fun updatePlaybackState(played: Long, total: Long ) {
@@ -219,6 +212,7 @@ class NowPlayingViewModel(
             _uiState.value = _uiState.value.copy(
                 shuffle = it
             )
+            musicServiceConnection.setShuffleMode( it )
         }
     }
 
@@ -304,7 +298,12 @@ class NowPlayingViewModel(
         }
     }
 
-    fun toggleShuffleMode() {}
+    fun toggleShuffleMode() {
+        val currentShuffleMode = _uiState.value.shuffle
+        viewModelScope.launch {
+            settingsRepository.setShuffle( !currentShuffleMode )
+        }
+    }
 
     fun togglePauseOnCurrentSongEnd() {}
 
