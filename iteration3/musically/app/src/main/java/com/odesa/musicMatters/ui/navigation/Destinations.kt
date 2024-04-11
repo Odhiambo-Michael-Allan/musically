@@ -119,7 +119,7 @@ enum class Destination(
         iconContentDescription = "${English.tree}-tab-icon"
     )
 }
-fun NavHostController.navigate( route: Route) = navigateSingleTopTo( route.name )
+fun NavHostController.navigate( route: Route ) = navigateSingleTopTo( route.name )
 
 fun NavHostController.navigateSingleTopTo( route: String ) =
     this.navigate( route ) {

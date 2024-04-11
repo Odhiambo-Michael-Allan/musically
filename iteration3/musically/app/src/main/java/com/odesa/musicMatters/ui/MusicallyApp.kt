@@ -144,7 +144,9 @@ fun MusicallyAppContent(
                         onPlayingPitchChange = { nowPlayingViewModel.onPlayingPitchChange( it ) },
                         onQueueClicked = {
                             showNowPlayingBottomSheet = false
-                            navController.navigate( Route.Queue.name )
+                            navController.navigate( Route.Queue.name ) {
+                                launchSingleTop = true
+                            }
                         },
                         onCreateEqualizerActivityContract = {
                             try {

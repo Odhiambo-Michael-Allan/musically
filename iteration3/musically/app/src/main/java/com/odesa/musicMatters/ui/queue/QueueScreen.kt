@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.odesa.musicMatters.R
+import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.QueueScreenTopAppBar
 import com.odesa.musicMatters.ui.components.QueueSongList
@@ -27,7 +28,14 @@ fun QueueScreen(
         uiState = uiState,
         onBackArrowClick = onBackArrowClick,
         onSaveClick = {},
-        onClearClick = {}
+        onClearClick = {},
+        onFavorite = { queueScreenViewModel.addToFavorites( it ) },
+        playSong = {
+            queueScreenViewModel.playMedia(
+                it.mediaItem,
+                true
+            )
+        },
     )
 }
 
@@ -37,6 +45,8 @@ fun QueueScreenContent(
     onBackArrowClick: () -> Unit,
     onSaveClick: () -> Unit,
     onClearClick: () -> Unit,
+    onFavorite: ( String ) -> Unit,
+    playSong: ( Song ) -> Unit,
 ) {
 
     val fallbackResourceId =
@@ -57,7 +67,10 @@ fun QueueScreenContent(
         ) {
             QueueSongList(
                 uiState = uiState,
-                fallbackResourceId = fallbackResourceId
+                fallbackResourceId = fallbackResourceId,
+                isFavorite = { uiState.favoriteSongIds.contains( it ) },
+                onFavorite = onFavorite,
+                playSong = playSong
             )
         }
     }
@@ -70,7 +83,9 @@ fun QueueScreenContentPreview() {
         uiState = emptyQueueScreenUiState,
         onBackArrowClick = {},
         onSaveClick = {},
-        onClearClick = {}
+        onClearClick = {},
+        onFavorite = {},
+        playSong = {}
     )
 }
 

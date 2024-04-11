@@ -45,6 +45,8 @@ class FakeMusicServiceConnection : MusicServiceConnection {
         resultCallback: ( Int, Bundle? ) -> Unit
     ) = true
 
+    override suspend fun playMediaItem( mediaItem: MediaItem, pauseThenPlay: Boolean ) {}
+
     override fun setPlaybackSpeed( playbackSpeed: Float ) {}
 
     override fun setPlaybackPitch( playbackPitch: Float ) {}

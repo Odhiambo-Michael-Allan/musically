@@ -19,6 +19,10 @@ interface MusicServiceConnection {
         command: String,
         parameters: Bundle?,
         resultCallback: ( ( Int, Bundle? ) -> Unit ) ) : Boolean
+    suspend fun playMediaItem(
+        mediaItem: MediaItem,
+        pauseThenPlay: Boolean,
+    )
     fun setPlaybackSpeed( playbackSpeed: Float )
     fun setPlaybackPitch( playbackPitch: Float )
     fun setRepeatMode( @Player.RepeatMode repeatMode: Int )

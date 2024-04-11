@@ -230,11 +230,13 @@ fun MusicallyNavHost(
         }
         composable(
             route = Route.Queue.name,
-            enterTransition = { SlideTransition.slideUp.enterTransition() }
+            enterTransition = { SlideTransition.slideUp.enterTransition() },
+            exitTransition = { SlideTransition.slideDown.exitTransition() },
         ) {
             val queueScreenViewModel: QueueScreenViewModel = viewModel(
                 factory = QueueScreenViewModelFactory(
                     settingsRepository = settingsRepository,
+                    playlistRepository = playlistRepository,
                     musicServiceConnection = musicServiceConnection
                 )
             )

@@ -3,25 +3,19 @@ package com.odesa.musicMatters.ui.songs
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.media3.common.C
 import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.services.media.artistTagSeparators
 import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
-import com.odesa.musicMatters.services.media.connection.TAG
-import com.odesa.musicMatters.services.media.extensions.isEnded
-import com.odesa.musicMatters.services.media.extensions.isPlayEnabled
 import com.odesa.musicMatters.services.media.extensions.toSong
-import com.odesa.musicMatters.services.media.library.MUSICALLY_TRACKS_ROOT
+import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_TRACKS_ROOT
 import com.odesa.musicMatters.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class SongsScreenViewModel(
     private val settingsRepository: SettingsRepository,
@@ -52,7 +46,7 @@ class SongsScreenViewModel(
     }
 
     private suspend fun fetchMediaItems() {
-        playlist = musicServiceConnection.getChildren( MUSICALLY_TRACKS_ROOT )
+        playlist = musicServiceConnection.getChildren( MUSIC_MATTERS_TRACKS_ROOT )
         _uiState.value = _uiState.value.copy(
             songs = playlist.map { it.toSong( artistTagSeparators ) }
         )
@@ -104,30 +98,9 @@ class SongsScreenViewModel(
 
     fun playMedia(
         mediaItem: MediaItem,
-        pauseThenPlaying: Boolean,
+        pauseThenPlay: Boolean,
     ) {
-        val player = musicServiceConnection.player ?: return
-        val nowPlaying = musicServiceConnection.nowPlaying.value
-        val isPrepared = player.playbackState != Player.STATE_IDLE
-        if ( isPrepared && mediaItem.mediaId == nowPlaying.mediaId ) {
-            when {
-                player.isPlaying -> if ( pauseThenPlaying ) player.pause() else Unit
-                player.isPlayEnabled -> player.play()
-                player.isEnded -> player.seekTo( C.TIME_UNSET )
-                else -> {
-                    Timber.tag( TAG ).d( "Playable item clicked but neither play nor pause " +
-                            "are enabled! ( mediaId = ${mediaItem.mediaId} )" )
-                }
-            }
-        } else {
-            viewModelScope.launch {
-                val indexOfSelectedMediaItem = playlist.indexOf( mediaItem )
-                Timber.tag( TAG ).d( "INDEX OF MEDIA ITEM TO PLAY: $indexOfSelectedMediaItem" )
-                player.setMediaItems( playlist, indexOfSelectedMediaItem, C.TIME_UNSET )
-                player.prepare()
-                player.play()
-            }
-        }
+        viewModelScope.launch { musicServiceConnection.playMediaItem( mediaItem, pauseThenPlay ) }
     }
 }
 

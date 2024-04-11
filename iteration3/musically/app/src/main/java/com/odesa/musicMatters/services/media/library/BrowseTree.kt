@@ -65,7 +65,7 @@ class BrowseTree(
 
         mediaIdToChildren[ MUSICALLY_BROWSABLE_ROOT ] = rootList
 
-        val trackList = mediaIdToChildren[ MUSICALLY_TRACKS_ROOT ] ?: mutableListOf()
+        val trackList = mediaIdToChildren[ MUSIC_MATTERS_TRACKS_ROOT ] ?: mutableListOf()
 
         musicSource.forEach { mediaItem ->
             mediaIdToMediaItem[ mediaItem.mediaId ] = mediaItem
@@ -73,7 +73,7 @@ class BrowseTree(
             trackList.add( mediaItem )
         }
 
-        mediaIdToChildren[ MUSICALLY_TRACKS_ROOT ] = trackList
+        mediaIdToChildren[ MUSIC_MATTERS_TRACKS_ROOT ] = trackList
     }
 
     /**
@@ -89,7 +89,7 @@ class BrowseTree(
 
 const val MUSICALLY_BROWSABLE_ROOT = "/"
 const val MUSICALLY_ALBUMS_ROOT = "__ALBUMS__"
-const val MUSICALLY_TRACKS_ROOT = "__TRACKS__"
+const val MUSIC_MATTERS_TRACKS_ROOT = "__TRACKS__"
 const val MUSICALLY_GENRES_ROOT = "__GENRES__"
 const val MUSICALLY_RECENT_ROOT = "__RECENT__"
 const val MUSICALLY_RECOMMENDED_ROOT = "__RECOMMENDED__"

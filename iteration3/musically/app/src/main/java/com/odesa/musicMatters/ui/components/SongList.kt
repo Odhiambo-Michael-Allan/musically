@@ -132,6 +132,9 @@ fun SongListPreview() {
 fun QueueSongList(
     uiState: QueueScreenUiState,
     @DrawableRes fallbackResourceId: Int,
+    isFavorite: ( String ) -> Boolean,
+    onFavorite: ( String ) -> Unit,
+    playSong: ( Song ) -> Unit,
 ) {
     when {
         uiState.songsInQueue.isEmpty() -> IconTextBody(
@@ -158,10 +161,10 @@ fun QueueSongList(
                         language = uiState.language,
                         song = song,
                         isCurrentlyPlaying = uiState.currentlyPlayingSongId == song.id,
-                        isFavorite = true,
+                        isFavorite = isFavorite( song.id ),
                         fallbackResourceId = fallbackResourceId,
-                        onClick = {},
-                        onFavorite = {},
+                        onClick = { playSong( song ) },
+                        onFavorite = onFavorite,
                         onPlayNext = { /*TODO*/ },
                         onAddToQueue = {},
                         onViewArtist = {},
@@ -180,7 +183,10 @@ fun QueueSongList(
 fun QueueSongListPreview() {
     QueueSongList(
         uiState = emptyQueueScreenUiState,
-        fallbackResourceId = R.drawable.placeholder_light
+        fallbackResourceId = R.drawable.placeholder_light,
+        isFavorite = { false },
+        onFavorite = {},
+        playSong = {}
     )
 }
 
@@ -189,6 +195,7 @@ val emptyQueueScreenUiState = QueueScreenUiState(
     language = SettingsDefaults.language,
     currentlyPlayingSongId = testSongs.first().id,
     themeMode = SettingsDefaults.themeMode,
+    favoriteSongIds = emptySet(),
     isLoading = false
 )
 

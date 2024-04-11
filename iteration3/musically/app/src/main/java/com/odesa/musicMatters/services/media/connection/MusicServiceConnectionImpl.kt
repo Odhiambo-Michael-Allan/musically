@@ -25,6 +25,9 @@ import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionToken
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.MoreExecutors
+import com.odesa.musicMatters.services.media.extensions.isEnded
+import com.odesa.musicMatters.services.media.extensions.isPlayEnabled
+import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_TRACKS_ROOT
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -32,6 +35,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -192,6 +196,33 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
 
     private fun updateIsPlaying( isPlaying: Boolean ) {
         _isPlaying.value = isPlaying
+    }
+
+    override suspend fun playMediaItem(
+        mediaItem: MediaItem,
+        pauseThenPlay: Boolean,
+    ) {
+        val player = player ?: return
+        val nowPlaying = nowPlaying.value
+        val isPrepared = player.playbackState != Player.STATE_IDLE
+        if ( isPrepared && mediaItem.mediaId == nowPlaying.mediaId ) {
+            when {
+                player.isPlaying -> if ( pauseThenPlay ) player.pause() else Unit
+                player.isPlayEnabled -> player.play()
+                player.isEnded -> player.seekTo( C.TIME_UNSET )
+                else -> {
+                    Timber.tag( TAG ).d( "Playable item clicked but neither play nor pause " +
+                            "are enabled! ( mediaId = ${mediaItem.mediaId})" )
+                }
+            }
+        } else {
+            val mediaItems = getChildren( MUSIC_MATTERS_TRACKS_ROOT )
+            val indexOfSelectedMediaItem = mediaItems.indexOf( mediaItem )
+            Timber.tag( TAG ).d( "INDEX OF MEDIA ITEM TO PLAY: $indexOfSelectedMediaItem" )
+            player.setMediaItems( mediaItems, indexOfSelectedMediaItem, C.TIME_UNSET )
+            player.prepare()
+            player.play()
+        }
     }
 
     companion object {
