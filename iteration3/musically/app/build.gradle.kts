@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.odesa.musically"
+    namespace = "com.odesa.musicMatters"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.odesa.musically"
+        applicationId = "com.odesa.musicMatters"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

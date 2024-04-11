@@ -6,13 +6,13 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set( RepositoriesMode.FAIL_ON_PROJECT_REPOS )
     repositories {
         google()
         mavenCentral()
     }
 }
 
-rootProject.name = "Musically"
+rootProject.name = "MusicMatters"
 include(":app")
  
