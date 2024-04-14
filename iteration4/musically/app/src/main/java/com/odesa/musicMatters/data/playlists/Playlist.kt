@@ -34,28 +34,6 @@ data class Playlist(
             numberOfTracks = serialized.getInt( PLAYLIST_NUMBER_OF_TRACKS_KEY ),
         )
 
-//        fun fromM3U( context: Context, path: String, uri: Uri ): Playlist {
-//            val filePath = FileExplorer.Path( path )
-//            val directory = filePath.directoryName
-//            val content = context.contentResolver.openInputStream( uri ) ?.use {
-//                String( it.readBytes() )
-//            } ?: ""
-//            val m3u = M3U.parse( content )
-//            val songPaths = mutableListOf<String>()
-//            m3u.entries.forEach { entry ->
-//                val resolvedPath = when {
-//                    FileExplorer.Path.isAbsolute( entry.path ) -> entry.path
-//                    else -> "/" + directory.resolve( FileExplorer.Path( entry.path ) ).toString()
-//                }
-//                songPaths.add( resolvedPath )
-//            }
-//            return Playlist(
-//                id = path,
-//                title = filePath.basename.removeSuffix( ".m3u" ),
-//                songIds = songPaths,
-//                numberOfTracks = songPaths.size,
-//            )
-//        }
     }
 }
 

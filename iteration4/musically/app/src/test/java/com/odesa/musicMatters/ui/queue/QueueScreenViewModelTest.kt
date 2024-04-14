@@ -82,4 +82,21 @@ class QueueScreenViewModelTest {
         )
     }
 
+    @Test
+    fun testClearQueue() {
+        musicServiceConnection.setMediaItems( testMediaItems )
+        assertEquals( testMediaItems.size, queueScreenViewModel.uiState.value.songsInQueue.size )
+        queueScreenViewModel.clearQueue()
+        assertEquals( 0, queueScreenViewModel.uiState.value.songsInQueue.size )
+    }
+
+    @Test
+    fun testSaveCurrentPlaylist() {
+        val playlistName = "playlist-1"
+        musicServiceConnection.setMediaItems( testMediaItems )
+        queueScreenViewModel.saveCurrentPlaylist( playlistName )
+        assertEquals( testMediaItems.size, playlistRepository.playlists.value.size )
+        assertEquals( playlistName, playlistRepository.playlists.value.first().title )
+    }
+
 }

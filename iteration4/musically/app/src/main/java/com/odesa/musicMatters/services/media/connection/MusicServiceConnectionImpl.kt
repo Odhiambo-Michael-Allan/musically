@@ -25,6 +25,7 @@ import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionToken
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.MoreExecutors
+import com.odesa.musicMatters.utils.move
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -32,6 +33,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -153,10 +155,6 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
         }
     }
 
-//    override fun setShuffleMode( shuffle: Boolean ) {
-//        if ( shuffle ) shuffleSongs() else unShuffleSongs()
-//    }
-
     fun release() {
         _rootMediaItem.value = MediaItem.EMPTY
         _nowPlaying.value = NOTHING_PLAYING
@@ -175,10 +173,20 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
         )
     }
 
+    private fun updateCurrentlyPlayingMediaItemIndex( player: Player ) {
+        _currentPlayingMediaItemIndex.value = player.currentMediaItemIndex
+    }
+
+    private fun updateQueueSize( player: Player ) {
+        _queueSize.value = player.mediaItemCount
+    }
+
     private fun updateNowPlaying( player: Player ) {
         val mediaItem = player.currentMediaItem ?: MediaItem.EMPTY
-        if ( mediaItem == MediaItem.EMPTY )
+        if ( mediaItem == MediaItem.EMPTY ) {
+            _nowPlaying.value = NOTHING_PLAYING
             return
+        }
         val mediaItemFuture = browser!!.getItem( mediaItem.mediaId )
         mediaItemFuture.addListener(
             Runnable {
@@ -198,13 +206,30 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
     override fun shuffleSongsInQueue() {
         player?.let {
             if ( nowPlaying.value == NOTHING_PLAYING ) return
+            it.moveMediaItem( it.currentMediaItemIndex, 0 )
+            updateCurrentlyPlayingMediaItemIndex( it )
             val newMediaItemsInQueue = mediaItemsInQueue.value.filter {
                 mediaItem ->  mediaItem.mediaId != nowPlaying.value.mediaId
             }.shuffled().toMutableList()
+            it.replaceMediaItems( 1, newMediaItemsInQueue.size, newMediaItemsInQueue )
             newMediaItemsInQueue.add( 0, nowPlaying.value )
-            it.replaceMediaItems( 0, newMediaItemsInQueue.size, newMediaItemsInQueue )
             _mediaItemsInQueue.value = newMediaItemsInQueue
         }
+    }
+
+    override fun moveMediaItem( from: Int, to: Int ) {
+        player?.moveMediaItem( from, to )
+        val newQueue = _mediaItemsInQueue.value.toMutableList()
+        newQueue.move( from, to )
+        _mediaItemsInQueue.value = newQueue
+        player?.let {
+            updateCurrentlyPlayingMediaItemIndex( it )
+        }
+    }
+
+    override fun clearQueue() {
+        player?.clearMediaItems()
+        _mediaItemsInQueue.value = emptyList()
     }
 
     override suspend fun playMediaItem(
@@ -250,18 +275,17 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
         override fun onEvents( player: Player, events: Player.Events ) {
             if ( events.contains( EVENT_PLAY_WHEN_READY_CHANGED )
                 || events.contains( EVENT_PLAYBACK_STATE_CHANGED )
-                || events.contains( EVENT_MEDIA_ITEM_TRANSITION ) ) {
+                || events.contains( EVENT_MEDIA_ITEM_TRANSITION )
+                || events.contains( Player.EVENT_PLAYLIST_METADATA_CHANGED ) ) {
                 updatePlaybackState( player )
+                updateCurrentlyPlayingMediaItemIndex( player )
+                updateQueueSize( player )
             }
             if ( events.contains( Player.EVENT_MEDIA_METADATA_CHANGED )
                 || events.contains( EVENT_MEDIA_ITEM_TRANSITION )
                 || events.contains( EVENT_PLAY_WHEN_READY_CHANGED ) ) {
+                Timber.tag( TAG ).d( "MEDIA METADATA CHANGED EVENT GENERATED" )
                 updateNowPlaying( player )
-            }
-            if ( events.contains( Player.EVENT_PLAYLIST_METADATA_CHANGED )
-                || events.contains( Player.EVENT_MEDIA_METADATA_CHANGED ) ) {
-                _queueSize.value = player.mediaItemCount
-                _currentPlayingMediaItemIndex.value = player.currentMediaItemIndex
             }
         }
 

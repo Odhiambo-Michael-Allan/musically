@@ -314,6 +314,7 @@ fun SongDropdownMenu(
 
 @Composable
 fun QueueSongCard(
+    modifier: Modifier = Modifier,
     language: Language,
     song: Song,
     isCurrentlyPlaying: Boolean,
@@ -332,6 +333,7 @@ fun QueueSongCard(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
+            modifier = modifier,
             onClick = onDragHandleClick
         ) {
             Icon(

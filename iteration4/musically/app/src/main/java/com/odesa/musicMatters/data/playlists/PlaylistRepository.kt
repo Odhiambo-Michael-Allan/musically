@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 interface PlaylistRepository {
 
     val favoritesPlaylist: StateFlow<Playlist>
+    val playlists: StateFlow<Set<Playlist>>
 
 //    fun search( playlistIds: List<String>, terms: String, limit: Int = 7 )
 //    fun sort(playlistIds: List<String>, by: SortPlaylistBy, reverse: Boolean ): List<String>
@@ -15,6 +16,7 @@ interface PlaylistRepository {
     fun isFavorite( songId: String ): Boolean
     suspend fun addToFavorites( songId: String )
     suspend fun removeFromFavorites( songId: String )
-//    fun savePlaylist( playlist: Playlist )
+    suspend fun savePlaylist( playlist: Playlist )
+    suspend fun deletePlaylist( playlist: Playlist )
 //    suspend fun renamePlaylist( playlist: Playlist, newTitle: String )
 }

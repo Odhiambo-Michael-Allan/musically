@@ -18,6 +18,9 @@ class FakePlaylistRepository : PlaylistRepository {
     )
     override val favoritesPlaylist = _favoritePlaylist.asStateFlow()
 
+    private val _playlists = MutableStateFlow( emptySet<Playlist>() )
+    override val playlists = _playlists.asStateFlow()
+
     override fun isFavorite( songId: String ): Boolean {
         return _favoritePlaylist.value.songIds.contains( songId )
     }
@@ -38,5 +41,15 @@ class FakePlaylistRepository : PlaylistRepository {
             songIds = currentFavoritesIds,
             numberOfTracks = currentFavoritesIds.size
         )
+    }
+
+    override suspend fun savePlaylist( playlist: Playlist ) {
+        val mutablePlaylist = _playlists.value.toMutableSet()
+        mutablePlaylist.add( playlist )
+        _playlists.value = mutablePlaylist
+    }
+
+    override suspend fun deletePlaylist( playlist: Playlist ) {
+        _playlists.value = _playlists.value.filter { it.id != playlist.id }.toSet()
     }
 }

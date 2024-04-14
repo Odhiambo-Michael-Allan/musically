@@ -240,7 +240,7 @@ fun NowPlayingBottomBar(
                 // ------------------------- Progress Bar ------------------------------
                 Box(
                     modifier = Modifier
-                        .height( 2.dp )
+                        .height( 1.dp )
                         .fillMaxWidth()
                 ) {
                     Box(

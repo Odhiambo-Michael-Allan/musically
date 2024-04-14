@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -61,7 +60,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.min
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.odesa.musicMatters.R
@@ -159,7 +157,7 @@ fun NowPlayingScreenContent(
     currentLoopMode: LoopMode,
     currentPlayingSpeed: Float,
     currentPlayingPitch: Float,
-    durationFormatter: (Long ) -> String,
+    durationFormatter: ( Long ) -> String,
     onArtistClicked: ( String ) -> Unit,
     onFavorite: ( String ) -> Unit,
     onPausePlayButtonClick: () -> Unit,
@@ -204,7 +202,7 @@ fun NowPlayingScreenContent(
                 }
             ) { target ->
                 Column (
-                    modifier = Modifier.padding( 16.dp, 4.dp )
+                    modifier = Modifier.padding( 16.dp, 16.dp )
                 ) {
                     Text(
                         text = target.title,
@@ -239,7 +237,9 @@ fun NowPlayingScreenContent(
                     }
                 }
             }
-            Row {
+            Row (
+                modifier = Modifier.padding( 0.dp, 16.dp )
+            ) {
                 IconButton(
                     modifier = Modifier.offset( 4.dp ),
                     onClick = { onFavorite( currentlyPlayingSong.id ) }

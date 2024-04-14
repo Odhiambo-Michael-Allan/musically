@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.Language
@@ -15,6 +16,7 @@ import com.odesa.musicMatters.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class QueueScreenViewModel(
     private val settingsRepository: SettingsRepository,
@@ -83,9 +85,28 @@ class QueueScreenViewModel(
         }
     }
 
+    fun moveSong( from: Int, to: Int ) {
+        musicServiceConnection.moveMediaItem( from, to )
+    }
+
+    fun clearQueue() {
+        musicServiceConnection.clearQueue()
+    }
+
+    fun saveCurrentPlaylist( playlistName: String ) {
+        val playlist = Playlist(
+            id = UUID.randomUUID().toString(),
+            title = playlistName,
+            songIds = uiState.value.songsInQueue.map { it.id }.toSet(),
+            numberOfTracks = uiState.value.songsInQueue.size
+        )
+        viewModelScope.launch {
+            playlistRepository.savePlaylist( playlist )
+        }
+    }
+
     fun playMedia(
-        mediaItem: MediaItem,
-        pauseThenPlay: Boolean,
+        mediaItem: MediaItem
     ) {
         viewModelScope.launch {
             musicServiceConnection.playMediaItem(

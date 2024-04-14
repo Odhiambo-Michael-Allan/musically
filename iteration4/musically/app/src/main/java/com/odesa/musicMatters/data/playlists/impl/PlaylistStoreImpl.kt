@@ -3,10 +3,15 @@ package com.odesa.musicMatters.data.playlists.impl
 import android.content.Context
 import android.provider.MediaStore
 import com.odesa.musicMatters.data.playlists.Playlist
+
 import com.odesa.musicMatters.data.playlists.PlaylistStore
+import com.odesa.musicMatters.utils.toSet
+import org.json.JSONArray
+
 import org.json.JSONObject
 import timber.log.Timber
 import java.io.File
+
 import java.io.IOException
 import java.util.UUID
 
@@ -16,10 +21,10 @@ class PlaylistStoreImpl( context: Context ) : PlaylistStore {
     private var adapter: FileAdapter
 
     init {
-        val file = File( context.dataDir.absolutePath, "favorites-playlist.json" )
+        val file = File( context.dataDir.absolutePath, "playlists.json" )
         if ( !file.exists() ) {
             // Create the file if it doesn't exist
-            Timber.tag( TAG ).d( "Creating new favorites-playlist.json file" )
+            Timber.tag( TAG ).d( "Creating new playlists.json file" )
             try {
                 file.createNewFile()
             } catch ( e: IOException ) {
@@ -29,75 +34,55 @@ class PlaylistStoreImpl( context: Context ) : PlaylistStore {
         adapter = FileAdapter( file )
     }
 
-//    override fun fetchPlaylists(): List<Playlist> {
-//        val playlists = mutableListOf<Playlist>()
-//        try {
-//            val favoritesPlaylist = readCachedFavoritePlaylistData()
-////            val playlistStoredOnDevice = fetchPlaylistStoredOnDevice()
-//            playlists.add( favoritesPlaylist )
-////            playlists.addAll( playlistStoredOnDevice )
-//        } catch ( exception: Exception ) {
-//            Timber.e( "An error occurred while fetching playlists.", exception )
-//        }
-//        return playlists
-//    }
+    private fun fetchPlaylistData() = PlaylistData.fromJSONObject( adapter.read() )
 
-//    override fun savePlaylist( playlist: Playlist ) {}
-//
-//    override fun savePlaylists( playlists: List<Playlist> ) {
-//        TODO("Not yet implemented")
-//    }
+    override fun fetchPlaylists() = fetchPlaylistData().playlists
 
     override fun fetchFavoritesPlaylist(): Playlist {
-        val content = adapter.read()
-        if ( content.isEmpty() )
-            return Playlist(
-                id = UUID.randomUUID().toString(),
-                title = "Favorites",
-                songIds = emptySet(),
-                numberOfTracks = 0
-            )
-        return Playlist.fromJSONObject( JSONObject( content ) )
+        return fetchPlaylistData().favorites
     }
 
-//    private fun fetchPlaylistStoredOnDevice(): List<Playlist> {
-//        val playlists = mutableListOf<Playlist>()
-//        context.contentResolver.query(
-//            getExternalVolumeUri(),
-//            null,
-//            MediaStore.Files.FileColumns.MIME_TYPE + " == ?",
-//            arrayOf(M3U.mimeType),
-//            null
-//        )?.use { cursor ->
-//            while ( cursor.moveToNext() ) {
-//                val playlistId = cursor.getLongFrom( MediaStore.Files.FileColumns._ID )
-//                val path = cursor.getStringFrom( MediaStore.Files.FileColumns.DATA )
-//                kotlin.runCatching {
-//                    Playlist.fromM3U(context, path, getExternalVolumeUri(playlistId))
-//                }.getOrNull() ?. let { playlists.add( it ) }
-//            }
-//        }
-//        return playlists
-//    }
-
-    override suspend fun addToFavorites(songId: String ) {
-        val currentFavoritePlaylist = fetchFavoritesPlaylist()
-        val songIds = currentFavoritePlaylist.songIds.toMutableSet()
+    override suspend fun addToFavorites( songId: String ) {
+        val currentPlaylistData = fetchPlaylistData()
+        val favoritesPlaylist = currentPlaylistData.favorites
+        val songIds = favoritesPlaylist.songIds.toMutableSet()
         songIds.add( songId )
-        adapter.overwrite( currentFavoritePlaylist.copy(
-            songIds = songIds,
-            numberOfTracks = songIds.size
-        ).toJSONObject().toString() )
+        val newFavoritesPlaylist = favoritesPlaylist.copy(
+            songIds = songIds
+        )
+        val newPlaylistData = currentPlaylistData.copy(
+            favorites = newFavoritesPlaylist
+        )
+        adapter.overwrite( newPlaylistData.toJSONObject().toString() )
     }
 
     override suspend fun removeFromFavorites( songId: String ) {
-        val currentFavoritePlaylist = fetchFavoritesPlaylist()
-        val songIds = currentFavoritePlaylist.songIds.toMutableSet()
+        val currentPlaylistData = fetchPlaylistData()
+        val favoritesPlaylist = currentPlaylistData.favorites
+        val songIds = favoritesPlaylist.songIds.toMutableSet()
         songIds.remove( songId )
-        adapter.overwrite( currentFavoritePlaylist.copy(
-            songIds = songIds,
-            numberOfTracks = songIds.size
-        ).toJSONObject().toString() )
+        val newFavoritesPlaylist = favoritesPlaylist.copy(
+            songIds = songIds
+        )
+        val newPlaylistData = currentPlaylistData.copy(
+            favorites = newFavoritesPlaylist
+        )
+        adapter.overwrite( newPlaylistData.toJSONObject().toString() )
+    }
+
+    override suspend fun savePlaylist( playlist: Playlist ) {
+        val currentPlaylistData = fetchPlaylistData()
+        val currentPlaylists = currentPlaylistData.playlists.toMutableSet()
+        currentPlaylists.add( playlist )
+        adapter.overwrite(
+            currentPlaylistData.copy(
+                playlists = currentPlaylists
+            ).toJSONObject().toString()
+        )
+    }
+
+    override suspend fun deletePlaylist(playlist: Playlist) {
+        TODO("Not yet implemented")
     }
 
     companion object {
@@ -110,7 +95,52 @@ class PlaylistStoreImpl( context: Context ) : PlaylistStore {
         private fun getExternalVolumeUri( rowId: Long ) =
             MediaStore.Files.getContentUri( FILES_EXTERNAL_VOLUME, rowId )
     }
+}
 
+data class PlaylistData(
+    val playlists: Set<Playlist>,
+    val favorites: Playlist
+) {
+
+    fun toJSONObject() = JSONObject().apply {
+        put( CUSTOM_PLAYLISTS, JSONArray( playlists.map { it.toJSONObject() } ) )
+        put( FAVORITES_PLAYLIST, favorites.toJSONObject() )
+    }
+
+    companion object {
+        private const val CUSTOM_PLAYLISTS = "0"
+        private const val FAVORITES_PLAYLIST = "1"
+
+        fun fromJSONObject( content: String ): PlaylistData {
+            return when {
+                content.isEmpty() -> PlaylistData(
+                    playlists = emptySet(),
+                    favorites = createFavoritesPlaylist()
+                )
+                else -> {
+                    val jsonContent = JSONObject( content )
+                    PlaylistData(
+                        playlists = when {
+                            jsonContent.has( CUSTOM_PLAYLISTS ) -> jsonContent.getJSONArray( CUSTOM_PLAYLISTS )
+                                .toSet { Playlist.fromJSONObject( getJSONObject( it ) ) }
+                            else -> emptySet()
+                        },
+                        favorites = when {
+                            jsonContent.has( FAVORITES_PLAYLIST ) -> Playlist.fromJSONObject( jsonContent.getJSONObject( FAVORITES_PLAYLIST ) )
+                            else -> createFavoritesPlaylist()
+                        }
+                    )
+                }
+            }
+        }
+
+        private fun createFavoritesPlaylist() = Playlist(
+            id = UUID.randomUUID().toString(),
+            title = "Favorites",
+            songIds = emptySet(),
+            numberOfTracks = 0
+        )
+    }
 }
 
 /**

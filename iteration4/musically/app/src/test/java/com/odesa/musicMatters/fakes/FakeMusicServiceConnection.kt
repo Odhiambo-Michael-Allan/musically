@@ -56,6 +56,10 @@ class FakeMusicServiceConnection : MusicServiceConnection {
     override fun setPlaybackPitch( playbackPitch: Float ) {}
     override fun setRepeatMode( repeatMode: Int ) {}
     override fun shuffleSongsInQueue() {}
+    override fun moveMediaItem(from: Int, to: Int) {}
+    override fun clearQueue() {
+        _mediaItemsInQueue.value = emptyList()
+    }
 
     fun setNowPlaying( mediaItem: MediaItem ) {
         _nowPlaying.value = mediaItem

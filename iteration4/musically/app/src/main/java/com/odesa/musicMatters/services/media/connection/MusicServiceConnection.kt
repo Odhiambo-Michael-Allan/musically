@@ -29,4 +29,6 @@ interface MusicServiceConnection {
     fun setPlaybackPitch( playbackPitch: Float )
     fun setRepeatMode( @Player.RepeatMode repeatMode: Int )
     fun shuffleSongsInQueue()
+    fun moveMediaItem( from: Int, to: Int )
+    fun clearQueue()
 }

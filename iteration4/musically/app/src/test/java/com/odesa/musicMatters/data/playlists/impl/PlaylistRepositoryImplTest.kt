@@ -1,5 +1,6 @@
 package com.odesa.musicMatters.data.playlists.impl
 
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.playlists.PlaylistStore
 import com.odesa.musicMatters.fakes.FakePlaylistStore
@@ -60,5 +61,24 @@ class PlaylistRepositoryImplTest {
         assertTrue( playlistRepository.isFavorite( songIdsToBeAdded.first() ) )
         assertTrue( playlistRepository.isFavorite( songIdsToBeAdded.last() ) )
         assertFalse( playlistRepository.isFavorite( "random_string" ) )
+    }
+
+    @Test
+    fun testSavePlaylist() = runTest {
+        val songIdsToBeAdded = List( 100 ) {
+            UUID.randomUUID().toString()
+        }.toSet()
+        val playlistsToBeAdded = List( 100 ) {
+            Playlist(
+                id = UUID.randomUUID().toString(),
+                title = "Playlist $it",
+                songIds = songIdsToBeAdded.toSet(),
+                numberOfTracks = songIdsToBeAdded.size
+            )
+        }
+        playlistsToBeAdded.forEach {
+            playlistRepository.savePlaylist( it )
+        }
+        assertEquals( playlistsToBeAdded.size, playlistRepository.playlists.value.size )
     }
 }

@@ -80,6 +80,9 @@ dependencies {
     // For media playback using ExoPlayer
     implementation( "androidx.media3:media3-exoplayer:$androidxMedia3Version" )
 
+//    implementation( "org.burnoutcrew.composereorderable:reorderable:0.9.6" )
+    implementation( "sh.calvin.reorderable:reorderable:1.5.0" )
+
 
     testImplementation( "junit:junit:4.13.2" )
     testImplementation( "androidx.test.ext:junit:1.1.5" )
