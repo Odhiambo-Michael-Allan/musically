@@ -29,7 +29,9 @@ fun QueueList(
     onMove: ( Int, Int ) -> Unit,
 ) {
 
-    val lazyListState = rememberLazyListState()
+    val lazyListState = rememberLazyListState(
+        initialFirstVisibleItemIndex = uiState.currentlyPlayingSongIndex
+    )
     val reorderableLazyColumnState = rememberReorderableLazyColumnState( lazyListState = lazyListState ) { from, to ->
         onMove( from.index, to.index )
     }

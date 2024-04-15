@@ -29,6 +29,7 @@ class QueueScreenViewModel(
             songsInQueue = emptyList(),
             language = settingsRepository.language.value,
             currentlyPlayingSongId = musicServiceConnection.nowPlaying.value.mediaId,
+            currentlyPlayingSongIndex = musicServiceConnection.currentlyPlayingMediaItemIndex.value,
             themeMode = settingsRepository.themeMode.value,
             favoriteSongIds = emptySet(),
             isLoading = true
@@ -39,6 +40,7 @@ class QueueScreenViewModel(
     init {
         viewModelScope.launch { observeMediaItems() }
         viewModelScope.launch { observeCurrentlyPlayingSong() }
+        viewModelScope.launch { observeCurrentlyPlayingSongIndex() }
         viewModelScope.launch { observeThemeMode() }
         viewModelScope.launch { observeFavoriteSongIds() }
     }
@@ -56,6 +58,14 @@ class QueueScreenViewModel(
         musicServiceConnection.nowPlaying.collect {
             _uiState.value = _uiState.value.copy(
                 currentlyPlayingSongId = it.mediaId
+            )
+        }
+    }
+
+    private suspend fun observeCurrentlyPlayingSongIndex() {
+        musicServiceConnection.currentlyPlayingMediaItemIndex.collect {
+            _uiState.value = _uiState.value.copy(
+                currentlyPlayingSongIndex = it
             )
         }
     }
@@ -121,6 +131,7 @@ class QueueScreenViewModel(
 data class QueueScreenUiState(
     val songsInQueue: List<Song>,
     val currentlyPlayingSongId: String,
+    val currentlyPlayingSongIndex: Int,
     val language: Language,
     val themeMode: ThemeMode,
     val favoriteSongIds: Set<String>,
