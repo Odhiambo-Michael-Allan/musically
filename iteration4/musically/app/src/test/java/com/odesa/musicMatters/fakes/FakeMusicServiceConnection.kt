@@ -2,11 +2,13 @@ package com.odesa.musicMatters.fakes
 
 import android.os.Bundle
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import com.google.common.collect.ImmutableList
 import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
 import com.odesa.musicMatters.services.media.connection.NOTHING_PLAYING
 import com.odesa.musicMatters.services.media.connection.PlaybackState
+import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_TRACKS_ROOT
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.UUID
@@ -35,7 +37,10 @@ class FakeMusicServiceConnection : MusicServiceConnection {
     override val mediaItemsInQueue = _mediaItemsInQueue.asStateFlow()
 
     override suspend fun getChildren( parentId: String ): ImmutableList<MediaItem> {
-        return testMediaItems
+        return when ( parentId ) {
+            MUSIC_MATTERS_TRACKS_ROOT -> testMediaItems
+            else -> genreList
+        }
     }
 
     override suspend fun sendCommand( command: String, parameters: Bundle? ) = true
@@ -92,4 +97,28 @@ val testMediaItems: ImmutableList<MediaItem> = ImmutableList.of(
     MediaItem.Builder().setMediaId( id1 ).build(),
     MediaItem.Builder().setMediaId( id2 ).build(),
     MediaItem.Builder().setMediaId( id3 ).build()
+)
+
+val genreList: ImmutableList<MediaItem> = ImmutableList.of(
+    MediaItem.Builder().apply {
+        setMediaId( UUID.randomUUID().toString() ).setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "Hip Hop" )
+            }.build()
+        )
+    }.build(),
+    MediaItem.Builder().apply {
+        setMediaId( UUID.randomUUID().toString() ).setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "Pop" )
+            }.build()
+        )
+    }.build(),
+    MediaItem.Builder().apply {
+        setMediaId( UUID.randomUUID().toString() ).setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "RnB" )
+            }.build()
+        )
+    }.build()
 )

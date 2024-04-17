@@ -42,7 +42,7 @@ fun SongList(
                 sortReverse = sortReverse,
                 onSortReverseChange = onSortReverseChange,
                 sortType = sortSongsBy,
-                sortTypes = SortSongsBy.entries.associateBy( { it }, { it.label( language ) }),
+                sortTypes = SortSongsBy.entries.associateBy( { it }, { it.label( language ) } ),
                 onSortTypeChange = onSortTypeChange,
                 label = {
                     Text( text = language.xSongs( songs.size.toString() ) )

@@ -1,50 +1,60 @@
 package com.odesa.musicMatters.ui.genres
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.odesa.musicMatters.data.preferences.GenreSortBy
+import com.odesa.musicMatters.services.i18n.English
+import com.odesa.musicMatters.ui.components.GenreGridList
+import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.TopAppBar
+import com.odesa.musicMatters.ui.components.testGenreList
 
 @Composable
 fun GenresScreen(
-    viewModel: GenresViewModel,
+    viewModel: GenreScreenViewModel,
     onSettingsClicked: () -> Unit
-){
+) {
+
+    val genreScreenUiState by viewModel.uiState.collectAsState()
+
     GenresScreenContent(
+        uiState = genreScreenUiState,
         onSettingsClicked = onSettingsClicked
     )
 }
 
 @Composable
 fun GenresScreenContent(
+    uiState: GenreScreenUiState,
     onSettingsClicked: () -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                onNavigationIconClicked = { /*TODO*/ },
-                title = "Genres",
-                rescan = "rescan",
-                onRefreshClicked = { /*TODO*/ },
-                settings = "Settings",
-                onSettingsClicked = onSettingsClicked
-            )
-        }
-    ){
-        Box(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize(),
+    Column (
+        modifier = Modifier.fillMaxSize()
+    ) {
+        TopAppBar(
+            onNavigationIconClicked = { /*TODO*/ },
+            title = uiState.language.genres,
+            rescan = uiState.language.rescan,
+            onRefreshClicked = { /*TODO*/ },
+            settings = uiState.language.settings,
+            onSettingsClicked = onSettingsClicked
+        )
+        LoaderScaffold(
+            isLoading = uiState.isLoading,
+            loading = uiState.language.loading
         ) {
-            Text(
-                modifier = Modifier.align( Alignment.Center ),
-                text = "Coming Soon!!"
+            GenreGridList(
+                genres = uiState.genres,
+                language = uiState.language,
+                sortType = GenreSortBy.GENRE,
+                sortReverse = false,
+                onSortReverseChange = {},
+                onSortTypeChange = {}
             )
         }
     }
@@ -53,5 +63,14 @@ fun GenresScreenContent(
 @Preview( showSystemUi = true )
 @Composable
 fun GenresScreenContentPreview() {
-    GenresScreenContent {}
+    GenresScreenContent(
+        uiState = testGenreScreenUiState,
+        onSettingsClicked = {}
+    )
 }
+
+val testGenreScreenUiState = GenreScreenUiState(
+    genres = testGenreList,
+    language = English,
+    isLoading = false
+)

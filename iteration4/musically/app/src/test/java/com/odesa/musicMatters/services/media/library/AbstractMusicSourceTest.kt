@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
+import com.odesa.musicMatters.fakes.FakeMusicSource
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
@@ -120,20 +121,5 @@ class AbstractMusicSourceTest {
         val searchExtras = Bundle.EMPTY
         val result = testSource.search( searchQuery, searchExtras )
         assertEquals( 1, result.size )
-    }
-}
-
-class FakeMusicSource (
-    private val music: List<MediaItem>
-) : AbstractMusicSource(), Iterable<MediaItem> by music {
-
-    override suspend fun load() = Unit
-
-    fun prepare() {
-        state = STATE_INITIALIZED
-    }
-
-    fun error() {
-        state = STATE_ERROR
     }
 }

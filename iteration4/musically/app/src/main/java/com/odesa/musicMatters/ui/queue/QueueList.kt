@@ -54,7 +54,7 @@ fun QueueList(
                 state = lazyListState,
             ) {
                 items( uiState.songsInQueue, { it.id } ) { song ->
-                    ReorderableItem(reorderableLazyListState = reorderableLazyColumnState, key = song.id) { isDragging ->
+                    ReorderableItem( reorderableLazyListState = reorderableLazyColumnState, key = song.id ) {
                         QueueSongCard(
                             modifier = modifier.draggableHandle(),
                             language = uiState.language,

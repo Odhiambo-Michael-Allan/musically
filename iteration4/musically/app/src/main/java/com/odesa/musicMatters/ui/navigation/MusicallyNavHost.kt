@@ -62,9 +62,9 @@ import com.odesa.musicMatters.ui.folders.FoldersViewModelFactory
 import com.odesa.musicMatters.ui.forYou.ForYouScreen
 import com.odesa.musicMatters.ui.forYou.ForYouViewModel
 import com.odesa.musicMatters.ui.forYou.ForYouViewModelFactory
+import com.odesa.musicMatters.ui.genres.GenreScreenViewModel
+import com.odesa.musicMatters.ui.genres.GenreScreenViewModelFactory
 import com.odesa.musicMatters.ui.genres.GenresScreen
-import com.odesa.musicMatters.ui.genres.GenresViewModel
-import com.odesa.musicMatters.ui.genres.GenresViewModelFactory
 import com.odesa.musicMatters.ui.playlists.PlaylistsScreen
 import com.odesa.musicMatters.ui.playlists.PlaylistsViewModel
 import com.odesa.musicMatters.ui.playlists.PlaylistsViewModelFactory
@@ -184,11 +184,14 @@ fun MusicallyNavHost(
             route = Route.Genres.name,
             enterTransition = { SlideTransition.slideUp.enterTransition() },
         ) {
-            val genresViewModel: GenresViewModel = viewModel(
-                factory = GenresViewModelFactory()
+            val genreScreenViewModel: GenreScreenViewModel = viewModel(
+                factory = GenreScreenViewModelFactory(
+                    musicServiceConnection = musicServiceConnection,
+                    settingsRepository = settingsRepository
+                )
             )
             GenresScreen(
-                viewModel = genresViewModel,
+                viewModel = genreScreenViewModel,
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) }
             )
         }

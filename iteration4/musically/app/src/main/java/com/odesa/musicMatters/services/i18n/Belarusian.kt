@@ -366,6 +366,8 @@ object Belarusian : Language {
         get() = "Раздзяляльнікі значэнняў тэгаў жанру"
     override val discNumber: String
         get() = "Нумар дыска"
+    override val setAsRingtone: String
+        get() = "усталяваць у якасці рынгтона"
 
     override fun playingXofY( x: String, y: String ) = "Гуляе $x з $y"
 

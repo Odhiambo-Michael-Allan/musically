@@ -366,6 +366,8 @@ object English : Language {
         get() = "Genre tag value separators"
     override val discNumber: String
         get() = "Disc number"
+    override val setAsRingtone: String
+        get() = "Set as ringtone"
 
     override fun playingXofY( x: String, y: String ) = "Playing $x of $y"
 

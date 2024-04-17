@@ -30,7 +30,7 @@ import com.odesa.musicMatters.services.media.extensions.stringRep
 import com.odesa.musicMatters.services.media.library.BrowseTree
 import com.odesa.musicMatters.services.media.library.LocalMusicSource
 import com.odesa.musicMatters.services.media.library.MEDIA_SEARCH_SUPPORTED
-import com.odesa.musicMatters.services.media.library.MUSICALLY_BROWSABLE_ROOT
+import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_BROWSABLE_ROOT
 import com.odesa.musicMatters.services.media.library.MusicSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -54,13 +54,13 @@ class MusicService : MediaLibraryService() {
 
     private val serviceJob = SupervisorJob()
     private val serviceScope = CoroutineScope( Dispatchers.Main + serviceJob )
-    protected lateinit var mediaSession: MediaLibrarySession
+    private lateinit var mediaSession: MediaLibrarySession
     private var currentMediaItemIndex: Int = 0
     private lateinit var musicSource: MusicSource
 
     private val catalogueRootMediaItem: MediaItem by lazy {
         MediaItem.Builder()
-            .setMediaId( MUSICALLY_BROWSABLE_ROOT )
+            .setMediaId( MUSIC_MATTERS_BROWSABLE_ROOT )
             .setMediaMetadata(
                 MediaMetadata.Builder()
                     .setFolderType( MediaMetadata.FOLDER_TYPE_ALBUMS )

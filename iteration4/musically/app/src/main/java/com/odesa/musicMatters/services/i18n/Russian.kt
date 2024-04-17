@@ -359,6 +359,8 @@ object Russian : Language {
         get() = TODO("Not yet implemented")
     override val discNumber: String
         get() = TODO("Not yet implemented")
+    override val setAsRingtone: String
+        get() = "установить в качестве рингтона"
 
     override fun playingXofY(x: String, y: String): String {
         TODO("Not yet implemented")

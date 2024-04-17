@@ -38,14 +38,14 @@ class SongsScreenViewModel(
     val uiState = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch { fetchMediaItems() }
+        viewModelScope.launch { fetchSongs() }
         viewModelScope.launch { observeLanguageChange() }
         viewModelScope.launch { observeThemeMode() }
         viewModelScope.launch { observeCurrentlyPlayingSong() }
         viewModelScope.launch { observeFavoriteSongIds() }
     }
 
-    private suspend fun fetchMediaItems() {
+    private suspend fun fetchSongs() {
         playlist = musicServiceConnection.getChildren( MUSIC_MATTERS_TRACKS_ROOT )
         _uiState.value = _uiState.value.copy(
             songs = playlist.map { it.toSong( artistTagSeparators ) }

@@ -366,6 +366,8 @@ object French : Language {
         get() = "Séparateurs de valeurs d'étiquettes de genre"
     override val discNumber: String
         get() =  "Numéro de disque"
+    override val setAsRingtone: String
+        get() = "définir comme sonnerie"
 
     override fun playingXofY( x: String, y: String ) = "Lecture de $x à $y"
 

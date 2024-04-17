@@ -70,8 +70,8 @@ import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.services.media.extensions.formatMilliseconds
 import com.odesa.musicMatters.services.media.testSongs
 import com.odesa.musicMatters.services.media.toSamplingInfoString
+import com.odesa.musicMatters.ui.components.NowPlayingSongDropDownMenu
 import com.odesa.musicMatters.ui.components.PlaybackPosition
-import com.odesa.musicMatters.ui.components.SongDropdownMenu
 import com.odesa.musicMatters.ui.components.swipeable
 import com.odesa.musicMatters.ui.navigation.FadeTransition
 import com.odesa.musicMatters.ui.theme.isLight
@@ -121,7 +121,7 @@ fun NowPlayingBottomSheet(
         onFavorite = { onFavorite( it ) },
         onPausePlayButtonClick = playPause,
         onPreviousButtonClick = playPreviousSong,
-        onNextButtonClick = playNextSong,
+        onPlayNext = playNextSong,
         onFastRewindButtonClick = fastRewind,
         onFastForwardButtonClick = fastForward,
         onSeekEnd = { onSeekEnd( it ) },
@@ -162,7 +162,7 @@ fun NowPlayingScreenContent(
     onFavorite: ( String ) -> Unit,
     onPausePlayButtonClick: () -> Unit,
     onPreviousButtonClick: () -> Unit,
-    onNextButtonClick: () -> Unit,
+    onPlayNext: () -> Unit,
     onFastRewindButtonClick: () -> Unit,
     onFastForwardButtonClick: () -> Unit,
     onSeekEnd: ( Long ) -> Unit,
@@ -265,17 +265,13 @@ fun NowPlayingScreenContent(
                         imageVector = Icons.Filled.MoreVert,
                         contentDescription = null
                     )
-                    SongDropdownMenu(
-                        language = language,
-                        song = currentlyPlayingSong,
-                        isFavorite = isFavorite,
+                    NowPlayingSongDropDownMenu(
                         expanded = showOptionsMenu,
+                        song = currentlyPlayingSong,
+                        language = language,
+                        isFavorite = isFavorite,
                         onFavorite = onFavorite,
-                        onAddToQueue = {},
-                        onPlayNext = {},
-                        onViewArtist = {},
                         onViewAlbum = {},
-                        onShareSong = {},
                         onDismissRequest = { showOptionsMenu = false }
                     )
                 }
@@ -297,7 +293,7 @@ fun NowPlayingScreenContent(
                     onPreviousButtonClick = onPreviousButtonClick,
                     onFastRewindButtonClick = onFastRewindButtonClick,
                     onFastForwardButtonClick = onFastForwardButtonClick,
-                    onNextButtonClick = onNextButtonClick
+                    onNextButtonClick = onPlayNext
                 )
             else ->
                 NowPlayingTraditionalControlsLayout(
@@ -307,7 +303,7 @@ fun NowPlayingScreenContent(
                     onFastRewindButtonClick = onFastRewindButtonClick,
                     onPausePlayButtonClick = onPausePlayButtonClick,
                     onFastForwardButtonClick = onFastForwardButtonClick,
-                    onNextButtonClick = onNextButtonClick
+                    onNextButtonClick = onPlayNext
                 )
         }
         Spacer( modifier = Modifier.height( 16.dp ) )
@@ -355,7 +351,7 @@ fun NowPlayingScreenContentPreview() {
         onFavorite = {},
         onPausePlayButtonClick = { /*TODO*/ },
         onPreviousButtonClick = { /*TODO*/ },
-        onNextButtonClick = { /*TODO*/ },
+        onPlayNext = { /*TODO*/ },
         onFastRewindButtonClick = { /*TODO*/ },
         onFastForwardButtonClick = { /*TODO*/ },
         onSeekEnd = {},
@@ -389,7 +385,7 @@ fun NowPlayingArtwork(
 ) {
     Box(
         modifier = Modifier
-            .padding( 16.dp, 0.dp )
+            .padding(16.dp, 0.dp)
             .fillMaxWidth()
 
     ) {
@@ -414,7 +410,7 @@ fun NowPlayingArtwork(
                 contentScale = ContentScale.Crop,
                 filterQuality = FilterQuality.High,
                 modifier = Modifier
-                    .size( 250.dp )
+                    .size(250.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .swipeable(
                         minimumDragAmount = 100f,

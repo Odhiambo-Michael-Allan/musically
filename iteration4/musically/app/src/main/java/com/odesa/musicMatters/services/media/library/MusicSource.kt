@@ -71,7 +71,7 @@ abstract class AbstractMusicSource : MusicSource {
         set( value ) {
             if ( value == STATE_INITIALIZED || value == STATE_ERROR ) {
                 synchronized( onReadyListeners ) {
-                    Timber.tag( TAG ).d( "STATE CHANGED, NOTIFYING LISTENERS" )
+                    Timber.tag(BROWSE_TREE_TAG).d( "STATE CHANGED, NOTIFYING LISTENERS" )
                     field = value
                     onReadyListeners.forEach { listener ->
                         listener( state == STATE_INITIALIZED )
@@ -90,13 +90,13 @@ abstract class AbstractMusicSource : MusicSource {
     override fun whenReady( performAction: ( Boolean ) -> Unit ): Boolean {
         return when ( state ) {
             STATE_CREATED, STATE_INITIALIZING -> {
-                Timber.tag( TAG ).d( "ADDING ACTION TO BE PERFORMED LATER - whenReady" )
+                Timber.tag(BROWSE_TREE_TAG).d( "ADDING ACTION TO BE PERFORMED LATER - whenReady" )
                 onReadyListeners += performAction
                 false
             }
 
             else -> {
-                Timber.tag( TAG ).d( "PERFORMING ACTION IN - whenReady" )
+                Timber.tag(BROWSE_TREE_TAG).d( "PERFORMING ACTION IN - whenReady" )
                 performAction( state != STATE_ERROR )
                 true
             }
@@ -110,7 +110,7 @@ abstract class AbstractMusicSource : MusicSource {
             MediaStore.Audio.Genres.ENTRY_CONTENT_TYPE -> {
                 // For a Genre focused search, only genre is set.
                 val genre = extras[ EXTRA_MEDIA_GENRE ]
-                Timber.tag( TAG ).d(  "Focused genre search: '$genre" )
+                Timber.tag(BROWSE_TREE_TAG).d(  "Focused genre search: '$genre" )
                 filter { song ->
                     song.mediaMetadata.genre?.toString() == genre
                 }
@@ -118,7 +118,7 @@ abstract class AbstractMusicSource : MusicSource {
             MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> {
                 // For an Artist focused search, only the artist is set.
                 val artist = extras[ MediaStore.EXTRA_MEDIA_ARTIST ]
-                Timber.tag( TAG ).d( "Focused artist search: artist = $artist" )
+                Timber.tag(BROWSE_TREE_TAG).d( "Focused artist search: artist = $artist" )
                 filter { song ->
                     isArtist( song, artist )
                 }
@@ -127,7 +127,7 @@ abstract class AbstractMusicSource : MusicSource {
                 // For an album focused search, album and artist are set
                 val artist = extras[ MediaStore.EXTRA_MEDIA_ARTIST ]
                 val album = extras[ MediaStore.EXTRA_MEDIA_ALBUM ]
-                Timber.tag( TAG ).d( "Focused album search: album = '$album' artist = '$artist' ")
+                Timber.tag(BROWSE_TREE_TAG).d( "Focused album search: album = '$album' artist = '$artist' ")
                 filter { song ->
                     ( isArtist( song, artist ) && song.mediaMetadata.albumTitle?.toString() == album )
                 }
@@ -137,7 +137,7 @@ abstract class AbstractMusicSource : MusicSource {
                 val title = extras[ MediaStore.EXTRA_MEDIA_TITLE ]
                 val album = extras[ MediaStore.EXTRA_MEDIA_ALBUM ]
                 val artist = extras[ MediaStore.EXTRA_MEDIA_ARTIST ]
-                Timber.tag( TAG ).d( "Focused media search: title = '$title' album = '$album' artist = '$artist'" )
+                Timber.tag(BROWSE_TREE_TAG).d( "Focused media search: title = '$title' album = '$album' artist = '$artist'" )
                 filter { song ->
                     isArtist( song, artist )
                             && song.mediaMetadata.albumTitle?.toString() == album
@@ -157,7 +157,7 @@ abstract class AbstractMusicSource : MusicSource {
         // more complex app, more logic could be used to find fuzzy matches, etc..
         if ( focusSearchResult.isEmpty() ) {
             return if ( query.isNotBlank() ) {
-                Timber.tag( TAG ).d( "Unfocused search for '$query'" )
+                Timber.tag(BROWSE_TREE_TAG).d( "Unfocused search for '$query'" )
                 filter { song ->
                     song.mediaMetadata.title?.toString().containsIgnoreCase( query )
                             || song.mediaMetadata.genre?.toString().containsIgnoreCase( query )

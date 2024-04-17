@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Album
+import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.PlaylistPlay
@@ -183,12 +185,13 @@ fun SongDropdownMenu(
             leadingIcon = {
                 Icon(
                     imageVector = if ( isFavorite ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                    tint = MaterialTheme.colorScheme.primary,
                     contentDescription = null
                 )
             },
             text = {
                 Text(
-                    text = if ( isFavorite ) language.unfavorite else language.favorite
+                    text = language.favorite
                 )
             },
             onClick = {
@@ -309,6 +312,144 @@ fun SongDropdownMenu(
 //            songIds = listOf( song.id ),
 //            onDismissRequest = { showAddSongToPlaylistDialog = false }
 //        )
+    }
+}
+
+@Composable
+fun NowPlayingSongDropDownMenu(
+    expanded: Boolean,
+    song: Song,
+    language: Language,
+    isFavorite: Boolean,
+    onFavorite: (String ) -> Unit,
+    onViewAlbum: (String ) -> Unit,
+    onDismissRequest: () -> Unit
+) {
+    var showSongDetailsDialog by remember { mutableStateOf( false ) }
+    var showAddSongToPlaylistDialog by remember { mutableStateOf( false ) }
+
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = onDismissRequest
+    ) {
+        DropdownMenuItem(
+            leadingIcon = {
+                Icon(
+                    imageVector = if ( isFavorite ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                    tint = MaterialTheme.colorScheme.primary,
+                    contentDescription = null
+                )
+            },
+            text = {
+                Text(
+                    text = language.favorite
+                )
+            },
+            onClick = {
+                onDismissRequest()
+                onFavorite( song.id )
+            }
+        )
+        song.albumTitle?.let {
+            DropdownMenuItem(
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.Album,
+                        contentDescription = null
+                    )
+                },
+                text = {
+                    Text( text = language.viewAlbum )
+                },
+                onClick = {
+                    onDismissRequest()
+                    onViewAlbum( it )
+                }
+            )
+        }
+        DropdownMenuItem(
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Filled.Person,
+                    contentDescription = null
+                )
+            },
+            text = {
+                Text(
+                    text = "${language.viewArtist}: ${song.artists ?: "<Unknown>"}"
+                )
+            },
+            onClick = {
+                onDismissRequest()
+//                onViewArtist( song.artists )
+            }
+        )
+        DropdownMenuItem(
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Filled.PlaylistAdd,
+                    contentDescription = null
+                )
+            },
+            text = {
+                Text( text = language.addToPlaylist )
+            },
+            onClick = {
+                onDismissRequest()
+                showAddSongToPlaylistDialog = true
+            }
+        )
+        DropdownMenuItem(
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Filled.Share,
+                    contentDescription = null
+                )
+            },
+            text = {
+                Text( text = language.shareSong )
+            },
+            onClick = {
+                onDismissRequest()
+//                onShareSong( song.uri )
+            }
+        )
+        DropdownMenuItem(
+            leadingIcon = {
+                Icon( imageVector = Icons.Filled.MusicNote, contentDescription = null )
+            },
+            text = {
+                Text( text = language.setAsRingtone )
+            },
+            onClick = {
+                onDismissRequest()
+                showSongDetailsDialog = true
+            }
+        )
+        DropdownMenuItem(
+            leadingIcon = {
+                Icon( imageVector = Icons.Filled.Info, contentDescription = null )
+            },
+            text = {
+                Text( text = language.details )
+            },
+            onClick = {
+                onDismissRequest()
+                showSongDetailsDialog = true
+            }
+        )
+        DropdownMenuItem(
+            leadingIcon = {
+                Icon( imageVector = Icons.Filled.DeleteOutline, contentDescription = null )
+            },
+            text = {
+                Text( text = language.delete )
+            },
+            onClick = {
+                onDismissRequest()
+                showSongDetailsDialog = true
+            }
+        )
     }
 }
 

@@ -364,6 +364,8 @@ object Chinese : Language {
         get() = "流派标签值分隔符"
     override val discNumber: String
         get() =  "碟片编号"
+    override val setAsRingtone: String
+        get() = "设置为铃声"
 
     override fun playingXofY( x: String, y: String ) = "第 $x 首，共 $y 首"
 

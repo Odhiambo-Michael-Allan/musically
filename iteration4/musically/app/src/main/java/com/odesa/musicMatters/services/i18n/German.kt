@@ -367,6 +367,8 @@ object German : Language {
         get() = "Genre-Trennzeichen"
     override val discNumber: String
         get() = "Diskussionsnummer"
+    override val setAsRingtone: String
+        get() = "als Klingelton einstellen"
 
     override fun playingXofY( x: String, y: String ) = "Wiedergabe von $x von $y"
 

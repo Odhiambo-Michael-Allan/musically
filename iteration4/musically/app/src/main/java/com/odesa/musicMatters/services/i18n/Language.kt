@@ -180,6 +180,7 @@ interface Language {
     val artistTagValueSeparators: String
     val genreTagValueSeparators: String
     val discNumber: String
+    val setAsRingtone: String
 
     fun playingXofY( x: String, y: String ): String
     fun unknownArtistX( x: String ): String
