@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material3.Card
@@ -30,14 +30,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
 import com.google.common.collect.ImmutableList
 import com.odesa.musicMatters.data.preferences.GenreSortBy
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
-import com.odesa.musicMatters.services.i18n.English
 import com.odesa.musicMatters.services.i18n.Language
-import java.util.UUID
+import com.odesa.musicMatters.services.media.Genre
 
 private object GenreTile {
     val colors = mutableListOf(
@@ -64,12 +61,13 @@ private object GenreTile {
 
 @Composable
 fun GenreGridList(
-    genres: List<MediaItem>,
+    genres: List<Genre>,
     language: Language,
     sortType: GenreSortBy,
     sortReverse: Boolean,
     onSortReverseChange: ( Boolean ) -> Unit,
     onSortTypeChange: ( GenreSortBy ) -> Unit,
+    onGenreClick: ( String ) -> Unit,
 ) {
     MediaSortBarScaffold(
         mediaSortBar = {
@@ -107,18 +105,17 @@ fun GenreGridList(
                 }
             )
             else -> {
-                LazyVerticalGrid(
-                    columns = GridCells.Adaptive( 150.dp ),
+                LazyVerticalStaggeredGrid(
+                    columns = StaggeredGridCells.Adaptive( 150.dp ),
                     horizontalArrangement = Arrangement.spacedBy( 4.dp ),
-                    verticalArrangement = Arrangement.spacedBy( 4.dp ),
+                    verticalItemSpacing = 4.dp,
                     contentPadding = PaddingValues( 8.dp )
                 ) {
                     itemsIndexed( genres ) { index, genre ->
                         GenreCard(
-                            genre = genre.mediaMetadata.title!!.toString(),
-                            numberOfSongsString = language.xSongs( "10" ),
+                            genre = genre,
                             position = index,
-                            onClick = {}
+                            onClick = { onGenreClick( genre.name ) }
                         )
                     }
                 }
@@ -130,8 +127,7 @@ fun GenreGridList(
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun GenreCard(
-    genre: String,
-    numberOfSongsString: String,
+    genre: Genre,
     position: Int,
     onClick: () -> Unit,
 ) {
@@ -156,7 +152,7 @@ fun GenreCard(
                     .absoluteOffset(8.dp, 12.dp)
             ) {
                 Text(
-                    text = genre,
+                    text = genre.name,
                     textAlign = TextAlign.Start,
                     style = MaterialTheme.typography.displaySmall
                         .copy( fontWeight = FontWeight.Bold ),
@@ -171,13 +167,13 @@ fun GenreCard(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = genre,
+                    text = genre.name,
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyLarge
                         .copy( fontWeight = FontWeight.Bold )
                 )
                 Text(
-                    text = numberOfSongsString,
+                    text = genre.numberOfTracks.toString(),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.labelSmall
                 )
@@ -190,8 +186,7 @@ fun GenreCard(
 @Composable
 fun GenreCardPreview() {
     GenreCard(
-        genre = "Hip Hop",
-        numberOfSongsString = English.xSongs( "10" ),
+        genre = testGenreList.first(),
         position = 0,
         onClick = {}
     )
@@ -209,6 +204,7 @@ fun GenreGridPreview() {
         sortReverse = false,
         onSortReverseChange = {},
         onSortTypeChange = {},
+        onGenreClick = {}
     )
 }
 
@@ -218,26 +214,17 @@ fun GenreSortBy.label( language: Language ) = when ( this ) {
     GenreSortBy.TRACKS_COUNT -> language.trackCount
 }
 
-val testGenreList: ImmutableList<MediaItem> = ImmutableList.of(
-    MediaItem.Builder().apply {
-        setMediaId( UUID.randomUUID().toString() ).setMediaMetadata(
-            MediaMetadata.Builder().apply {
-                setTitle( "Hip Hop" )
-            }.build()
-        )
-    }.build(),
-    MediaItem.Builder().apply {
-        setMediaId( UUID.randomUUID().toString() ).setMediaMetadata(
-            MediaMetadata.Builder().apply {
-                setTitle( "Pop" )
-            }.build()
-        )
-    }.build(),
-    MediaItem.Builder().apply {
-        setMediaId( UUID.randomUUID().toString() ).setMediaMetadata(
-            MediaMetadata.Builder().apply {
-                setTitle( "RnB" )
-            }.build()
-        )
-    }.build()
+val testGenreList: ImmutableList<Genre> = ImmutableList.of(
+    Genre(
+        name = "Hip Hop",
+        numberOfTracks = 5
+    ),
+    Genre(
+        name = "RnB",
+        numberOfTracks = 7,
+    ),
+    Genre(
+        name = "Electronic",
+        numberOfTracks = 12
+    )
 )

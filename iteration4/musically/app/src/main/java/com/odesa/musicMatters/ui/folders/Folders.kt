@@ -28,8 +28,6 @@ fun FoldersScreenContent(
             TopAppBar(
                 onNavigationIconClicked = { /*TODO*/ },
                 title = "Folders",
-                rescan = "rescan",
-                onRefreshClicked = { /*TODO*/ },
                 settings = "Settings",
                 onSettingsClicked = onSettingsClicked
             )

@@ -92,7 +92,8 @@ fun MediaMetadata.Builder.from( cursor: Cursor, context: Context, mediaUri: Uri 
     val genre = _genre ?: mediaMetadataRetriever.runCatching {
         extractMetadata( MediaMetadataRetriever.METADATA_KEY_GENRE )
     }.getOrNull() ?: UNKNOWN_STRING_VALUE
-    Timber.tag( TAG ).d( "Genre: $genre" )
+    val finalGenre = genre.split( *genreTagSeparators.toTypedArray() ).first()
+    Timber.tag( TAG ).d( "Genre: $finalGenre" )
 
     val bitrate = mediaMetadataRetriever.runCatching {
         extractMetadata( MediaMetadataRetriever.METADATA_KEY_BITRATE )?.toLong()
@@ -130,7 +131,7 @@ fun MediaMetadata.Builder.from( cursor: Cursor, context: Context, mediaUri: Uri 
     setArtist( artist )
     setAlbumArtist( albumArtist )
     setComposer( composer )
-    setGenre( genre )
+    setGenre( finalGenre )
     setIsPlayable( true )
     setArtworkUri( getArtworkUriWith( cursor ) )
     setIsBrowsable( false )
@@ -213,6 +214,8 @@ fun MediaItem.stringRep() = StringBuilder().apply {
 
 fun StringBuilder.appendWithLineBreak( content: String ): StringBuilder = append( content + "\n" )
 
+val genreTagSeparators = setOf( "/", "," )
+
 const val UNKNOWN_LONG_VALUE = 0L
 const val UNKNOWN_INT_VALUE = 0
 const val UNKNOWN_STRING_VALUE = "<unknown>"
@@ -229,4 +232,4 @@ const val TRACK_NUMBER_KEY = "TRACK-NUMBER"
 const val RELEASE_YEAR_KEY = "RELEASE-YEAR"
 const val ALBUM_TITLE_KEY = "ALBUM-TITLE"
 const val ARTIST_KEY = "ARTIST"
-const val TAG = "MEDIAITEM-BUILDER-FROM"
+const val TAG = "MEDIA-ITEM-BUILDER-FROM"

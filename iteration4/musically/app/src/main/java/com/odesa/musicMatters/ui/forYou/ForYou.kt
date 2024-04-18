@@ -30,8 +30,6 @@ fun ForYouScreenContent(
             TopAppBar(
                 onNavigationIconClicked = { /*TODO*/ },
                 title = "For You",
-                rescan = "rescan",
-                onRefreshClicked = { /*TODO*/ },
                 settings = "Settings",
                 onSettingsClicked = onSettingsClicked
             )

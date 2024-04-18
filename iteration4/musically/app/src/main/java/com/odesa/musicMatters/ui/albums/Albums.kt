@@ -28,8 +28,6 @@ fun AlbumsScreenContent(
             TopAppBar(
                 onNavigationIconClicked = { /*TODO*/ },
                 title = "Albums",
-                rescan = "rescan",
-                onRefreshClicked = { /*TODO*/ },
                 settings = "Settings",
                 onSettingsClicked = onSettingsClicked
             )

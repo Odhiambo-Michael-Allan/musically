@@ -30,8 +30,6 @@ fun PlaylistsScreenContent(
             TopAppBar(
                 onNavigationIconClicked = { /*TODO*/ },
                 title = "Playlists",
-                rescan = "rescan",
-                onRefreshClicked = { /*TODO*/ },
                 settings = "Settings",
                 onSettingsClicked = onSettingsClicked
             )

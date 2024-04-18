@@ -38,7 +38,7 @@ class FakeMusicServiceConnection : MusicServiceConnection {
 
     override suspend fun getChildren( parentId: String ): ImmutableList<MediaItem> {
         return when ( parentId ) {
-            MUSIC_MATTERS_TRACKS_ROOT -> testMediaItems
+            MUSIC_MATTERS_TRACKS_ROOT -> trackList
             else -> genreList
         }
     }
@@ -121,4 +121,29 @@ val genreList: ImmutableList<MediaItem> = ImmutableList.of(
             }.build()
         )
     }.build()
+)
+
+val trackList: ImmutableList<MediaItem> = ImmutableList.of(
+    MediaItem.Builder().apply {
+        setMediaId( id1 ).setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "You Right" ).setGenre( "RnB" )
+            }.build()
+        )
+    }.build(),
+    MediaItem.Builder().apply {
+        setMediaId( id2 ).setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "Best Man" ).setGenre( "Hip Hop" )
+            }.build()
+        )
+    }.build(),
+    MediaItem.Builder().apply {
+        setMediaId( id3 ).setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "Huncho Jack" ).setGenre( "Hip Hop" )
+            }.build()
+        )
+    }.build(),
+
 )

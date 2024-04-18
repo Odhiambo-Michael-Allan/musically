@@ -48,6 +48,15 @@ class GenreScreenViewModelTest {
     }
 
     @Test
+    fun testNumberOfTracksInGenreAreCorrectlySet() {
+        val genreList = genreScreenViewModel.uiState.value.genres
+        genreList.forEach { genre ->
+            if ( genre.name == "Hip Hop" )
+                assertEquals( 2, genre.numberOfTracks )
+        }
+    }
+
+    @Test
     fun testLanguageChange() {
         assertEquals( "Settings", genreScreenViewModel.uiState.value.language.settings )
         changeLanguageTo( Belarusian, "Налады" )

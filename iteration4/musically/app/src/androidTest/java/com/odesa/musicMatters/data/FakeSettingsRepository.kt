@@ -1,12 +1,12 @@
 package com.odesa.musicMatters.data
 
-import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.data.preferences.ForYou
 import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
-import com.odesa.musicMatters.data.storage.preferences.NowPlayingControlsLayout
 import com.odesa.musicMatters.data.preferences.NowPlayingLyricsLayout
+import com.odesa.musicMatters.data.preferences.impl.LoopMode
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.Belarusian
 import com.odesa.musicMatters.services.i18n.Chinese
 import com.odesa.musicMatters.services.i18n.English
@@ -17,6 +17,7 @@ import com.odesa.musicMatters.services.i18n.Spanish
 import com.odesa.musicMatters.ui.theme.SupportedFonts
 import com.odesa.musicMatters.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class FakeSettingsRepository : SettingsRepository {
@@ -91,11 +92,6 @@ class FakeSettingsRepository : SettingsRepository {
     private val _miniPlayerTextMarquee = MutableStateFlow( SettingsDefaults.miniPlayerTextMarquee )
     override val miniPlayerTextMarquee = _miniPlayerTextMarquee.asStateFlow()
 
-    private val _nowPlayingControlsLayout = MutableStateFlow(
-        SettingsDefaults.nowPlayingControlsLayout
-    )
-    override val nowPlayingControlsLayout = _nowPlayingControlsLayout.asStateFlow()
-
     private val _nowPlayingLyricsLayout = MutableStateFlow(
         SettingsDefaults.nowPlayingLyricsLayout
     )
@@ -110,6 +106,18 @@ class FakeSettingsRepository : SettingsRepository {
         SettingsDefaults.showNowPlayingSeekControls
     )
     override val showNowPlayingSeekControls = _showNowPlayingSeekControls.asStateFlow()
+    override val currentPlayingSpeed: StateFlow<Float>
+        get() = TODO("Not yet implemented")
+    override val currentPlayingPitch: StateFlow<Float>
+        get() = TODO("Not yet implemented")
+    override val currentLoopMode: StateFlow<LoopMode>
+        get() = TODO("Not yet implemented")
+    override val shuffle: StateFlow<Boolean>
+        get() = TODO("Not yet implemented")
+    override val showLyrics: StateFlow<Boolean>
+        get() = TODO("Not yet implemented")
+    override val controlsLayoutIsDefault: StateFlow<Boolean>
+        get() = TODO("Not yet implemented")
 
 
     override suspend fun setLanguage( localeCode: String ) {
@@ -211,12 +219,6 @@ class FakeSettingsRepository : SettingsRepository {
         _miniPlayerTextMarquee.value = textMarquee
     }
 
-    override suspend fun setNowPlayingControlsLayout(
-        nowPlayingControlsLayout: NowPlayingControlsLayout
-    ) {
-        _nowPlayingControlsLayout.value = nowPlayingControlsLayout
-    }
-
     override suspend fun setNowPlayingLyricsLayout(
         nowPlayingLyricsLayout: NowPlayingLyricsLayout
     ) {
@@ -233,5 +235,29 @@ class FakeSettingsRepository : SettingsRepository {
         showNowPlayingSeekControls: Boolean
     ) {
         _showNowPlayingSeekControls.value = showNowPlayingSeekControls
+    }
+
+    override suspend fun setCurrentPlayingSpeed(currentPlayingSpeed: Float) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setCurrentPlayingPitch(currentPlayingPitch: Float) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setCurrentLoopMode(currentLoopMode: LoopMode) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setShuffle(shuffle: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setShowLyrics(showLyrics: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setControlsLayoutIsDefault(controlsLayoutIsDefault: Boolean) {
+        TODO("Not yet implemented")
     }
 }

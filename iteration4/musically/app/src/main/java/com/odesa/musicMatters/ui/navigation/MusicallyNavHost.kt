@@ -46,9 +46,6 @@ import com.odesa.musicMatters.data.preferences.HomeTab
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
-import com.odesa.musicMatters.ui.albumArtists.AlbumArtistsScreen
-import com.odesa.musicMatters.ui.albumArtists.AlbumArtistsViewModel
-import com.odesa.musicMatters.ui.albumArtists.AlbumArtistsViewModelFactory
 import com.odesa.musicMatters.ui.albums.AlbumsScreen
 import com.odesa.musicMatters.ui.albums.AlbumsViewModel
 import com.odesa.musicMatters.ui.albums.AlbumsViewModelFactory
@@ -62,6 +59,7 @@ import com.odesa.musicMatters.ui.folders.FoldersViewModelFactory
 import com.odesa.musicMatters.ui.forYou.ForYouScreen
 import com.odesa.musicMatters.ui.forYou.ForYouViewModel
 import com.odesa.musicMatters.ui.forYou.ForYouViewModelFactory
+import com.odesa.musicMatters.ui.genre.GenreScreen
 import com.odesa.musicMatters.ui.genres.GenreScreenViewModel
 import com.odesa.musicMatters.ui.genres.GenreScreenViewModelFactory
 import com.odesa.musicMatters.ui.genres.GenresScreen
@@ -100,7 +98,7 @@ fun MusicallyNavHost(
     var navigationTriggeredFromBottomBar = false
 
     navController.addOnDestinationChangedListener { _, destination, _ ->
-        Destination.entries.forEach {
+        SupportedDestinations.forEach {
             if ( !navigationTriggeredFromBottomBar ) {
                 if ( destination.route == it.route.name )
                     currentTab = it
@@ -169,18 +167,6 @@ fun MusicallyNavHost(
             )
         }
         composable(
-            route = Route.AlbumArtists.name,
-            enterTransition = { SlideTransition.slideUp.enterTransition() },
-        ) {
-            val albumArtistsViewModel: AlbumArtistsViewModel = viewModel(
-                factory = AlbumArtistsViewModelFactory()
-            )
-            AlbumArtistsScreen(
-                viewModel = albumArtistsViewModel,
-                onSettingsClicked = { navController.navigate( Route.Settings.name ) }
-            )
-        }
-        composable(
             route = Route.Genres.name,
             enterTransition = { SlideTransition.slideUp.enterTransition() },
         ) {
@@ -192,6 +178,7 @@ fun MusicallyNavHost(
             )
             GenresScreen(
                 viewModel = genreScreenViewModel,
+                onGenreClick = { navController.navigateToGenreScreen( it ) },
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) }
             )
         }
@@ -249,6 +236,17 @@ fun MusicallyNavHost(
             )
         }
         composable(
+            route = Genre.routeWithArgs,
+            arguments = Genre.arguments,
+            enterTransition = { SlideTransition.slideUp.enterTransition() },
+            exitTransition = { SlideTransition.slideDown.exitTransition() },
+        ) { navBackStackEntry ->
+            // Retrieve the passed argument
+            val genreName = navBackStackEntry.getRouteArgument( RoutesParameters.GenreRouteGenreName )
+            GenreScreen( genreName )
+        }
+
+        composable(
             Route.Settings.name,
             enterTransition= { ScaleTransition.scaleDown.enterTransition() },
             exitTransition = { ScaleTransition.scaleUp.exitTransition() }
@@ -283,7 +281,7 @@ fun MusicallyNavHost(
             Spacer( modifier = Modifier.width( 2.dp ) )
             visibleTabs.map { it.toDestination() }.forEach { tab ->
                 val isSelected = currentTab == tab
-                val label = tab.label( language )
+                val label = tab.getLabel( language )
                 NavigationBarItem(
                     selected = isSelected,
                     alwaysShowLabel = labelVisibility == HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE,
@@ -299,7 +297,7 @@ fun MusicallyNavHost(
                             label = "home-bottom-bar"
                         ) {
                             Icon(
-                                imageVector = if ( it ) tab.selectedIcon() else tab.unselectedIcon(),
+                                imageVector = if ( it ) tab.selectedIcon else tab.unselectedIcon,
                                 contentDescription = tab.iconContentDescription
                             )
                         }
@@ -325,7 +323,7 @@ fun MusicallyNavHost(
             val sheetState = rememberModalBottomSheetState()
             val orderedTabs = remember {
                 setOf( *visibleTabs.map { it.toDestination() }.toTypedArray(),
-                    *Destination.entries.toTypedArray() )
+                    *SupportedDestinations.toTypedArray() )
             }
 
             ModalBottomSheet(
@@ -338,9 +336,9 @@ fun MusicallyNavHost(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalArrangement = Arrangement.spacedBy( 8.dp ),
                 ) {
-                    items( orderedTabs.toList(), key = { it.ordinal } ) {
+                    items( orderedTabs.toList(), key = { orderedTabs.indexOf( it ) } ) {
                         val isSelected = it == currentTab
-                        val label = it.label( language )
+                        val label = it.getLabel( language )
                         val containerColor = when {
                             isSelected -> MaterialTheme.colorScheme.secondaryContainer
                             else -> Color.Unspecified
@@ -364,12 +362,12 @@ fun MusicallyNavHost(
                         ) {
                             when {
                                 isSelected -> Icon(
-                                    imageVector = it.selectedIcon(),
+                                    imageVector = it.selectedIcon,
                                     contentDescription = it.iconContentDescription,
                                     tint = contentColor
                                 )
                                 else -> Icon(
-                                    imageVector = it.unselectedIcon(),
+                                    imageVector = it.unselectedIcon,
                                     contentDescription = it.iconContentDescription
                                 )
                             }
@@ -391,15 +389,14 @@ fun MusicallyNavHost(
 }
 
 fun HomeTab.toDestination() = when( this ) {
-    HomeTab.ForYou -> Destination.ForYou
-    HomeTab.Songs -> Destination.Songs
-    HomeTab.Tree -> Destination.Tree
-    HomeTab.Playlists -> Destination.Playlists
-    HomeTab.Folders -> Destination.Folders
-    HomeTab.Artists -> Destination.Artists
-    HomeTab.AlbumArtists -> Destination.AlbumArtists
-    HomeTab.Albums -> Destination.Albums
-    HomeTab.Genres -> Destination.Genres
+    HomeTab.ForYou -> ForYou
+    HomeTab.Songs -> Songs
+    HomeTab.Tree -> Tree
+    HomeTab.Playlists -> Playlists
+    HomeTab.Folders -> Folders
+    HomeTab.Artists -> Artists
+    HomeTab.Albums -> Albums
+    HomeTab.Genres -> Genres
 }
 
 

@@ -56,7 +56,6 @@ fun HomeTab.resolveName(language: Language) = when ( this ) {
     HomeTab.Genres -> language.genres
     HomeTab.ForYou -> language.forYou
     HomeTab.Artists -> language.artists
-    HomeTab.AlbumArtists -> language.albumArtists
     HomeTab.Folders -> language.folders
     HomeTab.Playlists -> language.playlists
     HomeTab.Tree -> language.tree

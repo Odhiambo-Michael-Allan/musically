@@ -28,6 +28,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,8 +42,6 @@ import com.odesa.musicMatters.utils.runFunctionIfTrueElseReturnThisObject
 fun TopAppBar(
     onNavigationIconClicked: () -> Unit,
     title: String,
-    rescan: String,
-    onRefreshClicked: () -> Unit,
     settings: String,
     onSettingsClicked: () -> Unit,
 ) {
@@ -97,8 +96,6 @@ fun TopAppBarPreview() {
     TopAppBar(
         onNavigationIconClicked = { /*TODO*/ },
         title = English.songs,
-        rescan = English.rescan,
-        onRefreshClicked = { /*TODO*/ },
         settings = English.settings
     ) {
 
@@ -135,7 +132,11 @@ fun MinimalAppBar(
                     contentAlignment = Alignment.Center
                 ) {
                     TopAppBarMinimalTitle {
-                        Text( text = it )
+                        Text(
+                            text = it,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     }
                 }
             }

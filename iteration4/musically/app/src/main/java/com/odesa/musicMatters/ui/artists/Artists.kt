@@ -28,8 +28,6 @@ fun ArtistsScreenContent(
             TopAppBar(
                 onNavigationIconClicked = { /*TODO*/ },
                 title = "Artists",
-                rescan = "rescan",
-                onRefreshClicked = { /*TODO*/ },
                 settings = "Settings",
                 onSettingsClicked = onSettingsClicked
             )

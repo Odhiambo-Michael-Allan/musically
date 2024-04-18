@@ -17,6 +17,7 @@ import com.odesa.musicMatters.ui.components.testGenreList
 @Composable
 fun GenresScreen(
     viewModel: GenreScreenViewModel,
+    onGenreClick: ( String ) -> Unit,
     onSettingsClicked: () -> Unit
 ) {
 
@@ -24,6 +25,7 @@ fun GenresScreen(
 
     GenresScreenContent(
         uiState = genreScreenUiState,
+        onGenreClick = onGenreClick,
         onSettingsClicked = onSettingsClicked
     )
 }
@@ -31,6 +33,7 @@ fun GenresScreen(
 @Composable
 fun GenresScreenContent(
     uiState: GenreScreenUiState,
+    onGenreClick: ( String ) -> Unit,
     onSettingsClicked: () -> Unit
 ) {
     Column (
@@ -39,8 +42,6 @@ fun GenresScreenContent(
         TopAppBar(
             onNavigationIconClicked = { /*TODO*/ },
             title = uiState.language.genres,
-            rescan = uiState.language.rescan,
-            onRefreshClicked = { /*TODO*/ },
             settings = uiState.language.settings,
             onSettingsClicked = onSettingsClicked
         )
@@ -54,7 +55,8 @@ fun GenresScreenContent(
                 sortType = GenreSortBy.GENRE,
                 sortReverse = false,
                 onSortReverseChange = {},
-                onSortTypeChange = {}
+                onSortTypeChange = {},
+                onGenreClick = onGenreClick
             )
         }
     }
@@ -65,6 +67,7 @@ fun GenresScreenContent(
 fun GenresScreenContentPreview() {
     GenresScreenContent(
         uiState = testGenreScreenUiState,
+        onGenreClick = {},
         onSettingsClicked = {}
     )
 }

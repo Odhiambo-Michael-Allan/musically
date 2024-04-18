@@ -105,7 +105,6 @@ enum class HomeTab {
     Songs,
     Artists,
     Albums,
-    AlbumArtists,
     Genres,
     Folders,
     Playlists,

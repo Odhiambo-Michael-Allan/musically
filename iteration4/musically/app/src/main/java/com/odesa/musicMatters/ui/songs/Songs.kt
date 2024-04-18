@@ -62,8 +62,6 @@ fun SongsScreenContent(
         TopAppBar(
             onNavigationIconClicked = { /*TODO*/ },
             title = uiState.language.songs,
-            rescan = uiState.language.rescan,
-            onRefreshClicked = { /*TODO*/ },
             settings = uiState.language.settings,
             onSettingsClicked = onSettingsClicked
         )

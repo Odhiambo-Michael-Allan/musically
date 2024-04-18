@@ -111,25 +111,20 @@ class BrowseTree(
 
     private fun addGenreMediaItemsTo( genreList: MutableList<MediaItem> ) {
         musicSource.forEach { mediaItem ->
-            val mediaItemGenre = mediaItem.mediaMetadata.genre
-            mediaItemGenre?.let {
-                val genreAlreadyExistsInGenreList = findGenreIn( genreList, mediaItemGenre.toString() )
-                if ( !genreAlreadyExistsInGenreList ) {
-                    val genreMetadata = createGenreMetadataUsing( mediaItemGenre.toString() )
-                    val genreMediaItem = createGenreMediaItemUsing( genreMetadata )
-                    genreList.add( genreMediaItem )
-                }
-            } ?: run {
-                val genreMetadata = createGenreMetadataUsing( "Other" )
+            val mediaItemGenre = mediaItem.mediaMetadata.genre ?: "<unknown>"
+            val loadedGenre = mediaItemGenre.toString()
+            val genreAlreadyExistsInGenreList = findGenreIn( genreList, loadedGenre )
+            if ( !genreAlreadyExistsInGenreList ) {
+                val genreMetadata = createGenreMetadataUsing( loadedGenre )
                 val genreMediaItem = createGenreMediaItemUsing( genreMetadata )
                 genreList.add( genreMediaItem )
             }
         }
     }
 
-    private fun findGenreIn(genreList: MutableList<MediaItem>, genre: String ): Boolean {
-        genreList.forEach { mediaItem ->
-            if ( mediaItem.mediaMetadata.title == genre )
+    private fun findGenreIn( genreList: MutableList<MediaItem>, genre: String ): Boolean {
+        genreList.forEach { genreMediaItem ->
+            if ( genreMediaItem.mediaMetadata.title.toString().lowercase() == genre.lowercase() )
                 return true
         }
         return false

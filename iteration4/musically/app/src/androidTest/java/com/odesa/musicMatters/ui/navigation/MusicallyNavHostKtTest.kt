@@ -17,9 +17,11 @@ import androidx.media3.common.Player
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.google.common.collect.ImmutableList
+import com.odesa.musicMatters.data.FakePlaylistRepository
 import com.odesa.musicMatters.data.FakeSettingsRepository
-import com.odesa.musicMatters.data.settings.SettingsRepository
+import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.English
 import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
 import com.odesa.musicMatters.services.media.connection.NOTHING_PLAYING
@@ -37,11 +39,13 @@ class MusicallyNavHostKtTest {
     val composeTestRule = createComposeRule()
     private lateinit var navController: TestNavHostController
     private lateinit var settingsRepository: SettingsRepository
+    private lateinit var playlistRepository: PlaylistRepository
     private lateinit var musicServiceConnection: MusicServiceConnection
 
     @Before
     fun setup() {
         settingsRepository = FakeSettingsRepository()
+        playlistRepository = FakePlaylistRepository()
         musicServiceConnection = FakeMusicServiceConnection()
 
         composeTestRule.setContent {
@@ -54,6 +58,7 @@ class MusicallyNavHostKtTest {
                 visibleTabs = SettingsDefaults.homeTabs,
                 labelVisibility = SettingsDefaults.homePageBottomBarLabelVisibility,
                 language = SettingsDefaults.language,
+                playlistRepository = playlistRepository
             ) {}
         }
     }
@@ -61,7 +66,7 @@ class MusicallyNavHostKtTest {
     @Test
     fun testForYouIsTheStartDestination() {
         composeTestRule
-            .onNodeWithText( Destination.ForYou.label( English ) )
+            .onNodeWithText( ForYou.getLabel( English ) )
             .assertIsDisplayed()
     }
 
@@ -70,12 +75,12 @@ class MusicallyNavHostKtTest {
         composeTestRule.onRoot().printToLog( "test-navigate-to-songs-screen" )
         composeTestRule
             .onNodeWithContentDescription(
-                Destination.Songs.iconContentDescription,
+                Songs.iconContentDescription,
                 useUnmergedTree = true
             ).performClick()
         composeTestRule
             .onNode(
-                hasText( Destination.Songs.label( English ) ) and
+                hasText( Songs.getLabel( English ) ) and
                 hasParent( hasContentDescription( "top-app-bar" ) ),
                 useUnmergedTree = true
             ).assertIsDisplayed()
@@ -85,12 +90,12 @@ class MusicallyNavHostKtTest {
     fun testNavigateToAlbumsScreen() {
         composeTestRule
             .onNodeWithContentDescription(
-                Destination.Albums.iconContentDescription,
+                Albums.iconContentDescription,
                 useUnmergedTree = true
             ).performClick()
         composeTestRule
             .onNode(
-                hasText( Destination.Albums.label( English ) ) and
+                hasText( Albums.getLabel( English ) ) and
                 hasParent( hasContentDescription( "top-app-bar" ) ),
                 useUnmergedTree = true
             ).assertIsDisplayed()
@@ -100,28 +105,12 @@ class MusicallyNavHostKtTest {
     fun testNavigateToArtistsScreen() {
         composeTestRule
             .onNodeWithContentDescription(
-                Destination.Artists.iconContentDescription,
+                Artists.iconContentDescription,
                 useUnmergedTree = true
             ).performClick()
         composeTestRule
             .onNode(
-                hasText( Destination.Artists.label( English ) ) and
-                hasParent( hasContentDescription( "top-app-bar" ) ),
-                useUnmergedTree = true
-            ).assertIsDisplayed()
-    }
-
-    @Test
-    fun testNavigateToAlbumArtistsScreen() {
-        showBottomSheet()
-        composeTestRule
-            .onNodeWithContentDescription(
-                Destination.AlbumArtists.iconContentDescription,
-                useUnmergedTree = true
-            ).performClick()
-        composeTestRule
-            .onNode(
-                hasText( Destination.AlbumArtists.label( English ) ) and
+                hasText( Artists.getLabel( English ) ) and
                 hasParent( hasContentDescription( "top-app-bar" ) ),
                 useUnmergedTree = true
             ).assertIsDisplayed()
@@ -132,12 +121,12 @@ class MusicallyNavHostKtTest {
         showBottomSheet()
         composeTestRule
             .onNodeWithContentDescription(
-                Destination.Genres.iconContentDescription,
+                Genres.iconContentDescription,
                 useUnmergedTree = true
             ).performClick()
         composeTestRule
             .onNode(
-                hasText( Destination.Genres.label( English ) ) and
+                hasText( Genres.getLabel( English ) ) and
                 hasParent( hasContentDescription( "top-app-bar" ) ),
                 useUnmergedTree = true
             ).assertIsDisplayed()
@@ -148,12 +137,12 @@ class MusicallyNavHostKtTest {
         showBottomSheet()
         composeTestRule
             .onNodeWithContentDescription(
-                Destination.Folders.iconContentDescription,
+                Folders.iconContentDescription,
                 useUnmergedTree = true
             ).performClick()
         composeTestRule
             .onNode(
-                hasText( Destination.Folders.label( English ) ) and
+                hasText( Folders.getLabel( English ) ) and
                 hasParent( hasContentDescription( "top-app-bar" ) ),
                 useUnmergedTree = true
             ).assertIsDisplayed()
@@ -163,12 +152,12 @@ class MusicallyNavHostKtTest {
     fun testNavigateToPlaylistsScreen() {
         composeTestRule
             .onNodeWithContentDescription(
-                Destination.Playlists.iconContentDescription,
+                Playlists.iconContentDescription,
                 useUnmergedTree = true
             ).performClick()
         composeTestRule
             .onNode(
-                hasText( Destination.Playlists.label( English ) ) and
+                hasText( Playlists.getLabel( English ) ) and
                 hasParent( hasContentDescription( "top-app-bar" ) ),
                 useUnmergedTree = true
             ).assertIsDisplayed()
@@ -179,12 +168,12 @@ class MusicallyNavHostKtTest {
         showBottomSheet()
         composeTestRule
             .onNodeWithContentDescription(
-                Destination.Tree.iconContentDescription,
+                Tree.iconContentDescription,
                 useUnmergedTree = true
             ).performClick()
         composeTestRule
             .onNode(
-                hasText( Destination.Tree.label( English ) ) and
+                hasText( Tree.getLabel( English ) ) and
                 hasParent( hasContentDescription( "top-app-bar" ) ),
                 useUnmergedTree = true
             ).assertIsDisplayed()
@@ -193,7 +182,7 @@ class MusicallyNavHostKtTest {
     private fun showBottomSheet() {
         composeTestRule
             .onNodeWithContentDescription(
-                Destination.ForYou.iconContentDescription,
+                ForYou.iconContentDescription,
                 useUnmergedTree = true
             ).performClick()
     }
@@ -206,7 +195,15 @@ class FakeMusicServiceConnection : MusicServiceConnection {
 
     override val playbackState: StateFlow<PlaybackState>
         get() = TODO("Not yet implemented")
+    override val queueSize: StateFlow<Int>
+        get() = TODO("Not yet implemented")
+    override val currentlyPlayingMediaItemIndex: StateFlow<Int>
+        get() = TODO("Not yet implemented")
+    override val isPlaying: StateFlow<Boolean>
+        get() = TODO("Not yet implemented")
     override val player: Player?
+        get() = TODO("Not yet implemented")
+    override val mediaItemsInQueue: StateFlow<List<MediaItem>>
         get() = TODO("Not yet implemented")
 
     override suspend fun getChildren( parentId: String ): ImmutableList<MediaItem> =
@@ -221,6 +218,38 @@ class FakeMusicServiceConnection : MusicServiceConnection {
         parameters: Bundle?,
         resultCallback: (Int, Bundle?) -> Unit
     ): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun playMediaItem(
+        mediaItem: MediaItem,
+        mediaItems: List<MediaItem>,
+        shuffle: Boolean
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun setPlaybackSpeed(playbackSpeed: Float) {
+        TODO("Not yet implemented")
+    }
+
+    override fun setPlaybackPitch(playbackPitch: Float) {
+        TODO("Not yet implemented")
+    }
+
+    override fun setRepeatMode(repeatMode: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun shuffleSongsInQueue() {
+        TODO("Not yet implemented")
+    }
+
+    override fun moveMediaItem(from: Int, to: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun clearQueue() {
         TODO("Not yet implemented")
     }
 
