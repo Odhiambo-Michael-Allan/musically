@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class GenreScreenViewModel(
+class GenresScreenViewModel(
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
@@ -28,29 +28,33 @@ class GenreScreenViewModel(
     val uiState = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch { loadGenres() }
+        loadGenres()
         viewModelScope.launch { observeLanguageChange() }
     }
 
-    private suspend fun loadGenres() {
-        val genreList = mutableListOf<Genre>()
-        val genreMediaItems = musicServiceConnection.getChildren( MUSIC_MATTERS_GENRES_ROOT )
-        val songMediaItems = musicServiceConnection.getChildren( MUSIC_MATTERS_TRACKS_ROOT )
-        genreMediaItems.forEach { genreMediaItem ->
-            var numberOfTracksInGenre = 0
-            songMediaItems.forEach { songMediaItem ->
-                if ( songMediaItem.mediaMetadata.genre.toString().lowercase() == genreMediaItem.mediaMetadata.title.toString().lowercase() )
-                    numberOfTracksInGenre++
-            }
-            genreList.add(
-                Genre( genreMediaItem.mediaMetadata.title.toString(), numberOfTracksInGenre )
-            )
-        }
+    private fun loadGenres() {
+        musicServiceConnection.runWhenInitialized {
+            viewModelScope.launch {
+                val genreList = mutableListOf<Genre>()
+                val genreMediaItems = musicServiceConnection.getChildren( MUSIC_MATTERS_GENRES_ROOT )
+                val songMediaItems = musicServiceConnection.getChildren( MUSIC_MATTERS_TRACKS_ROOT )
+                genreMediaItems.forEach { genreMediaItem ->
+                    var numberOfTracksInGenre = 0
+                    songMediaItems.forEach { songMediaItem ->
+                        if ( songMediaItem.mediaMetadata.genre.toString().lowercase() == genreMediaItem.mediaMetadata.title.toString().lowercase() )
+                            numberOfTracksInGenre++
+                    }
+                    genreList.add(
+                        Genre( genreMediaItem.mediaMetadata.title.toString(), numberOfTracksInGenre )
+                    )
+                }
 
-        _uiState.value = _uiState.value.copy(
-            genres = genreList,
-            isLoading = false
-        )
+                _uiState.value = _uiState.value.copy(
+                    genres = genreList,
+                    isLoading = false
+                )
+            }
+        }
     }
 
     private suspend fun observeLanguageChange() {
@@ -69,12 +73,12 @@ data class GenreScreenUiState(
 )
 
 @Suppress( "UNCHECKED_CAST" )
-class GenreScreenViewModelFactory(
+class GenresScreenViewModelFactory(
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T: ViewModel> create( modelClass: Class<T> ) =
-        ( GenreScreenViewModel(
+        ( GenresScreenViewModel(
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository
         ) as T )

@@ -1,5 +1,6 @@
 package com.odesa.musicMatters.fakes
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
@@ -8,6 +9,8 @@ import com.google.common.collect.ImmutableList
 import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
 import com.odesa.musicMatters.services.media.connection.NOTHING_PLAYING
 import com.odesa.musicMatters.services.media.connection.PlaybackState
+import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_RECENT_SONGS_ROOT
+import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_TRACKS_ROOT
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -36,9 +39,28 @@ class FakeMusicServiceConnection : MusicServiceConnection {
     private val _mediaItemsInQueue = MutableStateFlow( emptyList<MediaItem>() )
     override val mediaItemsInQueue = _mediaItemsInQueue.asStateFlow()
 
+    override var isInitialized = false
+        set( value ) {
+            field = value
+            if ( value ) {
+                synchronized( isInitializedListeners ) {
+                    isInitializedListeners.forEach {
+                        it.invoke()
+                    }
+                }
+            }
+        }
+    override val isInitializedListeners: MutableList<() -> Unit> = mutableListOf()
+
+    override fun runWhenInitialized( fn: () -> Unit ) {
+        if ( isInitialized ) fn.invoke() else isInitializedListeners.add( fn )
+    }
+
     override suspend fun getChildren( parentId: String ): ImmutableList<MediaItem> {
         return when ( parentId ) {
             MUSIC_MATTERS_TRACKS_ROOT -> trackList
+            MUSIC_MATTERS_RECENT_SONGS_ROOT -> trackList.subList( 0, 5 )
+            MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT -> albumList
             else -> genreList
         }
     }
@@ -92,6 +114,9 @@ class FakeMusicServiceConnection : MusicServiceConnection {
 val id1 = UUID.randomUUID().toString()
 val id2 = UUID.randomUUID().toString()
 val id3 = UUID.randomUUID().toString()
+val id4 = UUID.randomUUID().toString()
+val id5 = UUID.randomUUID().toString()
+val id6 = UUID.randomUUID().toString()
 
 val testMediaItems: ImmutableList<MediaItem> = ImmutableList.of(
     MediaItem.Builder().setMediaId( id1 ).build(),
@@ -145,5 +170,61 @@ val trackList: ImmutableList<MediaItem> = ImmutableList.of(
             }.build()
         )
     }.build(),
-
+    MediaItem.Builder().apply {
+        setMediaId( id4 ).setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "Lean on" ).setGenre( "Dance" )
+            }.build()
+        )
+    }.build(),
+    MediaItem.Builder().apply {
+        setMediaId( id5 ).setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "Scared To Be Lonely" ).setGenre( "House" )
+            }.build()
+        )
+    }.build(),
+    MediaItem.Builder().apply {
+        setMediaId( id6 ).setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "High off life" )
+                    .setGenre( "House" )
+            }.build()
+        )
+    }.build(),
 )
+
+val albumList: ImmutableList<MediaItem> = ImmutableList.of (
+    MediaItem.Builder().apply {
+        setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "Thriller1" )
+                setArtworkUri( Uri.EMPTY )
+            }.build()
+        )
+    }.build(),
+    MediaItem.Builder().apply {
+        setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "Thriller2" )
+                setArtworkUri( Uri.EMPTY )
+            }.build()
+        )
+    }.build(),
+    MediaItem.Builder().apply {
+        setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "Thriller3" )
+                setArtworkUri( Uri.EMPTY )
+            }.build()
+        )
+    }.build(),
+    MediaItem.Builder().apply {
+        setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "Thriller4" )
+            }.build()
+        )
+    }.build()
+)
+

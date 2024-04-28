@@ -1,6 +1,5 @@
-package com.odesa.musicMatters.ui.songs
+package com.odesa.musicMatters.ui.genre
 
-import com.odesa.musicMatters.MainCoroutineRule
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.data.settings.SettingsRepository
@@ -21,37 +20,42 @@ import com.odesa.musicMatters.ui.theme.ThemeMode
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith( RobolectricTestRunner::class )
-class SongsScreenViewModelTest {
+class GenreScreenViewModelTest {
 
-    @get:Rule
-    val mainCoroutineRule = MainCoroutineRule()
-
-    private lateinit var settingsRepository: SettingsRepository
     private lateinit var musicServiceConnection: FakeMusicServiceConnection
-    private lateinit var songsScreenViewModel: SongsScreenViewModel
+    private lateinit var settingsRepository: SettingsRepository
     private lateinit var playlistRepository: PlaylistRepository
+    private lateinit var genreScreenViewModel: GenreScreenViewModel
 
     @Before
     fun setup() {
-        settingsRepository = FakeSettingsRepository()
         musicServiceConnection = FakeMusicServiceConnection()
+        settingsRepository = FakeSettingsRepository()
         playlistRepository = FakePlaylistRepository()
-        songsScreenViewModel = SongsScreenViewModel(
-            settingsRepository = settingsRepository,
+        genreScreenViewModel = GenreScreenViewModel(
             musicServiceConnection = musicServiceConnection,
+            settingsRepository = settingsRepository,
             playlistRepository = playlistRepository
         )
     }
 
     @Test
+    fun testLoadSongsWithSpecificGenre() {
+        genreScreenViewModel.loadSongsWithGenre( "Hip Hop" )
+        musicServiceConnection.runWhenInitialized {
+            assertEquals( 2, genreScreenViewModel.uiState.value.songs.size )
+        }
+        musicServiceConnection.isInitialized = true
+    }
+
+    @Test
     fun testLanguageChange() {
-        assertEquals( "Settings", songsScreenViewModel.uiState.value.language.settings )
+        assertEquals( "Settings", genreScreenViewModel.uiState.value.language.settings )
         changeLanguageTo( Belarusian, "Налады" )
         changeLanguageTo( Chinese, "设置" )
         changeLanguageTo( English, "Settings" )
@@ -60,44 +64,35 @@ class SongsScreenViewModelTest {
         changeLanguageTo( Spanish, "Configuración" )
     }
 
-    private fun changeLanguageTo( language: Language, testString: String ) = runTest {
+    private fun changeLanguageTo(language: Language, testString: String ) = runTest {
         settingsRepository.setLanguage( language.locale )
-        val currentLanguage = songsScreenViewModel.uiState.value.language
+        val currentLanguage = genreScreenViewModel.uiState.value.language
         assertEquals( testString, currentLanguage.settings )
     }
 
     @Test
     fun testThemeModeChange() = runTest {
-        assertEquals( SettingsDefaults.themeMode, songsScreenViewModel.uiState.value.themeMode )
+        assertEquals( SettingsDefaults.themeMode, genreScreenViewModel.uiState.value.themeMode )
         ThemeMode.entries.forEach {
             settingsRepository.setThemeMode( it )
-            assertEquals( it, songsScreenViewModel.uiState.value.themeMode )
+            assertEquals( it, genreScreenViewModel.uiState.value.themeMode )
         }
-    }
-
-    @Test
-    fun testMediaItemsAreCorrectlyLoadedFromTheMusicServiceConnection() {
-        assertEquals( 0, songsScreenViewModel.uiState.value.songs.size )
-        musicServiceConnection.runWhenInitialized {
-            assertEquals( 6, songsScreenViewModel.uiState.value.songs.size )
-        }
-        musicServiceConnection.isInitialized = true
     }
 
     @Test
     fun testNowPlayingMediaItemIsCorrectlyUpdated() {
-        assertEquals( "", songsScreenViewModel.uiState.value.currentlyPlayingSongId )
+        assertEquals( "", genreScreenViewModel.uiState.value.currentlyPlayingSongId )
         musicServiceConnection.setNowPlaying( testMediaItems.first() )
-        assertEquals( id1, songsScreenViewModel.uiState.value.currentlyPlayingSongId )
+        assertEquals( id1, genreScreenViewModel.uiState.value.currentlyPlayingSongId )
     }
 
     @Test
     fun testFavoriteSongsChange() = runTest {
-        assertEquals( 0, songsScreenViewModel.uiState.value.favoriteSongIds.size )
+        assertEquals( 0, genreScreenViewModel.uiState.value.favoriteSongIds.size )
         testSongs.forEach {
             playlistRepository.addToFavorites( it.id )
         }
-        assertEquals( testSongs.size, songsScreenViewModel.uiState.value.favoriteSongIds.size )
+        assertEquals( testSongs.size, genreScreenViewModel.uiState.value.favoriteSongIds.size )
     }
 
     @Test
@@ -105,8 +100,9 @@ class SongsScreenViewModelTest {
         testSongs.forEach {
             playlistRepository.addToFavorites( it.id )
         }
-        assertEquals( testSongs.size, songsScreenViewModel.uiState.value.favoriteSongIds.size )
-        songsScreenViewModel.addToFavorites( testSongs.first().id )
-        assertEquals( testSongs.size - 1, songsScreenViewModel.uiState.value.favoriteSongIds.size )
+        assertEquals( testSongs.size, genreScreenViewModel.uiState.value.favoriteSongIds.size )
+        genreScreenViewModel.addToFavorites( testSongs.first().id )
+        assertEquals( testSongs.size - 1, genreScreenViewModel.uiState.value.favoriteSongIds.size )
     }
+
 }

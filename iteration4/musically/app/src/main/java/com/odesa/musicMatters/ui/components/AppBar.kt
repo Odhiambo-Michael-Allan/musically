@@ -107,7 +107,8 @@ fun TopAppBarPreview() {
 fun MinimalAppBar(
     modifier: Modifier = Modifier,
     onNavigationIconClicked: () -> Unit,
-    title: String
+    title: String,
+    
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier,

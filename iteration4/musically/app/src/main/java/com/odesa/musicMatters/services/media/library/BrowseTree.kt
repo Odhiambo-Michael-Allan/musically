@@ -1,7 +1,9 @@
 package com.odesa.musicMatters.services.media.library
 
+import android.net.Uri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
+import com.odesa.musicMatters.services.media.extensions.DATE_KEY
 import com.odesa.musicMatters.services.media.extensions.stringRep
 import timber.log.Timber
 import java.util.UUID
@@ -53,6 +55,18 @@ class BrowseTree(
         val genreList = mediaIdToChildren[ MUSIC_MATTERS_GENRES_ROOT ] ?: mutableListOf()
         addGenreMediaItemsTo( genreList )
         mediaIdToChildren[ MUSIC_MATTERS_GENRES_ROOT ] = genreList
+
+        val albumList = mediaIdToChildren[ MUSIC_MATTERS_ALBUMS_ROOT ] ?: mutableListOf()
+        addAlbumMediaItemsTo( albumList )
+        mediaIdToChildren[ MUSIC_MATTERS_ALBUMS_ROOT ] = albumList
+
+        val recentSongsList = mediaIdToChildren[ MUSIC_MATTERS_RECENT_SONGS_ROOT ] ?: mutableListOf()
+        addRecentSongMediaItemsTo( recentSongsList )
+        mediaIdToChildren[ MUSIC_MATTERS_RECENT_SONGS_ROOT ] = recentSongsList
+
+        val suggestedAlbumList = mediaIdToChildren[ MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT ] ?: mutableListOf()
+        addSuggestedAlbumMediaItemsTo( suggestedAlbumList )
+        mediaIdToChildren[ MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT ] = suggestedAlbumList
 
     }
 
@@ -140,6 +154,61 @@ class BrowseTree(
         setMediaId( UUID.randomUUID().toString() ).setMediaMetadata( genreMetadata )
     }.build()
 
+    private fun addAlbumMediaItemsTo( albumList: MutableList<MediaItem> ) {
+        musicSource.forEach {  mediaItem ->
+            val mediaItemAlbum = mediaItem.mediaMetadata.albumTitle ?: "<unknown>"
+            val loadedAlbum = mediaItemAlbum.toString()
+            val albumAlreadyExistsInAlbumList = findAlbumIn( albumList, loadedAlbum )
+            if ( !albumAlreadyExistsInAlbumList ) {
+                val albumMetadata = createAlbumMetadataUsing( loadedAlbum, mediaItem.mediaMetadata.artworkUri )
+                val albumMediaItem = createAlbumMediaItemUsing( albumMetadata )
+                albumList.add( albumMediaItem )
+            }
+        }
+    }
+
+    private fun findAlbumIn( albumList: MutableList<MediaItem>, album: String ): Boolean {
+        albumList.forEach { albumMediaItem ->
+            if ( albumMediaItem.mediaMetadata.title.toString().lowercase() == album.lowercase() )
+                return true
+        }
+        return false
+    }
+
+    private fun createAlbumMetadataUsing( albumName: String, artworkUri: Uri? ) = MediaMetadata.Builder().apply {
+        setTitle( albumName )
+        setIsPlayable( false )
+        setArtworkUri( artworkUri )
+        setFolderType( MediaMetadata.FOLDER_TYPE_ALBUMS )
+    }.build()
+
+    private fun createAlbumMediaItemUsing( albumMetadata: MediaMetadata ) = MediaItem.Builder().apply {
+        setMediaId( UUID.randomUUID().toString() ).setMediaMetadata( albumMetadata )
+    }.build()
+
+    private fun addRecentSongMediaItemsTo( recentSongsList: MutableList<MediaItem> ) {
+        val trackList = mediaIdToChildren[ MUSIC_MATTERS_TRACKS_ROOT ]
+        trackList!!.sortByDescending { it.mediaMetadata.extras?.getLong( DATE_KEY ) }
+        recentSongsList.addAll( trackList.subList( 0, 5 ) )
+    }
+
+    private fun addSuggestedAlbumMediaItemsTo( suggestedAlbumList: MutableList<MediaItem> ) {
+        val albumList = mediaIdToChildren[ MUSIC_MATTERS_ALBUMS_ROOT ]!!.shuffled()
+        val albumsWithArtwork = albumList.filter { it.mediaMetadata.artworkUri != null }
+        when {
+            albumsWithArtwork.size >= 6 -> suggestedAlbumList.addAll( albumsWithArtwork.subList( 0, 6 ) )
+            else -> suggestedAlbumList.addAll( albumsWithArtwork.subList( 0, albumsWithArtwork.size ) )
+        }
+        if ( suggestedAlbumList.size < 6 ) {
+            val albumsWithoutArtwork = albumList.filter { it.mediaMetadata.artworkUri == null }.toMutableList()
+            while ( suggestedAlbumList.size < 6 && albumsWithoutArtwork.size > 0 ) {
+                val album = albumsWithoutArtwork.removeAt( 0 )
+                suggestedAlbumList.add( album )
+            }
+
+        }
+    }
+
     /**
      * Provides access to the list of children with the 'get' operator
      * i.e.: 'browseTree[MUSIC_MATTERS_BROWSABLE_ROOT]'
@@ -155,9 +224,10 @@ const val MUSIC_MATTERS_BROWSABLE_ROOT = "/"
 const val MUSIC_MATTERS_ALBUMS_ROOT = "__ALBUMS__"
 const val MUSIC_MATTERS_TRACKS_ROOT = "__TRACKS__"
 const val MUSIC_MATTERS_GENRES_ROOT = "__GENRES__"
-const val MUSIC_MATTERS_RECENT_ROOT = "__RECENT__"
+const val MUSIC_MATTERS_RECENT_SONGS_ROOT = "__RECENT_SONGS__"
 const val MUSIC_MATTERS_ARTISTS_ROOT = "__ARTISTS__"
 const val MUSIC_MATTERS_RECOMMENDED_ROOT = "__RECOMMENDED__"
+const val MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT = "__SUGGESTED-ALBUMS__"
 const val MEDIA_SEARCH_SUPPORTED = "android.media.browse.SEARCH_SUPPORTED"
 const val BROWSE_TREE_TAG = "BROWSE-TREE-TAG"
 

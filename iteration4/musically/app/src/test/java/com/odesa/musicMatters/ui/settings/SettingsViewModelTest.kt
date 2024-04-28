@@ -1,12 +1,12 @@
 package com.odesa.musicMatters.ui.settings
 
 import com.odesa.musicMatters.MainCoroutineRule
-import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.data.preferences.ForYou
 import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
 import com.odesa.musicMatters.data.preferences.NowPlayingLyricsLayout
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.fakes.FakeSettingsRepository
 import com.odesa.musicMatters.services.i18n.Belarusian
 import com.odesa.musicMatters.services.i18n.Chinese
@@ -139,10 +139,8 @@ class SettingsViewModelTest {
         assertEquals( 5, settingsViewModel.uiState.value.homeTabs.size )
         changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs ) )
         changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums ) )
-        changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums,
-            HomeTab.AlbumArtists ) )
-        changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums,
-            HomeTab.AlbumArtists, HomeTab.Genres ) )
+        changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums ) )
+        changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums, HomeTab.Genres ) )
     }
 
     private fun changeHomeTabsTo( homeTabs: Set<HomeTab> ) = runTest {

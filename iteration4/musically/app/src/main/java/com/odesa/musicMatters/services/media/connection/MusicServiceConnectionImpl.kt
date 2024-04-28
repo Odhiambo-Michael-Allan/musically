@@ -89,6 +89,24 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
     private val _mediaItemsInQueue = MutableStateFlow( emptyList<MediaItem>() )
     override val mediaItemsInQueue = _mediaItemsInQueue.asStateFlow()
 
+    override var isInitialized: Boolean = false
+        set( value ) {
+            field = value
+            if ( value ) {
+                synchronized( isInitializedListeners ) {
+                    Timber.tag( TAG ).d( "MUSIC SERVICE CONNECTION INITIALIZED. NOTIFYING LISTENERS" )
+                    isInitializedListeners.forEach {
+                        it.invoke()
+                    }
+                }
+            }
+        }
+    override val isInitializedListeners: MutableList<() -> Unit> = mutableListOf()
+    override fun runWhenInitialized( fn: () -> Unit ) {
+        if ( isInitialized ) fn.invoke() else isInitializedListeners.add( fn )
+    }
+
+
     init {
         scope.launch {
             initializeMediaBrowser( context, serviceComponentName )
@@ -96,22 +114,28 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
     }
 
     private suspend fun initializeMediaBrowser( context: Context, serviceComponentName: ComponentName ) {
+        Timber.tag( TAG ).d( "INITIALIZING MEDIA BROWSER" )
         val newBrowser =
             MediaBrowser.Builder( context, SessionToken( context, serviceComponentName ) )
                 .setListener( BrowserListener() )
                 .buildAsync()
                 .await()
+        Timber.tag( TAG ).d( "BROWSER INITIALIZED: $newBrowser" )
         newBrowser.addListener( playerListener )
         browser = newBrowser
         _rootMediaItem.value = newBrowser.getLibraryRoot( /* params = */ null ).await().value!!
         newBrowser.currentMediaItem?.let {
             _nowPlaying.value = it
         }
+        isInitialized = true
     }
 
     override suspend fun getChildren( parentId: String ): ImmutableList<MediaItem> {
-        return this.browser?.getChildren( parentId, 0, Int.MAX_VALUE, null )
-            ?.await()?.value ?: ImmutableList.of()
+        Timber.tag( TAG ).d( "LOADING CHILDREN FOR $parentId" )
+        val children = this.browser?.getChildren( parentId, 0, Int.MAX_VALUE, null )
+            ?.await()?.value
+        Timber.tag( TAG ).d( "NUMBER OF CHILDREN LOADED: ${children?.size}" )
+        return  children ?: ImmutableList.of()
     }
 
     override suspend fun sendCommand( command: String, parameters: Bundle? ): Boolean =

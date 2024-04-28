@@ -16,7 +16,7 @@ import com.odesa.musicMatters.ui.components.testGenreList
 
 @Composable
 fun GenresScreen(
-    viewModel: GenreScreenViewModel,
+    viewModel: GenresScreenViewModel,
     onGenreClick: ( String ) -> Unit,
     onSettingsClicked: () -> Unit
 ) {

@@ -21,20 +21,20 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith( RobolectricTestRunner::class )
-class GenreScreenViewModelTest {
+class GenresScreenViewModelTest {
 
     @get:Rule
     val mainCoroutineRule = MainCoroutineRule()
 
     private lateinit var musicServiceConnection: FakeMusicServiceConnection
     private lateinit var settingsRepository: SettingsRepository
-    private lateinit var genreScreenViewModel: GenreScreenViewModel
+    private lateinit var genresScreenViewModel: GenresScreenViewModel
 
     @Before
     fun setup() {
         musicServiceConnection = FakeMusicServiceConnection()
         settingsRepository = FakeSettingsRepository()
-        genreScreenViewModel = GenreScreenViewModel(
+        genresScreenViewModel = GenresScreenViewModel(
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository
         )
@@ -43,13 +43,16 @@ class GenreScreenViewModelTest {
 
     @Test
     fun testGenresAreCorrectlyLoadedFromMusicServiceConnection() {
-        val uiState = genreScreenViewModel.uiState.value
-        assertEquals( 3, uiState.genres.size )
+        assertEquals( 0, genresScreenViewModel.uiState.value.genres.size )
+        musicServiceConnection.runWhenInitialized {
+            assertEquals( 3, genresScreenViewModel.uiState.value.genres.size )
+        }
+        musicServiceConnection.isInitialized = true
     }
 
     @Test
     fun testNumberOfTracksInGenreAreCorrectlySet() {
-        val genreList = genreScreenViewModel.uiState.value.genres
+        val genreList = genresScreenViewModel.uiState.value.genres
         genreList.forEach { genre ->
             if ( genre.name == "Hip Hop" )
                 assertEquals( 2, genre.numberOfTracks )
@@ -58,7 +61,7 @@ class GenreScreenViewModelTest {
 
     @Test
     fun testLanguageChange() {
-        assertEquals( "Settings", genreScreenViewModel.uiState.value.language.settings )
+        assertEquals( "Settings", genresScreenViewModel.uiState.value.language.settings )
         changeLanguageTo( Belarusian, "Налады" )
         changeLanguageTo( Chinese, "设置" )
         changeLanguageTo( English, "Settings" )
@@ -69,7 +72,7 @@ class GenreScreenViewModelTest {
 
     private fun changeLanguageTo(language: Language, testString: String ) = runTest {
         settingsRepository.setLanguage( language.locale )
-        val currentLanguage = genreScreenViewModel.uiState.value.language
+        val currentLanguage = genresScreenViewModel.uiState.value.language
         assertEquals( testString, currentLanguage.settings )
     }
 }

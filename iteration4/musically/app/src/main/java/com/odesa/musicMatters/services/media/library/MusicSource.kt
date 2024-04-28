@@ -71,7 +71,7 @@ abstract class AbstractMusicSource : MusicSource {
         set( value ) {
             if ( value == STATE_INITIALIZED || value == STATE_ERROR ) {
                 synchronized( onReadyListeners ) {
-                    Timber.tag(BROWSE_TREE_TAG).d( "STATE CHANGED, NOTIFYING LISTENERS" )
+                    Timber.tag( BROWSE_TREE_TAG ).d( "STATE CHANGED, NOTIFYING LISTENERS" )
                     field = value
                     onReadyListeners.forEach { listener ->
                         listener( state == STATE_INITIALIZED )
@@ -90,7 +90,7 @@ abstract class AbstractMusicSource : MusicSource {
     override fun whenReady( performAction: ( Boolean ) -> Unit ): Boolean {
         return when ( state ) {
             STATE_CREATED, STATE_INITIALIZING -> {
-                Timber.tag(BROWSE_TREE_TAG).d( "ADDING ACTION TO BE PERFORMED LATER - whenReady" )
+                Timber.tag( BROWSE_TREE_TAG ).d( "ADDING ACTION TO BE PERFORMED LATER - whenReady" )
                 onReadyListeners += performAction
                 false
             }
@@ -137,7 +137,7 @@ abstract class AbstractMusicSource : MusicSource {
                 val title = extras[ MediaStore.EXTRA_MEDIA_TITLE ]
                 val album = extras[ MediaStore.EXTRA_MEDIA_ALBUM ]
                 val artist = extras[ MediaStore.EXTRA_MEDIA_ARTIST ]
-                Timber.tag(BROWSE_TREE_TAG).d( "Focused media search: title = '$title' album = '$album' artist = '$artist'" )
+                Timber.tag( BROWSE_TREE_TAG ).d( "Focused media search: title = '$title' album = '$album' artist = '$artist'" )
                 filter { song ->
                     isArtist( song, artist )
                             && song.mediaMetadata.albumTitle?.toString() == album

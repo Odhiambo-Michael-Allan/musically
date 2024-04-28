@@ -3,6 +3,8 @@ package com.odesa.musicMatters.ui.genre
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,18 +18,22 @@ import com.odesa.musicMatters.ui.theme.isLight
 
 @Composable
 fun GenreScreen(
-    genre: String,
+    genreName: String,
+    genreScreenViewModel: GenreScreenViewModel,
+    onNavigateBack: () -> Unit,
 ) {
 
+    val uiState by genreScreenViewModel.uiState.collectAsState()
+
     GenreScreenContent(
-        uiState = testGenreScreenUiState,
-        genreName = genre,
+        uiState = uiState,
+        genreName = genreName,
         onSortReverseChange = {},
         onSortTypeChange = {},
-        onSettingsClicked = {},
         onShufflePlay = {},
-        playSong = {},
-        onFavorite = {}
+        playSong = { genreScreenViewModel.playMedia( it.mediaItem ) },
+        onFavorite = { genreScreenViewModel.addToFavorites( it ) },
+        onNavigateBack = onNavigateBack
     )
 }
 
@@ -37,10 +43,10 @@ fun GenreScreenContent(
     genreName: String,
     onSortReverseChange: ( Boolean ) -> Unit,
     onSortTypeChange: (SortSongsBy) -> Unit,
-    onSettingsClicked: () -> Unit,
     onShufflePlay: () -> Unit,
-    playSong: (Song) -> Unit,
-    onFavorite: ( String ) -> Unit
+    playSong: ( Song ) -> Unit,
+    onFavorite: ( String ) -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
 
     val fallbackResourceId =
@@ -51,7 +57,7 @@ fun GenreScreenContent(
         modifier = Modifier.fillMaxSize()
     ) {
         MinimalAppBar(
-            onNavigationIconClicked = { /*TODO*/ },
+            onNavigationIconClicked = onNavigateBack,
             title = "${uiState.language.genre} - $genreName"
         )
         LoaderScaffold(
@@ -84,10 +90,10 @@ fun GenreScreenContentPreview() {
         genreName = "Hip Hop",
         onSortReverseChange = {},
         onSortTypeChange = {},
-        onSettingsClicked = {},
         onShufflePlay = {},
         playSong = {},
-        onFavorite = {}
+        onFavorite = {},
+        onNavigateBack = {}
     )
 }
 

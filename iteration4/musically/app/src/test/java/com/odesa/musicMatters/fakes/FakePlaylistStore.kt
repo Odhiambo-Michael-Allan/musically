@@ -7,15 +7,41 @@ import java.util.UUID
 class FakePlaylistStore : PlaylistStore {
 
     private val playlists = mutableSetOf<Playlist>()
+    private val mostPlayedSongsMap = mutableMapOf<String, Int>()
 
     private var favoritePlaylist = Playlist(
         id = UUID.randomUUID().toString(),
         title = "Favorites",
-        numberOfTracks = 0,
         songIds = emptySet(),
     )
 
-    override fun fetchPlaylists(): Set<Playlist> {
+    private var recentSongsPlaylist = Playlist(
+        id = UUID.randomUUID().toString(),
+        title = "Recently Played Songs",
+        songIds = emptySet()
+    )
+
+    private var mostPlayedSongsPlaylist = Playlist(
+        id = UUID.randomUUID().toString(),
+        title = "Most played songs",
+        songIds = emptySet()
+    )
+
+    private var customPlaylists = List( 20 ) {
+        Playlist(
+            id = UUID.randomUUID().toString() + it,
+            title = "Playlist-$it",
+            songIds = emptySet()
+        )
+    }.toMutableSet()
+
+    init {
+        playlists.add( favoritePlaylist )
+        playlists.add( mostPlayedSongsPlaylist )
+        playlists.add( recentSongsPlaylist )
+    }
+
+    override fun fetchAllPlaylists(): Set<Playlist> {
         return playlists
     }
 
@@ -27,8 +53,7 @@ class FakePlaylistStore : PlaylistStore {
         val currentSongIds = favoritePlaylist.songIds.toMutableSet()
         currentSongIds.add( songId )
         favoritePlaylist = favoritePlaylist.copy(
-            songIds = currentSongIds,
-            numberOfTracks = currentSongIds.size
+            songIds = currentSongIds
         )
     }
 
@@ -36,17 +61,72 @@ class FakePlaylistStore : PlaylistStore {
         val currentSongIds = favoritePlaylist.songIds.toMutableSet()
         currentSongIds.remove( songId )
         favoritePlaylist = favoritePlaylist.copy(
-            songIds = currentSongIds,
-            numberOfTracks = currentSongIds.size
+            songIds = currentSongIds
         )
     }
 
-    override suspend fun savePlaylist( playlist: Playlist ) {
+    override fun fetchRecentSongsPlaylist(): Playlist {
+        return recentSongsPlaylist
+    }
+
+    override suspend fun addSongIdToRecentSongsPlaylist( songId: String ) {
+        val currentSongIds = recentSongsPlaylist.songIds.toMutableSet()
+        currentSongIds.add( songId )
+        recentSongsPlaylist = recentSongsPlaylist.copy(
+            songIds = currentSongIds
+        )
+    }
+
+    override suspend fun removeFromRecentSongsPlaylist( songId: String ) {
+        val currentSongIds = recentSongsPlaylist.songIds.toMutableSet()
+        currentSongIds.remove( songId )
+        recentSongsPlaylist = recentSongsPlaylist.copy(
+            songIds = currentSongIds
+        )
+    }
+
+    override fun fetchMostPlayedSongsPlaylist() = mostPlayedSongsPlaylist
+
+    override suspend fun addToMostPlayedSongsPlaylist( songId: String ) {
+        val currentSongIds = mostPlayedSongsPlaylist.songIds.toMutableSet()
+        currentSongIds.add( songId )
+        if ( mostPlayedSongsMap.contains( songId ) ) mostPlayedSongsMap[ songId ] = mostPlayedSongsMap[ songId ]!!.plus( 1 )
+        else mostPlayedSongsMap[ songId ] = 1
+        mostPlayedSongsPlaylist = mostPlayedSongsPlaylist.copy(
+            songIds = currentSongIds
+        )
+    }
+
+    override suspend fun removeFromMostPlayedSongsPlaylist( songId: String ) {
+        val currentSongIds = mostPlayedSongsPlaylist.songIds.toMutableSet()
+        currentSongIds.remove( songId )
+        if ( mostPlayedSongsMap.containsKey( songId ) ) mostPlayedSongsMap.remove( songId )
+        mostPlayedSongsPlaylist = mostPlayedSongsPlaylist.copy(
+            songIds = currentSongIds
+        )
+    }
+
+    override fun fetchAllCustomPlaylists() = customPlaylists
+
+    override suspend fun saveCustomPlaylist(playlist: Playlist ) {
         playlists.add( playlist )
     }
 
-    override suspend fun deletePlaylist( playlist: Playlist ) {
+    override suspend fun deleteCustomPlaylist(playlist: Playlist ) {
         playlists.remove( playlist )
     }
+
+    override suspend fun addSongToCustomPlaylist( songId: String, playlist: Playlist ) {
+        customPlaylists.find { it.id == playlist.id } ?. let {
+            val currentSongIds = it.songIds.toMutableSet()
+            currentSongIds.add( songId )
+            customPlaylists.remove( it )
+            customPlaylists.add( it.copy(
+                songIds = currentSongIds
+            ) )
+        }
+    }
+
+    override fun fetchMostPlayedSongsMap(): Map<String, Int> = mostPlayedSongsMap
 
 }

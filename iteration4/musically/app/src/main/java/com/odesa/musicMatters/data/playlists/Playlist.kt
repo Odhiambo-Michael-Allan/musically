@@ -8,8 +8,7 @@ import org.json.JSONObject
 data class Playlist(
     val id: String,
     val title: String,
-    val songIds: Set<String>,
-    val numberOfTracks: Int
+    val songIds: Set<String>
 ) {
 
     fun toJSONObject(): JSONObject {
@@ -17,7 +16,6 @@ data class Playlist(
         jsonObject.put( PLAYLIST_ID_KEY, id )
         jsonObject.put( PLAYLIST_TITLE_KEY, title )
         jsonObject.put( PLAYLIST_SONGS_KEY, JSONArray( songIds ) )
-        jsonObject.put( PLAYLIST_NUMBER_OF_TRACKS_KEY, numberOfTracks )
         return jsonObject
     }
 
@@ -31,11 +29,11 @@ data class Playlist(
             id = serialized.getString( PLAYLIST_ID_KEY ),
             title = serialized.getString( PLAYLIST_TITLE_KEY ),
             songIds = serialized.getJSONArray( PLAYLIST_SONGS_KEY ).toSet { getString( it ) },
-            numberOfTracks = serialized.getInt( PLAYLIST_NUMBER_OF_TRACKS_KEY ),
         )
 
     }
 }
+
 
 data class M3UEntry( val index: Int, val info: String, val path: String )
 

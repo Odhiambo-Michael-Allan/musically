@@ -19,6 +19,7 @@ data class Song(
     val year: Int?,
     val duration: Long,
     val albumTitle: String?,
+    val genre: String?,
     val artists: Set<String>,
     val composer: String?,
     val dateModified: Long,
@@ -52,13 +53,14 @@ val artistTagSeparators = setOf( "feat.", ";", "+", ",", "ft", "/", ", .", "(,",
 
 val testSongs = List( 100 ) {
     Song(
-        id = UUID.randomUUID().toString(),
+        id = UUID.randomUUID().toString() + "$it",
         title = "You Right",
         displayTitle = "You Right",
         trackNumber = 1,
         year = 0,
         duration = 180000L,
         albumTitle = "Best of Levels",
+        genre = "Pop",
         artists = setOf( "The Weekend", "Doja Cat" ),
         composer = "Abel \"The Weekend\" Tesfaye",
         dateModified = 1000000,

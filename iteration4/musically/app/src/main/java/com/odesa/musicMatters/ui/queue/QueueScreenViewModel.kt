@@ -108,7 +108,6 @@ class QueueScreenViewModel(
             id = UUID.randomUUID().toString(),
             title = playlistName,
             songIds = uiState.value.songsInQueue.map { it.id }.toSet(),
-            numberOfTracks = uiState.value.songsInQueue.size
         )
         viewModelScope.launch {
             playlistRepository.savePlaylist( playlist )

@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import android.provider.MediaStore.Audio.AudioColumns
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
+import com.odesa.musicMatters.services.media.Album
 import com.odesa.musicMatters.services.media.Song
 import timber.log.Timber
 
@@ -179,6 +180,7 @@ fun MediaItem.toSong( artistTagSeparators: Set<String> ) = Song(
     year = mediaMetadata.extras?.getInt( RELEASE_YEAR_KEY ),
     duration = mediaMetadata.extras?.getLong( SONG_DURATION ) ?: UNKNOWN_LONG_VALUE,
     albumTitle = mediaMetadata.extras?.getString( ALBUM_TITLE_KEY ),
+    genre = mediaMetadata.genre?.toString(),
     artists = parseArtistStringIntoIndividualArtists( artistTagSeparators ),
     composer = mediaMetadata.composer.toString(),
     dateModified = mediaMetadata.extras?.getLong( DATE_KEY ) ?: UNKNOWN_LONG_VALUE ,
@@ -186,6 +188,11 @@ fun MediaItem.toSong( artistTagSeparators: Set<String> ) = Song(
     path = mediaMetadata.extras?.getString( PATH_KEY ) ?: UNKNOWN_STRING_VALUE,
     artworkUri = mediaMetadata.artworkUri,
     mediaItem = this
+)
+
+fun MediaItem.toAlbum() = Album(
+    name = mediaMetadata.title.toString(),
+    artworkUri = mediaMetadata.artworkUri
 )
 
 fun MediaItem.parseArtistStringIntoIndividualArtists( separators: Set<String> ) =

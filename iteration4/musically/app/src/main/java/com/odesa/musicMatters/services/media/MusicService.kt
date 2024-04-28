@@ -25,6 +25,10 @@ import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import com.odesa.musicMatters.R
+import com.odesa.musicMatters.data.AppContainerImpl
+import com.odesa.musicMatters.data.playlists.PlaylistRepository
+import com.odesa.musicMatters.data.playlists.impl.PlaylistRepositoryImpl
+import com.odesa.musicMatters.data.playlists.impl.PlaylistStoreImpl
 import com.odesa.musicMatters.services.PermissionsManager
 import com.odesa.musicMatters.services.media.extensions.stringRep
 import com.odesa.musicMatters.services.media.library.BrowseTree
@@ -57,6 +61,7 @@ class MusicService : MediaLibraryService() {
     private lateinit var mediaSession: MediaLibrarySession
     private var currentMediaItemIndex: Int = 0
     private lateinit var musicSource: MusicSource
+    private lateinit var playlistRepository: PlaylistRepository
 
     private val catalogueRootMediaItem: MediaItem by lazy {
         MediaItem.Builder()
@@ -138,6 +143,13 @@ class MusicService : MediaLibraryService() {
             }
         }
         setMediaNotificationProvider( MusicallyMediaNotificationProvider( applicationContext ) )
+
+        playlistRepository = PlaylistRepositoryImpl.getInstance(
+            playlistStore = PlaylistStoreImpl.getInstance(
+                playlistsFile = AppContainerImpl.retrievePlaylistFileFromAppExternalCache( applicationContext ),
+                mostPlayedSongsFile = AppContainerImpl.retrieveMostPlayedSongsFileFromAppExternalCache( applicationContext )
+            )
+        )
     }
 
     override fun onGetSession( controllerInfo: MediaSession.ControllerInfo ): MediaLibrarySession? {
@@ -317,9 +329,21 @@ class MusicService : MediaLibraryService() {
             }
         }
 
+        override fun onMediaItemTransition( mediaItem: MediaItem?, reason: Int ) {
+            super.onMediaItemTransition( mediaItem, reason )
+            Timber.tag( TAG ).d( "MEDIA ITEM TRANSITION. ID: ${mediaItem?.mediaId}" )
+            // Whenever a media item is played, add it to the most played songs playlist. The
+            // playlist store will increment its count it already exists.
+            mediaItem?.let {
+                serviceScope.launch {
+                    playlistRepository.addToMostPlayedPlaylist( it.mediaId )
+                }
+            }
+        }
+
         override fun onPlayerError( error: PlaybackException ) {
             var message = R.string.generic_error
-            Timber.tag( TAG ).d( "Plaer error: ${error.errorCodeName} ( ${error.errorCode} )" )
+            Timber.tag( TAG ).d( "Player error: ${error.errorCodeName} ( ${error.errorCode} )" )
             if ( error.errorCode == PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS
                 || error.errorCode == PlaybackException.ERROR_CODE_IO_FILE_NOT_FOUND ) {
                 message = R.string.error_media_not_found

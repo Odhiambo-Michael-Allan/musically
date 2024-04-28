@@ -205,6 +205,13 @@ class FakeMusicServiceConnection : MusicServiceConnection {
         get() = TODO("Not yet implemented")
     override val mediaItemsInQueue: StateFlow<List<MediaItem>>
         get() = TODO("Not yet implemented")
+    override var isInitialized: Boolean
+        get() = TODO("Not yet implemented")
+        set(value) {}
+    override val isInitializedListeners: MutableList<() -> Unit>
+        get() = TODO("Not yet implemented")
+
+    override fun runWhenInitialized(fn: () -> Unit) {}
 
     override suspend fun getChildren( parentId: String ): ImmutableList<MediaItem> =
         ImmutableList.of<MediaItem>()

@@ -1,6 +1,5 @@
 package com.odesa.musicMatters.data.settings.impl
 
-import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.data.preferences.ForYou
 import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
@@ -9,6 +8,7 @@ import com.odesa.musicMatters.data.preferences.PreferenceStore
 import com.odesa.musicMatters.data.preferences.impl.LoopMode
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.data.preferences.impl.allowedSpeedPitchValues
+import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.fakes.FakePreferencesStoreImpl
 import com.odesa.musicMatters.services.i18n.Belarusian
 import com.odesa.musicMatters.services.i18n.Chinese
@@ -128,10 +128,8 @@ class SettingsRepositoryImplTest {
         assertEquals( 5, settingsRepository.homeTabs.value.size )
         changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs ) )
         changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums ) )
-        changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums,
-            HomeTab.AlbumArtists ) )
-        changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums,
-            HomeTab.AlbumArtists, HomeTab.Genres ) )
+        changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums ) )
+        changeHomeTabsTo( setOf( HomeTab.ForYou, HomeTab.Songs, HomeTab.Albums, HomeTab.Genres ) )
     }
 
     private fun changeHomeTabsTo( homeTabs: Set<HomeTab> ) = runTest {

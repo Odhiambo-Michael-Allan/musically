@@ -61,7 +61,6 @@ class NowPlayingViewModelTest {
         musicServiceConnection.setNowPlaying( testMediaItems.first() )
         assertNotNull( nowPlayingViewModel.uiState.value.currentlyPlayingSong )
         assertEquals( id1, nowPlayingViewModel.uiState.value.currentlyPlayingSong!!.id )
-
     }
 
     @Test
