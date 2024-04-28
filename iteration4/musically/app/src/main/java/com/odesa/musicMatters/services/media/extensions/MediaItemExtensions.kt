@@ -12,6 +12,7 @@ import android.provider.MediaStore.Audio.AudioColumns
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.odesa.musicMatters.services.media.Album
+import com.odesa.musicMatters.services.media.Artist
 import com.odesa.musicMatters.services.media.Song
 import timber.log.Timber
 
@@ -191,6 +192,11 @@ fun MediaItem.toSong( artistTagSeparators: Set<String> ) = Song(
 )
 
 fun MediaItem.toAlbum() = Album(
+    name = mediaMetadata.title.toString(),
+    artworkUri = mediaMetadata.artworkUri
+)
+
+fun MediaItem.toArtist() = Artist(
     name = mediaMetadata.title.toString(),
     artworkUri = mediaMetadata.artworkUri
 )

@@ -61,6 +61,20 @@ class BrowseTreeTest {
         assertNotNull( suggestedAlbums )
         assertEquals( 5, suggestedAlbums!!.size )
     }
+
+    @Test
+    fun testArtistsAreLoadedCorrectly() {
+        val artists = browseTree[ MUSIC_MATTERS_ARTISTS_ROOT ]
+        assertNotNull( artists )
+        assertEquals( 5, artists!!.size )
+    }
+
+    @Test
+    fun testSuggestedArtistsAreLoadedCorrectly() {
+        val suggestedArtists = browseTree[ MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT ]
+        assertNotNull( suggestedArtists )
+        assertEquals( 5, suggestedArtists!!.size )
+    }
 }
 
 val calendar: Calendar = Calendar.getInstance()

@@ -3,7 +3,9 @@ package com.odesa.musicMatters.services.media.library
 import android.net.Uri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
+import com.odesa.musicMatters.services.media.artistTagSeparators
 import com.odesa.musicMatters.services.media.extensions.DATE_KEY
+import com.odesa.musicMatters.services.media.extensions.parseArtistStringIntoIndividualArtists
 import com.odesa.musicMatters.services.media.extensions.stringRep
 import timber.log.Timber
 import java.util.UUID
@@ -67,6 +69,14 @@ class BrowseTree(
         val suggestedAlbumList = mediaIdToChildren[ MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT ] ?: mutableListOf()
         addSuggestedAlbumMediaItemsTo( suggestedAlbumList )
         mediaIdToChildren[ MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT ] = suggestedAlbumList
+
+        val artistList = mediaIdToChildren[ MUSIC_MATTERS_ARTISTS_ROOT ] ?: mutableListOf()
+        addArtistMediaItemsTo( artistList )
+        mediaIdToChildren[ MUSIC_MATTERS_ARTISTS_ROOT ] = artistList
+
+        val suggestedArtistsList = mediaIdToChildren[ MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT ] ?: mutableListOf()
+        addSuggestedArtistMediaItemsTo( suggestedArtistsList )
+        mediaIdToChildren[ MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT ] = suggestedArtistsList
 
     }
 
@@ -209,6 +219,56 @@ class BrowseTree(
         }
     }
 
+    private fun addArtistMediaItemsTo( artistList: MutableList<MediaItem> ) {
+        musicSource.forEach {  mediaItem ->
+            mediaItem.parseArtistStringIntoIndividualArtists( artistTagSeparators ).forEach { artist ->
+                val artistAlreadyExistsInArtistList = findArtistIn( artistList, artist )
+                if ( !artistAlreadyExistsInArtistList ) {
+                    Timber.tag( BROWSE_TREE_TAG ).d( "CREATING ARTIST: $artist" )
+                    val artistMetadata = createArtistMetadataUsing( artist, mediaItem.mediaMetadata.artworkUri )
+                    val artistMediaItem = createArtistMediaItemUsing( artistMetadata )
+                    artistList.add( artistMediaItem )
+                }
+            }
+        }
+    }
+
+    private fun findArtistIn( artistList: MutableList<MediaItem>, artist: String ): Boolean {
+        artistList.forEach { artistMediaItem ->
+            if ( artistMediaItem.mediaMetadata.title.toString().lowercase() == artist.lowercase() )
+                return true
+        }
+        return false
+    }
+
+    private fun createArtistMetadataUsing( artistName: String, artworkUri: Uri? ) = MediaMetadata.Builder().apply {
+        setTitle( artistName )
+        setIsPlayable( false )
+        setArtworkUri( artworkUri )
+        setFolderType( MediaMetadata.FOLDER_TYPE_ARTISTS )
+    }.build()
+
+    private fun createArtistMediaItemUsing( artistMetadata: MediaMetadata ) = MediaItem.Builder().apply {
+        setMediaId( UUID.randomUUID().toString() ).setMediaMetadata( artistMetadata )
+    }.build()
+
+    private fun addSuggestedArtistMediaItemsTo( suggestedArtistList: MutableList<MediaItem> ) {
+        val artistList = mediaIdToChildren[ MUSIC_MATTERS_ARTISTS_ROOT ]!!.shuffled()
+        val artistsWithArtwork = artistList.filter { it.mediaMetadata.artworkUri != null }
+        when {
+            artistsWithArtwork.size >= 6 -> suggestedArtistList.addAll( artistsWithArtwork.subList( 0, 6 ) )
+            else -> suggestedArtistList.addAll( artistsWithArtwork.subList( 0, artistsWithArtwork.size ) )
+        }
+        if ( suggestedArtistList.size < 6 ) {
+            val artistsWithoutArtwork = artistList.filter { it.mediaMetadata.artworkUri == null }.toMutableList()
+            while ( suggestedArtistList.size < 6 && artistsWithoutArtwork.size > 0 ) {
+                val artist = artistsWithoutArtwork.removeAt( 0 )
+                suggestedArtistList.add( artist )
+            }
+
+        }
+    }
+
     /**
      * Provides access to the list of children with the 'get' operator
      * i.e.: 'browseTree[MUSIC_MATTERS_BROWSABLE_ROOT]'
@@ -221,13 +281,17 @@ class BrowseTree(
 }
 
 const val MUSIC_MATTERS_BROWSABLE_ROOT = "/"
-const val MUSIC_MATTERS_ALBUMS_ROOT = "__ALBUMS__"
+const val MUSIC_MATTERS_RECOMMENDED_ROOT = "__RECOMMENDED__"
 const val MUSIC_MATTERS_TRACKS_ROOT = "__TRACKS__"
 const val MUSIC_MATTERS_GENRES_ROOT = "__GENRES__"
 const val MUSIC_MATTERS_RECENT_SONGS_ROOT = "__RECENT_SONGS__"
+
 const val MUSIC_MATTERS_ARTISTS_ROOT = "__ARTISTS__"
-const val MUSIC_MATTERS_RECOMMENDED_ROOT = "__RECOMMENDED__"
+const val MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT = "__SUGGESTED-ARTISTS__"
+
+const val MUSIC_MATTERS_ALBUMS_ROOT = "__ALBUMS__"
 const val MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT = "__SUGGESTED-ALBUMS__"
+
 const val MEDIA_SEARCH_SUPPORTED = "android.media.browse.SEARCH_SUPPORTED"
 const val BROWSE_TREE_TAG = "BROWSE-TREE-TAG"
 

@@ -11,6 +11,7 @@ import com.odesa.musicMatters.services.media.connection.NOTHING_PLAYING
 import com.odesa.musicMatters.services.media.connection.PlaybackState
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_RECENT_SONGS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT
+import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_TRACKS_ROOT
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -61,6 +62,7 @@ class FakeMusicServiceConnection : MusicServiceConnection {
             MUSIC_MATTERS_TRACKS_ROOT -> trackList
             MUSIC_MATTERS_RECENT_SONGS_ROOT -> trackList.subList( 0, 5 )
             MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT -> albumList
+            MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT -> artistList
             else -> genreList
         }
     }
@@ -223,6 +225,47 @@ val albumList: ImmutableList<MediaItem> = ImmutableList.of (
         setMediaMetadata(
             MediaMetadata.Builder().apply {
                 setTitle( "Thriller4" )
+            }.build()
+        )
+    }.build()
+)
+
+val artistList: ImmutableList<MediaItem> = ImmutableList.of (
+    MediaItem.Builder().apply {
+        setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "artist1" )
+                setArtworkUri( Uri.EMPTY )
+            }.build()
+        )
+    }.build(),
+    MediaItem.Builder().apply {
+        setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "artist2" )
+                setArtworkUri( Uri.EMPTY )
+            }.build()
+        )
+    }.build(),
+    MediaItem.Builder().apply {
+        setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "artist3" )
+                setArtworkUri( Uri.EMPTY )
+            }.build()
+        )
+    }.build(),
+    MediaItem.Builder().apply {
+        setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "artist4" )
+            }.build()
+        )
+    }.build(),
+    MediaItem.Builder().apply {
+        setMediaMetadata(
+            MediaMetadata.Builder().apply {
+                setTitle( "artist5" )
             }.build()
         )
     }.build()

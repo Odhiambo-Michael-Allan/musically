@@ -14,11 +14,12 @@ import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.services.media.artistTagSeparators
 import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
 import com.odesa.musicMatters.services.media.extensions.toAlbum
+import com.odesa.musicMatters.services.media.extensions.toArtist
 import com.odesa.musicMatters.services.media.extensions.toSong
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_RECENT_SONGS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT
+import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_TRACKS_ROOT
-import com.odesa.musicMatters.services.media.testArtists
 import com.odesa.musicMatters.services.media.testSongs
 import com.odesa.musicMatters.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,8 +41,8 @@ class ForYouScreenViewModel(
             suggestedAlbums = emptyList(),
             isLoadingMostPlayedSongs = true,
             mostPlayedSongs = emptyList(),
-            isLoadingSuggestedArtists = false,
-            suggestedArtists = testArtists,
+            isLoadingSuggestedArtists = true,
+            suggestedArtists = emptyList(),
             isLoadingPlayHistory = false,
             songsInPlayHistory = testSongs,
             language = English,
@@ -54,6 +55,7 @@ class ForYouScreenViewModel(
         fetchRecentlyAddedSongs()
         fetchSuggestedAlbums()
         viewModelScope.launch { observeMostPlayedSongsMap() }
+        fetchSuggestedArtists()
     }
 
     private fun fetchRecentlyAddedSongs() {
@@ -101,6 +103,20 @@ class ForYouScreenViewModel(
                     mostPlayedSongs = if ( mostPlayedSongs.size > 5 ) mostPlayedSongs.subList( 0, 5 ) else mostPlayedSongs,
                     isLoadingMostPlayedSongs = false
                 )
+            }
+        }
+    }
+
+    private fun fetchSuggestedArtists() {
+        musicServiceConnection.runWhenInitialized {
+            viewModelScope.launch {
+                val suggestedArtists = musicServiceConnection.getChildren( MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT )
+                    .map { it.toArtist() }
+                _uiState.value = _uiState.value.copy(
+                    suggestedArtists = suggestedArtists,
+                    isLoadingSuggestedArtists = false
+                )
+
             }
         }
     }

@@ -49,7 +49,7 @@ fun Song.toSamplingInfoString( language: Language ): String? {
     }
 }
 
-val artistTagSeparators = setOf( "feat.", ";", "+", ",", "ft", "/", ", .", "(,", ")" )
+val artistTagSeparators = setOf( "Feat", "feat.", "Ft", "ft", ",", "&" )
 
 val testSongs = List( 100 ) {
     Song(
