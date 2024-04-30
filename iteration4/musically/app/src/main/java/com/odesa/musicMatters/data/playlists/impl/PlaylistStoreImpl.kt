@@ -2,7 +2,7 @@ package com.odesa.musicMatters.data.playlists.impl
 
 import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.playlists.PlaylistStore
-import com.odesa.musicMatters.utils.toSet
+import com.odesa.musicMatters.utils.toList
 import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
@@ -17,7 +17,7 @@ class PlaylistStoreImpl private constructor( playlistsFile: File, mostPlayedSong
 
     override fun fetchAllPlaylists(): Set<Playlist> {
         val playlistData = fetchPlaylistData()
-        val playlists = mutableSetOf( playlistData.favoritesPlaylist, playlistData.recentlyPlayedPlaylist )
+        val playlists = mutableSetOf( playlistData.favoritesPlaylist, playlistData.recentlyPlayedSongsPlaylist )
         playlists.addAll( playlistData.customPlaylists )
         val mostPlayedSongsPlaylist = fetchMostPlayedSongsPlaylist()
         playlists.add( mostPlayedSongsPlaylist )
@@ -33,7 +33,7 @@ class PlaylistStoreImpl private constructor( playlistsFile: File, mostPlayedSong
     override suspend fun addToFavorites( songId: String ) {
         val currentPlaylistData = fetchPlaylistData()
         val favoritesPlaylist = currentPlaylistData.favoritesPlaylist
-        val songIds = favoritesPlaylist.songIds.toMutableSet()
+        val songIds = favoritesPlaylist.songIds.toMutableList()
         songIds.add( songId )
         val newFavoritesPlaylist = favoritesPlaylist.copy(
             songIds = songIds
@@ -47,7 +47,7 @@ class PlaylistStoreImpl private constructor( playlistsFile: File, mostPlayedSong
     override suspend fun removeFromFavorites( songId: String ) {
         val currentPlaylistData = fetchPlaylistData()
         val favoritesPlaylist = currentPlaylistData.favoritesPlaylist
-        val songIds = favoritesPlaylist.songIds.toMutableSet()
+        val songIds = favoritesPlaylist.songIds.toMutableList()
         songIds.remove( songId )
         val newFavoritesPlaylist = favoritesPlaylist.copy(
             songIds = songIds,
@@ -58,33 +58,33 @@ class PlaylistStoreImpl private constructor( playlistsFile: File, mostPlayedSong
         playlistsFileAdapter.overwrite( newPlaylistData.toJSONObject().toString() )
     }
 
-    override fun fetchRecentSongsPlaylist() = fetchPlaylistData().recentlyPlayedPlaylist
+    override fun fetchRecentlyPlayedSongsPlaylist() = fetchPlaylistData().recentlyPlayedSongsPlaylist
 
-    override suspend fun addSongIdToRecentSongsPlaylist( songId: String ) {
+    override suspend fun addSongIdToRecentlyPlayedSongsPlaylist( songId: String ) {
         val currentPlaylistData = fetchPlaylistData()
-        val recentSongsPlaylist = currentPlaylistData.recentlyPlayedPlaylist
-        val songIds = recentSongsPlaylist.songIds.toMutableSet()
-        songIds.add( songId )
+        val recentSongsPlaylist = currentPlaylistData.recentlyPlayedSongsPlaylist
+        val songIds = recentSongsPlaylist.songIds.toMutableList()
+        songIds.remove( songId )
+        songIds.add( 0, songId )
         val newRecentSongsPlaylist = recentSongsPlaylist.copy(
             songIds = songIds
         )
         val newPlaylistData = currentPlaylistData.copy(
-            recentlyPlayedPlaylist = newRecentSongsPlaylist
+            recentlyPlayedSongsPlaylist = newRecentSongsPlaylist
         )
         playlistsFileAdapter.overwrite( newPlaylistData.toJSONObject().toString() )
-
     }
 
-    override suspend fun removeFromRecentSongsPlaylist( songId: String ) {
+    override suspend fun removeFromRecentlyPlayedSongsPlaylist(songId: String ) {
         val currentPlaylistData = fetchPlaylistData()
-        val recentSongsPlaylist = currentPlaylistData.recentlyPlayedPlaylist
-        val songIds = recentSongsPlaylist.songIds.toMutableSet()
+        val recentSongsPlaylist = currentPlaylistData.recentlyPlayedSongsPlaylist
+        val songIds = recentSongsPlaylist.songIds.toMutableList()
         songIds.remove( songId )
         val newRecentSongsPlaylist = recentSongsPlaylist.copy(
             songIds = songIds
         )
         val newPlaylistData = currentPlaylistData.copy(
-            recentlyPlayedPlaylist = newRecentSongsPlaylist
+            recentlyPlayedSongsPlaylist = newRecentSongsPlaylist
         )
         playlistsFileAdapter.overwrite( newPlaylistData.toJSONObject().toString() )
     }
@@ -98,7 +98,7 @@ class PlaylistStoreImpl private constructor( playlistsFile: File, mostPlayedSong
     private fun createMostPlayedSongsPlaylist() = Playlist(
         id = UUID.randomUUID().toString(),
         title = "Most Played Songs",
-        songIds = emptySet(),
+        songIds = emptyList(),
     )
 
     private fun loadMostPlayedSongsPlaylistFrom( fileContents: String ): Playlist {
@@ -116,7 +116,7 @@ class PlaylistStoreImpl private constructor( playlistsFile: File, mostPlayedSong
         return Playlist(
             id = UUID.randomUUID().toString() + PlaylistData.MOST_PLAYED_SONGS_PLAYLIST,
             title = "Most Played Songs",
-            songIds = songIdToPlayCountMap.toList().sortedByDescending { it.second }.toMap().keys
+            songIds = songIdToPlayCountMap.toList().sortedByDescending { it.second }.toMap().keys.toList()
         )
     }
 
@@ -164,7 +164,7 @@ class PlaylistStoreImpl private constructor( playlistsFile: File, mostPlayedSong
 
     override suspend fun saveCustomPlaylist( playlist: Playlist ) {
         val currentPlaylistData = fetchPlaylistData()
-        val currentPlaylists = currentPlaylistData.customPlaylists.toMutableSet()
+        val currentPlaylists = currentPlaylistData.customPlaylists.toMutableList()
         currentPlaylists.add( playlist )
         playlistsFileAdapter.overwrite(
             currentPlaylistData.copy(
@@ -173,9 +173,9 @@ class PlaylistStoreImpl private constructor( playlistsFile: File, mostPlayedSong
         )
     }
 
-    override suspend fun deleteCustomPlaylist(playlist: Playlist ) {
+    override suspend fun deleteCustomPlaylist( playlist: Playlist ) {
         val currentPlaylistData = fetchPlaylistData()
-        val currentPlaylists = currentPlaylistData.customPlaylists.toMutableSet()
+        val currentPlaylists = currentPlaylistData.customPlaylists.toMutableList()
         currentPlaylists.removeIf {
             it.id == playlist.id
         }
@@ -189,7 +189,7 @@ class PlaylistStoreImpl private constructor( playlistsFile: File, mostPlayedSong
     override suspend fun addSongToCustomPlaylist( songId: String, playlist: Playlist ) {
         val customPlaylists = fetchPlaylistData().customPlaylists
         customPlaylists.find { it.id == playlist.id }?.let {
-            val currentSongIdsInPlaylist = it.songIds.toMutableSet()
+            val currentSongIdsInPlaylist = it.songIds.toMutableList()
             currentSongIdsInPlaylist.add( songId )
             val modifiedPlaylist = it.copy(
                 songIds = currentSongIdsInPlaylist
@@ -239,15 +239,15 @@ class PlaylistStoreImpl private constructor( playlistsFile: File, mostPlayedSong
 }
 
 data class PlaylistData(
-    val customPlaylists: Set<Playlist>,
+    val customPlaylists: List<Playlist>,
     val favoritesPlaylist: Playlist,
-    val recentlyPlayedPlaylist: Playlist
+    val recentlyPlayedSongsPlaylist: Playlist,
 ) {
 
     fun toJSONObject() = JSONObject().apply {
         put( CUSTOM_PLAYLISTS, JSONArray( customPlaylists.map { it.toJSONObject() } ) )
         put( FAVORITES_PLAYLIST, favoritesPlaylist.toJSONObject() )
-        put( RECENTLY_PLAYED_PLAYLIST, recentlyPlayedPlaylist.toJSONObject() )
+        put( RECENTLY_PLAYED_PLAYLIST, recentlyPlayedSongsPlaylist.toJSONObject() )
     }
 
     companion object {
@@ -260,9 +260,9 @@ data class PlaylistData(
             return when {
                 content.isEmpty() -> {
                     PlaylistData(
-                        customPlaylists = emptySet(),
-                        favoritesPlaylist = createFavoritesPlaylist(),
-                        recentlyPlayedPlaylist = createRecentlyPlayedPlaylist()
+                        customPlaylists = emptyList(),
+                        favoritesPlaylist = createFavoriteSongsPlaylist(),
+                        recentlyPlayedSongsPlaylist = createRecentlyPlayedSongsPlaylist()
                     )
                 }
                 else -> {
@@ -270,32 +270,32 @@ data class PlaylistData(
                     PlaylistData(
                         customPlaylists = when {
                             jsonContent.has( CUSTOM_PLAYLISTS ) -> jsonContent.getJSONArray( CUSTOM_PLAYLISTS )
-                                .toSet { Playlist.fromJSONObject( getJSONObject( it ) ) }
-                            else -> emptySet()
+                                .toList { Playlist.fromJSONObject( getJSONObject( it ) ) }
+                            else -> emptyList()
                         },
                         favoritesPlaylist = when {
                             jsonContent.has( FAVORITES_PLAYLIST ) -> Playlist.fromJSONObject( jsonContent.getJSONObject( FAVORITES_PLAYLIST ) )
-                            else -> createFavoritesPlaylist()
+                            else -> createFavoriteSongsPlaylist()
                         },
-                        recentlyPlayedPlaylist = when {
+                        recentlyPlayedSongsPlaylist = when {
                             jsonContent.has( RECENTLY_PLAYED_PLAYLIST ) -> Playlist.fromJSONObject( jsonContent.getJSONObject( RECENTLY_PLAYED_PLAYLIST ) )
-                            else -> createRecentlyPlayedPlaylist()
+                            else -> createRecentlyPlayedSongsPlaylist()
                         }
                     )
                 }
             }
         }
 
-        private fun createFavoritesPlaylist() = Playlist(
+        private fun createFavoriteSongsPlaylist() = Playlist(
             id = UUID.randomUUID().toString() + FAVORITES_PLAYLIST,
             title = "Favorites",
-            songIds = emptySet(),
+            songIds = emptyList(),
         )
 
-        private fun createRecentlyPlayedPlaylist() = Playlist(
+        private fun createRecentlyPlayedSongsPlaylist() = Playlist(
             id = UUID.randomUUID().toString() + RECENTLY_PLAYED_PLAYLIST,
             title = "Recently Played Songs",
-            songIds = emptySet(),
+            songIds = emptyList(),
         )
     }
 }
@@ -317,4 +317,4 @@ class FileAdapter( private val file: File ) {
     }
 }
 
-val PLAYLIST_STORE_TAG = "PLAYLIST-STORE"
+const val PLAYLIST_STORE_TAG = "PLAYLIST-STORE"

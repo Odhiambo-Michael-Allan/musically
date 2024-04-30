@@ -12,25 +12,25 @@ class FakePlaylistRepository : PlaylistRepository {
         Playlist(
             id = UUID.randomUUID().toString(),
             title = "Favorites",
-            songIds = emptySet(),
+            songIds = emptyList(),
         )
     )
     override val favoritesPlaylist = _favoritePlaylist.asStateFlow()
 
-    private val _recentSongsPlaylist = MutableStateFlow(
+    private val _recentlyPlayedSongsPlaylist = MutableStateFlow(
         Playlist(
             id = UUID.randomUUID().toString(),
             title = "Recently Played Songs",
-            songIds = emptySet()
+            songIds = emptyList()
         )
     )
-    override val recentSongsPlaylist = _recentSongsPlaylist.asStateFlow()
+    override val recentlyPlayedSongsPlaylist = _recentlyPlayedSongsPlaylist.asStateFlow()
 
     private val _mostPlayedSongsPlaylist = MutableStateFlow(
         Playlist(
             id = UUID.randomUUID().toString(),
             title = "Most Played Songs",
-            songIds = emptySet()
+            songIds = emptyList()
         )
     )
     override val mostPlayedSongsPlaylist = _mostPlayedSongsPlaylist.asStateFlow()
@@ -46,7 +46,7 @@ class FakePlaylistRepository : PlaylistRepository {
     }
 
     override suspend fun addToFavorites( songId: String ) {
-        val currentFavoritesIds = _favoritePlaylist.value.songIds.toMutableSet()
+        val currentFavoritesIds = _favoritePlaylist.value.songIds.toMutableList()
         currentFavoritesIds.add( songId )
         _favoritePlaylist.value = _favoritePlaylist.value.copy(
             songIds = currentFavoritesIds
@@ -54,31 +54,32 @@ class FakePlaylistRepository : PlaylistRepository {
     }
 
     override suspend fun removeFromFavorites( songId: String ) {
-        val currentFavoritesIds = _favoritePlaylist.value.songIds.toMutableSet()
+        val currentFavoritesIds = _favoritePlaylist.value.songIds.toMutableList()
         currentFavoritesIds.remove( songId )
         _favoritePlaylist.value = _favoritePlaylist.value.copy(
             songIds = currentFavoritesIds
         )
     }
 
-    override suspend fun addToRecentSongsPlaylist( songId: String ) {
-        val currentValue = _recentSongsPlaylist.value.songIds.toMutableSet()
-        currentValue.add( songId )
-        _recentSongsPlaylist.value = _recentSongsPlaylist.value.copy(
-            songIds = currentValue
+    override suspend fun addToRecentlyPlayedSongsPlaylist( songId: String ) {
+        val currentSongIds = _recentlyPlayedSongsPlaylist.value.songIds.toMutableList()
+        currentSongIds.remove( songId )
+        currentSongIds.add( 0, songId )
+        _recentlyPlayedSongsPlaylist.value = _recentlyPlayedSongsPlaylist.value.copy(
+            songIds = currentSongIds
         )
     }
 
-    override suspend fun removeFromRecentSongsPlaylist( songId: String ) {
-        val currentValue = _recentSongsPlaylist.value.songIds.toMutableSet()
+    override suspend fun removeFromRecentlyPlayedSongsPlaylist(songId: String ) {
+        val currentValue = _recentlyPlayedSongsPlaylist.value.songIds.toMutableList()
         currentValue.remove( songId )
-        _recentSongsPlaylist.value = _recentSongsPlaylist.value.copy(
+        _recentlyPlayedSongsPlaylist.value = _recentlyPlayedSongsPlaylist.value.copy(
             songIds = currentValue
         )
     }
 
     override suspend fun addToMostPlayedPlaylist( songId: String ) {
-        val currentValue = _mostPlayedSongsPlaylist.value.songIds.toMutableSet()
+        val currentValue = _mostPlayedSongsPlaylist.value.songIds.toMutableList()
         currentValue.add( songId )
         val currentMap = _mostPlayedSongsMap.value
         if ( currentMap.containsKey( songId ) ) currentMap[ songId ] =
@@ -90,7 +91,7 @@ class FakePlaylistRepository : PlaylistRepository {
     }
 
     override suspend fun removeFromMostPlayedPlaylist( songId: String ) {
-        val currentValue = _mostPlayedSongsPlaylist.value.songIds.toMutableSet()
+        val currentValue = _mostPlayedSongsPlaylist.value.songIds.toMutableList()
         currentValue.remove( songId )
         val currentMap = _mostPlayedSongsMap.value
         currentMap.remove( songId )

@@ -196,7 +196,7 @@ val emptyQueueScreenUiState = QueueScreenUiState(
     currentlyPlayingSongId = testSongs.first().id,
     currentlyPlayingSongIndex = 0,
     themeMode = SettingsDefaults.themeMode,
-    favoriteSongIds = emptySet(),
+    favoriteSongIds = emptyList(),
     isLoading = false
 )
 

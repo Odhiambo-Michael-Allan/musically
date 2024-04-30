@@ -26,12 +26,12 @@ class GenreScreenViewModel(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
-        GenreScreenUiState(
+        GenreScreenUistate(
             language = settingsRepository.language.value,
             themeMode = settingsRepository.themeMode.value,
             songs = emptyList(),
             currentlyPlayingSongId = musicServiceConnection.nowPlaying.value.mediaId,
-            favoriteSongIds = emptySet(),
+            favoriteSongIds = emptyList(),
             isLoading = true
         )
     )
@@ -126,20 +126,20 @@ class GenreScreenViewModelFactory(
         ) as T )
 }
 
-data class GenreScreenUiState(
+data class GenreScreenUistate(
     val language: Language,
     val themeMode: ThemeMode,
     val songs: List<Song>,
     val currentlyPlayingSongId: String,
-    val favoriteSongIds: Set<String>,
+    val favoriteSongIds: List<String>,
     val isLoading: Boolean
 )
 
-val testGenreScreenUiState = GenreScreenUiState(
+val testGenreScreenUiState = GenreScreenUistate(
     language = SettingsDefaults.language,
     themeMode = SettingsDefaults.themeMode,
     songs = testSongs,
     currentlyPlayingSongId = testSongs.first().id,
-    favoriteSongIds = emptySet(),
+    favoriteSongIds = emptyList(),
     isLoading = false
 )

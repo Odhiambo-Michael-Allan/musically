@@ -1,14 +1,13 @@
 package com.odesa.musicMatters.data.playlists
 
-import android.webkit.MimeTypeMap
-import com.odesa.musicMatters.utils.toSet
+import com.odesa.musicMatters.utils.toList
 import org.json.JSONArray
 import org.json.JSONObject
 
 data class Playlist(
     val id: String,
     val title: String,
-    val songIds: Set<String>
+    val songIds: List<String>
 ) {
 
     fun toJSONObject(): JSONObject {
@@ -28,41 +27,10 @@ data class Playlist(
         fun fromJSONObject( serialized: JSONObject ) = Playlist(
             id = serialized.getString( PLAYLIST_ID_KEY ),
             title = serialized.getString( PLAYLIST_TITLE_KEY ),
-            songIds = serialized.getJSONArray( PLAYLIST_SONGS_KEY ).toSet { getString( it ) },
+            songIds = serialized.getJSONArray( PLAYLIST_SONGS_KEY ).toList { getString( it ) },
         )
 
     }
 }
 
 
-data class M3UEntry( val index: Int, val info: String, val path: String )
-
-data class M3U( val entries: List<M3UEntry> ) {
-    fun stringify(): String {
-        val buffer = StringBuilder()
-        buffer.append( "#EXTM3U" )
-        entries.forEach {
-            buffer.append( "\\n\\n\\n#EXTINF:${it.index},${it.info}\\n${it.path}" )
-        }
-        buffer.append( "\n\n" )
-        return buffer.toString()
-    }
-
-    companion object {
-        private val entryRegex = Regex( """#EXTINF:(\d+),(.+?)\n(.+)""" )
-        val mimeType = MimeTypeMap.getSingleton()
-            .getMimeTypeFromExtension( "m3u" )
-            ?: "application/x-mpegURL"
-
-        fun parse( content: String ): M3U {
-            val entries = entryRegex.findAll( content ).map {
-                M3UEntry(
-                    index = it.groupValues[1].toInt(),
-                    info = it.groupValues[2],
-                    path = it.groupValues[3],
-                )
-            }
-            return M3U( entries.toList() )
-        }
-    }
-}

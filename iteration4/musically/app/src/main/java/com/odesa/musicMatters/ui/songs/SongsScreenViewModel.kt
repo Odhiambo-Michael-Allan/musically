@@ -31,7 +31,7 @@ class SongsScreenViewModel(
             themeMode = settingsRepository.themeMode.value,
             songs = emptyList(),
             currentlyPlayingSongId = musicServiceConnection.nowPlaying.value.mediaId,
-            favoriteSongIds = emptySet(),
+            favoriteSongIds = emptyList(),
             isLoading = true
         )
     )
@@ -118,7 +118,7 @@ data class SongsScreenUiState(
     val themeMode: ThemeMode,
     val songs: List<Song>,
     val currentlyPlayingSongId: String,
-    val favoriteSongIds: Set<String>,
+    val favoriteSongIds: List<String>,
     val isLoading: Boolean
 )
 

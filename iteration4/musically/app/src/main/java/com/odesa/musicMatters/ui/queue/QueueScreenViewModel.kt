@@ -31,7 +31,7 @@ class QueueScreenViewModel(
             currentlyPlayingSongId = musicServiceConnection.nowPlaying.value.mediaId,
             currentlyPlayingSongIndex = musicServiceConnection.currentlyPlayingMediaItemIndex.value,
             themeMode = settingsRepository.themeMode.value,
-            favoriteSongIds = emptySet(),
+            favoriteSongIds = emptyList(),
             isLoading = true
         )
     )
@@ -107,7 +107,7 @@ class QueueScreenViewModel(
         val playlist = Playlist(
             id = UUID.randomUUID().toString(),
             title = playlistName,
-            songIds = uiState.value.songsInQueue.map { it.id }.toSet(),
+            songIds = uiState.value.songsInQueue.map { it.id },
         )
         viewModelScope.launch {
             playlistRepository.savePlaylist( playlist )
@@ -133,7 +133,7 @@ data class QueueScreenUiState(
     val currentlyPlayingSongIndex: Int,
     val language: Language,
     val themeMode: ThemeMode,
-    val favoriteSongIds: Set<String>,
+    val favoriteSongIds: List<String>,
     val isLoading: Boolean
 )
 

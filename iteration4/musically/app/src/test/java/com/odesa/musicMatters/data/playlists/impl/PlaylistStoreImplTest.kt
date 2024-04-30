@@ -48,21 +48,21 @@ class PlaylistStoreImplTest {
     }
 
     @Test
-    fun testFetchFavoritesPlaylist() = runTest {
+    fun testFetchFavoriteSongsPlaylist() = runTest {
         val favoritesPlaylist = playlistStore.fetchFavoritesPlaylist()
         assertNotNull( favoritesPlaylist )
         assertEquals( 0, favoritesPlaylist.songIds.size )
     }
 
     @Test
-    fun testAddToFavorites() = runTest {
+    fun testAddToFavoriteSongsPlaylist() = runTest {
         playlistStore.addToFavorites( UUID.randomUUID().toString() )
         assertTrue( FileAdapter( playlistFile ).read().isNotEmpty() )
         assertEquals( 1, playlistStore.fetchFavoritesPlaylist().songIds.size )
     }
 
     @Test
-    fun testRemoveFromFavorites() = runTest {
+    fun testRemoveFromFavoriteSongsPlaylist() = runTest {
         ( 0..5 ).forEach { _ ->
             playlistStore.addToFavorites( UUID.randomUUID().toString() )
         }
@@ -73,29 +73,32 @@ class PlaylistStoreImplTest {
     }
 
     @Test
-    fun testFetchRecentSongsPlaylist() = runTest {
-        val recentSongsPlaylist = playlistStore.fetchRecentSongsPlaylist()
+    fun testFetchRecentlyPlayedSongsPlaylist() = runTest {
+        val recentSongsPlaylist = playlistStore.fetchRecentlyPlayedSongsPlaylist()
         assertNotNull( recentSongsPlaylist )
         assertEquals( 0, recentSongsPlaylist.songIds.size )
     }
 
     @Test
-    fun testAddToRecentSongsPlaylist() = runTest {
+    fun testAddToRecentlyPlayedSongsPlaylist() = runTest {
         testSongs.forEach {
-            playlistStore.addSongIdToRecentSongsPlaylist( it.id )
+            playlistStore.addSongIdToRecentlyPlayedSongsPlaylist( it.id )
         }
-        val recentSongsPlaylist = playlistStore.fetchRecentSongsPlaylist()
+        val recentSongsPlaylist = playlistStore.fetchRecentlyPlayedSongsPlaylist()
         assertEquals( testSongs.size, recentSongsPlaylist.songIds.size )
+        playlistStore.addSongIdToRecentlyPlayedSongsPlaylist( testSongs.last().id )
+        assertEquals( testSongs.size, playlistStore.fetchRecentlyPlayedSongsPlaylist().songIds.size )
+        assertEquals( testSongs.last().id, playlistStore.fetchRecentlyPlayedSongsPlaylist().songIds.first() )
     }
 
     @Test
-    fun testRemoveFromRecentSongsPlaylist() = runTest {
+    fun testRemoveFromRecentlyPlayedSongsPlaylist() = runTest {
         testSongs.forEach {
-            playlistStore.addSongIdToRecentSongsPlaylist( it.id )
+            playlistStore.addSongIdToRecentlyPlayedSongsPlaylist( it.id )
         }
-        playlistStore.removeFromRecentSongsPlaylist( testSongs.first().id )
-        playlistStore.removeFromRecentSongsPlaylist( testSongs[3].id )
-        val recentSongsPlaylist = playlistStore.fetchRecentSongsPlaylist()
+        playlistStore.removeFromRecentlyPlayedSongsPlaylist( testSongs.first().id )
+        playlistStore.removeFromRecentlyPlayedSongsPlaylist( testSongs[3].id )
+        val recentSongsPlaylist = playlistStore.fetchRecentlyPlayedSongsPlaylist()
         assertEquals( testSongs.size - 2, recentSongsPlaylist.songIds.size )
     }
 
@@ -197,6 +200,6 @@ val customPlaylists = List( 20 ) {
     Playlist(
         id = UUID.randomUUID().toString() + "$it",
         title = "Playlist-$it",
-        songIds = emptySet()
+        songIds = emptyList()
     )
 }.toMutableList()

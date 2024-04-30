@@ -3,22 +3,25 @@ package com.odesa.musicMatters.services.media.extensions
 import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
+
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
+
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.MediaStore.Audio.AudioColumns
+
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.odesa.musicMatters.services.media.Album
+
 import com.odesa.musicMatters.services.media.Artist
 import com.odesa.musicMatters.services.media.Song
-import timber.log.Timber
 
 fun MediaItem.Builder.from( cursor: Cursor, context: Context ): MediaItem.Builder {
     val mediaUri = getMediaUriFrom( cursor )
-    Timber.tag( TAG ).d( "Media Uri: $mediaUri" )
+//    Timber.tag( TAG ).d( "Media Uri: $mediaUri" )
     setMediaId( mediaUri.toString() )
     setUri( mediaUri )
     setMediaMetadata(
@@ -35,57 +38,57 @@ fun MediaMetadata.Builder.from( cursor: Cursor, context: Context, mediaUri: Uri 
         ?: mediaMetadataRetriever.runCatching {
             extractMetadata( MediaMetadataRetriever.METADATA_KEY_TITLE )
         }.getOrNull() ?: UNKNOWN_STRING_VALUE
-    Timber.tag( TAG ).d( "Title: $title" )
+//    Timber.tag( TAG ).d( "Title: $title" )
 
     val trackNumber = cursor.getNullableIntFrom( AudioColumns.TRACK ) ?: UNKNOWN_INT_VALUE
-    Timber.tag( TAG ).d( "Track Number: $trackNumber" )
+//    Timber.tag( TAG ).d( "Track Number: $trackNumber" )
 
     val year = cursor.getNullableIntFrom( AudioColumns.YEAR )
         ?: mediaMetadataRetriever.runCatching {
             extractMetadata( MediaMetadataRetriever.METADATA_KEY_YEAR )?.toInt()
         }.getOrNull() ?: UNKNOWN_INT_VALUE
-    Timber.tag( TAG ).d( "Year: $year" )
+//    Timber.tag( TAG ).d( "Year: $year" )
 
     val duration = cursor.getNullableLongFrom( AudioColumns.DURATION )
         ?: mediaMetadataRetriever.runCatching {
             extractMetadata( MediaMetadataRetriever.METADATA_KEY_DURATION )?.toLong()
         }.getOrNull() ?: UNKNOWN_LONG_VALUE
-    Timber.tag( TAG ).d( "Duration: $duration" )
+//    Timber.tag( TAG ).d( "Duration: $duration" )
 
     val albumTitle = cursor.getNullableStringFrom( AudioColumns.ALBUM )
         ?: mediaMetadataRetriever.runCatching {
             extractMetadata( MediaMetadataRetriever.METADATA_KEY_ALBUM )
         }.getOrNull() ?: UNKNOWN_STRING_VALUE
-    Timber.tag( TAG ).d( "Album: $albumTitle" )
+//    Timber.tag( TAG ).d( "Album: $albumTitle" )
 
     val artist = cursor.getNullableStringFrom( AudioColumns.ARTIST )
         ?: mediaMetadataRetriever.runCatching {
             extractMetadata( MediaMetadataRetriever.METADATA_KEY_ARTIST )
         }.getOrNull() ?: UNKNOWN_STRING_VALUE
-    Timber.tag( TAG ).d( "Artist: $artist" )
+//    Timber.tag( TAG ).d( "Artist: $artist" )
 
     val albumArtist = cursor.getNullableStringFrom( AudioColumns.ALBUM_ARTIST )
         ?: mediaMetadataRetriever.runCatching {
             extractMetadata( MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST )
         }.getOrNull() ?: UNKNOWN_STRING_VALUE
-    Timber.tag( TAG ).d( "Album Artist: $albumArtist" )
+//    Timber.tag( TAG ).d( "Album Artist: $albumArtist" )
 
     val composer = cursor.getNullableStringFrom( AudioColumns.COMPOSER )
         ?: mediaMetadataRetriever.runCatching {
             extractMetadata( MediaMetadataRetriever.METADATA_KEY_COMPOSER )
         }.getOrNull() ?: UNKNOWN_STRING_VALUE
-    Timber.tag( TAG ).d( "Composer: $composer" )
+//    Timber.tag( TAG ).d( "Composer: $composer" )
 
     val dateModified = cursor.getNullableLongFrom( AudioColumns.DATE_MODIFIED )
         ?: mediaMetadataRetriever.runCatching {
             extractMetadata( MediaMetadataRetriever.METADATA_KEY_DATE )?.toLong()
         }.getOrNull() ?: UNKNOWN_LONG_VALUE
-    Timber.tag( TAG ).d( "Date Modifier: $dateModified" )
+//    Timber.tag( TAG ).d( "Date Modifier: $dateModified" )
 
     val size = cursor.getNullableLongFrom( AudioColumns.SIZE ) ?: UNKNOWN_LONG_VALUE
-    Timber.tag( TAG ).d( "Size: $size" )
+//    Timber.tag( TAG ).d( "Size: $size" )
     val path = cursor.getNullableStringFrom( AudioColumns.DATA ) ?: UNKNOWN_STRING_VALUE
-    Timber.tag( TAG ).d( "Path: $path" )
+//    Timber.tag( TAG ).d( "Path: $path" )
 
     var _genre: String? = null
     if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ) {
@@ -95,33 +98,33 @@ fun MediaMetadata.Builder.from( cursor: Cursor, context: Context, mediaUri: Uri 
         extractMetadata( MediaMetadataRetriever.METADATA_KEY_GENRE )
     }.getOrNull() ?: UNKNOWN_STRING_VALUE
     val finalGenre = genre.split( *genreTagSeparators.toTypedArray() ).first()
-    Timber.tag( TAG ).d( "Genre: $finalGenre" )
+//    Timber.tag( TAG ).d( "Genre: $finalGenre" )
 
     val bitrate = mediaMetadataRetriever.runCatching {
         extractMetadata( MediaMetadataRetriever.METADATA_KEY_BITRATE )?.toLong()
     }.getOrNull() ?: UNKNOWN_LONG_VALUE
-    Timber.tag( TAG ).d( "Bitrate: $bitrate" )
+//    Timber.tag( TAG ).d( "Bitrate: $bitrate" )
 
     val bitsPerSample = if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ) {
         mediaMetadataRetriever.runCatching {
             extractMetadata( MediaMetadataRetriever.METADATA_KEY_BITS_PER_SAMPLE )?.toLong()
         }.getOrNull() ?: UNKNOWN_LONG_VALUE
     } else UNKNOWN_LONG_VALUE
-    Timber.tag( TAG ).d( "Bits Per Sample: $bitsPerSample" )
+//    Timber.tag( TAG ).d( "Bits Per Sample: $bitsPerSample" )
 
     val codec = mediaMetadataRetriever.runCatching {
         extractMetadata( MediaMetadataRetriever.METADATA_KEY_MIMETYPE )
     }.getOrNull() ?: UNKNOWN_STRING_VALUE
-    Timber.tag( TAG ).d( "Codec: $codec" )
+//    Timber.tag( TAG ).d( "Codec: $codec" )
 
     val samplingRate = if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ) {
         mediaMetadataRetriever.runCatching {
             extractMetadata( MediaMetadataRetriever.METADATA_KEY_SAMPLERATE )?.toLong()
         }.getOrNull() ?: UNKNOWN_LONG_VALUE
     } else UNKNOWN_LONG_VALUE
-    Timber.tag( TAG ).d( "Sampling Rate: $samplingRate" )
+//    Timber.tag( TAG ).d( "Sampling Rate: $samplingRate" )
 
-    Timber.tag( TAG ).d( "------------------------------------------------------------------" )
+//    Timber.tag( TAG ).d( "------------------------------------------------------------------" )
 
     mediaMetadataRetriever.release()
 

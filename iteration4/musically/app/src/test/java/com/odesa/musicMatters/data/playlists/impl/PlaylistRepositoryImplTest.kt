@@ -1,5 +1,6 @@
 package com.odesa.musicMatters.data.playlists.impl
 
+import com.odesa.musicMatters.MainCoroutineRule
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.playlists.PlaylistStore
 import com.odesa.musicMatters.fakes.FakePlaylistStore
@@ -9,6 +10,7 @@ import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -16,6 +18,9 @@ import java.util.UUID
 
 @RunWith( RobolectricTestRunner::class )
 class PlaylistRepositoryImplTest {
+
+    @get:Rule
+    val mainCoroutineRule = MainCoroutineRule()
 
     private lateinit var playlistStore: PlaylistStore
     private lateinit var playlistRepository: PlaylistRepository
@@ -69,21 +74,24 @@ class PlaylistRepositoryImplTest {
     }
 
     @Test
-    fun testAddToRecentSongsPlaylist() = runTest {
+    fun testAddToRecentlyPlayedSongsPlaylist() = runTest {
         songIdsToBeAdded.forEach {
-            playlistRepository.addToRecentSongsPlaylist( it )
+            playlistRepository.addToRecentlyPlayedSongsPlaylist( it )
         }
-        assertEquals( songIdsToBeAdded.size, playlistRepository.recentSongsPlaylist.value.songIds.size )
+        assertEquals( songIdsToBeAdded.size, playlistRepository.recentlyPlayedSongsPlaylist.value.songIds.size )
+        playlistRepository.addToRecentlyPlayedSongsPlaylist( songIdsToBeAdded.last() )
+        assertEquals( songIdsToBeAdded.size, playlistRepository.recentlyPlayedSongsPlaylist.value.songIds.size )
+        assertEquals( songIdsToBeAdded.last(), playlistRepository.recentlyPlayedSongsPlaylist.value.songIds.first() )
     }
 
     @Test
-    fun testRemoveFromRecentSongsPlaylist() = runTest {
+    fun testRemoveFromRecentlyPlayedSongsPlaylist() = runTest {
         songIdsToBeAdded.forEach {
-            playlistRepository.addToRecentSongsPlaylist( it )
+            playlistRepository.addToRecentlyPlayedSongsPlaylist( it )
         }
-        playlistRepository.removeFromRecentSongsPlaylist( songIdsToBeAdded.first() )
-        playlistRepository.removeFromRecentSongsPlaylist( songIdsToBeAdded.last() )
-        assertEquals( songIdsToBeAdded.size - 2, playlistRepository.recentSongsPlaylist.value.songIds.size )
+        playlistRepository.removeFromRecentlyPlayedSongsPlaylist( songIdsToBeAdded.first() )
+        playlistRepository.removeFromRecentlyPlayedSongsPlaylist( songIdsToBeAdded.last() )
+        assertEquals( songIdsToBeAdded.size - 2, playlistRepository.recentlyPlayedSongsPlaylist.value.songIds.size )
     }
 
     @Test

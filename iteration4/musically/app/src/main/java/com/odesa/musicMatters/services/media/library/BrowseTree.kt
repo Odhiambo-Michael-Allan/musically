@@ -6,8 +6,6 @@ import androidx.media3.common.MediaMetadata
 import com.odesa.musicMatters.services.media.artistTagSeparators
 import com.odesa.musicMatters.services.media.extensions.DATE_KEY
 import com.odesa.musicMatters.services.media.extensions.parseArtistStringIntoIndividualArtists
-import com.odesa.musicMatters.services.media.extensions.stringRep
-import timber.log.Timber
 import java.util.UUID
 
 /**
@@ -128,7 +126,7 @@ class BrowseTree(
     private fun addTrackMediaItemsTo( trackList: MutableList<MediaItem> ) {
         musicSource.forEach { mediaItem ->
             mediaIdToMediaItem[ mediaItem.mediaId ] = mediaItem
-            Timber.tag( BROWSE_TREE_TAG ).d( mediaItem.stringRep() )
+//            Timber.tag( BROWSE_TREE_TAG ).d( mediaItem.stringRep() )
             trackList.add( mediaItem )
         }
     }
@@ -221,10 +219,11 @@ class BrowseTree(
 
     private fun addArtistMediaItemsTo( artistList: MutableList<MediaItem> ) {
         musicSource.forEach {  mediaItem ->
-            mediaItem.parseArtistStringIntoIndividualArtists( artistTagSeparators ).forEach { artist ->
+            val splitArtists = mediaItem.parseArtistStringIntoIndividualArtists( artistTagSeparators ).toMutableSet()
+            if ( splitArtists.isEmpty() ) splitArtists.add( mediaItem.mediaMetadata.artist?.toString() ?: "" )
+            splitArtists.forEach { artist ->
                 val artistAlreadyExistsInArtistList = findArtistIn( artistList, artist )
                 if ( !artistAlreadyExistsInArtistList ) {
-                    Timber.tag( BROWSE_TREE_TAG ).d( "CREATING ARTIST: $artist" )
                     val artistMetadata = createArtistMetadataUsing( artist, mediaItem.mediaMetadata.artworkUri )
                     val artistMediaItem = createArtistMediaItemUsing( artistMetadata )
                     artistList.add( artistMediaItem )

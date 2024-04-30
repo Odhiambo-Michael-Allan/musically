@@ -20,8 +20,8 @@ class PlaylistRepositoryImpl( private val playlistStore: PlaylistStore ) : Playl
     private val _favoritesPlaylist = MutableStateFlow( playlistStore.fetchFavoritesPlaylist() )
     override val favoritesPlaylist = _favoritesPlaylist.asStateFlow()
 
-    private val _recentSongsPlaylist = MutableStateFlow( playlistStore.fetchRecentSongsPlaylist() )
-    override val recentSongsPlaylist = _recentSongsPlaylist.asStateFlow()
+    private val _recentlyPlayedSongsPlaylist = MutableStateFlow( playlistStore.fetchRecentlyPlayedSongsPlaylist() )
+    override val recentlyPlayedSongsPlaylist = _recentlyPlayedSongsPlaylist.asStateFlow()
 
     private val _mostPlayedSongsPlaylist = MutableStateFlow( playlistStore.fetchMostPlayedSongsPlaylist() )
     override val mostPlayedSongsPlaylist = _mostPlayedSongsPlaylist.asStateFlow()
@@ -50,17 +50,24 @@ class PlaylistRepositoryImpl( private val playlistStore: PlaylistStore ) : Playl
         }
     }
 
-    override suspend fun addToRecentSongsPlaylist( songId: String ) {
+    override suspend fun addToRecentlyPlayedSongsPlaylist( songId: String ) {
         withContext( Dispatchers.IO ) {
-            playlistStore.addSongIdToRecentSongsPlaylist( songId )
-            _recentSongsPlaylist.value = playlistStore.fetchRecentSongsPlaylist()
+            Timber.tag( PLAYLIST_REPOSITORY_TAG ).d( "ADDING SONG TO RECENTLY PLAYED PLAYLIST. ID: $songId" )
+            playlistStore.addSongIdToRecentlyPlayedSongsPlaylist( songId )
+            val newSongIds = playlistStore.fetchRecentlyPlayedSongsPlaylist().songIds
+            _recentlyPlayedSongsPlaylist.value = _recentlyPlayedSongsPlaylist.value.copy(
+                songIds = newSongIds
+            )
         }
     }
 
-    override suspend fun removeFromRecentSongsPlaylist( songId: String ) {
+    override suspend fun removeFromRecentlyPlayedSongsPlaylist( songId: String ) {
         withContext( Dispatchers.IO ) {
-            playlistStore.removeFromRecentSongsPlaylist( songId )
-            _recentSongsPlaylist.value = playlistStore.fetchRecentSongsPlaylist()
+            playlistStore.removeFromRecentlyPlayedSongsPlaylist( songId )
+            val newSongIds = playlistStore.fetchRecentlyPlayedSongsPlaylist().songIds
+            _recentlyPlayedSongsPlaylist.value = _recentlyPlayedSongsPlaylist.value.copy(
+                songIds = newSongIds
+            )
         }
     }
 
@@ -82,13 +89,17 @@ class PlaylistRepositoryImpl( private val playlistStore: PlaylistStore ) : Playl
     }
 
     override suspend fun savePlaylist( playlist: Playlist ) {
-        playlistStore.saveCustomPlaylist( playlist )
-        _playlists.value = playlistStore.fetchAllPlaylists()
+        withContext( Dispatchers.IO ) {
+            playlistStore.saveCustomPlaylist( playlist )
+            _playlists.value = playlistStore.fetchAllPlaylists()
+        }
     }
 
     override suspend fun deletePlaylist( playlist: Playlist ) {
-        playlistStore.deleteCustomPlaylist( playlist )
-        _playlists.value = playlistStore.fetchAllPlaylists()
+        withContext( Dispatchers.IO ) {
+            playlistStore.deleteCustomPlaylist( playlist )
+            _playlists.value = playlistStore.fetchAllPlaylists()
+        }
     }
 
     companion object {

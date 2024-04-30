@@ -116,6 +116,6 @@ val uiState = SongsScreenUiState(
     songs = testSongs,
     themeMode = ThemeMode.LIGHT,
     currentlyPlayingSongId = testSongs.first().id,
-    favoriteSongIds = testSongs.map { it.id }.toSet(),
+    favoriteSongIds = testSongs.map { it.id },
     isLoading = true
 )

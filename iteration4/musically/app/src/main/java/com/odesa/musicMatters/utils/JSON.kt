@@ -3,9 +3,9 @@ package com.odesa.musicMatters.utils
 import org.json.JSONArray
 import org.json.JSONObject
 
-fun <T> JSONArray.toSet( fn: JSONArray.( Int ) -> T ) = List( length() ) {
+fun <T> JSONArray.toList( fn: JSONArray.( Int ) -> T ) = List( length() ) {
     i -> fn.invoke( this, i )
-}.toSet()
+}
 
 fun JSONObject.getIntOrNull( key: String ) : Int? = if ( has( key ) ) getInt( key ) else null
 

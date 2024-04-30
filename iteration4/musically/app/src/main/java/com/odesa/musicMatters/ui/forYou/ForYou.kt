@@ -75,6 +75,7 @@ fun ForYouScreen(
 
     ForYouScreenContent(
         uiState = uiState,
+        onShuffleAndPlay = { viewModel.shuffleAndPlay() },
         onSettingsClicked = onSettingsClicked
     )
 }
@@ -82,6 +83,7 @@ fun ForYouScreen(
 @Composable
 fun ForYouScreenContent(
     uiState: ForYouScreenUiState,
+    onShuffleAndPlay: () -> Unit,
     onSettingsClicked: () -> Unit
 ) {
 
@@ -147,7 +149,7 @@ fun ForYouScreenContent(
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            onClick = { /*TODO*/ }
+            onClick = onShuffleAndPlay
         ) {
             Icon(
                 imageVector = Icons.Default.Shuffle,
@@ -233,8 +235,7 @@ fun ForYouSongRow(
                         ForYouSongCard(
                             modifier = Modifier
                                 .width( tileWidth )
-                                .height( tileHeight )
-                                .animateItemPlacement(),
+                                .height( tileHeight ),
                             song = it,
                             fallbackResourceId = fallbackResourceId
                         )
@@ -250,6 +251,7 @@ fun ForYouSongRow(
 fun ForYouScreenContentPreview() {
     ForYouScreenContent(
         uiState = testForYouScreenUiState,
+        onShuffleAndPlay = {},
         onSettingsClicked = {}
     )
 }

@@ -78,7 +78,9 @@ class FakeMusicServiceConnection : MusicServiceConnection {
     override suspend fun playMediaItem(
         mediaItem: MediaItem,
         mediaItems: List<MediaItem>,
-        shuffle: Boolean ) {}
+        shuffle: Boolean ) {
+        _mediaItemsInQueue.value = mediaItems
+    }
 
     override fun setPlaybackSpeed( playbackSpeed: Float ) {}
 

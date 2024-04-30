@@ -211,11 +211,11 @@ class NowPlayingViewModel(
     }
 
     private suspend fun observeShuffle() {
-        settingsRepository.shuffle.collect {
+        settingsRepository.shuffle.collect { shuffle ->
             _uiState.value = _uiState.value.copy(
-                shuffle = it
+                shuffle = shuffle
             )
-            if ( it ) musicServiceConnection.shuffleSongsInQueue()
+            if ( shuffle ) musicServiceConnection.shuffleSongsInQueue()
         }
     }
 

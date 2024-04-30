@@ -7,19 +7,19 @@ interface PlaylistStore {
     suspend fun addToFavorites( songId: String )
     suspend fun removeFromFavorites( songId: String )
 
-    fun fetchRecentSongsPlaylist(): Playlist
-    suspend fun addSongIdToRecentSongsPlaylist( songId: String )
-    suspend fun removeFromRecentSongsPlaylist( songId: String )
+    fun fetchRecentlyPlayedSongsPlaylist(): Playlist
+    suspend fun addSongIdToRecentlyPlayedSongsPlaylist( songId: String )
+    suspend fun removeFromRecentlyPlayedSongsPlaylist( songId: String )
 
     fun fetchMostPlayedSongsPlaylist(): Playlist
     suspend fun addToMostPlayedSongsPlaylist( songId: String )
     suspend fun removeFromMostPlayedSongsPlaylist( songId: String )
 
-    fun fetchAllCustomPlaylists(): Set<Playlist>
+    fun fetchAllCustomPlaylists(): List<Playlist>
     suspend fun saveCustomPlaylist( playlist: Playlist )
     suspend fun deleteCustomPlaylist( playlist: Playlist )
-    suspend fun addSongToCustomPlaylist( songId: String, playlist: Playlist )
 
+    suspend fun addSongToCustomPlaylist( songId: String, playlist: Playlist )
     fun fetchMostPlayedSongsMap(): Map<String, Int>
 
 }

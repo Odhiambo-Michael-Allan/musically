@@ -30,7 +30,6 @@ import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.playlists.impl.PlaylistRepositoryImpl
 import com.odesa.musicMatters.data.playlists.impl.PlaylistStoreImpl
 import com.odesa.musicMatters.services.PermissionsManager
-import com.odesa.musicMatters.services.media.extensions.stringRep
 import com.odesa.musicMatters.services.media.library.BrowseTree
 import com.odesa.musicMatters.services.media.library.LocalMusicSource
 import com.odesa.musicMatters.services.media.library.MEDIA_SEARCH_SUPPORTED
@@ -163,8 +162,8 @@ class MusicService : MediaLibraryService() {
         super.onTaskRemoved( rootIntent )
         // The choice what to do here is app specific. Some app stop playback, while others allow
         // playback to continue and allow its users to stop it with the notification.
-        releaseMediaSession()
-        stopSelf()
+//        releaseMediaSession()
+//        stopSelf()
     }
 
     override fun onDestroy() {
@@ -244,9 +243,9 @@ class MusicService : MediaLibraryService() {
         ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
             return callWhenMusicSourceIsReady {
                 val requestedChildren = browseTree[ parentId ]
-                requestedChildren?.forEach {
-                    Timber.tag( TAG ).d( it.stringRep() )
-                }
+//                requestedChildren?.forEach {
+//                    Timber.tag( TAG ).d( it.stringRep() )
+//                }
                 LibraryResult.ofItemList(
                     requestedChildren ?: ImmutableList.of(),
                     LibraryParams.Builder().build()
@@ -337,6 +336,7 @@ class MusicService : MediaLibraryService() {
             mediaItem?.let {
                 serviceScope.launch {
                     playlistRepository.addToMostPlayedPlaylist( it.mediaId )
+                    playlistRepository.addToRecentlyPlayedSongsPlaylist( it.mediaId )
                 }
             }
         }

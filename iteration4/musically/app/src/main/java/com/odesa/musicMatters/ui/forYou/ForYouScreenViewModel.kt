@@ -3,6 +3,7 @@ package com.odesa.musicMatters.ui.forYou
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.data.settings.SettingsRepository
@@ -20,12 +21,12 @@ import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_RECENT_SONGS_
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_TRACKS_ROOT
-import com.odesa.musicMatters.services.media.testSongs
 import com.odesa.musicMatters.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.random.Random
 
 class ForYouScreenViewModel(
     private val musicServiceConnection: MusicServiceConnection,
@@ -43,8 +44,8 @@ class ForYouScreenViewModel(
             mostPlayedSongs = emptyList(),
             isLoadingSuggestedArtists = true,
             suggestedArtists = emptyList(),
-            isLoadingPlayHistory = false,
-            songsInPlayHistory = testSongs,
+            isLoadingPlayHistory = true,
+            songsInPlayHistory = emptyList(),
             language = English,
             themeMode = SettingsDefaults.themeMode,
         )
@@ -56,6 +57,7 @@ class ForYouScreenViewModel(
         fetchSuggestedAlbums()
         viewModelScope.launch { observeMostPlayedSongsMap() }
         fetchSuggestedArtists()
+        viewModelScope.launch { observeRecentlyPlayedSongsPlaylist() }
     }
 
     private fun fetchRecentlyAddedSongs() {
@@ -100,7 +102,7 @@ class ForYouScreenViewModel(
                     songs.find { it.mediaId == key }?.toSong( artistTagSeparators )
                 }
                 _uiState.value = _uiState.value.copy(
-                    mostPlayedSongs = if ( mostPlayedSongs.size > 5 ) mostPlayedSongs.subList( 0, 5 ) else mostPlayedSongs,
+                    mostPlayedSongs = if ( mostPlayedSongs.size >= 5 ) mostPlayedSongs.subList( 0, 5 ) else mostPlayedSongs,
                     isLoadingMostPlayedSongs = false
                 )
             }
@@ -117,6 +119,48 @@ class ForYouScreenViewModel(
                     isLoadingSuggestedArtists = false
                 )
 
+            }
+        }
+    }
+
+    private suspend fun observeRecentlyPlayedSongsPlaylist() {
+        playlistRepository.recentlyPlayedSongsPlaylist.collect {
+            Timber.tag( TAG ).d( "UPDATING RECENTLY PLAYED SONGS PLAYLIST IN FOR VIEW MODEL" )
+            fetchRecentlyPlayedSongs( it )
+        }
+    }
+
+    private fun fetchRecentlyPlayedSongs( playlist: Playlist ) {
+        musicServiceConnection.runWhenInitialized {
+            viewModelScope.launch {
+                val songs = musicServiceConnection.getChildren( MUSIC_MATTERS_TRACKS_ROOT )
+                val songsInPlaylist = mutableListOf<Song>()
+                playlist.songIds.forEach { songId ->
+                    songs.find { it.mediaId == songId }?.let {
+                        songsInPlaylist.add( it.toSong( artistTagSeparators ) )
+                    }
+                }
+                _uiState.value = _uiState.value.copy(
+                    songsInPlayHistory = if ( songsInPlaylist.size >= 5 ) songsInPlaylist.subList( 0, 5 ) else songsInPlaylist,
+                    isLoadingPlayHistory = false
+                )
+            }
+        }
+    }
+
+    fun shuffleAndPlay() {
+        if ( uiState.value.isLoadingRecentSongs ) return
+        musicServiceConnection.runWhenInitialized {
+            viewModelScope.launch {
+                settingsRepository.setShuffle( true )
+                val songsList = musicServiceConnection.getChildren( MUSIC_MATTERS_TRACKS_ROOT )
+                    .map { it.toSong( artistTagSeparators ) }
+                val randomSongToPlay = songsList[ Random.nextInt( songsList.size ) ]
+                musicServiceConnection.playMediaItem(
+                    mediaItem = randomSongToPlay.mediaItem,
+                    mediaItems = songsList.map { it.mediaItem },
+                    shuffle = true
+                )
             }
         }
     }
@@ -143,7 +187,7 @@ class ForYouViewModelFactory(
     private val playlistRepository: PlaylistRepository,
     private val settingsRepository: SettingsRepository
 ) : ViewModelProvider.NewInstanceFactory() {
-    override fun <T : ViewModel> create( modelClass: Class<T> ) =
+     override fun <T : ViewModel> create(modelClass: Class<T> ) =
         ( ForYouScreenViewModel(
             musicServiceConnection = musicServiceConnection,
             playlistRepository = playlistRepository,

@@ -39,7 +39,7 @@ fun GenreScreen(
 
 @Composable
 fun GenreScreenContent(
-    uiState: GenreScreenUiState,
+    uiState: GenreScreenUistate,
     genreName: String,
     onSortReverseChange: ( Boolean ) -> Unit,
     onSortTypeChange: (SortSongsBy) -> Unit,
