@@ -50,6 +50,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.media3.common.MediaItem
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.odesa.musicMatters.R
@@ -76,7 +77,10 @@ fun ForYouScreen(
     ForYouScreenContent(
         uiState = uiState,
         onShuffleAndPlay = { viewModel.shuffleAndPlay() },
-        onSettingsClicked = onSettingsClicked
+        onSettingsClicked = onSettingsClicked,
+        onSongInRecentlyAddedSongsSelected = { viewModel.playRecentlyAddedSong( it ) },
+        onSongInMostPlayedSongsSelected = { viewModel.playMostPlayedSong( it ) },
+        onSongInPlayHistorySelected = { viewModel.playSongInPlayHistory( it ) }
     )
 }
 
@@ -84,7 +88,10 @@ fun ForYouScreen(
 fun ForYouScreenContent(
     uiState: ForYouScreenUiState,
     onShuffleAndPlay: () -> Unit,
-    onSettingsClicked: () -> Unit
+    onSettingsClicked: () -> Unit,
+    onSongInRecentlyAddedSongsSelected: ( MediaItem ) -> Unit,
+    onSongInMostPlayedSongsSelected: ( MediaItem ) -> Unit,
+    onSongInPlayHistorySelected: ( MediaItem ) -> Unit,
 ) {
 
     val fallbackResourceId =
@@ -112,6 +119,7 @@ fun ForYouScreenContent(
                     isLoadingRecentSongs = uiState.isLoadingRecentSongs,
                     recentlyAddedSongs = uiState.recentlyAddedSongs,
                     fallbackResourceId = fallbackResourceId,
+                    onSongInRecentlyAddedSongsSelected = onSongInRecentlyAddedSongsSelected
                 )
                 SuggestedAlbums(
                     language = uiState.language,
@@ -124,7 +132,8 @@ fun ForYouScreenContent(
                         language = uiState.language,
                         isLoadingMostPlayedSongs = uiState.isLoadingMostPlayedSongs,
                         mostPlayedSongs = uiState.mostPlayedSongs,
-                        fallbackResourceId = fallbackResourceId
+                        fallbackResourceId = fallbackResourceId,
+                        onSongInMostPlayedSongsSelected = onSongInMostPlayedSongsSelected
                     )
                 }
                 SuggestedArtists(
@@ -138,7 +147,8 @@ fun ForYouScreenContent(
                         language = uiState.language,
                         isLoadingPlayHistory = uiState.isLoadingPlayHistory,
                         songsInPlayHistory = uiState.songsInPlayHistory,
-                        fallbackResourceId = fallbackResourceId
+                        fallbackResourceId = fallbackResourceId,
+                        onSongInPlayHistorySelected = onSongInPlayHistorySelected
                     )
                 }
                 Spacer( modifier = Modifier.height( 100.dp ) )
@@ -165,13 +175,15 @@ fun RecentlyAddedSongs(
     isLoadingRecentSongs: Boolean,
     recentlyAddedSongs: List<Song>,
     @DrawableRes fallbackResourceId: Int,
+    onSongInRecentlyAddedSongsSelected: ( MediaItem ) -> Unit
 ) {
     ForYouSongRow(
         heading = language.recentlyAddedSongs,
         isLoading = isLoadingRecentSongs,
         language = language,
         fallbackResourceId = fallbackResourceId,
-        songs = recentlyAddedSongs
+        songs = recentlyAddedSongs,
+        onSongSelected = onSongInRecentlyAddedSongsSelected
     )
 }
 
@@ -180,14 +192,16 @@ fun MostPlayedSongs(
     language: Language,
     isLoadingMostPlayedSongs: Boolean,
     mostPlayedSongs: List<Song>,
-    @DrawableRes fallbackResourceId: Int
+    @DrawableRes fallbackResourceId: Int,
+    onSongInMostPlayedSongsSelected: ( MediaItem ) -> Unit,
 ) {
     ForYouSongRow(
         heading = "Most Played Songs",
         isLoading = isLoadingMostPlayedSongs,
         language = language,
         fallbackResourceId = fallbackResourceId,
-        songs = mostPlayedSongs
+        songs = mostPlayedSongs,
+        onSongSelected = onSongInMostPlayedSongsSelected
     )
 }
 
@@ -196,14 +210,16 @@ fun PlayHistory(
     language: Language,
     isLoadingPlayHistory: Boolean,
     songsInPlayHistory: List<Song>,
-    @DrawableRes fallbackResourceId: Int
+    @DrawableRes fallbackResourceId: Int,
+    onSongInPlayHistorySelected: ( MediaItem ) -> Unit
 ) {
     ForYouSongRow(
         heading = "Play History",
         isLoading = isLoadingPlayHistory,
         language = language,
         fallbackResourceId = fallbackResourceId,
-        songs = songsInPlayHistory
+        songs = songsInPlayHistory,
+        onSongSelected = onSongInPlayHistorySelected
     )
 }
 
@@ -214,7 +230,8 @@ fun ForYouSongRow(
     isLoading: Boolean,
     language: Language,
     @DrawableRes fallbackResourceId: Int,
-    songs: List<Song>
+    songs: List<Song>,
+    onSongSelected: ( MediaItem ) -> Unit,
 ) {
     SideHeading {
         Text( text = heading )
@@ -231,13 +248,14 @@ fun ForYouSongRow(
                     contentPadding = PaddingValues( 20.dp, 4.dp ),
                     horizontalArrangement = Arrangement.spacedBy( 8.dp )
                 ) {
-                    items( songs ) {
+                    items( songs ) { song ->
                         ForYouSongCard(
                             modifier = Modifier
                                 .width( tileWidth )
                                 .height( tileHeight ),
-                            song = it,
-                            fallbackResourceId = fallbackResourceId
+                            song = song,
+                            fallbackResourceId = fallbackResourceId,
+                            onClick = { onSongSelected( song.mediaItem ) }
                         )
                     }
                 }
@@ -252,7 +270,10 @@ fun ForYouScreenContentPreview() {
     ForYouScreenContent(
         uiState = testForYouScreenUiState,
         onShuffleAndPlay = {},
-        onSettingsClicked = {}
+        onSettingsClicked = {},
+        onSongInPlayHistorySelected = {},
+        onSongInMostPlayedSongsSelected = {},
+        onSongInRecentlyAddedSongsSelected = {}
     )
 }
 
@@ -307,13 +328,14 @@ fun ForYouSongCard(
     modifier: Modifier = Modifier,
     song: Song,
     @DrawableRes fallbackResourceId: Int,
+    onClick: () -> Unit
 ) {
 
     val backgroundColor = MaterialTheme.colorScheme.surface
 
     ElevatedCard(
         modifier = modifier,
-        onClick = {}
+        onClick = onClick
     ) {
         Box {
             AsyncImage(

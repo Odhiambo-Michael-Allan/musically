@@ -44,7 +44,7 @@ class BrowseTreeTest {
     fun testRecentlyAddedSongsAreCorrectlyConfigured() {
         val recentlyAddedSongs = browseTree[ MUSIC_MATTERS_RECENT_SONGS_ROOT ]
         assertNotNull( recentlyAddedSongs )
-        assertEquals( 5, recentlyAddedSongs!!.size )
+        assertEquals( musicList.size, recentlyAddedSongs!!.size )
         assertEquals( "Don't Believe the Hype", recentlyAddedSongs[ 0 ].mediaMetadata.title )
     }
 

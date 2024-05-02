@@ -197,7 +197,7 @@ class BrowseTree(
     private fun addRecentSongMediaItemsTo( recentSongsList: MutableList<MediaItem> ) {
         val trackList = mediaIdToChildren[ MUSIC_MATTERS_TRACKS_ROOT ]
         trackList!!.sortByDescending { it.mediaMetadata.extras?.getLong( DATE_KEY ) }
-        recentSongsList.addAll( trackList.subList( 0, 5 ) )
+        recentSongsList.addAll( trackList )
     }
 
     private fun addSuggestedAlbumMediaItemsTo( suggestedAlbumList: MutableList<MediaItem> ) {

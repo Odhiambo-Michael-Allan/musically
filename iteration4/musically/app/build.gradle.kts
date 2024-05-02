@@ -57,17 +57,22 @@ dependencies {
     val androidxMedia3Version =  "1.2.1"
     val kotlinCoroutinesVersion = "1.6.4"
 
-    implementation( "androidx.core:core-ktx:1.12.0" )
-    implementation( "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2" )
-    implementation( "androidx.activity:activity-compose:1.9.0" )
-    implementation( platform( "androidx.compose:compose-bom:2024.04.01" ) )
-    implementation( "androidx.compose.ui:ui" )
-    implementation( "androidx.compose.ui:ui-graphics" )
-    implementation( "androidx.compose.ui:ui-tooling-preview" )
-    implementation( "androidx.compose.material3:material3:1.1.2" )
-    implementation( "androidx.compose.material:material-icons-extended:1.6.6" )
-    implementation( "androidx.navigation:navigation-compose:$navVersion" )
-    implementation( "io.coil-kt:coil-compose:2.5.0" )
+    implementation( libs.androidx.core.ktx )
+    implementation( libs.androidx.lifecycle.runtime.ktx )
+
+    implementation( libs.androidx.compose.runtime )
+    implementation( libs.androidx.activity.compose )
+    implementation( platform( libs.androidx.compose.bom ) )
+    implementation( libs.androidx.compose.ui )
+    implementation( libs.androidx.compose.animation )
+    implementation( libs.androidx.ui.graphics )
+
+
+    implementation( libs.androidx.ui.tooling.preview )
+    implementation( libs.androidx.material3 )
+    implementation( libs.compose.material.icons.extended )
+    implementation( libs.compose.navigation )
+    implementation( libs.coil )
     implementation( "androidx.media:media:$androidxMediaVersion" )
     implementation( "com.jakewharton.timber:timber:5.0.1" )
     implementation( "com.github.bumptech.glide:glide:4.16.0" )
@@ -83,17 +88,17 @@ dependencies {
     implementation( "sh.calvin.reorderable:reorderable:1.5.0" )
 
 
-    testImplementation( "junit:junit:4.13.2" )
+    testImplementation( libs.junit )
     testImplementation( "androidx.test.ext:junit:1.1.5" )
-    testImplementation( "org.robolectric:robolectric:4.11.1" )
+    testImplementation( libs.robolectric )
 
-    androidTestImplementation( "androidx.test.ext:junit:1.1.5" )
-    androidTestImplementation( "androidx.test.espresso:espresso-core:3.5.1" )
-    androidTestImplementation( platform( "androidx.compose:compose-bom:2024.04.01" ) )
-    androidTestImplementation( "androidx.compose.ui:ui-test-junit4" )
-    androidTestImplementation( "androidx.navigation:navigation-testing:$navVersion" )
-    testImplementation( "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3" )
+    androidTestImplementation( libs.androidx.junit )
+    androidTestImplementation( libs.androidx.espresso.core )
+    androidTestImplementation( platform( libs.androidx.compose.bom ) )
+    androidTestImplementation( libs.androidx.ui.test.junit4 )
+    androidTestImplementation( libs.androidx.navigation.testing )
+    testImplementation( libs.kotlinx.coroutines.test )
 
-    debugImplementation( "androidx.compose.ui:ui-tooling" )
-    debugImplementation( "androidx.compose.ui:ui-test-manifest" )
+    debugImplementation( libs.androidx.ui.tooling )
+    debugImplementation( libs.androidx.ui.test.manifest )
 }

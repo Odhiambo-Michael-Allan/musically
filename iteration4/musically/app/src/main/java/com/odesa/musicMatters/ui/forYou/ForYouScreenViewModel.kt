@@ -3,6 +3,7 @@ package com.odesa.musicMatters.ui.forYou
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.MediaItem
 import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
@@ -66,7 +67,7 @@ class ForYouScreenViewModel(
                 val recentlyAddedSongs = musicServiceConnection.getChildren( MUSIC_MATTERS_RECENT_SONGS_ROOT )
                     .map { it.toSong( artistTagSeparators ) }
                 _uiState.value = uiState.value.copy(
-                    recentlyAddedSongs = recentlyAddedSongs,
+                    recentlyAddedSongs = if ( recentlyAddedSongs.size >= 5 ) recentlyAddedSongs.subList( 0, 5 ) else recentlyAddedSongs,
                     isLoadingRecentSongs = false
                 )
                 Timber.tag( TAG ).d( "RECENTLY ADDED SONGS SIZE: ${recentlyAddedSongs.size}")
@@ -125,7 +126,6 @@ class ForYouScreenViewModel(
 
     private suspend fun observeRecentlyPlayedSongsPlaylist() {
         playlistRepository.recentlyPlayedSongsPlaylist.collect {
-            Timber.tag( TAG ).d( "UPDATING RECENTLY PLAYED SONGS PLAYLIST IN FOR VIEW MODEL" )
             fetchRecentlyPlayedSongs( it )
         }
     }
@@ -161,6 +161,56 @@ class ForYouScreenViewModel(
                     mediaItems = songsList.map { it.mediaItem },
                     shuffle = true
                 )
+            }
+        }
+    }
+
+    fun playRecentlyAddedSong( mediaItem: MediaItem) {
+        musicServiceConnection.runWhenInitialized {
+            viewModelScope.launch {
+                val recentlyAddedSongs = musicServiceConnection.getChildren( MUSIC_MATTERS_RECENT_SONGS_ROOT )
+                    .map { it.toSong( artistTagSeparators ) }
+                musicServiceConnection.playMediaItem(
+                    mediaItem,
+                    recentlyAddedSongs.map { it.mediaItem },
+                    shuffle = false
+                )
+            }
+        }
+    }
+
+    fun playMostPlayedSong( mediaItem: MediaItem ) {
+        musicServiceConnection.runWhenInitialized {
+            viewModelScope.launch {
+                val mostPlayedSongsMap = playlistRepository.mostPlayedSongsMap.value
+                val songs = musicServiceConnection.getChildren( MUSIC_MATTERS_TRACKS_ROOT )
+                val sortedMap = mostPlayedSongsMap.toList().sortedByDescending { it.second }.toMap()
+                val mostPlayedSongs = sortedMap.keys.mapNotNull { key ->
+                    songs.find { it.mediaId == key }?.toSong( artistTagSeparators )
+                }
+                musicServiceConnection.playMediaItem(
+                    mediaItem,
+                    mostPlayedSongs.map { it.mediaItem },
+                    shuffle = false
+                )
+            }
+        }
+    }
+
+    fun playSongInPlayHistory( mediaItem: MediaItem ) {
+        musicServiceConnection.runWhenInitialized {
+            viewModelScope.launch {
+                val playHistoryPlaylist = playlistRepository.recentlyPlayedSongsPlaylist.value
+                val songs = musicServiceConnection.getChildren( MUSIC_MATTERS_TRACKS_ROOT )
+                val songsInPlaylist = mutableListOf<Song>()
+                playHistoryPlaylist.songIds.forEach { songId ->
+                    songs.find { it.mediaId == songId }?.let {
+                        songsInPlaylist.add( it.toSong( artistTagSeparators ) )
+                    }
+                }
+                musicServiceConnection.playMediaItem( mediaItem,
+                    songsInPlaylist.map { it.mediaItem },
+                    false )
             }
         }
     }
