@@ -108,6 +108,7 @@ fun MinimalAppBar(
     modifier: Modifier = Modifier,
     onNavigationIconClicked: () -> Unit,
     title: String,
+    options: ( @Composable () -> Unit )? = null
     
 ) {
     CenterAlignedTopAppBar(
@@ -142,6 +143,11 @@ fun MinimalAppBar(
                 }
             }
         },
+        actions = {
+            options?.let {
+                options()
+            }
+        }
     )
 }
 

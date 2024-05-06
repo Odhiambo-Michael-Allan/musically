@@ -6,7 +6,7 @@ import java.util.UUID
 
 class FakePlaylistStore : PlaylistStore {
 
-    private val playlists = mutableSetOf<Playlist>()
+    private val playlists = mutableListOf<Playlist>()
     private val mostPlayedSongsMap = mutableMapOf<String, Int>()
 
     private var favoritePlaylist = Playlist(
@@ -41,7 +41,7 @@ class FakePlaylistStore : PlaylistStore {
         playlists.add( recentSongsPlaylist )
     }
 
-    override fun fetchAllPlaylists(): Set<Playlist> {
+    override fun fetchAllPlaylists(): List<Playlist> {
         return playlists
     }
 

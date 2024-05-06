@@ -1,7 +1,7 @@
 package com.odesa.musicMatters.data.playlists
 
 interface PlaylistStore {
-    fun fetchAllPlaylists(): Set<Playlist>
+    fun fetchAllPlaylists(): List<Playlist>
 
     fun fetchFavoritesPlaylist(): Playlist
     suspend fun addToFavorites( songId: String )

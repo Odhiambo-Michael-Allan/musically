@@ -18,6 +18,7 @@ import com.odesa.musicMatters.services.media.Album
 
 import com.odesa.musicMatters.services.media.Artist
 import com.odesa.musicMatters.services.media.Song
+import com.odesa.musicMatters.services.media.artistTagSeparators
 
 fun MediaItem.Builder.from( cursor: Cursor, context: Context ): MediaItem.Builder {
     val mediaUri = getMediaUriFrom( cursor )
@@ -196,6 +197,7 @@ fun MediaItem.toSong( artistTagSeparators: Set<String> ) = Song(
 
 fun MediaItem.toAlbum() = Album(
     name = mediaMetadata.title.toString(),
+    artists = parseArtistStringIntoIndividualArtists( artistTagSeparators ),
     artworkUri = mediaMetadata.artworkUri
 )
 

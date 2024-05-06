@@ -1,6 +1,8 @@
 package com.odesa.musicMatters.ui.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
+import androidx.compose.material.icons.automirrored.outlined.PlaylistPlay
 import androidx.compose.material.icons.filled.AccountTree
 import androidx.compose.material.icons.filled.Album
 import androidx.compose.material.icons.filled.Face
@@ -25,14 +27,14 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.odesa.musicMatters.services.i18n.English
 import com.odesa.musicMatters.services.i18n.Language
+import timber.log.Timber
 
-object RoutesParameters {
-    const val GenreRouteGenreName = "genre-name"
-    const val ArtistRouteArtistName = "artist-name"
-    const val AlbumRouteAlbumName = "album-name"
-    const val AlbumArtistRouteArtistName = "album-artist-name"
-    const val PlaylistRoutePlaylistId = "playlist-id"
-    const val SearchRouteInitialChip = "initial-chip"
+object RouteParameters {
+    const val GENRE_ROUTE_GENRE_NAME = "genre-name"
+    const val ARTIST_ROUTE_ARTIST_NAME = "artist-name"
+    const val ALBUM_ROUTE_ALBUM_NAME = "album-name"
+    const val PLAYLIST_ROUTE_PLAYLIST_ID = "playlist-id"
+    const val PLAYLIST_ROUTE_PLAYLIST_NAME = "playlist-name"
 }
 
 sealed class Route( val name: String ) {
@@ -40,14 +42,35 @@ sealed class Route( val name: String ) {
     data object Songs : Route( "songs" )
     data object Artists : Route( "artists" )
     data object Albums : Route( "albums" )
-    data object AlbumArtists : Route( "album-artists" )
+    data object Album : Route( "album" )
     data object Genres : Route( "genres" )
     data object Genre : Route( "genre" )
     data object Folders : Route( "folders" )
     data object Playlists : Route( "playlists" )
+    data object Playlist : Route( "playlist" )
     data object Tree : Route( "tree" )
     data object Queue : Route( "queue" )
     data object Settings : Route( "settings" )
+}
+
+object RoutesBuilder {
+    private val encodeParamChars = object {
+        val percent = "%" to "%25"
+        val slash = "/" to "%2F"
+    }
+    fun buildAlbumRoute( albumName: String ) = "album/${encodeParam( albumName ) }"
+    fun buildPlaylistRoute( playlistId: String, playlistName: String ) = "playlist/${encodeParam( playlistId )}/${encodeParam( playlistName )}"
+
+    private fun encodeParam(value: String ): String {
+        Timber.tag( DESTINATIONS_TAG ).d( "ENCODING PARAM: $value" )
+        return value.replace( encodeParamChars.percent.first, encodeParamChars.percent.second )
+            .replace( encodeParamChars.slash.first, encodeParamChars.slash.second )
+    }
+
+
+    fun decodeParam( value: String ) = value
+        .replace( encodeParamChars.percent.second, encodeParamChars.percent.first )
+        .replace( encodeParamChars.slash.second, encodeParamChars.slash.first )
 }
 
 /**
@@ -101,6 +124,24 @@ object Albums : MusicMattersDestination {
     override fun getLabel( language: Language ) = language.albums
 }
 
+object Album : MusicMattersDestination {
+    override val selectedIcon = Icons.Filled.Album
+    override val unselectedIcon = Icons.Outlined.Album
+    override val route = Route.Album
+    override val iconContentDescription = ""
+    override fun getLabel( language: Language ) = ""
+
+    val routeWithArgs = RoutesBuilder.buildAlbumRoute(
+        "{${RouteParameters.ALBUM_ROUTE_ALBUM_NAME}}"
+    )
+    val arguments = listOf(
+        navArgument( RouteParameters.ALBUM_ROUTE_ALBUM_NAME ) {
+            type = NavType.StringType
+        }
+    )
+
+}
+
 object Genres : MusicMattersDestination {
     override val selectedIcon = Icons.Filled.Tune
     override val unselectedIcon = Icons.Outlined.Tune
@@ -116,9 +157,9 @@ object Genre : MusicMattersDestination {
     override val route = Route.Genre
     override val iconContentDescription = ""
 
-    val routeWithArgs = "${route.name}/{${RoutesParameters.GenreRouteGenreName}}"
+    val routeWithArgs = "${route.name}/{${RouteParameters.GENRE_ROUTE_GENRE_NAME}}"
     val arguments = listOf(
-        navArgument( RoutesParameters.GenreRouteGenreName ) {
+        navArgument( RouteParameters.GENRE_ROUTE_GENRE_NAME ) {
             type = NavType.StringType
         }
     )
@@ -142,6 +183,29 @@ object Playlists : MusicMattersDestination {
     override val iconContentDescription = "${English.playlists}-tab-icon"
 
     override fun getLabel( language: Language ) = language.playlists
+}
+
+object Playlist : MusicMattersDestination {
+    override val selectedIcon = Icons.AutoMirrored.Filled.PlaylistPlay
+    override val unselectedIcon = Icons.AutoMirrored.Outlined.PlaylistPlay
+    override val route = Route.Playlist
+    override val iconContentDescription = ""
+
+    val routeWithArgs = RoutesBuilder.buildPlaylistRoute(
+        "{${RouteParameters.PLAYLIST_ROUTE_PLAYLIST_ID}}",
+        "{${RouteParameters.PLAYLIST_ROUTE_PLAYLIST_NAME}}"
+    )
+    override fun getLabel( language: Language ) = ""
+
+    val arguments = listOf(
+        navArgument( RouteParameters.PLAYLIST_ROUTE_PLAYLIST_ID ) {
+            type = NavType.StringType
+        },
+        navArgument( RouteParameters.PLAYLIST_ROUTE_PLAYLIST_NAME ) {
+            type = NavType.StringType
+        }
+    )
+
 }
 
 object Tree : MusicMattersDestination {
@@ -181,4 +245,15 @@ fun NavHostController.navigateSingleTopTo( route: String ) =
 fun NavHostController.navigateToGenreScreen( genreName: String ) =
     this.navigate( "${Genre.route.name}/$genreName" )
 
-fun NavBackStackEntry.getRouteArgument( key: String ) = arguments?.getString( key )
+fun NavHostController.navigateToAlbumScreen( albumName: String ) =
+    this.navigate( RoutesBuilder.buildAlbumRoute( albumName ) )
+
+fun NavHostController.navigateToPlaylistScreen( playlistId: String, playlistTitle: String ) =
+    this.navigate( RoutesBuilder.buildPlaylistRoute( playlistId, playlistTitle ) )
+
+fun NavBackStackEntry.getRouteArgument( key: String ) = arguments?.getString( key )?.let {
+    Timber.tag( DESTINATIONS_TAG ).d( "DECODING PARAM: $key -> $it" )
+    RoutesBuilder.decodeParam( it )
+}
+
+const val DESTINATIONS_TAG = "DESTINATIONS-TAG"

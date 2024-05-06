@@ -69,7 +69,8 @@ import com.odesa.musicMatters.ui.theme.isLight
 @Composable
 fun ForYouScreen(
     viewModel: ForYouScreenViewModel,
-    onSettingsClicked: () -> Unit
+    onSettingsClicked: () -> Unit,
+    onSuggestedAlbumClick: ( Album ) -> Unit,
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
@@ -80,7 +81,8 @@ fun ForYouScreen(
         onSettingsClicked = onSettingsClicked,
         onSongInRecentlyAddedSongsSelected = { viewModel.playRecentlyAddedSong( it ) },
         onSongInMostPlayedSongsSelected = { viewModel.playMostPlayedSong( it ) },
-        onSongInPlayHistorySelected = { viewModel.playSongInPlayHistory( it ) }
+        onSongInPlayHistorySelected = { viewModel.playSongInPlayHistory( it ) },
+        onSuggestedAlbumClick = onSuggestedAlbumClick,
     )
 }
 
@@ -92,6 +94,7 @@ fun ForYouScreenContent(
     onSongInRecentlyAddedSongsSelected: ( MediaItem ) -> Unit,
     onSongInMostPlayedSongsSelected: ( MediaItem ) -> Unit,
     onSongInPlayHistorySelected: ( MediaItem ) -> Unit,
+    onSuggestedAlbumClick: ( Album ) -> Unit
 ) {
 
     val fallbackResourceId =
@@ -111,7 +114,7 @@ fun ForYouScreenContent(
             )
             Column (
                 modifier = Modifier
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll( rememberScrollState() )
                     .fillMaxSize(),
             ) {
                 RecentlyAddedSongs(
@@ -125,7 +128,8 @@ fun ForYouScreenContent(
                     language = uiState.language,
                     isLoading = uiState.isLoadingSuggestedAlbums,
                     albums = uiState.suggestedAlbums,
-                    fallbackResourceId = fallbackResourceId
+                    fallbackResourceId = fallbackResourceId,
+                    onClick = { onSuggestedAlbumClick( it ) }
                 )
                 if ( uiState.mostPlayedSongs.isNotEmpty() ) {
                     MostPlayedSongs(
@@ -273,7 +277,8 @@ fun ForYouScreenContentPreview() {
         onSettingsClicked = {},
         onSongInPlayHistorySelected = {},
         onSongInMostPlayedSongsSelected = {},
-        onSongInRecentlyAddedSongsSelected = {}
+        onSongInRecentlyAddedSongsSelected = {},
+        onSuggestedAlbumClick = {}
     )
 }
 
@@ -435,6 +440,7 @@ private fun SuggestedAlbums(
     isLoading: Boolean,
     albums: List<Album>,
     @DrawableRes fallbackResourceId: Int,
+    onClick: ( Album ) -> Unit,
 ) {
     SideHeading {
         Text( text = language.suggestedAlbums )
@@ -446,7 +452,7 @@ private fun SuggestedAlbums(
         items = albums
     ) {
         Card(
-            onClick = {}
+            onClick = { onClick( it ) }
         ) {
             AsyncImage(
                 modifier = Modifier

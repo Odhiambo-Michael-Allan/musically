@@ -20,7 +20,7 @@ class MusicallyMediaNotificationProvider( private val context: Context ) : Media
         onNotificationChangedCallback: MediaNotification.Provider.Callback
     ): MediaNotification {
         val defaultMediaNotificationProvider = DefaultMediaNotificationProvider( context )
-        defaultMediaNotificationProvider.setSmallIcon( R.drawable.musically_logo )
+        defaultMediaNotificationProvider.setSmallIcon( R.drawable.notification_icon )
         return defaultMediaNotificationProvider
             .createNotification(
                 mediaSession,

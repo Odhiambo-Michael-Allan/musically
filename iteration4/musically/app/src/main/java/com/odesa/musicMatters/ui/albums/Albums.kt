@@ -1,44 +1,92 @@
 package com.odesa.musicMatters.ui.albums
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import com.odesa.musicMatters.R
+import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.services.i18n.English
+import com.odesa.musicMatters.services.media.AlbumSortBy
+import com.odesa.musicMatters.services.media.testAlbums
+import com.odesa.musicMatters.ui.components.AlbumGrid
+import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.TopAppBar
+import com.odesa.musicMatters.ui.theme.isLight
 
 @Composable
 fun AlbumsScreen(
-    viewModel: AlbumsViewModel,
+    viewModel: AlbumsScreenViewModel,
+    onAlbumClick: ( String ) -> Unit,
     onSettingsClicked: () -> Unit
 ) {
+
+    val albumScreenUiState by viewModel.uiState.collectAsState()
+
     AlbumsScreenContent(
-        onSettingsClicked = onSettingsClicked
+        uiState = albumScreenUiState,
+        onAlbumClick = onAlbumClick,
+        onSettingsClicked = onSettingsClicked,
+        onPlayAlbum = { viewModel.playAlbum( it ) }
     )
 }
 
 @Composable
 fun AlbumsScreenContent(
-    onSettingsClicked: () -> Unit
+    uiState: AlbumsScreenUiState,
+    onAlbumClick: ( String ) -> Unit,
+    onSettingsClicked: () -> Unit,
+    onPlayAlbum: ( String ) -> Unit,
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                onNavigationIconClicked = { /*TODO*/ },
-                title = "Albums",
-                settings = "Settings",
-                onSettingsClicked = onSettingsClicked
+
+    val fallbackResourceId =
+        if ( uiState.themeMode.isLight( LocalContext.current ) )
+            R.drawable.placeholder_light else R.drawable.placeholder_dark
+
+    Column (
+        modifier = Modifier.fillMaxSize()
+    ) {
+        TopAppBar(
+            onNavigationIconClicked = { /*TODO*/ },
+            title = uiState.language.albums,
+            settings = uiState.language.settings,
+            onSettingsClicked = onSettingsClicked
+        )
+        LoaderScaffold(
+            isLoading = uiState.isLoadingAlbums,
+            loading = uiState.language.loading
+        ) {
+            AlbumGrid(
+                albums = uiState.albums,
+                language = uiState.language,
+                sortType = AlbumSortBy.ALBUM_NAME,
+                sortReverse = false,
+                fallbackResourceId = fallbackResourceId,
+                onSortReverseChange = {},
+                onSortTypeChange = {},
+                onAlbumClick = onAlbumClick,
+                onPlayAlbum = onPlayAlbum
             )
         }
-    ){
-        Box(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize()
-        ) {
-            Text( text = "Coming Soon!!" )
-        }
     }
+}
+
+@Preview( showSystemUi = true )
+@Composable
+fun AlbumsScreenContentPreview() {
+    AlbumsScreenContent(
+        uiState = AlbumsScreenUiState(
+            albums = testAlbums,
+            isLoadingAlbums = false,
+            language = English,
+            themeMode = SettingsDefaults.themeMode
+        ),
+        onAlbumClick = {},
+        onSettingsClicked = {},
+        onPlayAlbum = {}
+    )
 }

@@ -148,3 +148,9 @@ enum class GenreSortBy {
     GENRE,
     TRACKS_COUNT,
 }
+
+enum class PlaylistSortBy {
+    CUSTOM,
+    TITLE,
+    TRACKS_COUNT,
+}

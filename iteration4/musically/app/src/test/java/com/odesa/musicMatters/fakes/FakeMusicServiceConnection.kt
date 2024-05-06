@@ -9,6 +9,8 @@ import com.google.common.collect.ImmutableList
 import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
 import com.odesa.musicMatters.services.media.connection.NOTHING_PLAYING
 import com.odesa.musicMatters.services.media.connection.PlaybackState
+import com.odesa.musicMatters.services.media.extensions.ALBUM_TITLE_KEY
+import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_ALBUMS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_RECENT_SONGS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT
@@ -63,6 +65,7 @@ class FakeMusicServiceConnection : MusicServiceConnection {
             MUSIC_MATTERS_RECENT_SONGS_ROOT -> trackList.subList( 0, 5 )
             MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT -> albumList
             MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT -> artistList
+            MUSIC_MATTERS_ALBUMS_ROOT -> albumList
             else -> genreList
         }
     }
@@ -156,35 +159,61 @@ val trackList: ImmutableList<MediaItem> = ImmutableList.of(
     MediaItem.Builder().apply {
         setMediaId( id1 ).setMediaMetadata(
             MediaMetadata.Builder().apply {
-                setTitle( "You Right" ).setGenre( "RnB" )
+                setTitle( "You Right" )
+                setGenre( "RnB" )
+                val extras = Bundle().apply {
+                    putString( ALBUM_TITLE_KEY, "Album-1" )
+                }
+                setExtras( extras )
             }.build()
         )
     }.build(),
     MediaItem.Builder().apply {
         setMediaId( id2 ).setMediaMetadata(
             MediaMetadata.Builder().apply {
-                setTitle( "Best Man" ).setGenre( "Hip Hop" )
+                setTitle( "Best Man" )
+                setGenre( "Hip Hop" )
+                val extras = Bundle().apply {
+                    putString( ALBUM_TITLE_KEY, "Album-2" )
+                }
+                setExtras( extras )
             }.build()
         )
     }.build(),
     MediaItem.Builder().apply {
         setMediaId( id3 ).setMediaMetadata(
             MediaMetadata.Builder().apply {
-                setTitle( "Huncho Jack" ).setGenre( "Hip Hop" )
+                setTitle( "Huncho Jack" )
+                setGenre( "Hip Hop" )
+                val extras = Bundle().apply {
+                    putString( ALBUM_TITLE_KEY, "Album-2" )
+                }
+                setExtras( extras )
             }.build()
         )
     }.build(),
     MediaItem.Builder().apply {
         setMediaId( id4 ).setMediaMetadata(
             MediaMetadata.Builder().apply {
-                setTitle( "Lean on" ).setGenre( "Dance" )
+                setTitle( "Lean on" )
+                setGenre( "Dance" )
+                setAlbumTitle( "Album-3" )
+                val extras = Bundle().apply {
+                    putString( ALBUM_TITLE_KEY, "Album-3" )
+                }
+                setExtras( extras )
             }.build()
         )
     }.build(),
     MediaItem.Builder().apply {
         setMediaId( id5 ).setMediaMetadata(
             MediaMetadata.Builder().apply {
-                setTitle( "Scared To Be Lonely" ).setGenre( "House" )
+                setTitle( "Scared To Be Lonely" )
+                setGenre( "House" )
+                val extras = Bundle().apply {
+                    putString( ALBUM_TITLE_KEY, "Album-4" )
+                }
+                setExtras( extras )
             }.build()
         )
     }.build(),
@@ -192,11 +221,17 @@ val trackList: ImmutableList<MediaItem> = ImmutableList.of(
         setMediaId( id6 ).setMediaMetadata(
             MediaMetadata.Builder().apply {
                 setTitle( "High off life" )
-                    .setGenre( "House" )
+                setGenre( "House" )
+                val extras = Bundle().apply {
+                    putString( ALBUM_TITLE_KEY, "Album-4" )
+                }
+                setExtras( extras )
             }.build()
         )
     }.build(),
 )
+
+//mediaMetadata.extras?.getString( ALBUM_TITLE_KEY )
 
 val albumList: ImmutableList<MediaItem> = ImmutableList.of (
     MediaItem.Builder().apply {
@@ -226,7 +261,7 @@ val albumList: ImmutableList<MediaItem> = ImmutableList.of (
     MediaItem.Builder().apply {
         setMediaMetadata(
             MediaMetadata.Builder().apply {
-                setTitle( "Thriller4" )
+                setTitle( "Album-4" )
             }.build()
         )
     }.build()

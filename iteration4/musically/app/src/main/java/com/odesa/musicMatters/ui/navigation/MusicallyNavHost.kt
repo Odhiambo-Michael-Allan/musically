@@ -46,8 +46,11 @@ import com.odesa.musicMatters.data.preferences.HomeTab
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
+import com.odesa.musicMatters.ui.album.AlbumScreen
+import com.odesa.musicMatters.ui.album.AlbumScreenViewModel
+import com.odesa.musicMatters.ui.album.AlbumScreenViewModelFactory
 import com.odesa.musicMatters.ui.albums.AlbumsScreen
-import com.odesa.musicMatters.ui.albums.AlbumsViewModel
+import com.odesa.musicMatters.ui.albums.AlbumsScreenViewModel
 import com.odesa.musicMatters.ui.albums.AlbumsViewModelFactory
 import com.odesa.musicMatters.ui.artists.ArtistsScreen
 import com.odesa.musicMatters.ui.artists.ArtistsViewModel
@@ -65,6 +68,9 @@ import com.odesa.musicMatters.ui.genre.GenreScreenViewModelFactory
 import com.odesa.musicMatters.ui.genres.GenresScreen
 import com.odesa.musicMatters.ui.genres.GenresScreenViewModel
 import com.odesa.musicMatters.ui.genres.GenresScreenViewModelFactory
+import com.odesa.musicMatters.ui.playlist.PlaylistScreen
+import com.odesa.musicMatters.ui.playlist.PlaylistScreenViewModel
+import com.odesa.musicMatters.ui.playlist.PlaylistScreenViewModelFactory
 import com.odesa.musicMatters.ui.playlists.PlaylistsScreen
 import com.odesa.musicMatters.ui.playlists.PlaylistsViewModel
 import com.odesa.musicMatters.ui.playlists.PlaylistsViewModelFactory
@@ -128,7 +134,8 @@ fun MusicallyNavHost(
             )
             ForYouScreen(
                 viewModel = forYouScreenViewModel,
-                onSettingsClicked = { navController.navigate( Route.Settings.name ) }
+                onSettingsClicked = { navController.navigate( Route.Settings.name ) },
+                onSuggestedAlbumClick = { navController.navigateToAlbumScreen( it.name ) }
             )
         }
         composable(
@@ -166,12 +173,39 @@ fun MusicallyNavHost(
             enterTransition = { SlideTransition.slideUp.enterTransition() },
             exitTransition = { FadeTransition.exitTransition() }
         ) {
-            val albumsViewModel: AlbumsViewModel = viewModel(
-                factory = AlbumsViewModelFactory()
+            val albumsScreenViewModel: AlbumsScreenViewModel = viewModel(
+                factory = AlbumsViewModelFactory(
+                    musicServiceConnection = musicServiceConnection,
+                    settingsRepository = settingsRepository
+                )
             )
             AlbumsScreen(
-                viewModel = albumsViewModel,
+                viewModel = albumsScreenViewModel,
+                onAlbumClick = { navController.navigateToAlbumScreen( it ) },
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) }
+            )
+        }
+        composable(
+            route = Album.routeWithArgs,
+            arguments = Album.arguments,
+            enterTransition = { SlideTransition.slideLeft.enterTransition() },
+            exitTransition = { FadeTransition.exitTransition() }
+        ) { navBackStackEntry ->
+            val albumScreenViewModel: AlbumScreenViewModel = viewModel(
+                factory = AlbumScreenViewModelFactory(
+                    musicServiceConnection = musicServiceConnection,
+                    settingsRepository = settingsRepository,
+                    playlistRepository = playlistRepository
+                )
+            )
+            // Retrieve the passed argument
+            val albumName = navBackStackEntry.getRouteArgument(
+                RouteParameters.ALBUM_ROUTE_ALBUM_NAME ) ?: ""
+            albumScreenViewModel.loadSongsInAlbum( albumName )
+            AlbumScreen(
+                albumName = albumName,
+                albumScreenViewModel = albumScreenViewModel,
+                onNavigateBack = { navController.navigateUp() }
             )
         }
         composable(
@@ -189,6 +223,29 @@ fun MusicallyNavHost(
                 viewModel = genresScreenViewModel,
                 onGenreClick = { navController.navigateToGenreScreen( it ) },
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) }
+            )
+        }
+        composable(
+            route = Genre.routeWithArgs,
+            arguments = Genre.arguments,
+            enterTransition = { SlideTransition.slideLeft.enterTransition() },
+            exitTransition = { FadeTransition.exitTransition() },
+        ) { navBackStackEntry ->
+            val genreScreenViewModel: GenreScreenViewModel = viewModel(
+                factory = GenreScreenViewModelFactory(
+                    musicServiceConnection = musicServiceConnection,
+                    settingsRepository = settingsRepository,
+                    playlistRepository = playlistRepository,
+                )
+            )
+            // Retrieve the passed argument
+            val genreName = navBackStackEntry.getRouteArgument(
+                RouteParameters.GENRE_ROUTE_GENRE_NAME ) ?: ""
+            genreScreenViewModel.loadSongsWithGenre( genreName )
+            GenreScreen(
+                genreName = genreName,
+                genreScreenViewModel = genreScreenViewModel,
+                onNavigateBack = { navController.navigateUp() }
             )
         }
         composable(
@@ -210,11 +267,42 @@ fun MusicallyNavHost(
             exitTransition = { FadeTransition.exitTransition() }
         ) {
             val playlistsViewModel: PlaylistsViewModel = viewModel(
-                factory = PlaylistsViewModelFactory()
+                factory = PlaylistsViewModelFactory(
+                    musicServiceConnection = musicServiceConnection,
+                    settingsRepository = settingsRepository,
+                    playlistRepository = playlistRepository,
+                )
             )
             PlaylistsScreen(
                 viewModel = playlistsViewModel,
+                onPlaylistClick = { playlistId, playlistName -> navController.navigateToPlaylistScreen( playlistId, playlistName ) },
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) }
+            )
+        }
+        composable(
+            route = Playlist.routeWithArgs,
+            arguments = Playlist.arguments,
+            enterTransition = { SlideTransition.slideLeft.enterTransition() },
+            exitTransition = { SlideTransition.slideRight.exitTransition() }
+        ) { navBackStackEntry ->
+            val playlistScreenViewModel: PlaylistScreenViewModel = viewModel(
+                factory = PlaylistScreenViewModelFactory(
+                    musicServiceConnection = musicServiceConnection,
+                    settingsRepository = settingsRepository,
+                    playlistsRepository = playlistRepository
+                )
+            )
+            val playlistId = navBackStackEntry.getRouteArgument(
+                RouteParameters.PLAYLIST_ROUTE_PLAYLIST_ID
+            ) ?: ""
+            val playlistName = navBackStackEntry.getRouteArgument(
+                RouteParameters.PLAYLIST_ROUTE_PLAYLIST_NAME
+            ) ?: ""
+            playlistScreenViewModel.loadSongsInPlaylistWithId( playlistId )
+            PlaylistScreen(
+                playlistTitle = playlistName,
+                viewModel = playlistScreenViewModel,
+                onNavigateBack = { navController.navigateUp() }
             )
         }
         composable(
@@ -245,29 +333,6 @@ fun MusicallyNavHost(
             QueueScreen(
                 queueScreenViewModel = queueScreenViewModel,
                 onBackArrowClick = { navController.navigateUp() }
-            )
-        }
-        composable(
-            route = Genre.routeWithArgs,
-            arguments = Genre.arguments,
-            enterTransition = { SlideTransition.slideLeft.enterTransition() },
-            exitTransition = { FadeTransition.exitTransition() },
-        ) { navBackStackEntry ->
-            val genreScreenViewModel: GenreScreenViewModel = viewModel(
-                factory = GenreScreenViewModelFactory(
-                    musicServiceConnection = musicServiceConnection,
-                    settingsRepository = settingsRepository,
-                    playlistRepository = playlistRepository,
-                )
-            )
-            // Retrieve the passed argument
-            val genreName = navBackStackEntry.getRouteArgument(
-                RoutesParameters.GenreRouteGenreName ) ?: ""
-            genreScreenViewModel.loadSongsWithGenre( genreName )
-            GenreScreen(
-                genreName = genreName,
-                genreScreenViewModel = genreScreenViewModel,
-                onNavigateBack = { navController.navigateUp() }
             )
         }
 

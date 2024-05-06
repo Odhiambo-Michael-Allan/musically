@@ -49,6 +49,21 @@ fun Song.toSamplingInfoString( language: Language ): String? {
     }
 }
 
+enum class SortSongsBy {
+    CUSTOM,
+    TITLE,
+    ARTIST,
+    ALBUM,
+    DURATION,
+    DATE_ADDED,
+    DATE_MODIFIED,
+    COMPOSER,
+    ALBUM_ARTIST,
+    YEAR,
+    FILENAME,
+    TRACK_NUMBER,
+}
+
 val artistTagSeparators = setOf( "Feat", "feat.", "Ft", "ft", ",", "&" )
 
 val testSongs = List( 100 ) {

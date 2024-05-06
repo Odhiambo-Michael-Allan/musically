@@ -2,6 +2,7 @@ package com.odesa.musicMatters.ui.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -34,6 +35,7 @@ fun SongList(
     playSong: ( Song ) -> Unit,
     isFavorite: ( String ) -> Boolean,
     onFavorite: ( String ) -> Unit,
+    leadingContent: ( LazyListScope.() -> Unit )? = null
 ) {
 
     MediaSortBarScaffold(
@@ -71,6 +73,7 @@ fun SongList(
                     state = lazyListState,
                     modifier = Modifier.drawScrollBar( lazyListState )
                 ) {
+                    leadingContent?.invoke( this )
                     itemsIndexed( songs ) { index, song ->
                         SongCard(
                             language = language,

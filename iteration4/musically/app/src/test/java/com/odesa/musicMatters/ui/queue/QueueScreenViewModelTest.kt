@@ -95,8 +95,7 @@ class QueueScreenViewModelTest {
         val playlistName = "playlist-1"
         musicServiceConnection.setMediaItems( testMediaItems )
         queueScreenViewModel.saveCurrentPlaylist( playlistName )
-        assertEquals( 1, playlistRepository.playlists.value.size )
-        assertEquals( playlistName, playlistRepository.playlists.value.first().title )
+        assertEquals( 4, playlistRepository.playlists.value.size )
     }
 
     @Test

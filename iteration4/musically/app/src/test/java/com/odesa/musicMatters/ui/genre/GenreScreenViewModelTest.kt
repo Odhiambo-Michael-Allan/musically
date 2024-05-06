@@ -46,7 +46,7 @@ class GenreScreenViewModelTest {
 
     @Test
     fun testLoadSongsWithSpecificGenre() {
-        genreScreenViewModel.loadSongsWithGenre( "Hip Hop" )
+        genreScreenViewModel.loadSongsWithGenre(  "Hip Hop" )
         musicServiceConnection.runWhenInitialized {
             assertEquals( 2, genreScreenViewModel.uiState.value.songs.size )
         }

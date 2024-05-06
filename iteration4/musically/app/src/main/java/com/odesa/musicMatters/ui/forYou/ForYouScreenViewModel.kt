@@ -152,7 +152,6 @@ class ForYouScreenViewModel(
         if ( uiState.value.isLoadingRecentSongs ) return
         musicServiceConnection.runWhenInitialized {
             viewModelScope.launch {
-                settingsRepository.setShuffle( true )
                 val songsList = musicServiceConnection.getChildren( MUSIC_MATTERS_TRACKS_ROOT )
                     .map { it.toSong( artistTagSeparators ) }
                 val randomSongToPlay = songsList[ Random.nextInt( songsList.size ) ]

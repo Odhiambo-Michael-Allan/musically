@@ -15,9 +15,9 @@ class PlaylistStoreImpl private constructor( playlistsFile: File, mostPlayedSong
     private val playlistsFileAdapter: FileAdapter = FileAdapter( playlistsFile )
     private val mostPlayedSongsFileAdapter: FileAdapter = FileAdapter( mostPlayedSongsFile )
 
-    override fun fetchAllPlaylists(): Set<Playlist> {
+    override fun fetchAllPlaylists(): List<Playlist> {
         val playlistData = fetchPlaylistData()
-        val playlists = mutableSetOf( playlistData.favoritesPlaylist, playlistData.recentlyPlayedSongsPlaylist )
+        val playlists = mutableListOf( playlistData.favoritesPlaylist, playlistData.recentlyPlayedSongsPlaylist )
         playlists.addAll( playlistData.customPlaylists )
         val mostPlayedSongsPlaylist = fetchMostPlayedSongsPlaylist()
         playlists.add( mostPlayedSongsPlaylist )

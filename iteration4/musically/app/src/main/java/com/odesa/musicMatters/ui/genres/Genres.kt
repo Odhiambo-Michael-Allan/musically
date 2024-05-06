@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.odesa.musicMatters.data.preferences.GenreSortBy
 import com.odesa.musicMatters.services.i18n.English
-import com.odesa.musicMatters.ui.components.GenreGridList
+import com.odesa.musicMatters.ui.components.GenreGrid
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.TopAppBar
 import com.odesa.musicMatters.ui.components.testGenreList
@@ -49,7 +49,7 @@ fun GenresScreenContent(
             isLoading = uiState.isLoading,
             loading = uiState.language.loading
         ) {
-            GenreGridList(
+            GenreGrid(
                 genres = uiState.genres,
                 language = uiState.language,
                 sortType = GenreSortBy.GENRE,

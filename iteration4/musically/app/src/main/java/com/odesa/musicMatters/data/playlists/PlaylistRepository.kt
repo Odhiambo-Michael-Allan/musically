@@ -8,7 +8,7 @@ interface PlaylistRepository {
     val favoritesPlaylist: StateFlow<Playlist>
     val recentlyPlayedSongsPlaylist: StateFlow<Playlist>
     val mostPlayedSongsPlaylist: StateFlow<Playlist>
-    val playlists: StateFlow<Set<Playlist>>
+    val playlists: StateFlow<List<Playlist>>
     val mostPlayedSongsMap: StateFlow<Map<String, Int>>
 
     fun isFavorite( songId: String ): Boolean
