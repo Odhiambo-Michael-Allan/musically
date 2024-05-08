@@ -12,6 +12,7 @@ import com.odesa.musicMatters.services.media.connection.PlaybackState
 import com.odesa.musicMatters.services.media.extensions.ALBUM_TITLE_KEY
 import com.odesa.musicMatters.services.media.extensions.PATH_KEY
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_ALBUMS_ROOT
+import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_ARTISTS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_RECENT_SONGS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT
@@ -66,6 +67,7 @@ class FakeMusicServiceConnection : MusicServiceConnection {
             MUSIC_MATTERS_TRACKS_ROOT -> trackList
             MUSIC_MATTERS_RECENT_SONGS_ROOT -> trackList.subList( 0, 5 )
             MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT -> albumList
+            MUSIC_MATTERS_ARTISTS_ROOT -> artistList
             MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT -> artistList
             MUSIC_MATTERS_ALBUMS_ROOT -> albumList
             else -> genreList

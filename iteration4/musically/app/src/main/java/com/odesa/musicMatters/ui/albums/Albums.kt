@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.services.i18n.English
-import com.odesa.musicMatters.services.media.AlbumSortBy
+import com.odesa.musicMatters.services.media.SortAlbumsBy
 import com.odesa.musicMatters.services.media.testAlbums
 import com.odesa.musicMatters.ui.components.AlbumGrid
 import com.odesa.musicMatters.ui.components.LoaderScaffold
@@ -63,7 +63,7 @@ fun AlbumsScreenContent(
             AlbumGrid(
                 albums = uiState.albums,
                 language = uiState.language,
-                sortType = AlbumSortBy.ALBUM_NAME,
+                sortType = SortAlbumsBy.ALBUM_NAME,
                 sortReverse = false,
                 fallbackResourceId = fallbackResourceId,
                 onSortReverseChange = {},

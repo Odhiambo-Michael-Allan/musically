@@ -53,7 +53,7 @@ import com.odesa.musicMatters.ui.albums.AlbumsScreen
 import com.odesa.musicMatters.ui.albums.AlbumsScreenViewModel
 import com.odesa.musicMatters.ui.albums.AlbumsViewModelFactory
 import com.odesa.musicMatters.ui.artists.ArtistsScreen
-import com.odesa.musicMatters.ui.artists.ArtistsViewModel
+import com.odesa.musicMatters.ui.artists.ArtistsScreenViewModel
 import com.odesa.musicMatters.ui.artists.ArtistsViewModelFactory
 import com.odesa.musicMatters.ui.components.swipeable
 import com.odesa.musicMatters.ui.folders.FoldersScreen
@@ -160,11 +160,15 @@ fun MusicallyNavHost(
             enterTransition = { SlideTransition.slideUp.enterTransition() },
             exitTransition = { FadeTransition.exitTransition() }
         ) {
-            val artistsViewModel: ArtistsViewModel = viewModel(
-                factory = ArtistsViewModelFactory()
+            val artistsScreenViewModel: ArtistsScreenViewModel = viewModel(
+                factory = ArtistsViewModelFactory(
+                    musicServiceConnection = musicServiceConnection,
+                    settingsRepository = settingsRepository
+                )
             )
             ArtistsScreen(
-                viewModel = artistsViewModel,
+                viewModel = artistsScreenViewModel,
+                onArtistClick = {},
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) }
             )
         }

@@ -8,7 +8,7 @@ data class Album(
     val artworkUri: Uri?
 )
 
-enum class AlbumSortBy {
+enum class SortAlbumsBy {
     CUSTOM,
     ALBUM_NAME,
     ARTIST_NAME,

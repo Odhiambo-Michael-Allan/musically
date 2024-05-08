@@ -110,8 +110,10 @@ class TreeScreenViewModelTest {
         settingsRepository.setCurrentlyDisabledTreePaths( testPaths )
         viewModel.togglePath( testPaths.first() )
         assertEquals( testPaths.size - 1, viewModel.uiState.value.disabledTreePaths.size )
+        assertEquals( testPaths.size - 1, settingsRepository.currentlyDisabledTreePaths.value.size )
         viewModel.togglePath( testPaths.first() )
         assertEquals( testPaths.size, viewModel.uiState.value.disabledTreePaths.size )
+        assertEquals( testPaths.size, settingsRepository.currentlyDisabledTreePaths.value.size )
     }
 
     @Test

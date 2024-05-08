@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.playlists.testPlaylists
-import com.odesa.musicMatters.data.preferences.PlaylistSortBy
+import com.odesa.musicMatters.data.preferences.SortPlaylistsBy
 import com.odesa.musicMatters.services.i18n.English
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.PlaylistGrid
@@ -70,7 +70,7 @@ fun PlaylistsScreenContent(
                 PlaylistGrid(
                     playlists = uiState.playlists,
                     language = uiState.language,
-                    sortType = PlaylistSortBy.CUSTOM,
+                    sortType = SortPlaylistsBy.CUSTOM,
                     sortReverse = false,
                     fallbackResourceId = R.drawable.placeholder_light,
                     onSortReverseChange = {},

@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.playlists.testPlaylists
-import com.odesa.musicMatters.data.preferences.PlaylistSortBy
+import com.odesa.musicMatters.data.preferences.SortPlaylistsBy
 import com.odesa.musicMatters.services.i18n.English
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.media.Song
@@ -24,11 +24,11 @@ import com.odesa.musicMatters.services.media.Song
 fun PlaylistGrid(
     playlists: List<Playlist>,
     language: Language,
-    sortType: PlaylistSortBy,
+    sortType: SortPlaylistsBy,
     sortReverse: Boolean,
     @DrawableRes fallbackResourceId: Int,
     onSortReverseChange: ( Boolean ) -> Unit,
-    onSortTypeChange: ( PlaylistSortBy ) -> Unit,
+    onSortTypeChange: (SortPlaylistsBy ) -> Unit,
     onPlaylistClick: ( String, String ) -> Unit,
     onPlaySongsInPlaylist: ( Playlist ) -> Unit,
     onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
@@ -39,7 +39,7 @@ fun PlaylistGrid(
                 sortReverse = sortReverse,
                 onSortReverseChange = onSortReverseChange,
                 sortType = sortType,
-                sortTypes = PlaylistSortBy.entries.associateBy({ it }, { it.label(language) }),
+                sortTypes = SortPlaylistsBy.entries.associateBy({ it }, { it.label(language) }),
                 onSortTypeChange = onSortTypeChange,
                 label = {
                     Text(
@@ -89,10 +89,10 @@ fun PlaylistGrid(
     }
 }
 
-fun PlaylistSortBy.label( language: Language ) = when ( this ) {
-    PlaylistSortBy.TITLE -> language.title
-    PlaylistSortBy.CUSTOM -> language.custom
-    PlaylistSortBy.TRACKS_COUNT -> language.trackCount
+fun SortPlaylistsBy.label(language: Language ) = when ( this ) {
+    SortPlaylistsBy.TITLE -> language.title
+    SortPlaylistsBy.CUSTOM -> language.custom
+    SortPlaylistsBy.TRACKS_COUNT -> language.trackCount
 }
 
 @Preview( showSystemUi = true )
@@ -101,7 +101,7 @@ fun PlaylistGridPreview() {
     PlaylistGrid(
         playlists = testPlaylists,
         language = English,
-        sortType = PlaylistSortBy.CUSTOM,
+        sortType = SortPlaylistsBy.CUSTOM,
         sortReverse = false,
         fallbackResourceId = R.drawable.placeholder_light,
         onSortReverseChange = {},

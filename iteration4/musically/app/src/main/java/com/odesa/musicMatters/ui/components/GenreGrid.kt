@@ -31,7 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.common.collect.ImmutableList
-import com.odesa.musicMatters.data.preferences.GenreSortBy
+import com.odesa.musicMatters.data.preferences.SortGenresBy
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.media.Genre
@@ -63,10 +63,10 @@ private object GenreTile {
 fun GenreGrid(
     genres: List<Genre>,
     language: Language,
-    sortType: GenreSortBy,
+    sortType: SortGenresBy,
     sortReverse: Boolean,
     onSortReverseChange: ( Boolean ) -> Unit,
-    onSortTypeChange: ( GenreSortBy ) -> Unit,
+    onSortTypeChange: (SortGenresBy ) -> Unit,
     onGenreClick: ( String ) -> Unit,
 ) {
     MediaSortBarScaffold(
@@ -78,7 +78,7 @@ fun GenreGrid(
                     sortReverse = sortReverse,
                     onSortReverseChange = onSortReverseChange,
                     sortType = sortType,
-                    sortTypes = GenreSortBy.entries.associateBy( { it }, { it.label( language ) } ),
+                    sortTypes = SortGenresBy.entries.associateBy( { it }, { it.label( language ) } ),
                     onSortTypeChange = onSortTypeChange,
                     label = {
                         Text(
@@ -200,7 +200,7 @@ fun GenreGridPreview() {
     GenreGrid(
         genres = testGenreList,
         language = SettingsDefaults.language,
-        sortType = GenreSortBy.GENRE,
+        sortType = SortGenresBy.GENRE,
         sortReverse = false,
         onSortReverseChange = {},
         onSortTypeChange = {},
@@ -208,10 +208,10 @@ fun GenreGridPreview() {
     )
 }
 
-fun GenreSortBy.label( language: Language ) = when ( this ) {
-    GenreSortBy.GENRE -> language.genre
-    GenreSortBy.CUSTOM -> language.custom
-    GenreSortBy.TRACKS_COUNT -> language.trackCount
+fun SortGenresBy.label(language: Language ) = when ( this ) {
+    SortGenresBy.GENRE -> language.genre
+    SortGenresBy.CUSTOM -> language.custom
+    SortGenresBy.TRACKS_COUNT -> language.trackCount
 }
 
 val testGenreList: ImmutableList<Genre> = ImmutableList.of(
