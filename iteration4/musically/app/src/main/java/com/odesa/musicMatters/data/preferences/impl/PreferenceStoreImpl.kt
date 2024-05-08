@@ -417,6 +417,19 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         }
     }
 
+    override fun getCurrentlyDisabledTreePaths(): List<String> = getSharedPreferences()
+        .getStringSet( SettingsKeys.currentlyDisabledTreePaths, null )
+        ?.toList() ?: emptyList()
+
+    override suspend fun setCurrentlyDisabledTreePaths(paths: List<String> ) {
+        withContext( Dispatchers.IO ) {
+            getSharedPreferences().edit {
+                putStringSet( SettingsKeys.currentlyDisabledTreePaths, paths.toSet() )
+            }
+        }
+
+    }
+
     private fun getSharedPreferences() = context.getSharedPreferences(
         SettingsKeys.identifier,
         Context.MODE_PRIVATE
@@ -458,6 +471,8 @@ object SettingsKeys {
     const val pauseOnCurrentSongEnd = "pause_on_current_song_end"
     const val currentPlayingSpeed = "current_playing_speed"
     const val currentPlayingPitch = "current_playing_pitch"
+
+    const val currentlyDisabledTreePaths = "currently_disabled_tree_paths"
 }
 
 object SettingsDefaults {

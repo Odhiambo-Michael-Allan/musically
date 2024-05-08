@@ -44,6 +44,7 @@ class FakePreferencesStoreImpl : PreferenceStore {
     private var shuffle: Boolean? = null
     private var showLyrics: Boolean? = null
     private var controlsLayoutIsDefault: Boolean? = null
+    private var disabledTreePaths = listOf<String>()
 
     override suspend fun setLanguage( localeCode: String ) {
         language = localeCode
@@ -244,4 +245,10 @@ class FakePreferencesStoreImpl : PreferenceStore {
     }
 
     override fun getShowLyrics() = showLyrics ?: SettingsDefaults.showLyrics
+
+    override suspend fun setCurrentlyDisabledTreePaths(paths: List<String> ) {
+        this.disabledTreePaths = paths
+    }
+
+    override fun getCurrentlyDisabledTreePaths() = this.disabledTreePaths
 }

@@ -1,12 +1,12 @@
 package com.odesa.musicMatters.fakes
 
-import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.data.preferences.ForYou
 import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
 import com.odesa.musicMatters.data.preferences.NowPlayingLyricsLayout
 import com.odesa.musicMatters.data.preferences.impl.LoopMode
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.Belarusian
 import com.odesa.musicMatters.services.i18n.Chinese
 import com.odesa.musicMatters.services.i18n.English
@@ -128,6 +128,9 @@ class FakeSettingsRepository : SettingsRepository {
     private val _controlsLayoutIsDefault = MutableStateFlow(
         SettingsDefaults.controlsLayoutIsDefault )
     override val controlsLayoutIsDefault = _controlsLayoutIsDefault.asStateFlow()
+
+    private val _currentlyDisabledTreePaths = MutableStateFlow( emptyList<String>() )
+    override val currentlyDisabledTreePaths = _currentlyDisabledTreePaths.asStateFlow()
 
 
     override suspend fun setLanguage( localeCode: String ) {
@@ -269,5 +272,9 @@ class FakeSettingsRepository : SettingsRepository {
 
     override suspend fun setControlsLayoutIsDefault( controlsLayoutIsDefault: Boolean ) {
         _controlsLayoutIsDefault.value = controlsLayoutIsDefault
+    }
+
+    override suspend fun setCurrentlyDisabledTreePaths( paths: List<String> ) {
+        _currentlyDisabledTreePaths.value = paths
     }
 }

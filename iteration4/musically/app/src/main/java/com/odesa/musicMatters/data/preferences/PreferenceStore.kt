@@ -98,6 +98,9 @@ interface PreferenceStore {
     suspend fun setShowLyrics( showLyrics: Boolean )
     fun getShowLyrics(): Boolean
 
+    suspend fun setCurrentlyDisabledTreePaths(paths: List<String> )
+    fun getCurrentlyDisabledTreePaths(): List<String>
+
 }
 
 enum class HomeTab {

@@ -52,7 +52,7 @@ class SettingsRepositoryImplTest {
         changeLanguageTo( Spanish, "Configuración" )
     }
 
-    private fun changeLanguageTo(language: Language, testString: String ) = runTest {
+    private fun changeLanguageTo( language: Language, testString: String ) = runTest {
         settingsRepository.setLanguage( language.locale )
         assertEquals( language.locale, preferenceStore.getLanguage() )
         val currentLanguage = settingsRepository.language.value
@@ -383,6 +383,11 @@ class SettingsRepositoryImplTest {
             assertEquals( it, preferenceStore.getCurrentPlayingPitch() )
             assertEquals( it, settingsRepository.currentPlayingPitch.value )
         }
+    }
+
+    @Test
+    fun testCurrentlyDisabledTreePathsChange() = runTest {
+        assertEquals( 0, settingsRepository.currentlyDisabledTreePaths.value.size )
     }
 
 }

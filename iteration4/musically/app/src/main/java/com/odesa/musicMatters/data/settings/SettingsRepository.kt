@@ -42,6 +42,8 @@ interface SettingsRepository {
     val showLyrics: StateFlow<Boolean>
     val controlsLayoutIsDefault: StateFlow<Boolean>
 
+    val currentlyDisabledTreePaths: StateFlow<List<String>>
+
     suspend fun setLanguage( localeCode: String )
     suspend fun setFont( fontName: String )
     suspend fun setFontScale( fontScale: Float )
@@ -71,5 +73,5 @@ interface SettingsRepository {
     suspend fun setShuffle( shuffle: Boolean )
     suspend fun setShowLyrics( showLyrics: Boolean )
     suspend fun setControlsLayoutIsDefault( controlsLayoutIsDefault: Boolean )
-
+    suspend fun setCurrentlyDisabledTreePaths( paths: List<String> )
 }

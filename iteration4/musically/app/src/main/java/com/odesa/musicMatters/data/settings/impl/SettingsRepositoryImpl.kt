@@ -1,12 +1,12 @@
 package com.odesa.musicMatters.data.settings.impl
 
-import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.data.preferences.ForYou
 import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
 import com.odesa.musicMatters.data.preferences.NowPlayingLyricsLayout
 import com.odesa.musicMatters.data.preferences.PreferenceStore
 import com.odesa.musicMatters.data.preferences.impl.LoopMode
+import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.Belarusian
 import com.odesa.musicMatters.services.i18n.Chinese
 import com.odesa.musicMatters.services.i18n.English
@@ -109,6 +109,9 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore) : Se
 
     private val _controlsLayoutIsDefault = MutableStateFlow( preferenceStore.getControlsLayoutIsDefault() )
     override val controlsLayoutIsDefault = _controlsLayoutIsDefault.asStateFlow()
+
+    private val _currentlyDisabledTreePaths = MutableStateFlow( preferenceStore.getCurrentlyDisabledTreePaths() )
+    override val currentlyDisabledTreePaths = _currentlyDisabledTreePaths.asStateFlow()
 
     override suspend fun setLanguage( localeCode: String ) {
         preferenceStore.setLanguage( localeCode )
@@ -321,6 +324,13 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore) : Se
         preferenceStore.setControlsLayoutIsDefault( controlsLayoutIsDefault )
         _controlsLayoutIsDefault.update {
             controlsLayoutIsDefault
+        }
+    }
+
+    override suspend fun setCurrentlyDisabledTreePaths( paths: List<String> ) {
+        preferenceStore.setCurrentlyDisabledTreePaths( paths )
+        _currentlyDisabledTreePaths.update {
+            paths
         }
     }
 

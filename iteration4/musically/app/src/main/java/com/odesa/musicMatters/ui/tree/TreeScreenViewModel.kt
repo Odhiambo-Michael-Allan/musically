@@ -3,6 +3,7 @@ package com.odesa.musicMatters.ui.tree
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.MediaItem
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.preferences.SortPathsBy
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
@@ -38,13 +39,18 @@ class TreeScreenViewModel(
             language = settingsRepository.language.value,
             themeMode = settingsRepository.themeMode.value,
             favoriteSongIds = playlistRepository.favoritesPlaylist.value.songIds,
-            disabledDirectoryNames = emptyList(),
+            disabledTreePaths = emptyList(),
         )
     )
     val uiState = _uiState.asStateFlow()
 
     init {
         createTree()
+        viewModelScope.launch { observeCurrentlyPlayingSongId() }
+        viewModelScope.launch { observeLanguageChange() }
+        viewModelScope.launch { observeThemeModeChange() }
+        viewModelScope.launch { observeFavoriteSongsPlaylist() }
+        viewModelScope.launch { observeDisabledDirectoryNames() }
     }
 
     private fun createTree() {
@@ -67,6 +73,73 @@ class TreeScreenViewModel(
             }
         }
     }
+
+    private suspend fun observeCurrentlyPlayingSongId() {
+        musicServiceConnection.nowPlaying.collect {
+            _uiState.value = _uiState.value.copy(
+                currentlyPlayingSongId = it.mediaId
+            )
+        }
+    }
+
+    private suspend fun observeLanguageChange() {
+        settingsRepository.language.collect {
+            _uiState.value = _uiState.value.copy(
+                language = it
+            )
+        }
+    }
+
+    private suspend fun observeThemeModeChange() {
+        settingsRepository.themeMode.collect {
+            _uiState.value = _uiState.value.copy(
+                themeMode = it
+            )
+        }
+    }
+
+    private suspend fun observeFavoriteSongsPlaylist() {
+        playlistRepository.favoritesPlaylist.collect {
+            _uiState.value = _uiState.value.copy(
+                favoriteSongIds = it.songIds
+            )
+        }
+    }
+
+    private suspend fun observeDisabledDirectoryNames() {
+        settingsRepository.currentlyDisabledTreePaths.collect {
+            _uiState.value = _uiState.value.copy(
+                disabledTreePaths = it
+            )
+        }
+    }
+
+    fun togglePath( path: String ) {
+        viewModelScope.launch {
+            val currentlyDisabledPaths = uiState.value.disabledTreePaths.toMutableList()
+            if ( currentlyDisabledPaths.contains( path ) )
+                currentlyDisabledPaths.remove( path )
+            else
+                currentlyDisabledPaths.add( path )
+            settingsRepository.setCurrentlyDisabledTreePaths( currentlyDisabledPaths )
+            _uiState.value = _uiState.value.copy(
+                disabledTreePaths = currentlyDisabledPaths
+            )
+        }
+    }
+
+    fun playMedia(
+        mediaItem: MediaItem,
+    ) {
+        viewModelScope.launch {
+            val songs = musicServiceConnection.getChildren( MUSIC_MATTERS_TRACKS_ROOT )
+            musicServiceConnection.playMediaItem(
+                mediaItem = mediaItem,
+                mediaItems = songs,
+                shuffle = settingsRepository.shuffle.value
+            )
+        }
+    }
 }
 
 data class TreeScreenUiState(
@@ -77,7 +150,7 @@ data class TreeScreenUiState(
     val language: Language,
     val themeMode: ThemeMode,
     val favoriteSongIds: List<String>,
-    val disabledDirectoryNames: List<String>,
+    val disabledTreePaths: List<String>,
 )
 
 val testPaths = listOf(
@@ -110,7 +183,7 @@ val testTreeScreenUiState = TreeScreenUiState(
     language = English,
     favoriteSongIds = emptyList(),
     themeMode = SettingsDefaults.themeMode,
-    disabledDirectoryNames = emptyList()
+    disabledTreePaths = emptyList()
 )
 
 fun Path.directoryName(): String {

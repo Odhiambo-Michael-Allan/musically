@@ -29,6 +29,8 @@ import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.MusicNote
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -51,6 +53,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -107,8 +110,8 @@ fun TreeSongList(
             }
             else -> TreeSongListContent(
                 uiState = uiState,
-                togglePath = {},
-                onPlaySong = {},
+                togglePath = togglePath,
+                onPlaySong = onPlaySong,
                 fallbackResourceId = fallbackResourceId
             )
         }
@@ -142,56 +145,50 @@ fun TreeSongListContent(
         state = lazyListState
     ) {
         uiState.tree.forEach { ( directoryName, songsInDirectory ) ->
-            val expanded = !uiState.disabledDirectoryNames.contains( directoryName )
+            val expanded = !uiState.disabledTreePaths.contains( directoryName )
             val bottomPadding = if ( expanded ) 4.dp else 0.dp
 
             stickyHeader {
-                Box(
+                Row (
                     modifier = Modifier
-                        .padding( bottom = bottomPadding )
+                        .fillMaxWidth()
+                        .background( MaterialTheme.colorScheme.surfaceColorAtElevation( 1.dp ) )
+                        .clickable { togglePath(directoryName) }
+                        .padding(
+                            start = 12.dp,
+                            end = 8.dp,
+                            top = 4.dp,
+                            bottom = 4.dp
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Row (
+                    Icon(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
-                            .clickable { togglePath(directoryName) }
-                            .padding(
-                                start = 12.dp,
-                                end = 8.dp,
-                                top = 4.dp,
-                                bottom = 4.dp
-                            ),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            modifier = Modifier.size( 20.dp ),
-                            imageVector = if ( expanded ) Icons.Filled.ExpandMore
-                                    else Icons.Filled.ChevronRight,
-                            contentDescription = null
-                        )
-                        Spacer( modifier = Modifier.width( 4.dp ) )
-                        Text(
-                            text = directoryName,
-                            style = MaterialTheme.typography.labelMedium,
-                        )
-                        Spacer( modifier = Modifier.weight( 1f ) )
-                        var showOptionsMenu by remember { mutableStateOf( false ) }
-                        TreeSongListSongCardIconButton(
-                            icon = { modifier ->
-                                Icon(
-                                    modifier = modifier,
-                                    imageVector = Icons.Filled.MoreVert,
-                                    contentDescription = null
-                                )
-//                                GenericSongListDropdownMenu(
-//
-//                                )
-                            },
-                            onClick = {
-                                showOptionsMenu = !showOptionsMenu
-                            }
-                        )
-                    }
+                            .size( 20.dp )
+                        ,
+                        imageVector = if ( expanded ) Icons.Filled.ExpandMore
+                        else Icons.Filled.ChevronRight,
+                        contentDescription = null
+                    )
+                    Spacer( modifier = Modifier.width( 4.dp ) )
+                    Text(
+                        modifier = Modifier.weight( 1f ),
+                        text = directoryName,
+                        style = MaterialTheme.typography.labelMedium,
+                    )
+                    var showOptionsMenu by remember { mutableStateOf( false ) }
+                    TreeSongListSongCardIconButton(
+                        icon = { modifier ->
+                            Icon(
+                                modifier = modifier,
+                                imageVector = Icons.Filled.MoreVert,
+                                contentDescription = null
+                            )
+                        },
+                        onClick = {
+                            showOptionsMenu = !showOptionsMenu
+                        }
+                    )
                 }
             }
             if ( expanded ) {
@@ -202,83 +199,99 @@ fun TreeSongListContent(
                     val isFavorite by remember( uiState.favoriteSongIds, it ) {
                         derivedStateOf { uiState.favoriteSongIds.contains( it.id ) }
                     }
-                    Row (
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(5.dp))
-                            .padding(
-                                start = 12.dp,
-                                end = 8.dp,
-                                top = 6.dp,
-                                bottom = 6.dp
-                            )
-                            .clickable {
-                                onPlaySong(it)
-                            },
-                        horizontalArrangement = Arrangement.spacedBy( 12.dp ),
-                        verticalAlignment = Alignment.CenterVertically,
+                    Card (
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors( containerColor = Color.Transparent ),
+                        onClick = { onPlaySong( it ) }
                     ) {
-                        AsyncImage(
+                        Row (
                             modifier = Modifier
-                                .size(30.dp)
-                                .clip(RoundedCornerShape(5.dp)),
-                            model = ImageRequest.Builder( LocalContext.current ).apply {
-                                data( it.artworkUri )
-                                placeholder( fallbackResourceId )
-                                fallback( fallbackResourceId )
-                                error( fallbackResourceId )
-                                crossfade( true )
-                            }.build(),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop
-                        )
-                        Column (
-                            modifier = Modifier.weight( 1f )
+                                .padding(
+                                    start = 12.dp,
+                                    end = 8.dp,
+                                    top = 6.dp,
+                                    bottom = 6.dp
+                                ),
+                            horizontalArrangement = Arrangement.spacedBy( 12.dp ),
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Text(
-                                text = it.title,
-                                style = MaterialTheme.typography.labelLarge.copy(
-                                    color = when {
-                                        isCurrentlyPlaying -> MaterialTheme.colorScheme.primary
-                                        else -> LocalTextStyle.current.color
-                                    }
-                                )
+                            AsyncImage(
+                                modifier = Modifier
+                                    .size(30.dp)
+                                    .clip(RoundedCornerShape(5.dp)),
+                                model = ImageRequest.Builder( LocalContext.current ).apply {
+                                    data( it.artworkUri )
+                                    placeholder( fallbackResourceId )
+                                    fallback( fallbackResourceId )
+                                    error( fallbackResourceId )
+                                    crossfade( true )
+                                }.build(),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop
                             )
-                            if ( it.artists.isNotEmpty() ) {
+                            Column (
+                                modifier = Modifier.weight( 1f )
+                            ) {
                                 Text(
-                                    text = it.artists.joinToString(),
-                                    style = MaterialTheme.typography.labelSmall
+                                    text = it.title,
+                                    style = MaterialTheme.typography.labelLarge.copy(
+                                        color = when {
+                                            isCurrentlyPlaying -> MaterialTheme.colorScheme.primary
+                                            else -> LocalTextStyle.current.color
+                                        }
+                                    )
                                 )
+                                if ( it.artists.isNotEmpty() ) {
+                                    Text(
+                                        text = it.artists.joinToString(),
+                                        style = MaterialTheme.typography.labelSmall
+                                    )
+                                }
                             }
-                        }
-                        Row {
-                            if ( isFavorite ) {
+                            Row {
+                                if ( isFavorite ) {
+                                    TreeSongListSongCardIconButton(
+                                        icon = { modifier ->
+                                            Icon(
+                                                modifier = modifier,
+                                                imageVector = Icons.Filled.Favorite,
+                                                tint = MaterialTheme.colorScheme.primary,
+                                                contentDescription = null
+                                            )
+                                        },
+                                        onClick = {}
+                                    )
+                                }
+                                Spacer( modifier = Modifier.width( 4.dp ) )
+                                var showOptionsMenu by remember { mutableStateOf( false ) }
                                 TreeSongListSongCardIconButton(
                                     icon = { modifier ->
                                         Icon(
                                             modifier = modifier,
-                                            imageVector = Icons.Filled.Favorite,
-                                            tint = MaterialTheme.colorScheme.primary,
+                                            imageVector = Icons.Filled.MoreVert,
                                             contentDescription = null
                                         )
+                                        SongDropdownMenu(
+                                            language = uiState.language,
+                                            song = it,
+                                            isFavorite = isFavorite,
+                                            expanded = showOptionsMenu,
+                                            onFavorite = {},
+                                            onAddToQueue = {},
+                                            onPlayNext = { /*TODO*/ },
+                                            onViewArtist = {},
+                                            onViewAlbum = {},
+                                            onShareSong = {},
+                                            onDismissRequest = {
+                                                showOptionsMenu = false
+                                            }
+                                        )
                                     },
-                                    onClick = {}
+                                    onClick = {
+                                        showOptionsMenu = !showOptionsMenu
+                                    }
                                 )
                             }
-                            Spacer( modifier = Modifier.width( 4.dp ) )
-                            var showOptionsMenu by remember { mutableStateOf( false ) }
-                            TreeSongListSongCardIconButton(
-                                icon = { modifier ->
-                                    Icon(
-                                        modifier = modifier,
-                                        imageVector = Icons.Filled.MoreVert,
-                                        contentDescription = null
-                                    )
-                                },
-                                onClick = {
-                                    showOptionsMenu = !showOptionsMenu
-                                }
-                            )
                         }
                     }
                 }
@@ -341,14 +354,14 @@ private fun TreeSongListMediaSortBar(
 
     Row (
         modifier = Modifier
-            .padding( 16.dp, 16.dp )
+            .padding(16.dp, 16.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
-                .clip( RoundedCornerShape( 8.dp ) )
+                .clip(RoundedCornerShape(8.dp))
                 .clickable {
                     showSortMenu = !showSortMenu
                 }
@@ -490,6 +503,7 @@ private fun TreeSongListMediaSortBarDropdownMenuItem(
                     Icon(
                         imageVector = if ( reversed ) Icons.Filled.ArrowCircleDown
                                 else Icons.Filled.ArrowCircleUp,
+                        tint = MaterialTheme.colorScheme.primary,
                         contentDescription = null
                     )
                 }
