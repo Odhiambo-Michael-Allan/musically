@@ -84,7 +84,7 @@ import com.odesa.musicMatters.ui.songs.SongsScreen
 import com.odesa.musicMatters.ui.songs.SongsScreenViewModel
 import com.odesa.musicMatters.ui.songs.SongsViewModelFactory
 import com.odesa.musicMatters.ui.tree.TreeScreen
-import com.odesa.musicMatters.ui.tree.TreeViewModel
+import com.odesa.musicMatters.ui.tree.TreeScreenViewModel
 import com.odesa.musicMatters.ui.tree.TreeViewModelFactory
 
 @OptIn( ExperimentalMaterial3Api::class )
@@ -310,11 +310,15 @@ fun MusicallyNavHost(
             enterTransition = { SlideTransition.slideUp.enterTransition() },
             exitTransition = { FadeTransition.exitTransition() }
         ) {
-            val treeViewModel: TreeViewModel = viewModel(
-                factory = TreeViewModelFactory()
+            val treeScreenViewModel: TreeScreenViewModel = viewModel(
+                factory = TreeViewModelFactory(
+                    musicServiceConnection = musicServiceConnection,
+                    settingsRepository = settingsRepository,
+                    playlistRepository = playlistRepository
+                )
             )
             TreeScreen(
-                viewModel = treeViewModel,
+                viewModel = treeScreenViewModel,
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) }
             )
         }

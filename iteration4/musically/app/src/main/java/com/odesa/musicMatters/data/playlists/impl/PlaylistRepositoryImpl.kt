@@ -40,6 +40,7 @@ class PlaylistRepositoryImpl( private val playlistStore: PlaylistStore ) : Playl
         withContext( Dispatchers.IO ) {
             playlistStore.addToFavorites( songId )
             _favoritesPlaylist.value = playlistStore.fetchFavoritesPlaylist()
+            _playlists.value = playlistStore.fetchAllPlaylists()
         }
     }
 

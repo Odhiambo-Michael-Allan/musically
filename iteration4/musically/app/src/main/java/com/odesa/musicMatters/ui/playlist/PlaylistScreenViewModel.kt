@@ -3,6 +3,7 @@ package com.odesa.musicMatters.ui.playlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.MediaItem
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.Language
@@ -34,6 +35,27 @@ class PlaylistScreenViewModel(
     )
     val uiState = _uiState.asStateFlow()
 
+    init {
+        viewModelScope.launch { observeCurrentlyPlayingSong() }
+        viewModelScope.launch { observeFavoriteSongIds() }
+    }
+
+    private suspend fun observeCurrentlyPlayingSong() {
+        musicServiceConnection.nowPlaying.collect {
+            _uiState.value = _uiState.value.copy(
+                currentlyPlayingSongId = it.mediaId
+            )
+        }
+    }
+
+    private suspend fun observeFavoriteSongIds() {
+        playlistRepository.favoritesPlaylist.collect {
+            _uiState.value = _uiState.value.copy(
+                favoriteSongIds = it.songIds
+            )
+        }
+    }
+
     fun loadSongsInPlaylistWithId( playlistId: String ) {
         musicServiceConnection.runWhenInitialized {
             viewModelScope.launch {
@@ -47,6 +69,19 @@ class PlaylistScreenViewModel(
             }
         }
     }
+
+    fun playMedia(
+        mediaItem: MediaItem,
+    ) {
+        viewModelScope.launch {
+            musicServiceConnection.playMediaItem(
+                mediaItem = mediaItem,
+                mediaItems = uiState.value.songsInPlaylist.map { it.mediaItem },
+                shuffle = settingsRepository.shuffle.value
+            )
+        }
+    }
+
 }
 
 data class PlaylistScreenUiState(

@@ -22,7 +22,7 @@ class FakePlaylistRepository : PlaylistRepository {
     override val mostPlayedSongsPlaylist: StateFlow<Playlist>
         get() = TODO("Not yet implemented")
 
-    private val _playlists = MutableStateFlow( emptySet<Playlist>() )
+    private val _playlists = MutableStateFlow( emptyList<Playlist>() )
     override val playlists = _playlists.asStateFlow()
     override val mostPlayedSongsMap: StateFlow<Map<String, Int>>
         get() = TODO("Not yet implemented")
@@ -64,12 +64,12 @@ class FakePlaylistRepository : PlaylistRepository {
     }
 
     override suspend fun savePlaylist( playlist: Playlist ) {
-        val mutablePlaylist = _playlists.value.toMutableSet()
+        val mutablePlaylist = _playlists.value.toMutableList()
         mutablePlaylist.add( playlist )
         _playlists.value = mutablePlaylist
     }
 
     override suspend fun deletePlaylist( playlist: Playlist ) {
-        _playlists.value = _playlists.value.filter { it.id != playlist.id }.toSet()
+        _playlists.value = _playlists.value.filter { it.id != playlist.id }
     }
 }

@@ -17,7 +17,6 @@ import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.i18n.Spanish
 import com.odesa.musicMatters.services.media.testSongs
 import com.odesa.musicMatters.ui.theme.ThemeMode
-import junit.framework.TestCase
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertNotNull
@@ -49,7 +48,7 @@ class AlbumScreenViewModelTest {
 
     @Test
     fun testLanguageChange() {
-        TestCase.assertEquals("Settings", albumScreenViewModel.uiState.value.language.settings)
+        assertEquals("Settings", albumScreenViewModel.uiState.value.language.settings)
         changeLanguageTo( Belarusian, "Налады" )
         changeLanguageTo( Chinese, "设置" )
         changeLanguageTo( English, "Settings" )
@@ -61,35 +60,35 @@ class AlbumScreenViewModelTest {
     private fun changeLanguageTo(language: Language, testString: String ) = runTest {
         settingsRepository.setLanguage( language.locale )
         val currentLanguage = albumScreenViewModel.uiState.value.language
-        TestCase.assertEquals( testString, currentLanguage.settings )
+        assertEquals( testString, currentLanguage.settings )
     }
 
     @Test
     fun testThemeModeChange() = runTest {
-        TestCase.assertEquals(
+        assertEquals(
             SettingsDefaults.themeMode,
             albumScreenViewModel.uiState.value.themeMode
         )
         ThemeMode.entries.forEach {
             settingsRepository.setThemeMode( it )
-            TestCase.assertEquals( it, albumScreenViewModel.uiState.value.themeMode )
+            assertEquals( it, albumScreenViewModel.uiState.value.themeMode )
         }
     }
 
     @Test
     fun testNowPlayingMediaItemIsCorrectlyUpdated() {
-        TestCase.assertEquals( "", albumScreenViewModel.uiState.value.currentlyPlayingSongId )
+        assertEquals( "", albumScreenViewModel.uiState.value.currentlyPlayingSongId )
         musicServiceConnection.setNowPlaying( testMediaItems.first() )
-        TestCase.assertEquals( id1, albumScreenViewModel.uiState.value.currentlyPlayingSongId )
+        assertEquals( id1, albumScreenViewModel.uiState.value.currentlyPlayingSongId )
     }
 
     @Test
     fun testFavoriteSongsChange() = runTest {
-        TestCase.assertEquals( 0, albumScreenViewModel.uiState.value.favoriteSongIds.size )
+        assertEquals( 0, albumScreenViewModel.uiState.value.favoriteSongIds.size )
         testSongs.forEach {
             playlistRepository.addToFavorites( it.id )
         }
-        TestCase.assertEquals(
+        assertEquals(
             testSongs.size,
             albumScreenViewModel.uiState.value.favoriteSongIds.size
         )
@@ -100,12 +99,12 @@ class AlbumScreenViewModelTest {
         testSongs.forEach {
             playlistRepository.addToFavorites( it.id )
         }
-        TestCase.assertEquals(
+        assertEquals(
             testSongs.size,
             albumScreenViewModel.uiState.value.favoriteSongIds.size
         )
         albumScreenViewModel.addToFavorites( testSongs.first().id )
-        TestCase.assertEquals(
+        assertEquals(
             testSongs.size - 1,
             albumScreenViewModel.uiState.value.favoriteSongIds.size
         )

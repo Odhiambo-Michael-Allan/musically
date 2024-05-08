@@ -154,3 +154,8 @@ enum class PlaylistSortBy {
     TITLE,
     TRACKS_COUNT,
 }
+
+enum class SortPathsBy {
+    CUSTOM,
+    NAME
+}

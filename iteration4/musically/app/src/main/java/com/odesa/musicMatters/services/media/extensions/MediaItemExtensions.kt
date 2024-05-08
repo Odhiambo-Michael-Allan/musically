@@ -19,6 +19,7 @@ import com.odesa.musicMatters.services.media.Album
 import com.odesa.musicMatters.services.media.Artist
 import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.services.media.artistTagSeparators
+import timber.log.Timber
 
 fun MediaItem.Builder.from( cursor: Cursor, context: Context ): MediaItem.Builder {
     val mediaUri = getMediaUriFrom( cursor )
@@ -89,7 +90,7 @@ fun MediaMetadata.Builder.from( cursor: Cursor, context: Context, mediaUri: Uri 
     val size = cursor.getNullableLongFrom( AudioColumns.SIZE ) ?: UNKNOWN_LONG_VALUE
 //    Timber.tag( TAG ).d( "Size: $size" )
     val path = cursor.getNullableStringFrom( AudioColumns.DATA ) ?: UNKNOWN_STRING_VALUE
-//    Timber.tag( TAG ).d( "Path: $path" )
+    Timber.tag( TAG ).d( "Path: $path" )
 
     var _genre: String? = null
     if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ) {

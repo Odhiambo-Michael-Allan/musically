@@ -10,11 +10,13 @@ import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
 import com.odesa.musicMatters.services.media.connection.NOTHING_PLAYING
 import com.odesa.musicMatters.services.media.connection.PlaybackState
 import com.odesa.musicMatters.services.media.extensions.ALBUM_TITLE_KEY
+import com.odesa.musicMatters.services.media.extensions.PATH_KEY
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_ALBUMS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_RECENT_SONGS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_TRACKS_ROOT
+import com.odesa.musicMatters.ui.tree.testPaths
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.UUID
@@ -163,6 +165,7 @@ val trackList: ImmutableList<MediaItem> = ImmutableList.of(
                 setGenre( "RnB" )
                 val extras = Bundle().apply {
                     putString( ALBUM_TITLE_KEY, "Album-1" )
+                    putString( PATH_KEY, testPaths.first() )
                 }
                 setExtras( extras )
             }.build()
@@ -175,6 +178,7 @@ val trackList: ImmutableList<MediaItem> = ImmutableList.of(
                 setGenre( "Hip Hop" )
                 val extras = Bundle().apply {
                     putString( ALBUM_TITLE_KEY, "Album-2" )
+                    putString( PATH_KEY, testPaths[1] )
                 }
                 setExtras( extras )
             }.build()
@@ -187,6 +191,7 @@ val trackList: ImmutableList<MediaItem> = ImmutableList.of(
                 setGenre( "Hip Hop" )
                 val extras = Bundle().apply {
                     putString( ALBUM_TITLE_KEY, "Album-2" )
+                    putString( PATH_KEY, testPaths[2] )
                 }
                 setExtras( extras )
             }.build()
@@ -200,6 +205,7 @@ val trackList: ImmutableList<MediaItem> = ImmutableList.of(
                 setAlbumTitle( "Album-3" )
                 val extras = Bundle().apply {
                     putString( ALBUM_TITLE_KEY, "Album-3" )
+                    putString( PATH_KEY, testPaths[3] )
                 }
                 setExtras( extras )
             }.build()
@@ -212,6 +218,7 @@ val trackList: ImmutableList<MediaItem> = ImmutableList.of(
                 setGenre( "House" )
                 val extras = Bundle().apply {
                     putString( ALBUM_TITLE_KEY, "Album-4" )
+                    putString( PATH_KEY, testPaths[4] )
                 }
                 setExtras( extras )
             }.build()
@@ -224,6 +231,7 @@ val trackList: ImmutableList<MediaItem> = ImmutableList.of(
                 setGenre( "House" )
                 val extras = Bundle().apply {
                     putString( ALBUM_TITLE_KEY, "Album-4" )
+                    putString( PATH_KEY, testPaths[4] )
                 }
                 setExtras( extras )
             }.build()
@@ -231,7 +239,6 @@ val trackList: ImmutableList<MediaItem> = ImmutableList.of(
     }.build(),
 )
 
-//mediaMetadata.extras?.getString( ALBUM_TITLE_KEY )
 
 val albumList: ImmutableList<MediaItem> = ImmutableList.of (
     MediaItem.Builder().apply {

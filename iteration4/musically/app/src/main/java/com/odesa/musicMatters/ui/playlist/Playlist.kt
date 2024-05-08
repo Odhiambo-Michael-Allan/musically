@@ -41,7 +41,7 @@ fun PlaylistScreen(
         onSortReverseChange = {},
         onSortTypeChange = {},
         onShufflePlay = {},
-        playSong = {},
+        playSong = { viewModel.playMedia( it.mediaItem ) },
         onFavorite = {},
         onNavigateBack = onNavigateBack
     )

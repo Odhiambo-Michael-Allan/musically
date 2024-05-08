@@ -36,7 +36,8 @@ class FakePlaylistRepository : PlaylistRepository {
     override val mostPlayedSongsPlaylist = _mostPlayedSongsPlaylist.asStateFlow()
 
     private val _playlists = MutableStateFlow(
-        listOf( _favoritePlaylist.value,
+        listOf(
+            _favoritePlaylist.value,
             _recentlyPlayedSongsPlaylist.value,
             _mostPlayedSongsPlaylist.value
         )
@@ -56,6 +57,9 @@ class FakePlaylistRepository : PlaylistRepository {
         _favoritePlaylist.value = _favoritePlaylist.value.copy(
             songIds = currentFavoritesIds
         )
+        val updatedListOfPlaylists = _playlists.value.filter { it.id != _favoritePlaylist.value.id }.toMutableList()
+        updatedListOfPlaylists.add( _favoritePlaylist.value )
+        _playlists.value = updatedListOfPlaylists
     }
 
     override suspend fun removeFromFavorites( songId: String ) {
@@ -84,14 +88,14 @@ class FakePlaylistRepository : PlaylistRepository {
     }
 
     override suspend fun addToMostPlayedPlaylist( songId: String ) {
-        val currentValue = _mostPlayedSongsPlaylist.value.songIds.toMutableList()
-        currentValue.add( songId )
-        val currentMap = _mostPlayedSongsMap.value
-        if ( currentMap.containsKey( songId ) ) currentMap[ songId ] =
-            currentMap[ songId ]!!.plus( 1 ) else currentMap[ songId] = 1
-        _mostPlayedSongsMap.value = currentMap
+        val songIdsInMostPlayedSongsPlaylist = _mostPlayedSongsPlaylist.value.songIds.toMutableList()
+        songIdsInMostPlayedSongsPlaylist.add( songId )
+        val mapOfMostPlayedSongs = _mostPlayedSongsMap.value
+        if ( mapOfMostPlayedSongs.containsKey( songId ) ) mapOfMostPlayedSongs[ songId ] =
+            mapOfMostPlayedSongs[ songId ]!!.plus( 1 ) else mapOfMostPlayedSongs[ songId ] = 1
+        _mostPlayedSongsMap.value = mapOfMostPlayedSongs
         _mostPlayedSongsPlaylist.value = _mostPlayedSongsPlaylist.value.copy(
-            songIds = currentValue
+            songIds = songIdsInMostPlayedSongsPlaylist
         )
     }
 
