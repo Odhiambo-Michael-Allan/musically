@@ -199,7 +199,7 @@ fun CustomSlider(
 @Composable
 fun CustomSliderPreview() {
     CustomSlider(
-        SettingsDefaults.fadePlaybackDuration,
+        SettingsDefaults.FADE_PLAYBACK_DURATION,
         0.5f..6f,
         calculateSliderValue = { value ->
             value.times( 2 ).roundToInt().toFloat().div( 2 ) },

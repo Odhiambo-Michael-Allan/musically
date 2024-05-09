@@ -1,6 +1,5 @@
 package com.odesa.musicMatters.data.settings.impl
 
-import com.odesa.musicMatters.data.preferences.ForYou
 import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
 import com.odesa.musicMatters.data.preferences.NowPlayingLyricsLayout
@@ -43,9 +42,6 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore) : Se
 
     private val _homeTabs = MutableStateFlow( preferenceStore.getHomeTabs() )
     override val homeTabs = _homeTabs.asStateFlow()
-
-    private val _forYouContents = MutableStateFlow( preferenceStore.getForYouContents() )
-    override val forYouContents = _forYouContents.asStateFlow()
 
     private val _homePageBottomBarLabelVisibility = MutableStateFlow( preferenceStore.getHomePageBottomBarLabelVisibility() )
     override val homePageBottomBarLabelVisibility = _homePageBottomBarLabelVisibility.asStateFlow()
@@ -170,13 +166,6 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore) : Se
         preferenceStore.setHomeTabs( homeTabs )
         _homeTabs.update {
             homeTabs
-        }
-    }
-
-    override suspend fun setForYouContents( forYouContents: Set<ForYou> ) {
-        preferenceStore.setForYouContents( forYouContents )
-        _forYouContents.update {
-            forYouContents
         }
     }
 

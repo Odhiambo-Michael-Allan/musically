@@ -18,7 +18,7 @@ import com.odesa.musicMatters.services.media.testSongs
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.SongList
 import com.odesa.musicMatters.ui.components.TopAppBar
-import com.odesa.musicMatters.ui.theme.MusicallyTheme
+import com.odesa.musicMatters.ui.theme.MusicMattersTheme
 import com.odesa.musicMatters.ui.theme.ThemeMode
 import com.odesa.musicMatters.ui.theme.isLight
 
@@ -91,7 +91,7 @@ fun SongsScreenContent(
 @Preview( showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_MASK )
 @Composable
 fun SongsScreenContentPreview() {
-    MusicallyTheme(
+    MusicMattersTheme(
         themeMode = SettingsDefaults.themeMode,
         primaryColorName = SettingsDefaults.primaryColorName,
         fontName = SettingsDefaults.font.name,

@@ -52,6 +52,9 @@ import com.odesa.musicMatters.ui.album.AlbumScreenViewModelFactory
 import com.odesa.musicMatters.ui.albums.AlbumsScreen
 import com.odesa.musicMatters.ui.albums.AlbumsScreenViewModel
 import com.odesa.musicMatters.ui.albums.AlbumsViewModelFactory
+import com.odesa.musicMatters.ui.artist.ArtistScreen
+import com.odesa.musicMatters.ui.artist.ArtistScreenViewModel
+import com.odesa.musicMatters.ui.artist.ArtistScreenViewModelFactory
 import com.odesa.musicMatters.ui.artists.ArtistsScreen
 import com.odesa.musicMatters.ui.artists.ArtistsScreenViewModel
 import com.odesa.musicMatters.ui.artists.ArtistsViewModelFactory
@@ -168,8 +171,33 @@ fun MusicallyNavHost(
             )
             ArtistsScreen(
                 viewModel = artistsScreenViewModel,
-                onArtistClick = {},
+                onArtistClick = { navController.navigateToArtistScreen( it ) },
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) }
+            )
+        }
+        composable(
+            route = Artist.route.name,
+            arguments = Artist.arguments,
+            enterTransition = { SlideTransition.slideLeft.enterTransition() },
+            exitTransition = { FadeTransition.exitTransition() }
+        ) { navBackStackEntry ->
+            val artistScreenViewModel: ArtistScreenViewModel = viewModel(
+                factory = ArtistScreenViewModelFactory(
+                    musicServiceConnection = musicServiceConnection,
+                    settingsRepository = settingsRepository,
+                    playlistRepository = playlistRepository
+                )
+            )
+            // Retrieve the passed argument
+            val artist = navBackStackEntry.getRouteArgument(
+                RouteParameters.ARTIST_ROUTE_ARTIST_NAME
+            ) ?: ""
+            artistScreenViewModel.loadSongsBy( artist )
+            ArtistScreen(
+                artistName = artist,
+                artistScreenViewModel = artistScreenViewModel,
+                onViewAlbum = { navController.navigateToAlbumScreen( it ) },
+                onNavigateBack = { navController.navigateUp() }
             )
         }
         composable(
@@ -491,7 +519,6 @@ fun HomeTab.toDestination() = when( this ) {
     HomeTab.Songs -> Songs
     HomeTab.Tree -> Tree
     HomeTab.Playlists -> Playlists
-    HomeTab.Folders -> Folders
     HomeTab.Artists -> Artists
     HomeTab.Albums -> Albums
     HomeTab.Genres -> Genres

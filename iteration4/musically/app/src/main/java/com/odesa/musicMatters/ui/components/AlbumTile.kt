@@ -1,6 +1,7 @@
 package com.odesa.musicMatters.ui.components
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
@@ -15,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,6 +30,7 @@ import com.odesa.musicMatters.services.media.testAlbums
 
 @Composable
 fun AlbumTile(
+    modifier: Modifier,
     album: Album,
     language: Language,
     @DrawableRes fallbackResourceId: Int,
@@ -39,6 +42,7 @@ fun AlbumTile(
     onClick: () -> Unit
 ) {
     Tile(
+        modifier = modifier,
         imageRequest = ImageRequest.Builder( LocalContext.current ).apply {
             data( album.artworkUri )
             placeholder( fallbackResourceId )
@@ -186,6 +190,7 @@ fun AlbumDropdownMenu(
 @Composable
 fun AlbumTilePreview() {
     AlbumTile(
+        modifier = Modifier.fillMaxWidth(),
         album = testAlbums.first(),
         language = English,
         fallbackResourceId = R.drawable.placeholder_light,

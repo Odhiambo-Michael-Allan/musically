@@ -1,6 +1,5 @@
 package com.odesa.musicMatters.fakes
 
-import com.odesa.musicMatters.data.preferences.ForYou
 import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
 import com.odesa.musicMatters.data.preferences.NowPlayingLyricsLayout
@@ -19,7 +18,6 @@ class FakePreferencesStoreImpl : PreferenceStore {
     private var useMaterialYou: Boolean? = null
     private var primaryColorName: String? = null
     private var homeTabs: Set<HomeTab>? = null
-    private var forYouContents: Set<ForYou>? = null
     private var homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility? = null
     private var fadePlayback: Boolean? = null
     private var fadePlaybackDuration: Float? = null
@@ -87,12 +85,6 @@ class FakePreferencesStoreImpl : PreferenceStore {
         this.homeTabs = homeTabs
     }
 
-    override fun getForYouContents() = forYouContents ?: SettingsDefaults.forYouContents
-
-    override suspend fun setForYouContents( forYouContents: Set<ForYou> ) {
-        this.forYouContents = forYouContents
-    }
-
     override fun getHomePageBottomBarLabelVisibility() = homePageBottomBarLabelVisibility
         ?: SettingsDefaults.homePageBottomBarLabelVisibility
 
@@ -100,82 +92,82 @@ class FakePreferencesStoreImpl : PreferenceStore {
         homePageBottomBarLabelVisibility = value
     }
 
-    override fun getFadePlayback() = fadePlayback ?: SettingsDefaults.fadePlayback
+    override fun getFadePlayback() = fadePlayback ?: SettingsDefaults.FADE_PLAYBACK
 
     override suspend fun setFadePlayback( fadePlayback: Boolean ) {
         this.fadePlayback = fadePlayback
     }
 
-    override fun getFadePlaybackDuration() = fadePlaybackDuration ?: SettingsDefaults.fadePlaybackDuration
+    override fun getFadePlaybackDuration() = fadePlaybackDuration ?: SettingsDefaults.FADE_PLAYBACK_DURATION
 
     override suspend fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
         this.fadePlaybackDuration = fadePlaybackDuration
     }
 
-    override fun getRequireAudioFocus() = requireAudioFocus ?: SettingsDefaults.requireAudioFocus
+    override fun getRequireAudioFocus() = requireAudioFocus ?: SettingsDefaults.REQUIRE_AUDIO_FOCUS
 
     override suspend fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
         this.requireAudioFocus = requireAudioFocus
     }
 
     override fun getIgnoreAudioFocusLoss() = ignoreAudioFocusLoss
-        ?: SettingsDefaults.ignoreAudioFocusLoss
+        ?: SettingsDefaults.IGNORE_AUDIO_FOCUS_LOSS
 
     override suspend fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean ) {
         this.ignoreAudioFocusLoss = ignoreAudioFocusLoss
     }
 
     override fun getPlayOnHeadphonesConnect() = playOnHeadphonesConnect
-        ?: SettingsDefaults.playOnHeadphonesConnect
+        ?: SettingsDefaults.PLAY_ON_HEADPHONES_CONNECT
 
     override suspend fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
         this.playOnHeadphonesConnect = playOnHeadphonesConnect
     }
 
     override fun getPauseOnHeadphonesDisconnect() = pauseOnHeadphonesDisconnect
-        ?: SettingsDefaults.pauseOnHeadphonesDisconnect
+        ?: SettingsDefaults.PAUSE_ON_HEADPHONES_DISCONNECT
 
     override suspend fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean ) {
         this.pauseOnHeadphonesDisconnect = pauseOnHeadphonesDisconnect
     }
 
     override fun getFastRewindDuration() = fastRewindDuration
-        ?: SettingsDefaults.fastRewindDuration
+        ?: SettingsDefaults.FAST_REWIND_DURATION
 
     override suspend fun setFastRewindDuration( fastRewindDuration: Int ) {
         this.fastRewindDuration = fastRewindDuration
     }
 
     override fun getFastForwardDuration() = fastForwardDuration
-        ?: SettingsDefaults.fastForwardDuration
+        ?: SettingsDefaults.FAST_FORWARD_DURATION
 
     override suspend fun setFastForwardDuration( fastForwardDuration: Int ) {
         this.fastForwardDuration = fastForwardDuration
     }
 
     override fun getMiniPlayerShowTrackControls() = miniPlayerShowTrackControls
-        ?: SettingsDefaults.miniPlayerShowTrackControls
+        ?: SettingsDefaults.MINI_PLAYER_SHOW_TRACK_CONTROLS
 
     override suspend fun setMiniPlayerShowTrackControls( showTrackControls: Boolean ) {
         miniPlayerShowTrackControls = showTrackControls
     }
 
     override fun getMiniPlayerShowSeekControls() = miniPlayerShowSeekControls
-        ?: SettingsDefaults.miniPlayerShowSeekControls
+        ?: SettingsDefaults.MINI_PLAYERS_SHOW_SEEK_CONTROLS
 
     override suspend fun setMiniPlayerShowSeekControls( showSeekControls: Boolean ) {
         miniPlayerShowSeekControls = showSeekControls
     }
 
     override fun getMiniPlayerTextMarquee() = miniPlayerTextMarquee
-        ?: SettingsDefaults.miniPlayerTextMarquee
+        ?: SettingsDefaults.MINI_PLAYER_TEXT_MARQUEE
 
     override suspend fun setMiniPlayerTextMarquee( textMarquee: Boolean ) {
         miniPlayerTextMarquee = textMarquee
     }
 
     override fun getControlsLayoutIsDefault() = controlsLayoutIsDefault
-        ?: SettingsDefaults.controlsLayoutIsDefault
+        ?: SettingsDefaults.CONTROLS_LAYOUT_IS_DEFAULT
 
     override suspend fun setControlsLayoutIsDefault( controlsLayoutIsDefault: Boolean ) {
         this.controlsLayoutIsDefault = controlsLayoutIsDefault
@@ -189,14 +181,14 @@ class FakePreferencesStoreImpl : PreferenceStore {
     }
 
     override fun getShowNowPlayingAudioInformation() = showNowPlayingAudioInformation
-        ?: SettingsDefaults.showNowPlayingAudioInformation
+        ?: SettingsDefaults.SHOW_NOW_PLAYING_AUDIO_INFORMATION
 
     override suspend fun setShowNowPlayingAudioInformation( showNowPlayingAudioInformation: Boolean ) {
         this.showNowPlayingAudioInformation = showNowPlayingAudioInformation
     }
 
     override fun getShowNowPlayingSeekControls() = showNowPlayingSeekControls
-        ?: SettingsDefaults.showNowPlayingSeekControls
+        ?: SettingsDefaults.SHOW_NOW_PLAYING_SEEK_CONTROLS
 
     override suspend fun setShowNowPlayingSeekControls( showNowPlayingSeekControls: Boolean ) {
         this.showNowPlayingSeekControls = showNowPlayingSeekControls
@@ -212,21 +204,21 @@ class FakePreferencesStoreImpl : PreferenceStore {
         this.sortSongsInReverse = sortSongsInReverse
     }
 
-    override fun getSortSongsInReverse() = sortSongsInReverse ?: SettingsDefaults.sortSongsInReverse
+    override fun getSortSongsInReverse() = sortSongsInReverse ?: SettingsDefaults.SORT_SONGS_IN_REVERSE
 
     override suspend fun setCurrentPlayingSpeed( currentPlayingSpeed: Float ) {
         this.currentPlayingSpeed = currentPlayingSpeed
     }
 
     override fun getCurrentPlayingSpeed() = currentPlayingSpeed
-        ?: SettingsDefaults.currentPlayingSpeed
+        ?: SettingsDefaults.CURRENT_PLAYING_SPEED
 
     override suspend fun setCurrentPlayingPitch( currentPlayingPitch: Float ) {
         this.currentPlayingPitch = currentPlayingPitch
     }
 
     override fun getCurrentPlayingPitch() = currentPlayingPitch
-        ?: SettingsDefaults.currentPlayingPitch
+        ?: SettingsDefaults.CURRENT_PLAYING_PITCH
 
     override suspend fun setCurrentLoopMode( loopMode: LoopMode) {
         this.currentLoopMode = loopMode
@@ -238,13 +230,13 @@ class FakePreferencesStoreImpl : PreferenceStore {
         this.shuffle = shuffle
     }
 
-    override fun getShuffle() = shuffle ?: SettingsDefaults.shuffle
+    override fun getShuffle() = shuffle ?: SettingsDefaults.SHUFFLE
 
     override suspend fun setShowLyrics( showLyrics: Boolean ) {
         this.showLyrics = showLyrics
     }
 
-    override fun getShowLyrics() = showLyrics ?: SettingsDefaults.showLyrics
+    override fun getShowLyrics() = showLyrics ?: SettingsDefaults.SHOW_LYRICS
 
     override suspend fun setCurrentlyDisabledTreePaths(paths: List<String> ) {
         this.disabledTreePaths = paths

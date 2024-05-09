@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.odesa.musicMatters.data.preferences.SortSongsBy
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.services.i18n.English
-import com.odesa.musicMatters.ui.theme.MusicallyTheme
+import com.odesa.musicMatters.ui.theme.MusicMattersTheme
 
 @Composable
 fun <T : Enum<T>> MediaSortBar(
@@ -142,7 +142,7 @@ fun <T : Enum<T>> MediaSortBar(
 @Preview( showSystemUi = true )
 @Composable
 fun MediaSortBarPreview() {
-    MusicallyTheme(
+    MusicMattersTheme(
         themeMode = SettingsDefaults.themeMode,
         primaryColorName = SettingsDefaults.primaryColorName,
         fontName = SettingsDefaults.font.name,

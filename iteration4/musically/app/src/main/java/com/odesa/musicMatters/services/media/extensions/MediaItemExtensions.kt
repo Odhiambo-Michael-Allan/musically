@@ -198,7 +198,7 @@ fun MediaItem.toSong( artistTagSeparators: Set<String> ) = Song(
 
 fun MediaItem.toAlbum() = Album(
     name = mediaMetadata.title.toString(),
-    artists = parseArtistStringIntoIndividualArtists( artistTagSeparators ),
+    artists = parseAlbumArtistsStringIntoIndividualArtists( artistTagSeparators ),
     artworkUri = mediaMetadata.artworkUri
 )
 
@@ -207,10 +207,17 @@ fun MediaItem.toArtist() = Artist(
     artworkUri = mediaMetadata.artworkUri
 )
 
-fun MediaItem.parseArtistStringIntoIndividualArtists( separators: Set<String> ) =
-    mediaMetadata.extras?.getString( ARTIST_KEY )?.split( *separators.toTypedArray() )
+fun MediaItem.parseArtistStringIntoIndividualArtists( separators: Set<String> ): Set<String> {
+    val artistsSet = mediaMetadata.extras?.getString( ARTIST_KEY )?.split( *separators.toTypedArray() )
         ?.mapNotNull { x -> x.trim().takeIf { it.isNotEmpty() } }
         ?.toSet() ?: setOf()
+    return artistsSet
+}
+
+fun MediaItem.parseAlbumArtistsStringIntoIndividualArtists( separators: Set<String> ) =
+    mediaMetadata.artist?.split( *separators.toTypedArray() )
+    ?.mapNotNull { x -> x.trim().takeIf { it.isNotEmpty() } }
+    ?.toSet() ?: setOf()
 
 fun MediaItem.stringRep() = StringBuilder().apply {
     appendWithLineBreak( "Media Id: $mediaId" )

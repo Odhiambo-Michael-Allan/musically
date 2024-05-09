@@ -1,6 +1,5 @@
 package com.odesa.musicMatters.fakes
 
-import com.odesa.musicMatters.data.preferences.ForYou
 import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
 import com.odesa.musicMatters.data.preferences.NowPlayingLyricsLayout
@@ -42,53 +41,50 @@ class FakeSettingsRepository : SettingsRepository {
     private val _homeTabs = MutableStateFlow( SettingsDefaults.homeTabs )
     override val homeTabs = _homeTabs.asStateFlow()
 
-    private val _forYouContents = MutableStateFlow( SettingsDefaults.forYouContents )
-    override val forYouContents = _forYouContents.asStateFlow()
-
     private val _homePageBottomBarLabelVisibility = MutableStateFlow(
         SettingsDefaults.homePageBottomBarLabelVisibility
     )
     override val homePageBottomBarLabelVisibility = _homePageBottomBarLabelVisibility.asStateFlow()
 
-    private val _fadePlayback = MutableStateFlow( SettingsDefaults.fadePlayback )
+    private val _fadePlayback = MutableStateFlow( SettingsDefaults.FADE_PLAYBACK )
     override val fadePlayback = _fadePlayback.asStateFlow()
 
-    private val _fadePlaybackDuration = MutableStateFlow( SettingsDefaults.fadePlaybackDuration )
+    private val _fadePlaybackDuration = MutableStateFlow( SettingsDefaults.FADE_PLAYBACK_DURATION )
     override val fadePlaybackDuration = _fadePlaybackDuration.asStateFlow()
 
-    private val _requireAudioFocus = MutableStateFlow( SettingsDefaults.requireAudioFocus )
+    private val _requireAudioFocus = MutableStateFlow( SettingsDefaults.REQUIRE_AUDIO_FOCUS )
     override val requireAudioFocus = _requireAudioFocus.asStateFlow()
 
-    private val _ignoreAudioFocusLoss = MutableStateFlow( SettingsDefaults.ignoreAudioFocusLoss )
+    private val _ignoreAudioFocusLoss = MutableStateFlow( SettingsDefaults.IGNORE_AUDIO_FOCUS_LOSS )
     override val ignoreAudioFocusLoss = _ignoreAudioFocusLoss.asStateFlow()
 
     private val _playOnHeadphoneConnect = MutableStateFlow(
-        SettingsDefaults.playOnHeadphonesConnect
+        SettingsDefaults.PLAY_ON_HEADPHONES_CONNECT
     )
     override val playOnHeadphonesConnect = _playOnHeadphoneConnect.asStateFlow()
 
     private val _pauseOnHeadphonesDisconnect = MutableStateFlow(
-        SettingsDefaults.pauseOnHeadphonesDisconnect
+        SettingsDefaults.PAUSE_ON_HEADPHONES_DISCONNECT
     )
     override val pauseOnHeadphonesDisconnect = _pauseOnHeadphonesDisconnect.asStateFlow()
 
-    private val _fastRewindDuration = MutableStateFlow( SettingsDefaults.fastRewindDuration )
+    private val _fastRewindDuration = MutableStateFlow( SettingsDefaults.FAST_REWIND_DURATION )
     override val fastRewindDuration = _fastRewindDuration.asStateFlow()
 
-    private val _fastForwardDuration = MutableStateFlow( SettingsDefaults.fastForwardDuration )
+    private val _fastForwardDuration = MutableStateFlow( SettingsDefaults.FAST_FORWARD_DURATION )
     override val fastForwardDuration = _fastForwardDuration.asStateFlow()
 
     private val _miniPlayerShowTrackControls = MutableStateFlow(
-        SettingsDefaults.miniPlayerShowTrackControls
+        SettingsDefaults.MINI_PLAYER_SHOW_TRACK_CONTROLS
     )
     override val miniPlayerShowTrackControls = _miniPlayerShowTrackControls.asStateFlow()
 
     private val _miniPlayerShowSeekControls = MutableStateFlow(
-        SettingsDefaults.miniPlayerShowSeekControls
+        SettingsDefaults.MINI_PLAYERS_SHOW_SEEK_CONTROLS
     )
     override val miniPlayerShowSeekControls = _miniPlayerShowSeekControls.asStateFlow()
 
-    private val _miniPlayerTextMarquee = MutableStateFlow( SettingsDefaults.miniPlayerTextMarquee )
+    private val _miniPlayerTextMarquee = MutableStateFlow( SettingsDefaults.MINI_PLAYER_TEXT_MARQUEE )
     override val miniPlayerTextMarquee = _miniPlayerTextMarquee.asStateFlow()
 
     private val _nowPlayingLyricsLayout = MutableStateFlow(
@@ -97,36 +93,36 @@ class FakeSettingsRepository : SettingsRepository {
     override val nowPlayingLyricsLayout = _nowPlayingLyricsLayout.asStateFlow()
 
     private val _showNowPlayingAudioInformation = MutableStateFlow(
-        SettingsDefaults.showNowPlayingAudioInformation
+        SettingsDefaults.SHOW_NOW_PLAYING_AUDIO_INFORMATION
     )
     override val showNowPlayingAudioInformation = _showNowPlayingAudioInformation.asStateFlow()
 
     private val _showNowPlayingSeekControls = MutableStateFlow(
-        SettingsDefaults.showNowPlayingSeekControls
+        SettingsDefaults.SHOW_NOW_PLAYING_SEEK_CONTROLS
     )
     override val showNowPlayingSeekControls = _showNowPlayingSeekControls.asStateFlow()
 
     private val _currentPlayingSpeed = MutableStateFlow(
-        SettingsDefaults.currentPlayingSpeed
+        SettingsDefaults.CURRENT_PLAYING_SPEED
     )
     override val currentPlayingSpeed = _currentPlayingSpeed.asStateFlow()
 
     private val _currentPlayingPitch = MutableStateFlow(
-        SettingsDefaults.currentPlayingPitch
+        SettingsDefaults.CURRENT_PLAYING_PITCH
     )
     override val currentPlayingPitch = _currentPlayingPitch.asStateFlow()
 
     private val _currentLoopMode = MutableStateFlow( SettingsDefaults.loopMode )
     override val currentLoopMode = _currentLoopMode.asStateFlow()
 
-    private val _shuffle = MutableStateFlow( SettingsDefaults.shuffle )
+    private val _shuffle = MutableStateFlow( SettingsDefaults.SHUFFLE )
     override val shuffle = _shuffle.asStateFlow()
 
-    private val _showLyrics = MutableStateFlow( SettingsDefaults.showLyrics )
+    private val _showLyrics = MutableStateFlow( SettingsDefaults.SHOW_LYRICS )
     override val showLyrics = _showLyrics.asStateFlow()
 
     private val _controlsLayoutIsDefault = MutableStateFlow(
-        SettingsDefaults.controlsLayoutIsDefault )
+        SettingsDefaults.CONTROLS_LAYOUT_IS_DEFAULT )
     override val controlsLayoutIsDefault = _controlsLayoutIsDefault.asStateFlow()
 
     private val _currentlyDisabledTreePaths = MutableStateFlow( emptyList<String>() )
@@ -176,10 +172,6 @@ class FakeSettingsRepository : SettingsRepository {
 
     override suspend fun setHomeTabs( homeTabs: Set<HomeTab> ) {
         _homeTabs.value = homeTabs
-    }
-
-    override suspend fun setForYouContents( forYouContents: Set<ForYou> ) {
-        _forYouContents.value = forYouContents
     }
 
     override suspend fun setHomePageBottomBarLabelVisibility(

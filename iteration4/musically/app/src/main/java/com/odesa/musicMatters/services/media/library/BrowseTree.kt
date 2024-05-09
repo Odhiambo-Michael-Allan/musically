@@ -165,11 +165,10 @@ class BrowseTree(
     private fun addAlbumMediaItemsTo( albumList: MutableList<MediaItem> ) {
         musicSource.forEach {  mediaItem ->
             val mediaItemAlbum = mediaItem.mediaMetadata.albumTitle ?: "<unknown>"
-            val loadedAlbum = mediaItemAlbum.toString()
-            val albumAlreadyExistsInAlbumList = findAlbumIn( albumList, loadedAlbum )
+            val loadedAlbumName = mediaItemAlbum.toString()
+            val albumAlreadyExistsInAlbumList = findAlbumIn( albumList, loadedAlbumName )
             if ( !albumAlreadyExistsInAlbumList ) {
-                val albumMetadata = createAlbumMetadataUsing( loadedAlbum, mediaItem.mediaMetadata.artworkUri )
-                val albumMediaItem = createAlbumMediaItemUsing( albumMetadata )
+                val albumMediaItem = createAlbumMediaItemUsing( loadedAlbumName, mediaItem )
                 albumList.add( albumMediaItem )
             }
         }
@@ -183,16 +182,18 @@ class BrowseTree(
         return false
     }
 
-    private fun createAlbumMetadataUsing( albumName: String, artworkUri: Uri? ) = MediaMetadata.Builder().apply {
-        setTitle( albumName )
-        setIsPlayable( false )
-        setArtworkUri( artworkUri )
-        setFolderType( MediaMetadata.FOLDER_TYPE_ALBUMS )
-    }.build()
-
-    private fun createAlbumMediaItemUsing( albumMetadata: MediaMetadata ) = MediaItem.Builder().apply {
-        setMediaId( UUID.randomUUID().toString() ).setMediaMetadata( albumMetadata )
-    }.build()
+    private fun createAlbumMediaItemUsing(albumName: String, mediaItem: MediaItem ): MediaItem {
+        val mediaMetadata = MediaMetadata.Builder().apply {
+            setTitle( albumName )
+            setIsPlayable( false )
+            setArtworkUri( mediaItem.mediaMetadata.artworkUri )
+            setArtist( mediaItem.mediaMetadata.artist )
+            setIsBrowsable( true )
+        }.build()
+        return MediaItem.Builder().apply {
+            setMediaId( UUID.randomUUID().toString() ).setMediaMetadata( mediaMetadata )
+        }.build()
+    }
 
     private fun addRecentSongMediaItemsTo( recentSongsList: MutableList<MediaItem> ) {
         val trackList = mediaIdToChildren[ MUSIC_MATTERS_TRACKS_ROOT ]

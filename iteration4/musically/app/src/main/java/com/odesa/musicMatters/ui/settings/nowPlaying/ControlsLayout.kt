@@ -32,7 +32,7 @@ fun ControlsLayout(
 @Composable
 fun ControlsLayoutPreview() {
     ControlsLayout(
-        controlsLayoutIsDefault = SettingsDefaults.controlsLayoutIsDefault,
+        controlsLayoutIsDefault = SettingsDefaults.CONTROLS_LAYOUT_IS_DEFAULT,
         language = English,
         onNowPlayingControlsLayoutChange = {}
     )

@@ -129,17 +129,18 @@ fun MinimalAppBar(
                 targetState = title,
                 label = "top-app-bar-title"
             ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                ProvideTextStyle(
+                    value = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 0.sp,
+                        textAlign = TextAlign.Center
+                    )
                 ) {
-                    TopAppBarMinimalTitle {
-                        Text(
-                            text = it,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
+                    Text(
+                        text = it,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
             }
         },
@@ -177,10 +178,11 @@ fun TopAppBarMinimalTitle(
 
 @Preview( showBackground = true )
 @Composable
-fun TopAppBarMinimalTitlePreview() {
-    TopAppBarMinimalTitle {
-        Text( text = "Settings" )
-    }
+fun TopAppBarMinimalAppBarPreview() {
+    MinimalAppBar(
+        onNavigationIconClicked = { /*TODO*/ },
+        title = "Queue"
+    )
 }
 
 @OptIn( ExperimentalMaterial3Api::class )

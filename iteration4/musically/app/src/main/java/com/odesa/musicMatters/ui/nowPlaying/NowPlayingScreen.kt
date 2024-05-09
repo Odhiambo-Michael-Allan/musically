@@ -87,7 +87,8 @@ fun NowPlayingBottomSheet(
     fastRewind: () -> Unit,
     fastForward: () -> Unit,
     onSeekEnd: ( Long ) -> Unit,
-    onArtworkClicked: () -> Unit,
+    onArtworkClicked: ( String ) -> Unit,
+    onArtistClicked: ( String ) -> Unit,
     toggleLoopMode: () -> Unit,
     toggleShuffleMode: () -> Unit,
     onPlayingSpeedChange: ( Float ) -> Unit,
@@ -116,8 +117,9 @@ fun NowPlayingBottomSheet(
         currentLoopMode = nowPlayingBottomSheetUiState.currentLoopMode,
         currentPlayingSpeed = nowPlayingBottomSheetUiState.currentPlayingSpeed,
         currentPlayingPitch = nowPlayingBottomSheetUiState.currentPlayingPitch,
+        showSamplingInfo = nowPlayingBottomSheetUiState.showSamplingInfo,
         durationFormatter = { it.formatMilliseconds() },
-        onArtistClicked = {},
+        onArtistClicked = onArtistClicked,
         onFavorite = { onFavorite( it ) },
         onPausePlayButtonClick = playPause,
         onPreviousButtonClick = playPreviousSong,
@@ -125,7 +127,7 @@ fun NowPlayingBottomSheet(
         onFastRewindButtonClick = fastRewind,
         onFastForwardButtonClick = fastForward,
         onSeekEnd = { onSeekEnd( it ) },
-        onArtworkClicked = onArtworkClicked,
+        onArtworkClicked = { onArtworkClicked( nowPlayingBottomSheetUiState.currentlyPlayingSong.albumTitle!! ) },
         onSwipeArtworkLeft = playPreviousSong,
         onSwipeArtworkRight = playNextSong,
         onQueueClicked = onQueueClicked,
@@ -157,6 +159,7 @@ fun NowPlayingScreenContent(
     currentLoopMode: LoopMode,
     currentPlayingSpeed: Float,
     currentPlayingPitch: Float,
+    showSamplingInfo: Boolean,
     durationFormatter: ( Long ) -> String,
     onArtistClicked: ( String ) -> Unit,
     onFavorite: ( String ) -> Unit,
@@ -226,14 +229,16 @@ fun NowPlayingScreenContent(
                             if ( index != target.artists.size - 1 ) Text( text = ", " )
                         }
                     }
-                    target.toSamplingInfoString( language )?.let {
-                        val localContentColor = LocalContentColor.current
-                        Text(
-                            text = it,
-                            style = MaterialTheme.typography.labelSmall
-                                .copy( color = localContentColor.copy( alpha = 0.7f ) ),
-                            modifier = Modifier.padding( top = 4.dp )
-                        )
+                    if ( showSamplingInfo ) {
+                        target.toSamplingInfoString( language )?.let {
+                            val localContentColor = LocalContentColor.current
+                            Text(
+                                text = it,
+                                style = MaterialTheme.typography.labelSmall
+                                    .copy( color = localContentColor.copy( alpha = 0.7f ) ),
+                                modifier = Modifier.padding( top = 4.dp )
+                            )
+                        }
                     }
                 }
             }
@@ -346,6 +351,7 @@ fun NowPlayingScreenContentPreview() {
         currentlyPlayingSongIndex = 20,
         queueSize = 100,
         shuffle = true,
+        showSamplingInfo = false,
         durationFormatter = { "05:33" },
         onArtistClicked = {},
         onFavorite = {},

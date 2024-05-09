@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.odesa.musicMatters.data.settings.SettingsRepository
-import com.odesa.musicMatters.data.preferences.ForYou
 import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
 import com.odesa.musicMatters.data.preferences.NowPlayingLyricsLayout
@@ -29,7 +28,6 @@ class SettingsViewModel(
             useMaterialYou = settingsRepository.useMaterialYou.value,
             primaryColorName = settingsRepository.primaryColorName.value,
             homeTabs = settingsRepository.homeTabs.value,
-            forYouContent = settingsRepository.forYouContents.value,
             homePageBottomBarLabelVisibility = settingsRepository
                 .homePageBottomBarLabelVisibility.value,
             fadePlayback = settingsRepository.fadePlayback.value,
@@ -60,7 +58,6 @@ class SettingsViewModel(
         viewModelScope.launch { observeUseMaterialYouSetting() }
         viewModelScope.launch { observePrimaryColorNameSetting() }
         viewModelScope.launch { observeHomeTabsSetting() }
-        viewModelScope.launch { observeForYouContentSetting() }
         viewModelScope.launch { observeHomePageBottomBarLabelVisibilitySetting() }
         viewModelScope.launch { observeFadePlaybackSetting() }
         viewModelScope.launch { observeFadePlaybackDurationSetting() }
@@ -131,14 +128,6 @@ class SettingsViewModel(
         settingsRepository.homeTabs.collect {
             _uiState.value = _uiState.value.copy(
                 homeTabs = it
-            )
-        }
-    }
-
-    private suspend fun observeForYouContentSetting() {
-        settingsRepository.forYouContents.collect {
-            _uiState.value = _uiState.value.copy(
-                forYouContent = it
             )
         }
     }
@@ -304,10 +293,6 @@ class SettingsViewModel(
         viewModelScope.launch { settingsRepository.setHomeTabs( homeTabs ) }
     }
 
-    fun setForYouContent( forYouContent: Set<ForYou> ) {
-        viewModelScope.launch { settingsRepository.setForYouContents( forYouContent ) }
-    }
-
     fun setHomePageBottomBarLabelVisibility( value: HomePageBottomBarLabelVisibility) {
         viewModelScope.launch { settingsRepository.setHomePageBottomBarLabelVisibility( value ) }
     }
@@ -407,7 +392,6 @@ data class SettingsScreenUiState(
     val useMaterialYou: Boolean,
     val primaryColorName: String,
     val homeTabs: Set<HomeTab>,
-    val forYouContent: Set<ForYou>,
     val homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility,
     val fadePlayback: Boolean,
     val fadePlaybackDuration: Float,

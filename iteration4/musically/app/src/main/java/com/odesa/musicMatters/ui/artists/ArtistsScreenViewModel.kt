@@ -6,9 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.media.Artist
+import com.odesa.musicMatters.services.media.artistTagSeparators
 import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
 import com.odesa.musicMatters.services.media.extensions.toArtist
+import com.odesa.musicMatters.services.media.extensions.toSong
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_ARTISTS_ROOT
+import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_TRACKS_ROOT
 import com.odesa.musicMatters.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -59,6 +62,20 @@ class ArtistsScreenViewModel(
         settingsRepository.themeMode.collect {
             _uiState.value = _uiState.value.copy(
                 themeMode = it
+            )
+        }
+    }
+
+    fun playSongsByArtist( artist: Artist ) {
+        viewModelScope.launch {
+            val songsByArtist = musicServiceConnection.getChildren( MUSIC_MATTERS_TRACKS_ROOT )
+                .map { it.toSong( artistTagSeparators ) }
+                .filter { it.artists.contains( artist.name ) }
+                .map { it.mediaItem }
+            musicServiceConnection.playMediaItem(
+                mediaItem = songsByArtist.first(),
+                mediaItems = songsByArtist,
+                shuffle = settingsRepository.shuffle.value
             )
         }
     }

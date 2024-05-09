@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.MusicNote
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.QueueMusic
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.outlined.AccountTree
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.outlined.Face
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Group
 import androidx.compose.material.icons.outlined.MusicNote
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.QueueMusic
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -41,6 +43,7 @@ sealed class Route( val name: String ) {
     data object ForYou : Route( "for-you" )
     data object Songs : Route( "songs" )
     data object Artists : Route( "artists" )
+    data object Artist : Route( RoutesBuilder.buildArtistRoute( "{${RouteParameters.ARTIST_ROUTE_ARTIST_NAME}}" ) )
     data object Albums : Route( "albums" )
     data object Album : Route( "album" )
     data object Genres : Route( "genres" )
@@ -60,6 +63,7 @@ object RoutesBuilder {
     }
     fun buildAlbumRoute( albumName: String ) = "album/${encodeParam( albumName ) }"
     fun buildPlaylistRoute( playlistId: String, playlistName: String ) = "playlist/${encodeParam( playlistId )}/${encodeParam( playlistName )}"
+    fun buildArtistRoute( artistName: String ) = "artist/${encodeParam( artistName)}"
 
     private fun encodeParam(value: String ): String {
         Timber.tag( DESTINATIONS_TAG ).d( "ENCODING PARAM: $value" )
@@ -113,6 +117,22 @@ object Artists : MusicMattersDestination {
     override val iconContentDescription = "${English.artists}-tab-icon"
 
     override fun getLabel( language: Language ) = language.artists
+}
+
+object Artist : MusicMattersDestination {
+    override val selectedIcon = Icons.Filled.Person
+    override val unselectedIcon = Icons.Outlined.Person
+    override val route = Route.Artist
+    override val iconContentDescription = ""
+
+    override fun getLabel( language: Language ) = ""
+
+    val arguments = listOf(
+        navArgument( RouteParameters.ARTIST_ROUTE_ARTIST_NAME ) {
+            type = NavType.StringType
+        }
+    )
+
 }
 
 object Albums : MusicMattersDestination {
@@ -246,10 +266,15 @@ fun NavHostController.navigateToGenreScreen( genreName: String ) =
     this.navigate( "${Genre.route.name}/$genreName" )
 
 fun NavHostController.navigateToAlbumScreen( albumName: String ) =
-    this.navigate( RoutesBuilder.buildAlbumRoute( albumName ) )
+    this.navigate( RoutesBuilder.buildAlbumRoute( albumName ) ) {
+        launchSingleTop = true
+    }
 
 fun NavHostController.navigateToPlaylistScreen( playlistId: String, playlistTitle: String ) =
     this.navigate( RoutesBuilder.buildPlaylistRoute( playlistId, playlistTitle ) )
+
+fun NavHostController.navigateToArtistScreen( artistName: String ) =
+    this.navigate( RoutesBuilder.buildArtistRoute( artistName ) )
 
 fun NavBackStackEntry.getRouteArgument( key: String ) = arguments?.getString( key )?.let {
     Timber.tag( DESTINATIONS_TAG ).d( "DECODING PARAM: $key -> $it" )

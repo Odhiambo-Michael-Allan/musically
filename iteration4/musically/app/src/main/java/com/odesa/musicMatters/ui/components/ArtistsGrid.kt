@@ -29,7 +29,7 @@ fun ArtistsGrid(
     onSortReverseChange: ( Boolean ) -> Unit,
     onSortTypeChange: ( SortArtistsBy ) -> Unit,
     onArtistClick: ( String ) -> Unit,
-    onPlaySongsByArtist: ( String ) -> Unit,
+    onPlaySongsByArtist: ( Artist ) -> Unit,
 ) {
     MediaSortBarScaffold(
         mediaSortBar = {
@@ -67,7 +67,7 @@ fun ArtistsGrid(
                             artist = artist,
                             language = language,
                             fallbackResourceId = fallbackResourceId,
-                            onPlaySongsByArtist = { onPlaySongsByArtist(artist.name) },
+                            onPlaySongsByArtist = { onPlaySongsByArtist( artist ) },
                             onShufflePlay = { /*TODO*/ },
                             onPlayNext = { /*TODO*/ },
                             onAddToQueue = { /*TODO*/ },

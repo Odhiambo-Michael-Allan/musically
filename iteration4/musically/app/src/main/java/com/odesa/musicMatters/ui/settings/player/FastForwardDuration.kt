@@ -25,7 +25,7 @@ fun FastForwardDuration(
             currentValue.roundToInt().toFloat()
         },
         onValueChange = onFastForwardDurationChange,
-        onReset = { onFastForwardDurationChange( SettingsDefaults.fastForwardDuration.toFloat() ) },
+        onReset = { onFastForwardDurationChange( SettingsDefaults.FAST_FORWARD_DURATION.toFloat() ) },
         label = { currentValue -> language.xSecs( currentValue.toString() ) }
     )
 }

@@ -27,7 +27,7 @@ fun FadePlaybackDuration(
             currentValue.times( 2 ).roundToInt().toFloat().div( 2 )
         },
         onValueChange = onFadePlaybackDurationChange,
-        onReset = { onFadePlaybackDurationChange( SettingsDefaults.fadePlaybackDuration ) },
+        onReset = { onFadePlaybackDurationChange( SettingsDefaults.FADE_PLAYBACK_DURATION ) },
         label = { currentValue -> language.xSecs( currentValue.toString() ) }
     )
 }
@@ -37,7 +37,7 @@ fun FadePlaybackDuration(
 fun FadePlaybackDurationPreview() {
     FadePlaybackDuration(
         language = English,
-        value = SettingsDefaults.fadePlaybackDuration
+        value = SettingsDefaults.FADE_PLAYBACK_DURATION
     ) {}
 }
 

@@ -12,6 +12,7 @@ import com.odesa.musicMatters.R
 import com.odesa.musicMatters.data.preferences.SortArtistsBy
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.services.i18n.English
+import com.odesa.musicMatters.services.media.Artist
 import com.odesa.musicMatters.services.media.testArtists
 import com.odesa.musicMatters.ui.components.ArtistsGrid
 import com.odesa.musicMatters.ui.components.LoaderScaffold
@@ -29,8 +30,8 @@ fun ArtistsScreen(
 
     ArtistsScreenContent(
         uiState = artistsScreenUiState,
-        onArtistClick = {},
-        onPlaySongsByArtist = {},
+        onArtistClick = onArtistClick,
+        onPlaySongsByArtist = { viewModel.playSongsByArtist( it ) },
         onSettingsClicked = onSettingsClicked
     )
 }
@@ -39,7 +40,7 @@ fun ArtistsScreen(
 fun ArtistsScreenContent(
     uiState: ArtistsScreenUiState,
     onArtistClick: ( String ) -> Unit,
-    onPlaySongsByArtist: ( String ) -> Unit,
+    onPlaySongsByArtist: ( Artist ) -> Unit,
     onSettingsClicked: () -> Unit
 ) {
 
@@ -52,7 +53,7 @@ fun ArtistsScreenContent(
     ) {
         TopAppBar(
             onNavigationIconClicked = { /*TODO*/ },
-            title = uiState.language.albums,
+            title = uiState.language.artists,
             settings = uiState.language.settings,
             onSettingsClicked = onSettingsClicked
         )

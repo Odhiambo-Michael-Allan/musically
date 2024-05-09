@@ -25,7 +25,7 @@ fun FastRewindDuration(
             currentValue.roundToInt().toFloat()
         },
         onValueChange = onFastRewindDurationChange,
-        onReset = { onFastRewindDurationChange( SettingsDefaults.fastRewindDuration.toFloat() ) },
+        onReset = { onFastRewindDurationChange( SettingsDefaults.FAST_REWIND_DURATION.toFloat() ) },
         label = { currentValue -> language.xSecs( currentValue.toString() ) }
     )
 }

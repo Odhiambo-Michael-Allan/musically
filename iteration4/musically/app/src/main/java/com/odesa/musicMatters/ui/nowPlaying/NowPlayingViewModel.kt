@@ -51,6 +51,7 @@ class NowPlayingViewModel(
             currentPlayingPitch = settingsRepository.currentPlayingPitch.value,
             themeMode = settingsRepository.themeMode.value,
             textMarquee = settingsRepository.miniPlayerTextMarquee.value,
+            showSamplingInfo = settingsRepository.showNowPlayingAudioInformation.value
         )
     )
 
@@ -78,6 +79,7 @@ class NowPlayingViewModel(
         viewModelScope.launch { observeCurrentPlayingSpeed() }
         viewModelScope.launch { observeCurrentPlayingPitch() }
         viewModelScope.launch { observeFavoriteSongs() }
+        viewModelScope.launch { observeShowNowPlayingAudioInformation() }
     }
 
     private suspend fun observeNowPlaying() {
@@ -255,6 +257,14 @@ class NowPlayingViewModel(
         }
     }
 
+    private suspend fun observeShowNowPlayingAudioInformation() {
+        settingsRepository.showNowPlayingAudioInformation.collect {
+            _uiState.value = _uiState.value.copy(
+                showSamplingInfo = it
+            )
+        }
+    }
+
     fun onFavorite( songId: String ) {
         viewModelScope.launch {
             if ( playlistRepository.isFavorite( songId ) ) playlistRepository.removeFromFavorites( songId )
@@ -374,6 +384,7 @@ data class NowPlayingScreenUiState(
     val currentPlayingPitch: Float,
     val themeMode: ThemeMode,
     val textMarquee: Boolean,
+    val showSamplingInfo: Boolean,
 )
 
 

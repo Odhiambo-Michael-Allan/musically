@@ -36,6 +36,7 @@ import coil.request.ImageRequest
 
 @Composable
 fun Tile(
+    modifier: Modifier,
     imageRequest: ImageRequest,
     options: @Composable ( Boolean, () -> Unit ) -> Unit,
     content: @Composable ColumnScope.() -> Unit,
@@ -44,8 +45,8 @@ fun Tile(
 ) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
+//            .fillMaxWidth()
+            .wrapContentHeight().then( modifier ),
         colors = CardDefaults.cardColors( containerColor = Color.Transparent ),
         onClick = onClick
     ) {

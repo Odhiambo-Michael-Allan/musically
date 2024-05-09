@@ -3,7 +3,6 @@ package com.odesa.musicMatters.data
 import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.UUID
 
@@ -17,15 +16,30 @@ class FakePlaylistRepository : PlaylistRepository {
         )
     )
     override val favoritesPlaylist = _favoritePlaylist.asStateFlow()
-    override val recentlyPlayedSongsPlaylist: StateFlow<Playlist>
-        get() = TODO("Not yet implemented")
-    override val mostPlayedSongsPlaylist: StateFlow<Playlist>
-        get() = TODO("Not yet implemented")
+
+    private val _recentlyPlayedSongsPlaylist = MutableStateFlow(
+        Playlist(
+            id = UUID.randomUUID().toString(),
+            title = "Recently Played Playlist",
+            songIds = emptyList()
+        )
+    )
+    override val recentlyPlayedSongsPlaylist = _recentlyPlayedSongsPlaylist.asStateFlow()
+
+    private val _mostPlayedSongsPlaylist = MutableStateFlow(
+        Playlist(
+            id = UUID.randomUUID().toString(),
+            title = "Most Played Playlist",
+            songIds = emptyList()
+        )
+    )
+    override val mostPlayedSongsPlaylist = _mostPlayedSongsPlaylist.asStateFlow()
 
     private val _playlists = MutableStateFlow( emptyList<Playlist>() )
     override val playlists = _playlists.asStateFlow()
-    override val mostPlayedSongsMap: StateFlow<Map<String, Int>>
-        get() = TODO("Not yet implemented")
+
+    private val _mostPlayedSongsMap = MutableStateFlow( emptyMap<String, Int>() )
+    override val mostPlayedSongsMap = _mostPlayedSongsMap.asStateFlow()
 
     override fun isFavorite( songId: String ): Boolean {
         return _favoritePlaylist.value.songIds.contains( songId )

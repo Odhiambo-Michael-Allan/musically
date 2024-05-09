@@ -280,9 +280,11 @@
     <string name="disc_number">Disc number</string>
 
     <string name="notification_channel">Now Playing</string>
-    <string name="notification_channel_description">Shows what music is currently playing in MUSICALLY</string>
+    <string name="notification_channel_description">Shows what music is currently playing in MUSIC MATTERS</string>
     <string name="error_media_not_found">Could not locate requested media.</string>
     <string name="generic_error">The application has encountered an unexpected error.</string>
 
-
+    <string name="storage_access">Storage Access</string>
+    <string name="grant_access">Grant access</string>
+    <string name="storage_access_prompt">The app needs permission to access your device storage for playing music</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.odesa.musicMatters.data.settings
 
-import com.odesa.musicMatters.data.preferences.ForYou
 import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
 import com.odesa.musicMatters.data.preferences.NowPlayingLyricsLayout
@@ -18,7 +17,6 @@ interface SettingsRepository {
     val useMaterialYou: StateFlow<Boolean>
     val primaryColorName: StateFlow<String>
     val homeTabs: StateFlow<Set<HomeTab>>
-    val forYouContents: StateFlow<Set<ForYou>>
     val homePageBottomBarLabelVisibility: StateFlow<HomePageBottomBarLabelVisibility>
     val fadePlayback: StateFlow<Boolean>
     val fadePlaybackDuration: StateFlow<Float>
@@ -51,7 +49,6 @@ interface SettingsRepository {
     suspend fun setUseMaterialYou( useMaterialYou: Boolean )
     suspend fun setPrimaryColorName( primaryColorName: String )
     suspend fun setHomeTabs( homeTabs: Set<HomeTab> )
-    suspend fun setForYouContents( forYouContents: Set<ForYou> )
     suspend fun setHomePageBottomBarLabelVisibility( homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility)
     suspend fun setFadePlayback( fadePlayback: Boolean )
     suspend fun setFadePlaybackDuration( fadePlaybackDuration: Float )

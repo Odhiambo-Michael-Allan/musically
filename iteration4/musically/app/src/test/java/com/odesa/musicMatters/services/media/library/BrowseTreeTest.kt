@@ -4,9 +4,12 @@ import android.os.Bundle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.odesa.musicMatters.fakes.FakeMusicSource
+import com.odesa.musicMatters.services.media.extensions.ARTIST_KEY
 import com.odesa.musicMatters.services.media.extensions.DATE_KEY
+import com.odesa.musicMatters.services.media.extensions.toAlbum
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
+import junit.framework.TestCase.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -53,6 +56,7 @@ class BrowseTreeTest {
         val albums = browseTree[ MUSIC_MATTERS_ALBUMS_ROOT ]
         assertNotNull( albums )
         assertEquals( 5, albums!!.size )
+        assertTrue( albums.first().toAlbum().artists.isNotEmpty() )
     }
 
     @Test
@@ -87,9 +91,12 @@ val musicList = listOf(
             setAlbumTitle( "Speechless" )
             setArtist( "Jemand" )
             setGenre( "Folk" )
-            val bundle = Bundle()
-            bundle.putLong( DATE_KEY, calendar.timeInMillis )
-            setExtras( bundle )
+            setExtras(
+                Bundle().apply {
+                    putLong( DATE_KEY, calendar.timeInMillis )
+                    putString( ARTIST_KEY, "Jemand" )
+                }
+            )
         }.build() )
     }.build(),
     MediaItem.Builder().apply {

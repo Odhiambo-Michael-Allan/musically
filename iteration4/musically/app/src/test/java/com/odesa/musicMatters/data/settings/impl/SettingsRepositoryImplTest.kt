@@ -1,6 +1,5 @@
 package com.odesa.musicMatters.data.settings.impl
 
-import com.odesa.musicMatters.data.preferences.ForYou
 import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
 import com.odesa.musicMatters.data.preferences.NowPlayingLyricsLayout
@@ -139,20 +138,6 @@ class SettingsRepositoryImplTest {
     }
 
     @Test
-    fun testForYouContentsChange() {
-        assertEquals( 2, settingsRepository.forYouContents.value.size )
-        changeForYouContentsTo( setOf( ForYou.Albums ) )
-        changeForYouContentsTo( setOf( ForYou.Albums, ForYou.Artists ) )
-        changeForYouContentsTo( setOf( ForYou.Albums, ForYou.Artists, ForYou.AlbumArtists ) )
-    }
-
-    private fun changeForYouContentsTo( forYouContents: Set<ForYou> ) = runTest {
-        settingsRepository.setForYouContents( forYouContents )
-        assertEquals( forYouContents.size, preferenceStore.getForYouContents().size )
-        assertEquals( forYouContents.size, settingsRepository.forYouContents.value.size )
-    }
-
-    @Test
     fun testHomePageBottomBarLabelVisibilityChange() {
         assertEquals( HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE,
             settingsRepository.homePageBottomBarLabelVisibility.value )
@@ -182,7 +167,7 @@ class SettingsRepositoryImplTest {
 
     @Test
     fun testFadePlaybackDurationChange() = runTest {
-        assertEquals( SettingsDefaults.fadePlaybackDuration,
+        assertEquals( SettingsDefaults.FADE_PLAYBACK_DURATION,
             settingsRepository.fadePlaybackDuration.value )
         for ( duration in 1..100 ) {
             settingsRepository.setFadePlaybackDuration( duration.toFloat() )
@@ -237,7 +222,7 @@ class SettingsRepositoryImplTest {
 
     @Test
     fun testFastRewindDurationSettingChange() = runTest {
-        assertEquals( SettingsDefaults.fastRewindDuration,
+        assertEquals( SettingsDefaults.FAST_REWIND_DURATION,
             settingsRepository.fastRewindDuration.value )
         for ( duration in 3..60 ) {
             settingsRepository.setFastRewindDuration( duration )
@@ -248,7 +233,7 @@ class SettingsRepositoryImplTest {
 
     @Test
     fun testFastForwardDurationSettingChange() = runTest {
-        assertEquals( SettingsDefaults.fastForwardDuration,
+        assertEquals( SettingsDefaults.FAST_FORWARD_DURATION,
             settingsRepository.fastForwardDuration.value )
         for ( duration in 3..60 ) {
             settingsRepository.setFastForwardDuration( duration )
@@ -292,7 +277,7 @@ class SettingsRepositoryImplTest {
 
     @Test
     fun testNowPlayingControlsLayoutSettingChange() = runTest {
-        assertEquals( SettingsDefaults.controlsLayoutIsDefault,
+        assertEquals( SettingsDefaults.CONTROLS_LAYOUT_IS_DEFAULT,
             settingsRepository.controlsLayoutIsDefault.value )
         settingsRepository.setControlsLayoutIsDefault( false )
         assertFalse( preferenceStore.getControlsLayoutIsDefault() )
@@ -365,7 +350,7 @@ class SettingsRepositoryImplTest {
 
     @Test
     fun testCurrentPlayingSpeedChange() = runTest {
-        assertEquals( SettingsDefaults.currentPlayingSpeed,
+        assertEquals( SettingsDefaults.CURRENT_PLAYING_SPEED,
             settingsRepository.currentPlayingSpeed.value )
         allowedSpeedPitchValues.forEach {
             settingsRepository.setCurrentPlayingSpeed( it )
@@ -376,7 +361,7 @@ class SettingsRepositoryImplTest {
 
     @Test
     fun testCurrentPlayingPitchChange() = runTest {
-        assertEquals( SettingsDefaults.currentPlayingPitch,
+        assertEquals( SettingsDefaults.CURRENT_PLAYING_PITCH,
             settingsRepository.currentPlayingPitch.value )
         allowedSpeedPitchValues.forEach {
             settingsRepository.setCurrentPlayingPitch( it )

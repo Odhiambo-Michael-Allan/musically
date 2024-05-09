@@ -1,7 +1,6 @@
 package com.odesa.musicMatters.ui.settings
 
 import com.odesa.musicMatters.MainCoroutineRule
-import com.odesa.musicMatters.data.preferences.ForYou
 import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
 import com.odesa.musicMatters.data.preferences.NowPlayingLyricsLayout
@@ -150,19 +149,6 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testForYouContentsChange() {
-        assertEquals( 2, settingsViewModel.uiState.value.forYouContent.size )
-        changeForYouContentsTo( setOf( ForYou.Albums ) )
-        changeForYouContentsTo( setOf( ForYou.Albums, ForYou.Artists ) )
-        changeForYouContentsTo( setOf( ForYou.Albums, ForYou.Artists, ForYou.AlbumArtists ) )
-    }
-
-    private fun changeForYouContentsTo( forYouContents: Set<ForYou> ) = runTest {
-        settingsRepository.setForYouContents( forYouContents )
-        assertEquals( forYouContents.size, settingsViewModel.uiState.value.forYouContent.size )
-    }
-
-    @Test
     fun testHomePageBottomBarLabelVisibilityChange() {
         assertEquals( HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE,
             settingsViewModel.uiState.value.homePageBottomBarLabelVisibility )
@@ -189,7 +175,7 @@ class SettingsViewModelTest {
 
     @Test
     fun testFadePlaybackDurationChange() = runTest {
-        assertEquals( SettingsDefaults.fadePlaybackDuration,
+        assertEquals( SettingsDefaults.FADE_PLAYBACK_DURATION,
             settingsViewModel.uiState.value.fadePlaybackDuration )
         for ( duration in 1..100 ) {
             settingsRepository.setFadePlaybackDuration( duration.toFloat() )
@@ -236,7 +222,7 @@ class SettingsViewModelTest {
 
     @Test
     fun testFastRewindDurationSettingChange() = runTest {
-        assertEquals( SettingsDefaults.fastRewindDuration,
+        assertEquals( SettingsDefaults.FAST_REWIND_DURATION,
             settingsViewModel.uiState.value.fastRewindDuration )
         for ( duration in 3 .. 60 ) {
             settingsRepository.setFastRewindDuration( duration )
@@ -246,7 +232,7 @@ class SettingsViewModelTest {
 
     @Test
     fun testFastForwardDurationSettingChange() = runTest {
-        assertEquals( SettingsDefaults.fastForwardDuration,
+        assertEquals( SettingsDefaults.FAST_FORWARD_DURATION,
             settingsViewModel.uiState.value.fastForwardDuration )
         for ( duration in 3 .. 60 ) {
             settingsRepository.setFastForwardDuration( duration )
@@ -283,7 +269,7 @@ class SettingsViewModelTest {
 
     @Test
     fun testNowPlayingControlsLayoutSettingChange() = runTest {
-        assertEquals( SettingsDefaults.controlsLayoutIsDefault,
+        assertEquals( SettingsDefaults.CONTROLS_LAYOUT_IS_DEFAULT,
             settingsViewModel.uiState.value.controlsLayoutIsDefault )
         listOf( true, false ).forEach {
             settingsRepository.setControlsLayoutIsDefault( it )
@@ -303,7 +289,7 @@ class SettingsViewModelTest {
 
     @Test
     fun testShowNowPlayingAudioInformationSettingChange() = runTest {
-        assertEquals( SettingsDefaults.showNowPlayingAudioInformation,
+        assertEquals( SettingsDefaults.SHOW_NOW_PLAYING_AUDIO_INFORMATION,
             settingsViewModel.uiState.value.showNowPlayingAudioInformation )
         listOf( true, false ).forEach {
             settingsRepository.setShowNowPlayingAudioInformation( it )
@@ -313,7 +299,7 @@ class SettingsViewModelTest {
 
     @Test
     fun testShowNowPlayingSeekControlsSettingChange() = runTest {
-        assertEquals( SettingsDefaults.showNowPlayingSeekControls,
+        assertEquals( SettingsDefaults.SHOW_NOW_PLAYING_SEEK_CONTROLS,
             settingsViewModel.uiState.value.showNowPlayingSeekControls )
         listOf( true, false ).forEach {
             settingsRepository.setShowNowPlayingSeekControls( it )

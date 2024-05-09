@@ -10,6 +10,7 @@ import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
 import com.odesa.musicMatters.services.media.connection.NOTHING_PLAYING
 import com.odesa.musicMatters.services.media.connection.PlaybackState
 import com.odesa.musicMatters.services.media.extensions.ALBUM_TITLE_KEY
+import com.odesa.musicMatters.services.media.extensions.ARTIST_KEY
 import com.odesa.musicMatters.services.media.extensions.PATH_KEY
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_ALBUMS_ROOT
 import com.odesa.musicMatters.services.media.library.MUSIC_MATTERS_ARTISTS_ROOT
@@ -168,6 +169,7 @@ val trackList: ImmutableList<MediaItem> = ImmutableList.of(
                 val extras = Bundle().apply {
                     putString( ALBUM_TITLE_KEY, "Album-1" )
                     putString( PATH_KEY, testPaths.first() )
+                    putString( ARTIST_KEY, "Doja Cat, The Weekend" )
                 }
                 setExtras( extras )
             }.build()
@@ -181,6 +183,7 @@ val trackList: ImmutableList<MediaItem> = ImmutableList.of(
                 val extras = Bundle().apply {
                     putString( ALBUM_TITLE_KEY, "Album-2" )
                     putString( PATH_KEY, testPaths[1] )
+                    putString( ARTIST_KEY, "Travis Scott, Quavo" )
                 }
                 setExtras( extras )
             }.build()
@@ -194,6 +197,7 @@ val trackList: ImmutableList<MediaItem> = ImmutableList.of(
                 val extras = Bundle().apply {
                     putString( ALBUM_TITLE_KEY, "Album-2" )
                     putString( PATH_KEY, testPaths[2] )
+                    putString( ARTIST_KEY, "Travis Scott, Quavo" )
                 }
                 setExtras( extras )
             }.build()
@@ -208,6 +212,7 @@ val trackList: ImmutableList<MediaItem> = ImmutableList.of(
                 val extras = Bundle().apply {
                     putString( ALBUM_TITLE_KEY, "Album-3" )
                     putString( PATH_KEY, testPaths[3] )
+                    putString( ARTIST_KEY, "Major Lazer & DJ Snake")
                 }
                 setExtras( extras )
             }.build()
@@ -221,6 +226,7 @@ val trackList: ImmutableList<MediaItem> = ImmutableList.of(
                 val extras = Bundle().apply {
                     putString( ALBUM_TITLE_KEY, "Album-4" )
                     putString( PATH_KEY, testPaths[4] )
+                    putString( ARTIST_KEY, "Martin Garrix, Dua Lipa" )
                 }
                 setExtras( extras )
             }.build()
@@ -234,6 +240,7 @@ val trackList: ImmutableList<MediaItem> = ImmutableList.of(
                 val extras = Bundle().apply {
                     putString( ALBUM_TITLE_KEY, "Album-4" )
                     putString( PATH_KEY, testPaths[4] )
+                    putString( ARTIST_KEY, "Martin Garrix" )
                 }
                 setExtras( extras )
             }.build()
@@ -271,6 +278,7 @@ val albumList: ImmutableList<MediaItem> = ImmutableList.of (
         setMediaMetadata(
             MediaMetadata.Builder().apply {
                 setTitle( "Album-4" )
+                setArtist( "Travis Scott" )
             }.build()
         )
     }.build()
@@ -311,7 +319,7 @@ val artistList: ImmutableList<MediaItem> = ImmutableList.of (
     MediaItem.Builder().apply {
         setMediaMetadata(
             MediaMetadata.Builder().apply {
-                setTitle( "artist5" )
+                setTitle( "Travis Scott" )
             }.build()
         )
     }.build()

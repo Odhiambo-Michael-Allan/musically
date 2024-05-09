@@ -31,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.odesa.musicMatters.data.preferences.ForYou
 import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
 import com.odesa.musicMatters.data.preferences.NowPlayingLyricsLayout
@@ -40,7 +39,6 @@ import com.odesa.musicMatters.services.i18n.English
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.ui.components.MinimalAppBar
 import com.odesa.musicMatters.ui.settings.Interface.BottomBarLabelVisibility
-import com.odesa.musicMatters.ui.settings.Interface.ForYou
 import com.odesa.musicMatters.ui.settings.Interface.HomeTabs
 import com.odesa.musicMatters.ui.settings.appearance.Font
 import com.odesa.musicMatters.ui.settings.appearance.FontScale
@@ -63,8 +61,8 @@ import com.odesa.musicMatters.ui.settings.player.IgnoreAudioFocusLoss
 import com.odesa.musicMatters.ui.settings.player.PauseOnHeadphonesDisconnect
 import com.odesa.musicMatters.ui.settings.player.PlayOnHeadphonesConnect
 import com.odesa.musicMatters.ui.settings.player.RequireAudioFocus
+import com.odesa.musicMatters.ui.theme.MusicMattersTheme
 import com.odesa.musicMatters.ui.theme.MusicallyFont
-import com.odesa.musicMatters.ui.theme.MusicallyTheme
 import com.odesa.musicMatters.ui.theme.SupportedFonts
 import com.odesa.musicMatters.ui.theme.ThemeMode
 
@@ -98,9 +96,6 @@ fun SettingsScreen(
         },
         onHomeTabsChange = {
                 homeTabs -> settingsViewModel.setHomeTabs( homeTabs )
-        },
-        onForYouContentChange = {
-                forYouContent -> settingsViewModel.setForYouContent( forYouContent )
         },
         onHomePageBottomBarLabelVisibilityChange = {
                 value -> settingsViewModel.setHomePageBottomBarLabelVisibility( value )
@@ -167,7 +162,6 @@ fun SettingsScreenContent(
     onUseMaterialYouChange: ( Boolean ) -> Unit,
     onPrimaryColorChange: ( String ) -> Unit,
     onHomeTabsChange: ( Set<HomeTab> ) -> Unit,
-    onForYouContentChange: ( Set<ForYou> ) -> Unit,
     onHomePageBottomBarLabelVisibilityChange: (HomePageBottomBarLabelVisibility) -> Unit,
     onFadePlaybackChange: ( Boolean ) -> Unit,
     onFadePlaybackDurationChange: ( Float ) -> Unit,
@@ -281,11 +275,6 @@ fun SettingsScreenContent(
                     homeTabs = uiState.homeTabs,
                     onHomeTabsChange = onHomeTabsChange
                 )
-                ForYou(
-                    language = uiState.language,
-                    forYouContent = uiState.forYouContent,
-                    onForYouContentChange = onForYouContentChange
-                )
                 BottomBarLabelVisibility(
                     value = uiState.homePageBottomBarLabelVisibility,
                     language = uiState.language,
@@ -390,25 +379,24 @@ fun SettingsScreenContentPreview() {
         useMaterialYou = SettingsDefaults.useMaterialYou,
         primaryColorName = "Blue",
         homeTabs = SettingsDefaults.homeTabs,
-        forYouContent = SettingsDefaults.forYouContents,
         homePageBottomBarLabelVisibility = SettingsDefaults.homePageBottomBarLabelVisibility,
-        fadePlayback = SettingsDefaults.fadePlayback,
-        fadePlaybackDuration = SettingsDefaults.fadePlaybackDuration,
-        requireAudioFocus = SettingsDefaults.requireAudioFocus,
-        ignoreAudioFocusLoss = SettingsDefaults.ignoreAudioFocusLoss,
-        playOnHeadphonesConnect = SettingsDefaults.playOnHeadphonesConnect,
-        pauseOnHeadphonesDisconnect = SettingsDefaults.pauseOnHeadphonesDisconnect,
-        fastRewindDuration = SettingsDefaults.fastRewindDuration,
-        fastForwardDuration = SettingsDefaults.fastForwardDuration,
-        miniPlayerShowTrackControls = SettingsDefaults.miniPlayerShowTrackControls,
-        miniPlayerShowSeekControls = SettingsDefaults.miniPlayerShowSeekControls,
-        miniPlayerTextMarquee = SettingsDefaults.miniPlayerTextMarquee,
-        controlsLayoutIsDefault = SettingsDefaults.controlsLayoutIsDefault,
+        fadePlayback = SettingsDefaults.FADE_PLAYBACK,
+        fadePlaybackDuration = SettingsDefaults.FADE_PLAYBACK_DURATION,
+        requireAudioFocus = SettingsDefaults.REQUIRE_AUDIO_FOCUS,
+        ignoreAudioFocusLoss = SettingsDefaults.IGNORE_AUDIO_FOCUS_LOSS,
+        playOnHeadphonesConnect = SettingsDefaults.PLAY_ON_HEADPHONES_CONNECT,
+        pauseOnHeadphonesDisconnect = SettingsDefaults.PAUSE_ON_HEADPHONES_DISCONNECT,
+        fastRewindDuration = SettingsDefaults.FAST_REWIND_DURATION,
+        fastForwardDuration = SettingsDefaults.FAST_FORWARD_DURATION,
+        miniPlayerShowTrackControls = SettingsDefaults.MINI_PLAYER_SHOW_TRACK_CONTROLS,
+        miniPlayerShowSeekControls = SettingsDefaults.MINI_PLAYERS_SHOW_SEEK_CONTROLS,
+        miniPlayerTextMarquee = SettingsDefaults.MINI_PLAYER_TEXT_MARQUEE,
+        controlsLayoutIsDefault = SettingsDefaults.CONTROLS_LAYOUT_IS_DEFAULT,
         nowPlayingLyricsLayout = SettingsDefaults.nowPlayingLyricsLayout,
-        showNowPlayingAudioInformation = SettingsDefaults.showNowPlayingAudioInformation,
-        showNowPlayingSeekControls = SettingsDefaults.showNowPlayingSeekControls,
+        showNowPlayingAudioInformation = SettingsDefaults.SHOW_NOW_PLAYING_AUDIO_INFORMATION,
+        showNowPlayingSeekControls = SettingsDefaults.SHOW_NOW_PLAYING_SEEK_CONTROLS,
     )
-    MusicallyTheme(
+    MusicMattersTheme(
         themeMode = ThemeMode.LIGHT,
         primaryColorName = SettingsDefaults.primaryColorName,
         fontName = SettingsDefaults.font.name,
@@ -425,7 +413,6 @@ fun SettingsScreenContentPreview() {
             onUseMaterialYouChange = {},
             onPrimaryColorChange = {},
             onHomeTabsChange = {},
-            onForYouContentChange = {},
             onHomePageBottomBarLabelVisibilityChange = {},
             onFadePlaybackChange = {},
             onFadePlaybackDurationChange = {},

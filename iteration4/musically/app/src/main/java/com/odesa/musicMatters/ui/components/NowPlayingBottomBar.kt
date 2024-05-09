@@ -437,5 +437,6 @@ val uiState = NowPlayingScreenUiState(
     currentPlayingSpeed = 1f,
     currentPlayingPitch = 1f,
     themeMode = SettingsDefaults.themeMode,
-    textMarquee = true
+    textMarquee = true,
+    showSamplingInfo = true,
 )

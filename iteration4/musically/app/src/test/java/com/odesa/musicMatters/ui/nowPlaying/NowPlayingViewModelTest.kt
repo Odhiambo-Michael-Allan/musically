@@ -146,7 +146,7 @@ class NowPlayingViewModelTest {
 
     @Test
     fun testTextMarqueeChange() = runTest {
-        assertEquals( SettingsDefaults.miniPlayerTextMarquee,
+        assertEquals( SettingsDefaults.MINI_PLAYER_TEXT_MARQUEE,
             nowPlayingViewModel.uiState.value.textMarquee )
         settingsRepository.setMiniPlayerTextMarquee( false )
         assertFalse( nowPlayingViewModel.uiState.value.textMarquee )
@@ -156,7 +156,7 @@ class NowPlayingViewModelTest {
 
     @Test
     fun testShowTrackControlsChange() = runTest {
-        assertEquals( SettingsDefaults.miniPlayerShowTrackControls,
+        assertEquals( SettingsDefaults.MINI_PLAYER_SHOW_TRACK_CONTROLS,
             nowPlayingViewModel.uiState.value.showTrackControls )
         settingsRepository.setMiniPlayerShowTrackControls( false )
         assertFalse( nowPlayingViewModel.uiState.value.showTrackControls )
@@ -166,7 +166,7 @@ class NowPlayingViewModelTest {
 
     @Test
     fun testShowSeekControlsChange() = runTest {
-        assertEquals( SettingsDefaults.miniPlayerShowSeekControls,
+        assertEquals( SettingsDefaults.MINI_PLAYERS_SHOW_SEEK_CONTROLS,
             nowPlayingViewModel.uiState.value.showSeekControls )
         settingsRepository.setMiniPlayerShowSeekControls( true )
         assertTrue( nowPlayingViewModel.uiState.value.showSeekControls )
@@ -176,7 +176,7 @@ class NowPlayingViewModelTest {
 
     @Test
     fun testControlsLayoutIsDefaultChange() = runTest {
-        assertEquals( SettingsDefaults.controlsLayoutIsDefault,
+        assertEquals( SettingsDefaults.CONTROLS_LAYOUT_IS_DEFAULT,
             nowPlayingViewModel.uiState.value.controlsLayoutIsDefault )
         listOf( true, false ).forEach {
             settingsRepository.setControlsLayoutIsDefault( it )
@@ -187,7 +187,7 @@ class NowPlayingViewModelTest {
 
     @Test
     fun testShowLyricsChange() = runTest {
-        assertEquals( SettingsDefaults.showLyrics,
+        assertEquals( SettingsDefaults.SHOW_LYRICS,
             nowPlayingViewModel.uiState.value.showLyrics )
         listOf( true, false ).forEach {
             settingsRepository.setShowLyrics( it )
@@ -198,7 +198,7 @@ class NowPlayingViewModelTest {
 
     @Test
     fun testShuffleChange() = runTest {
-        assertEquals( SettingsDefaults.shuffle,
+        assertEquals( SettingsDefaults.SHUFFLE,
             nowPlayingViewModel.uiState.value.shuffle )
         listOf( true, false ).forEach {
             settingsRepository.setShuffle( it )
@@ -219,7 +219,7 @@ class NowPlayingViewModelTest {
 
     @Test
     fun testPlayingSpeedChange() = runTest {
-        assertEquals( SettingsDefaults.currentPlayingSpeed,
+        assertEquals( SettingsDefaults.CURRENT_PLAYING_SPEED,
             nowPlayingViewModel.uiState.value.currentPlayingSpeed )
         allowedSpeedPitchValues.forEach {
             settingsRepository.setCurrentPlayingSpeed( it )
@@ -230,7 +230,7 @@ class NowPlayingViewModelTest {
 
     @Test
     fun testPlayingPitchChange() = runTest {
-        assertEquals( SettingsDefaults.currentPlayingPitch,
+        assertEquals( SettingsDefaults.CURRENT_PLAYING_PITCH,
             nowPlayingViewModel.uiState.value.currentPlayingPitch )
         allowedSpeedPitchValues.forEach {
             settingsRepository.setCurrentPlayingPitch( it )
@@ -252,11 +252,11 @@ class NowPlayingViewModelTest {
 
     @Test
     fun testToggleShuffleMode() {
-        assertEquals( SettingsDefaults.shuffle, nowPlayingViewModel.uiState.value.shuffle )
+        assertEquals( SettingsDefaults.SHUFFLE, nowPlayingViewModel.uiState.value.shuffle )
         nowPlayingViewModel.toggleShuffleMode()
-        assertEquals( !SettingsDefaults.shuffle, nowPlayingViewModel.uiState.value.shuffle )
+        assertEquals( !SettingsDefaults.SHUFFLE, nowPlayingViewModel.uiState.value.shuffle )
         nowPlayingViewModel.toggleShuffleMode()
-        assertEquals( SettingsDefaults.shuffle, nowPlayingViewModel.uiState.value.shuffle )
+        assertEquals( SettingsDefaults.SHUFFLE, nowPlayingViewModel.uiState.value.shuffle )
     }
 
     @Test
@@ -267,6 +267,15 @@ class NowPlayingViewModelTest {
         assertTrue( nowPlayingViewModel.uiState.value.currentlyPlayingSongIsFavorite )
         playlistRepository.removeFromFavorites( currentlyPlayingSongId.id )
         assertFalse( nowPlayingViewModel.uiState.value.currentlyPlayingSongIsFavorite )
+    }
+
+    @Test
+    fun testShowNowPlayingAdditionalInfoChange() = runTest {
+        assertTrue( nowPlayingViewModel.uiState.value.showSamplingInfo )
+        settingsRepository.setShowNowPlayingAudioInformation( false )
+        assertFalse( nowPlayingViewModel.uiState.value.showSamplingInfo )
+        settingsRepository.setShowNowPlayingAudioInformation( true )
+        assertTrue( nowPlayingViewModel.uiState.value.showSamplingInfo )
     }
 
 }

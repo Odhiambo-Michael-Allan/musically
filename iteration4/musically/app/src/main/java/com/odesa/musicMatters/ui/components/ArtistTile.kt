@@ -1,6 +1,7 @@
 package com.odesa.musicMatters.ui.components
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
@@ -14,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -39,6 +41,7 @@ fun ArtistTile(
     onClick: () -> Unit,
 ) {
     Tile(
+        modifier = Modifier.fillMaxWidth(),
         imageRequest = ImageRequest.Builder( LocalContext.current ).apply {
             data( artist.artworkUri )
             placeholder( fallbackResourceId )
