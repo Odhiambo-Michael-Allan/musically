@@ -35,10 +35,12 @@ import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -70,7 +72,7 @@ import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.services.media.extensions.formatMilliseconds
 import com.odesa.musicMatters.services.media.testSongs
 import com.odesa.musicMatters.services.media.toSamplingInfoString
-import com.odesa.musicMatters.ui.components.NowPlayingSongDropDownMenu
+import com.odesa.musicMatters.ui.components.NowPlayingSongOptionsBottomSheetContent
 import com.odesa.musicMatters.ui.components.PlaybackPosition
 import com.odesa.musicMatters.ui.components.swipeable
 import com.odesa.musicMatters.ui.navigation.FadeTransition
@@ -141,7 +143,7 @@ fun NowPlayingBottomSheet(
 }
 
 
-@OptIn( ExperimentalLayoutApi::class )
+@OptIn( ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun NowPlayingScreenContent(
     currentlyPlayingSong: Song,
@@ -270,15 +272,25 @@ fun NowPlayingScreenContent(
                         imageVector = Icons.Filled.MoreVert,
                         contentDescription = null
                     )
-                    NowPlayingSongDropDownMenu(
-                        expanded = showOptionsMenu,
-                        song = currentlyPlayingSong,
-                        language = language,
-                        isFavorite = isFavorite,
-                        onFavorite = onFavorite,
-                        onViewAlbum = {},
-                        onDismissRequest = { showOptionsMenu = false }
-                    )
+                    if ( showOptionsMenu ) {
+                        ModalBottomSheet(
+                            onDismissRequest = {
+                                showOptionsMenu = false
+                            }
+                        ) {
+                            NowPlayingSongOptionsBottomSheetContent(
+                                song = currentlyPlayingSong,
+                                language = language,
+                                isFavorite = isFavorite,
+                                fallbackResourceId = fallbackResourceId,
+                                onFavorite = onFavorite,
+                                onViewAlbum = {},
+                                onDismissRequest = {
+                                    showOptionsMenu = false
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }

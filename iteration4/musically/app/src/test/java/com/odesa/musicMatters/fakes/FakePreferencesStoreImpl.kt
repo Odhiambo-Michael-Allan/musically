@@ -61,7 +61,7 @@ class FakePreferencesStoreImpl : PreferenceStore {
         this.fontScale = fontScale
     }
 
-    override fun getFontScale() = fontScale ?: SettingsDefaults.fontScale
+    override fun getFontScale() = fontScale ?: SettingsDefaults.FONT_SCALE
 
     override suspend fun setThemeMode( themeMode: ThemeMode ) {
         this.themeMode = themeMode
@@ -78,7 +78,7 @@ class FakePreferencesStoreImpl : PreferenceStore {
         this.primaryColorName = primaryColorName
     }
 
-    override fun getPrimaryColorName() = primaryColorName ?: SettingsDefaults.primaryColorName
+    override fun getPrimaryColorName() = primaryColorName ?: SettingsDefaults.PRIMARY_COLOR_NAME
     override fun getHomeTabs() = homeTabs ?: SettingsDefaults.homeTabs
 
     override suspend fun setHomeTabs( homeTabs: Set<HomeTab> ) {

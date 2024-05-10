@@ -374,9 +374,9 @@ fun SettingsScreenContentPreview() {
     val uiState = SettingsScreenUiState(
         language = English,
         font = SupportedFonts.ProductSans,
-        fontScale = SettingsDefaults.fontScale,
+        fontScale = SettingsDefaults.FONT_SCALE,
         themeMode = ThemeMode.LIGHT,
-        useMaterialYou = SettingsDefaults.useMaterialYou,
+        useMaterialYou = SettingsDefaults.USE_MATERIAL_YOU,
         primaryColorName = "Blue",
         homeTabs = SettingsDefaults.homeTabs,
         homePageBottomBarLabelVisibility = SettingsDefaults.homePageBottomBarLabelVisibility,
@@ -398,10 +398,10 @@ fun SettingsScreenContentPreview() {
     )
     MusicMattersTheme(
         themeMode = ThemeMode.LIGHT,
-        primaryColorName = SettingsDefaults.primaryColorName,
+        primaryColorName = SettingsDefaults.PRIMARY_COLOR_NAME,
         fontName = SettingsDefaults.font.name,
-        fontScale = SettingsDefaults.fontScale,
-        useMaterialYou = SettingsDefaults.useMaterialYou
+        fontScale = SettingsDefaults.FONT_SCALE,
+        useMaterialYou = SettingsDefaults.USE_MATERIAL_YOU
     ) {
         SettingsScreenContent(
             uiState = uiState,

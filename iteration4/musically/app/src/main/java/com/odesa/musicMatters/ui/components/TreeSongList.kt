@@ -33,12 +33,14 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -129,7 +131,7 @@ fun TreeSongListPreview() {
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun TreeSongListContent(
     uiState: TreeScreenUiState,
@@ -152,7 +154,7 @@ fun TreeSongListContent(
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background( MaterialTheme.colorScheme.surfaceColorAtElevation( 1.dp ) )
+                        .background(MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
                         .clickable { togglePath(directoryName) }
                         .padding(
                             start = 12.dp,
@@ -271,21 +273,29 @@ fun TreeSongListContent(
                                             imageVector = Icons.Filled.MoreVert,
                                             contentDescription = null
                                         )
-                                        SongDropdownMenu(
-                                            language = uiState.language,
-                                            song = it,
-                                            isFavorite = isFavorite,
-                                            expanded = showOptionsMenu,
-                                            onFavorite = {},
-                                            onAddToQueue = {},
-                                            onPlayNext = { /*TODO*/ },
-                                            onViewArtist = {},
-                                            onViewAlbum = {},
-                                            onShareSong = {},
-                                            onDismissRequest = {
-                                                showOptionsMenu = false
+                                        if ( showOptionsMenu ) {
+                                            ModalBottomSheet(
+                                                onDismissRequest = {
+                                                    showOptionsMenu = false
+                                                }
+                                            ) {
+                                                SongOptionsBottomSheetContent(
+                                                    language = uiState.language,
+                                                    song = it,
+                                                    isFavorite = isFavorite,
+                                                    isCurrentlyPlaying = uiState.currentlyPlayingSongId == it.id,
+                                                    fallbackResourceId = fallbackResourceId,
+                                                    onFavorite = {},
+                                                    onAddToQueue = {},
+                                                    onPlayNext = { /*TODO*/ },
+                                                    onViewArtist = {},
+                                                    onViewAlbum = {},
+                                                    onShareSong = {}
+                                                ) {
+                                                    showOptionsMenu = false
+                                                }
                                             }
-                                        )
+                                        }
                                     },
                                     onClick = {
                                         showOptionsMenu = !showOptionsMenu

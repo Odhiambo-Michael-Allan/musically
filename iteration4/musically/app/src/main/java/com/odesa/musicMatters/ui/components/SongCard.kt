@@ -2,6 +2,7 @@ package com.odesa.musicMatters.ui.components
 
 import android.net.Uri
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,27 +13,25 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
+import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.filled.Album
-import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.PlaylistAdd
-import androidx.compose.material.icons.filled.PlaylistPlay
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -72,7 +72,7 @@ fun SongCard(
     onShareSong: ( Uri ) -> Unit,
 ) {
 
-    var showSongOptionsMenu by remember { mutableStateOf( false ) }
+    var showSongOptionsBottomSheet by remember { mutableStateOf( false ) }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -131,28 +131,37 @@ fun SongCard(
                         }
                     }
                     IconButton(
-                        onClick = { showSongOptionsMenu = !showSongOptionsMenu }
+                        onClick = { showSongOptionsBottomSheet = !showSongOptionsBottomSheet }
                     ) {
                         Icon(
                             modifier = Modifier.size( 24.dp ),
                             imageVector = Icons.Filled.MoreVert,
                             contentDescription = null
                         )
-                        SongDropdownMenu(
-                            language = language,
-                            song,
-                            isFavorite = isFavorite,
-                            expanded = showSongOptionsMenu,
-                            onFavorite = onFavorite,
-                            onAddToQueue = onAddToQueue,
-                            onPlayNext = onPlayNext,
-                            onViewArtist = onViewArtist,
-                            onViewAlbum = onViewAlbum,
-                            onShareSong = onShareSong,
-                            onDismissRequest = {
-                                showSongOptionsMenu = false
+                        if ( showSongOptionsBottomSheet ) {
+                            ModalBottomSheet(
+                                onDismissRequest = {
+                                    showSongOptionsBottomSheet = false
+                                }
+                            ) {
+                                SongOptionsBottomSheetContent(
+                                    language = language,
+                                    song = song,
+                                    isFavorite = isFavorite,
+                                    isCurrentlyPlaying = isCurrentlyPlaying,
+                                    fallbackResourceId = fallbackResourceId,
+                                    onFavorite = onFavorite,
+                                    onAddToQueue = onAddToQueue,
+                                    onPlayNext = { /*TODO*/ },
+                                    onViewArtist = onViewArtist,
+                                    onViewAlbum = onViewAlbum,
+                                    onShareSong = onShareSong,
+                                    onDismissRequest = {
+                                        showSongOptionsBottomSheet = false
+                                    }
+                                )
                             }
-                        )
+                        }
                     }
                 }
             }
@@ -161,295 +170,251 @@ fun SongCard(
 }
 
 @Composable
-fun SongDropdownMenu(
+fun SongOptionsBottomSheetContent(
     language: Language,
     song: Song,
     isFavorite: Boolean,
-    expanded: Boolean,
+    isCurrentlyPlaying: Boolean,
+    @DrawableRes fallbackResourceId: Int,
     onFavorite: ( String ) -> Unit,
     onAddToQueue: ( String ) -> Unit,
     onPlayNext: () -> Unit,
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
 ) {
-    var showSongDetailsDialog by remember { mutableStateOf( false ) }
-    var showAddSongToPlaylistDialog by remember { mutableStateOf( false ) }
-
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = onDismissRequest
-    ) {
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon(
-                    imageVector = if ( isFavorite ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                    tint = MaterialTheme.colorScheme.primary,
-                    contentDescription = null
-                )
-            },
-            text = {
-                Text(
-                    text = language.favorite
-                )
-            },
+    Column {
+        SongOptionsBottomSheetHeader(
+            song = song,
+            fallbackResourceId = fallbackResourceId,
+            isCurrentlyPlaying = isCurrentlyPlaying,
+        )
+        HorizontalDivider( modifier = Modifier.padding( 32.dp, 0.dp ) )
+        SongOptionsBottomSheetItem(
+            imageVector = if ( isFavorite ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+            label = language.favorite,
             onClick = {
-                onDismissRequest()
                 onFavorite( song.id )
-            }
-        )
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.PlaylistPlay,
-                    contentDescription = null
-                )
-            },
-            text = { Text( text = language.playNext ) },
-            onClick = {
                 onDismissRequest()
-                onPlayNext()
             }
         )
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon( imageVector = Icons.Filled.PlaylistPlay, contentDescription = null )
-            },
-            text = {
-                Text(text = language.addToQueue)
-            },
-            onClick = {
-                onDismissRequest()
-                onAddToQueue( song.id )
-            }
-        )
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.PlaylistAdd,
-                    contentDescription = null
-                )
-            },
-            text = {
-                Text( text = language.addToPlaylist )
-            },
-            onClick = {
-                onDismissRequest()
-                showAddSongToPlaylistDialog = true
-            }
-        )
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.Person,
-                    contentDescription = null
-                )
-            },
-            text = {
-                Text(
-                    text = "${language.viewArtist}: ${song.artists ?: "<Unknown>"}"
-                )
-            },
-            onClick = {
-                onDismissRequest()
-//                onViewArtist( song.artists )
-            }
-        )
-        song.albumTitle?.let {
-            DropdownMenuItem(
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.Album,
-                        contentDescription = null
-                    )
-                },
-                text = {
-                    Text( text = language.viewAlbum )
-                },
-                onClick = {
-                    onDismissRequest()
-                    onViewAlbum( it )
-                }
-            )
+        SongOptionsBottomSheetItem(
+            imageVector = Icons.AutoMirrored.Filled.PlaylistPlay,
+            label = language.playNext
+        ) {
+            onPlayNext()
+            onDismissRequest()
         }
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.Share,
-                    contentDescription = null
-                )
-            },
-            text = {
-                Text( text = language.shareSong )
-            },
-            onClick = {
+        SongOptionsBottomSheetItem(
+            imageVector = Icons.AutoMirrored.Filled.PlaylistPlay,
+            label = language.addToQueue
+        ) {
+            onAddToQueue( song.id )
+            onDismissRequest()
+        }
+        SongOptionsBottomSheetItem(
+            imageVector = Icons.AutoMirrored.Filled.PlaylistAdd,
+            label = language.addToPlaylist
+        ) {
+            onDismissRequest()
+        }
+        SongOptionsBottomSheetItem(
+            imageVector = Icons.Filled.Person,
+            label = "${language.viewArtist}: ${song.artists}"
+        ) {
+            onDismissRequest()
+        }
+        song.albumTitle?.let {
+            SongOptionsBottomSheetItem(
+                imageVector = Icons.Filled.Album,
+                label = language.viewAlbum
+            ) {
                 onDismissRequest()
-//                onShareSong( song.uri )
+                onViewAlbum( it )
             }
-        )
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon( imageVector = Icons.Filled.Info, contentDescription = null )
-            },
-            text = {
-                Text( text = language.details )
-            },
-            onClick = {
-                onDismissRequest()
-                showSongDetailsDialog = true
-            }
-        )
-    }
-    if ( showSongDetailsDialog ) {
-//        SongDetailsDialog(
-//            song = song,
-//            onDismissRequest = { showSongDetailsDialog = false }
-//        )
-    }
-    if ( showAddSongToPlaylistDialog ) {
-//        AddToPlaylistDialog(
-//            songIds = listOf( song.id ),
-//            onDismissRequest = { showAddSongToPlaylistDialog = false }
-//        )
+        }
+        SongOptionsBottomSheetItem(
+            imageVector = Icons.Filled.Share,
+            label = language.shareSong
+        ) {
+            onDismissRequest()
+        }
+        SongOptionsBottomSheetItem(
+            imageVector = Icons.Filled.Info,
+            label = language.details
+        ) {
+            onDismissRequest()
+        }
     }
 }
 
 @Composable
-fun NowPlayingSongDropDownMenu(
-    expanded: Boolean,
+fun SongOptionsBottomSheetItem(
+    imageVector: ImageVector,
+    label: String,
+    onClick: () -> Unit,
+) {
+    Card (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp),
+        colors = CardDefaults.cardColors().copy(
+            containerColor = Color.Transparent
+        ),
+        onClick = onClick
+    ) {
+        Row (
+            modifier = Modifier.padding( 16.dp ),
+            horizontalArrangement = Arrangement.spacedBy( 24.dp ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = imageVector,
+                tint = MaterialTheme.colorScheme.primary,
+                contentDescription = null
+            )
+            Text(
+                text = label
+            )
+        }
+    }
+}
+
+@Composable
+fun SongOptionsBottomSheetHeader(
+    song: Song,
+    @DrawableRes fallbackResourceId: Int,
+    isCurrentlyPlaying: Boolean,
+) {
+    Row (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(32.dp, 16.dp),
+        horizontalArrangement = Arrangement.spacedBy( 24.dp ),
+    ) {
+        AsyncImage(
+            model = ImageRequest.Builder( LocalContext.current ).apply {
+                data( song.artworkUri )
+                placeholder( fallbackResourceId )
+                fallback( fallbackResourceId )
+                error( fallbackResourceId )
+                crossfade( true )
+            }.build(),
+            modifier = Modifier
+                .size(45.dp)
+                .clip(RoundedCornerShape(10.dp)),
+            contentDescription = null
+        )
+        Column {
+            Text(
+                text = song.title,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    color = when {
+                        isCurrentlyPlaying -> MaterialTheme.colorScheme.primary
+                        else -> LocalTextStyle.current.color
+                    }
+                ),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = song.artists.joinToString(),
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+@Preview( showBackground = true )
+@Composable
+fun SongOptionsBottomSheetHeaderPreview() {
+    SongOptionsBottomSheetHeader(
+        song = testSongs.first(),
+        fallbackResourceId = R.drawable.placeholder_light,
+        isCurrentlyPlaying = true
+    )
+}
+
+@Preview( showBackground = true )
+@Composable
+fun SongOptionsBottomSheetContentPreview() {
+    SongOptionsBottomSheetContent(
+        language = English,
+        song = testSongs.first(),
+        isFavorite = true,
+        isCurrentlyPlaying = true,
+        fallbackResourceId = R.drawable.placeholder_light,
+        onFavorite = {},
+        onAddToQueue = {},
+        onPlayNext = { /*TODO*/ },
+        onViewArtist = {},
+        onViewAlbum = {},
+        onShareSong = {},
+        onDismissRequest = {}
+    )
+}
+
+@Composable
+fun NowPlayingSongOptionsBottomSheetContent(
     song: Song,
     language: Language,
     isFavorite: Boolean,
+    @DrawableRes fallbackResourceId: Int,
     onFavorite: (String ) -> Unit,
     onViewAlbum: (String ) -> Unit,
     onDismissRequest: () -> Unit
 ) {
-    var showSongDetailsDialog by remember { mutableStateOf( false ) }
-    var showAddSongToPlaylistDialog by remember { mutableStateOf( false ) }
-
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = onDismissRequest
-    ) {
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon(
-                    imageVector = if ( isFavorite ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                    tint = MaterialTheme.colorScheme.primary,
-                    contentDescription = null
-                )
-            },
-            text = {
-                Text(
-                    text = language.favorite
-                )
-            },
+    Column {
+        SongOptionsBottomSheetHeader(
+            song = song,
+            fallbackResourceId = fallbackResourceId,
+            isCurrentlyPlaying = true,
+        )
+        HorizontalDivider( modifier = Modifier.padding( 32.dp, 0.dp ) )
+        SongOptionsBottomSheetItem(
+            imageVector = if ( isFavorite ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+            label = language.favorite,
             onClick = {
-                onDismissRequest()
                 onFavorite( song.id )
+                onDismissRequest()
             }
         )
         song.albumTitle?.let {
-            DropdownMenuItem(
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.Album,
-                        contentDescription = null
-                    )
-                },
-                text = {
-                    Text( text = language.viewAlbum )
-                },
-                onClick = {
-                    onDismissRequest()
-                    onViewAlbum( it )
-                }
-            )
+            SongOptionsBottomSheetItem(
+                imageVector = Icons.Filled.Album,
+                label = language.viewAlbum
+            ) {
+                onDismissRequest()
+                onViewAlbum( it )
+            }
         }
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.Person,
-                    contentDescription = null
-                )
-            },
-            text = {
-                Text(
-                    text = "${language.viewArtist}: ${song.artists ?: "<Unknown>"}"
-                )
-            },
-            onClick = {
-                onDismissRequest()
-//                onViewArtist( song.artists )
-            }
-        )
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.PlaylistAdd,
-                    contentDescription = null
-                )
-            },
-            text = {
-                Text( text = language.addToPlaylist )
-            },
-            onClick = {
-                onDismissRequest()
-                showAddSongToPlaylistDialog = true
-            }
-        )
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.Share,
-                    contentDescription = null
-                )
-            },
-            text = {
-                Text( text = language.shareSong )
-            },
-            onClick = {
-                onDismissRequest()
-//                onShareSong( song.uri )
-            }
-        )
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon( imageVector = Icons.Filled.MusicNote, contentDescription = null )
-            },
-            text = {
-                Text( text = language.setAsRingtone )
-            },
-            onClick = {
-                onDismissRequest()
-                showSongDetailsDialog = true
-            }
-        )
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon( imageVector = Icons.Filled.Info, contentDescription = null )
-            },
-            text = {
-                Text( text = language.details )
-            },
-            onClick = {
-                onDismissRequest()
-                showSongDetailsDialog = true
-            }
-        )
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon( imageVector = Icons.Filled.DeleteOutline, contentDescription = null )
-            },
-            text = {
-                Text( text = language.delete )
-            },
-            onClick = {
-                onDismissRequest()
-                showSongDetailsDialog = true
-            }
-        )
+        SongOptionsBottomSheetItem(
+            imageVector = Icons.Filled.Person,
+            label = "${language.viewArtist}: ${song.artists}"
+        ) {
+            onDismissRequest()
+        }
+        SongOptionsBottomSheetItem(
+            imageVector = Icons.AutoMirrored.Filled.PlaylistAdd,
+            label = language.addToPlaylist
+        ) {
+            onDismissRequest()
+        }
+        SongOptionsBottomSheetItem(
+            imageVector = Icons.Filled.Share,
+            label = language.shareSong
+        ) {
+            onDismissRequest()
+        }
+        SongOptionsBottomSheetItem(
+            imageVector = Icons.Filled.Info,
+            label = language.details
+        ) {
+            onDismissRequest()
+        }
     }
 }
 

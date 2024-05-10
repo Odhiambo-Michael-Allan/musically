@@ -36,7 +36,7 @@ class FakeSettingsRepository : SettingsRepository {
     private val _useMaterialYou = MutableStateFlow( true )
     override val useMaterialYou = _useMaterialYou.asStateFlow()
 
-    private val _primaryColorName = MutableStateFlow( SettingsDefaults.primaryColorName )
+    private val _primaryColorName = MutableStateFlow( SettingsDefaults.PRIMARY_COLOR_NAME )
     override val primaryColorName = _primaryColorName.asStateFlow()
 
     private val _homeTabs = MutableStateFlow( SettingsDefaults.homeTabs )

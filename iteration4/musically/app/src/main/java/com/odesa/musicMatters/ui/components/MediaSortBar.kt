@@ -144,10 +144,10 @@ fun <T : Enum<T>> MediaSortBar(
 fun MediaSortBarPreview() {
     MusicMattersTheme(
         themeMode = SettingsDefaults.themeMode,
-        primaryColorName = SettingsDefaults.primaryColorName,
+        primaryColorName = SettingsDefaults.PRIMARY_COLOR_NAME,
         fontName = SettingsDefaults.font.name,
-        fontScale = SettingsDefaults.fontScale,
-        useMaterialYou = SettingsDefaults.useMaterialYou
+        fontScale = SettingsDefaults.FONT_SCALE,
+        useMaterialYou = SettingsDefaults.USE_MATERIAL_YOU
     ) {
         MediaSortBar(
             sortReverse = false,

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.outlined.SdStorage
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +30,7 @@ fun PermissionCard(
     position: String,
     title: String,
     description: String,
+    permissionGranted: Boolean,
     onClick: () -> Unit,
 ) {
     Row(
@@ -75,6 +77,14 @@ fun PermissionCard(
                     modifier = Modifier.padding( 8.dp ),
                     text = stringResource( id = R.string.grant_access )
                 )
+                if ( permissionGranted ) {
+                    Icon(
+                        modifier = Modifier.padding( 8.dp ),
+                        imageVector = Icons.Filled.CheckCircle,
+                        tint = MaterialTheme.colorScheme.primary,
+                        contentDescription = null
+                    )
+                }
             }
         }
     }
@@ -85,15 +95,16 @@ fun PermissionCard(
 fun PermissionCardPreview() {
     MusicMattersTheme(
         themeMode = SettingsDefaults.themeMode,
-        primaryColorName = SettingsDefaults.primaryColorName,
+        primaryColorName = SettingsDefaults.PRIMARY_COLOR_NAME,
         fontName = SettingsDefaults.font.name,
-        fontScale = SettingsDefaults.fontScale,
-        useMaterialYou = SettingsDefaults.useMaterialYou
+        fontScale = SettingsDefaults.FONT_SCALE,
+        useMaterialYou = SettingsDefaults.USE_MATERIAL_YOU
     ) {
         PermissionCard(
             position = "1.",
             title = stringResource( id = R.string.storage_access ),
             description = stringResource( id = R.string.storage_access_prompt ),
+            permissionGranted = true,
             onClick = {}
         )
     }

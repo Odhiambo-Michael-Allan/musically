@@ -122,7 +122,7 @@ class SettingsViewModelTest {
 
     @Test
     fun testPrimaryColorNameChange() {
-        assertEquals( SettingsDefaults.primaryColorName, settingsViewModel.uiState.value.primaryColorName )
+        assertEquals( SettingsDefaults.PRIMARY_COLOR_NAME, settingsViewModel.uiState.value.primaryColorName )
         PrimaryThemeColors.entries.forEach {
             changePrimaryColorTo( it.name )
         }

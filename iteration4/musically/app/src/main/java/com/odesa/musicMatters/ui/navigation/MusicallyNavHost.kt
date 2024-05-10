@@ -59,9 +59,6 @@ import com.odesa.musicMatters.ui.artists.ArtistsScreen
 import com.odesa.musicMatters.ui.artists.ArtistsScreenViewModel
 import com.odesa.musicMatters.ui.artists.ArtistsViewModelFactory
 import com.odesa.musicMatters.ui.components.swipeable
-import com.odesa.musicMatters.ui.folders.FoldersScreen
-import com.odesa.musicMatters.ui.folders.FoldersViewModel
-import com.odesa.musicMatters.ui.folders.FoldersViewModelFactory
 import com.odesa.musicMatters.ui.forYou.ForYouScreen
 import com.odesa.musicMatters.ui.forYou.ForYouScreenViewModel
 import com.odesa.musicMatters.ui.forYou.ForYouViewModelFactory
@@ -138,7 +135,8 @@ fun MusicallyNavHost(
             ForYouScreen(
                 viewModel = forYouScreenViewModel,
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) },
-                onSuggestedAlbumClick = { navController.navigateToAlbumScreen( it.name ) }
+                onSuggestedAlbumClick = { navController.navigateToAlbumScreen( it.name ) },
+                onSuggestedArtistClick = { navController.navigateToArtistScreen( it.name ) },
             )
         }
         composable(
@@ -278,19 +276,6 @@ fun MusicallyNavHost(
                 genreName = genreName,
                 genreScreenViewModel = genreScreenViewModel,
                 onNavigateBack = { navController.navigateUp() }
-            )
-        }
-        composable(
-            route = Route.Folders.name,
-            enterTransition = { SlideTransition.slideUp.enterTransition() },
-            exitTransition = { FadeTransition.exitTransition() }
-        ) {
-            val foldersViewModel: FoldersViewModel = viewModel(
-                factory = FoldersViewModelFactory()
-            )
-            FoldersScreen(
-                viewModel = foldersViewModel,
-                onSettingsClicked = { navController.navigate( Route.Settings.name ) }
             )
         }
         composable(

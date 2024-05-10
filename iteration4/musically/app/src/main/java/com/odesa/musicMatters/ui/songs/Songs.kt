@@ -93,10 +93,10 @@ fun SongsScreenContent(
 fun SongsScreenContentPreview() {
     MusicMattersTheme(
         themeMode = SettingsDefaults.themeMode,
-        primaryColorName = SettingsDefaults.primaryColorName,
+        primaryColorName = SettingsDefaults.PRIMARY_COLOR_NAME,
         fontName = SettingsDefaults.font.name,
         fontScale = 1.75f,
-        useMaterialYou = SettingsDefaults.useMaterialYou
+        useMaterialYou = SettingsDefaults.USE_MATERIAL_YOU
     ) {
         SongsScreenContent(
             uiState = uiState,

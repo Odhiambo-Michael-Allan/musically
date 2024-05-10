@@ -287,4 +287,15 @@
     <string name="storage_access">Storage Access</string>
     <string name="grant_access">Grant access</string>
     <string name="storage_access_prompt">The app needs permission to access your device storage for playing music</string>
+
+    <string name="welcome_message">Hello there! Welcome to</string>
+    <string name="read_media_audio">Read Media Audio</string>
+    <string name="read_media_audio_prompt">The app needs to read media and audio inorder to fetch and play audio files stored on your device</string>
+
+    <string name="ringtone_permission">Ringtone</string>
+    <string name="ringtone_permission_prompt">The app needs permission to access your device settings inorder to set music as ringtone</string>
+
+    <string name="post_notifications_permission">Post Notifications</string>
+    <string name="post_notifications_prompt">The app needs this to create and display notifications on your device</string>
+    <string name="lets_go">Let\'s go</string>
 </resources>

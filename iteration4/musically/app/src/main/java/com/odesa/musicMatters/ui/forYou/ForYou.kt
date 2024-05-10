@@ -71,6 +71,7 @@ fun ForYouScreen(
     viewModel: ForYouScreenViewModel,
     onSettingsClicked: () -> Unit,
     onSuggestedAlbumClick: ( Album ) -> Unit,
+    onSuggestedArtistClick: ( Artist ) -> Unit,
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
@@ -83,6 +84,7 @@ fun ForYouScreen(
         onSongInMostPlayedSongsSelected = { viewModel.playMostPlayedSong( it ) },
         onSongInPlayHistorySelected = { viewModel.playSongInPlayHistory( it ) },
         onSuggestedAlbumClick = onSuggestedAlbumClick,
+        onSuggestedArtistClick = onSuggestedArtistClick,
     )
 }
 
@@ -94,7 +96,9 @@ fun ForYouScreenContent(
     onSongInRecentlyAddedSongsSelected: ( MediaItem ) -> Unit,
     onSongInMostPlayedSongsSelected: ( MediaItem ) -> Unit,
     onSongInPlayHistorySelected: ( MediaItem ) -> Unit,
-    onSuggestedAlbumClick: ( Album ) -> Unit
+    onSuggestedAlbumClick: ( Album ) -> Unit,
+    onSuggestedArtistClick: ( Artist ) -> Unit
+
 ) {
 
     val fallbackResourceId =
@@ -114,7 +118,7 @@ fun ForYouScreenContent(
             )
             Column (
                 modifier = Modifier
-                    .verticalScroll( rememberScrollState() )
+                    .verticalScroll(rememberScrollState())
                     .fillMaxSize(),
             ) {
                 RecentlyAddedSongs(
@@ -144,7 +148,8 @@ fun ForYouScreenContent(
                     language = uiState.language,
                     isLoading = uiState.isLoadingSuggestedArtists,
                     suggestedArtists = uiState.suggestedArtists,
-                    fallbackResourceId = fallbackResourceId
+                    fallbackResourceId = fallbackResourceId,
+                    onSuggestedArtistClick = { onSuggestedArtistClick( it ) }
                 )
                 if ( uiState.songsInPlayHistory.isNotEmpty() ) {
                     PlayHistory(
@@ -255,8 +260,8 @@ fun ForYouSongRow(
                     items( songs ) { song ->
                         ForYouSongCard(
                             modifier = Modifier
-                                .width( tileWidth )
-                                .height( tileHeight ),
+                                .width(tileWidth)
+                                .height(tileHeight),
                             song = song,
                             fallbackResourceId = fallbackResourceId,
                             onClick = { onSongSelected( song.mediaItem ) }
@@ -278,7 +283,8 @@ fun ForYouScreenContentPreview() {
         onSongInPlayHistorySelected = {},
         onSongInMostPlayedSongsSelected = {},
         onSongInRecentlyAddedSongsSelected = {},
-        onSuggestedAlbumClick = {}
+        onSuggestedAlbumClick = {},
+        onSuggestedArtistClick = {}
     )
 }
 
@@ -480,6 +486,7 @@ private fun SuggestedArtists(
     isLoading: Boolean,
     suggestedArtists: List<Artist>,
     @DrawableRes fallbackResourceId: Int,
+    onSuggestedArtistClick: ( Artist ) -> Unit,
 ) {
 
     SideHeading {
@@ -492,7 +499,7 @@ private fun SuggestedArtists(
         items = suggestedArtists
     ) {
         Card(
-            onClick = {}
+            onClick = { onSuggestedArtistClick( it ) }
         ) {
             AsyncImage(
                 modifier = Modifier

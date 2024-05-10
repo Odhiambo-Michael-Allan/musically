@@ -74,7 +74,7 @@ class SettingsRepositoryImplTest {
 
     @Test
     fun testFontScaleChange() {
-        assertEquals( SettingsDefaults.fontScale, settingsRepository.fontScale.value )
+        assertEquals( SettingsDefaults.FONT_SCALE, settingsRepository.fontScale.value )
         scalingPresets.forEach { changeFontScaleTo( it ) }
     }
 
@@ -110,7 +110,7 @@ class SettingsRepositoryImplTest {
 
     @Test
     fun testPrimaryColorChange() {
-        assertEquals( SettingsDefaults.primaryColorName, settingsRepository.primaryColorName.value )
+        assertEquals( SettingsDefaults.PRIMARY_COLOR_NAME, settingsRepository.primaryColorName.value )
         PrimaryThemeColors.entries.forEach {
             changePrimaryColorTo( it.name )
         }

@@ -8,12 +8,8 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.launch
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,22 +19,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.odesa.musicMatters.R
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
 import com.odesa.musicMatters.ui.components.NowPlayingBottomBar
-import com.odesa.musicMatters.ui.components.PermissionCard
 import com.odesa.musicMatters.ui.navigation.MusicallyNavHost
 import com.odesa.musicMatters.ui.navigation.Route
 import com.odesa.musicMatters.ui.navigation.navigateToAlbumScreen
 import com.odesa.musicMatters.ui.navigation.navigateToArtistScreen
 import com.odesa.musicMatters.ui.nowPlaying.NowPlayingBottomSheet
 import com.odesa.musicMatters.ui.nowPlaying.NowPlayingViewModel
-import com.odesa.musicMatters.ui.theme.MusicMattersTheme
 import timber.log.Timber
 
 @Composable
@@ -49,29 +41,13 @@ fun MusicallyApp(
     musicServiceConnection: MusicServiceConnection,
     nowPlayingViewModel: NowPlayingViewModel
 ) {
-    val themeMode by settingsRepository.themeMode.collectAsState()
-    val primaryColorName by settingsRepository.primaryColorName.collectAsState()
-    val font by settingsRepository.font.collectAsState()
-    val fontScale by settingsRepository.fontScale.collectAsState()
-    val useMaterialYou by settingsRepository.useMaterialYou.collectAsState()
-
-    MusicMattersTheme(
-        themeMode = themeMode,
-        primaryColorName = primaryColorName,
-        fontName = font.name,
-        fontScale = fontScale,
-        useMaterialYou = useMaterialYou
-    ) {
-        Surface( color = MaterialTheme.colorScheme.background ) {
-            MusicallyAppContent(
-                navController = navController,
-                settingsRepository = settingsRepository,
-                playlistRepository = playlistRepository,
-                musicServiceConnection = musicServiceConnection,
-                nowPlayingViewModel = nowPlayingViewModel
-            )
-        }
-    }
+    MusicallyAppContent(
+        navController = navController,
+        settingsRepository = settingsRepository,
+        playlistRepository = playlistRepository,
+        musicServiceConnection = musicServiceConnection,
+        nowPlayingViewModel = nowPlayingViewModel
+    )
 }
 
 @OptIn( ExperimentalMaterial3Api::class )
@@ -173,32 +149,11 @@ fun MusicallyAppContent(
                         }
                     )
                 }
-
-            }
-            var showPermissionsBottomSheet by remember { mutableStateOf( true ) }
-            if ( showPermissionsBottomSheet ) {
-                val sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true )
-                ModalBottomSheet(
-                    sheetState = sheetState,
-                    onDismissRequest = { showPermissionsBottomSheet = false }
-                ) {
-                    Column (
-                        modifier = Modifier
-                            .verticalScroll(rememberScrollState())
-                            .fillMaxSize()
-                    ) {
-                        PermissionCard(
-                            position = "1.",
-                            title = stringResource( id = R.string.storage_access ),
-                            description = stringResource( id = R.string.storage_access_prompt ),
-                            onClick = { }
-                        )
-                    }
-                }
             }
         }
     }
 }
+
 
 
 

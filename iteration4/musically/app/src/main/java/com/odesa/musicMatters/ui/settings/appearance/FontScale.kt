@@ -100,7 +100,7 @@ fun FontScale(
                 actions = {
                     TextButton(
                         onClick = {
-                            onFontScaleChange( SettingsDefaults.fontScale.toString() )
+                            onFontScaleChange( SettingsDefaults.FONT_SCALE.toString() )
                             fontScaleDialogIsOpen = false
                         }
                     ) {

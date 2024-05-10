@@ -55,7 +55,7 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
     }
 
     override fun getFontScale() = getSharedPreferences().getFloat(
-        SettingsKeys.FONT_SCALE, SettingsDefaults.fontScale
+        SettingsKeys.FONT_SCALE, SettingsDefaults.FONT_SCALE
     )
 
     override suspend fun setThemeMode( themeMode: ThemeMode ) {
@@ -71,7 +71,7 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         ?: SettingsDefaults.themeMode
 
     override fun getUseMaterialYou() = getSharedPreferences().getBoolean(
-        SettingsKeys.USE_MATERIAL_YOU, SettingsDefaults.useMaterialYou
+        SettingsKeys.USE_MATERIAL_YOU, SettingsDefaults.USE_MATERIAL_YOU
     )
 
     override suspend fun setUseMaterialYou( useMaterialYou: Boolean ) {
@@ -91,7 +91,7 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
     }
 
     override fun getPrimaryColorName() = getSharedPreferences()
-        .getString(SettingsKeys.PRIMARY_COLOR_NAME, null ) ?: SettingsDefaults.primaryColorName
+        .getString(SettingsKeys.PRIMARY_COLOR_NAME, null ) ?: SettingsDefaults.PRIMARY_COLOR_NAME
 
     override fun getHomeTabs() = getSharedPreferences()
         .getString(SettingsKeys.HOME_TABS, null )
@@ -458,10 +458,10 @@ object SettingsKeys {
 object SettingsDefaults {
     val language = English
     val font = SupportedFonts.ProductSans
-    const val fontScale = 1.25f
+    const val FONT_SCALE = 1.25f
     val themeMode = ThemeMode.SYSTEM
-    const val useMaterialYou = true
-    const val primaryColorName = "Green"
+    const val USE_MATERIAL_YOU = true
+    const val PRIMARY_COLOR_NAME = "Green"
     val homeTabs = setOf(
         HomeTab.ForYou,
         HomeTab.Songs,
@@ -484,7 +484,7 @@ object SettingsDefaults {
     const val MINI_PLAYER_TEXT_MARQUEE = true
     const val CONTROLS_LAYOUT_IS_DEFAULT = true
     val nowPlayingLyricsLayout = NowPlayingLyricsLayout.ReplaceArtwork
-    const val SHOW_NOW_PLAYING_AUDIO_INFORMATION = true
+    const val SHOW_NOW_PLAYING_AUDIO_INFORMATION = false
     const val SHOW_NOW_PLAYING_SEEK_CONTROLS = false
     val sortSongsBy = SortSongsBy.TITLE
     const val SORT_SONGS_IN_REVERSE = false
