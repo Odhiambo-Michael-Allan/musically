@@ -407,13 +407,13 @@ object English : Language {
 
     override fun xKHZ( x: String ) = "$x kHZ"
 
-    override fun shareFailedX( x: String ) = "Share failed (Error: $x)"
+    override fun shareFailedX( x: String ) = "Share failed Error: $x"
 
-    override fun exportFailedX( x: String ) = "Export failed (Error: $x)"
+    override fun exportFailedX( x: String ) = "Export failed Error: $x"
 
     override fun exportedX( x: String ) = "Exported $x"
 
-    override fun launchingEqualizerFailedX( x: String ) = "Launching equalizer failed (Error: $x)"
+    override fun launchingEqualizerFailedX( x: String ) = "Launching equalizer failed Error: $x"
 
     override fun unknownAlbumX( x: String ) = "Unknown album ($x)"
 

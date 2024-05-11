@@ -1,6 +1,9 @@
 package com.odesa.musicMatters.ui.songs
 
+import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -25,9 +28,12 @@ import com.odesa.musicMatters.ui.theme.isLight
 @Composable
 fun SongsScreen(
     songsScreenViewModel: SongsScreenViewModel,
+    onViewAlbum: (String ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
     onSettingsClicked: () -> Unit
 ) {
     val songsScreenUiState by songsScreenViewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     SongsScreenContent(
         uiState = songsScreenUiState,
@@ -38,7 +44,26 @@ fun SongsScreen(
         playSong = {
             songsScreenViewModel.playMedia( it.mediaItem )
         },
-        onFavorite = { songsScreenViewModel.addToFavorites( it ) }
+        onFavorite = { songsScreenViewModel.addToFavorites( it ) },
+        onViewAlbum = onViewAlbum,
+        onViewArtist = onViewArtist,
+        onShareSong = {
+            try {
+                val intent = Intent( Intent.ACTION_SEND ).apply {
+                    addFlags( Intent.FLAG_GRANT_READ_URI_PERMISSION )
+                    putExtra( Intent.EXTRA_STREAM, it )
+                    type = context.contentResolver.getType( it )
+                }
+                context.startActivity( intent )
+            }
+            catch ( exception: Exception ) {
+                Toast.makeText(
+                    context,
+                    uiState.language.shareFailedX( exception.localizedMessage ?: exception.toString() ),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     )
 }
 
@@ -50,11 +75,16 @@ fun SongsScreenContent(
     onSettingsClicked: () -> Unit,
     onShufflePlay: () -> Unit,
     playSong: ( Song ) -> Unit,
-    onFavorite: ( String ) -> Unit
+    onFavorite: ( String ) -> Unit,
+    onViewAlbum: ( String ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
+    onShareSong: ( Uri ) -> Unit,
 ) {
     val fallbackResourceId =
         if ( uiState.themeMode.isLight( LocalContext.current ) )
             R.drawable.placeholder_light else R.drawable.placeholder_dark
+
+    val context = LocalContext.current
 
     Column (
         modifier = Modifier.fillMaxSize()
@@ -82,6 +112,9 @@ fun SongsScreenContent(
                 playSong = playSong,
                 isFavorite = { uiState.favoriteSongIds.contains( it ) },
                 onFavorite = onFavorite,
+                onViewAlbum = onViewAlbum,
+                onViewArtist = onViewArtist,
+                onShareSong = onShareSong
             )
         }
     }
@@ -105,7 +138,10 @@ fun SongsScreenContentPreview() {
             onSettingsClicked = {},
             onShufflePlay = {},
             playSong = {},
-            onFavorite = {}
+            onFavorite = {},
+            onViewAlbum = {},
+            onViewArtist = {},
+            onShareSong = {},
         )
     }
 }

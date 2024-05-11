@@ -1,5 +1,8 @@
 package com.odesa.musicMatters.ui.artist
 
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -43,10 +46,12 @@ fun ArtistScreen(
     artistName: String,
     artistScreenViewModel: ArtistScreenViewModel,
     onViewAlbum: ( String ) -> Unit,
+    onViewArtist: (String ) -> Unit,
     onNavigateBack: () -> Unit
 ) {
 
     val uiState by artistScreenViewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     ArtistScreenContent(
         artistName = artistName,
@@ -57,8 +62,26 @@ fun ArtistScreen(
         onShufflePlay = {},
         onFavorite = {},
         playSong = { artistScreenViewModel.playSong( it.mediaItem ) },
-        onViewAlbum = { onViewAlbum( it.name ) },
-        onNavigateBack = onNavigateBack
+        onViewAlbum = { onViewAlbum( it ) },
+        onViewArtist = onViewArtist,
+        onNavigateBack = onNavigateBack,
+        onShareSong = {
+            try {
+                val intent = Intent( Intent.ACTION_SEND ).apply {
+                    addFlags( Intent.FLAG_GRANT_READ_URI_PERMISSION )
+                    putExtra( Intent.EXTRA_STREAM, it )
+                    type = context.contentResolver.getType( it )
+                }
+                context.startActivity( intent )
+            }
+            catch ( exception: Exception ) {
+                Toast.makeText(
+                    context,
+                    com.odesa.musicMatters.ui.songs.uiState.language.shareFailedX( exception.localizedMessage ?: exception.toString() ),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     )
 }
 
@@ -72,7 +95,9 @@ fun ArtistScreenContent(
     onShufflePlay: () -> Unit,
     playSong: (Song) -> Unit,
     onFavorite: ( String ) -> Unit,
-    onViewAlbum: ( Album ) -> Unit,
+    onViewAlbum: ( String ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
+    onShareSong: ( Uri ) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
 
@@ -104,6 +129,9 @@ fun ArtistScreenContent(
                 playSong = playSong,
                 isFavorite = { uiState.favoriteSongIds.contains(it) },
                 onFavorite = onFavorite,
+                onViewAlbum = onViewAlbum,
+                onViewArtist = onViewArtist,
+                onShareSong = onShareSong,
                 leadingContent = {
                     item {
                         ArtistArtwork(
@@ -199,6 +227,8 @@ fun ArtistScreenContentPreview() {
         playSong = {},
         onFavorite = {},
         onPlaySongsInAlbum = {},
-        onViewAlbum = {}
+        onViewAlbum = {},
+        onViewArtist = {},
+        onShareSong = {}
     ) {}
 }

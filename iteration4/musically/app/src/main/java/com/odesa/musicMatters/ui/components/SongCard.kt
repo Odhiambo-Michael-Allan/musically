@@ -219,11 +219,14 @@ fun SongOptionsBottomSheetContent(
         ) {
             onDismissRequest()
         }
-        SongOptionsBottomSheetItem(
-            imageVector = Icons.Filled.Person,
-            label = "${language.viewArtist}: ${song.artists}"
-        ) {
-            onDismissRequest()
+        song.artists.forEach {
+            SongOptionsBottomSheetItem(
+                imageVector = Icons.Filled.Person,
+                label = "${language.viewArtist}: $it"
+            ) {
+                onDismissRequest()
+                onViewArtist( it )
+            }
         }
         song.albumTitle?.let {
             SongOptionsBottomSheetItem(
@@ -239,6 +242,7 @@ fun SongOptionsBottomSheetContent(
             label = language.shareSong
         ) {
             onDismissRequest()
+            onShareSong( song.mediaUri )
         }
         SongOptionsBottomSheetItem(
             imageVector = Icons.Filled.Info,

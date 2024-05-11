@@ -1,5 +1,8 @@
 package com.odesa.musicMatters.ui.genre
 
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -20,10 +23,13 @@ import com.odesa.musicMatters.ui.theme.isLight
 fun GenreScreen(
     genreName: String,
     genreScreenViewModel: GenreScreenViewModel,
+    onViewAlbum: (String ) -> Unit,
+    onViewArtist: (String ) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
 
     val uiState by genreScreenViewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     GenreScreenContent(
         uiState = uiState,
@@ -33,7 +39,26 @@ fun GenreScreen(
         onShufflePlay = {},
         playSong = { genreScreenViewModel.playMedia( it.mediaItem ) },
         onFavorite = { genreScreenViewModel.addToFavorites( it ) },
-        onNavigateBack = onNavigateBack
+        onViewAlbum = onViewAlbum,
+        onViewArtist = onViewArtist,
+        onNavigateBack = onNavigateBack,
+        onShareSong = {
+            try {
+                val intent = Intent( Intent.ACTION_SEND ).apply {
+                    addFlags( Intent.FLAG_GRANT_READ_URI_PERMISSION )
+                    putExtra( Intent.EXTRA_STREAM, it )
+                    type = context.contentResolver.getType( it )
+                }
+                context.startActivity( intent )
+            }
+            catch ( exception: Exception ) {
+                Toast.makeText(
+                    context,
+                    com.odesa.musicMatters.ui.songs.uiState.language.shareFailedX( exception.localizedMessage ?: exception.toString() ),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     )
 }
 
@@ -46,6 +71,9 @@ fun GenreScreenContent(
     onShufflePlay: () -> Unit,
     playSong: ( Song ) -> Unit,
     onFavorite: ( String ) -> Unit,
+    onViewAlbum: ( String ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
+    onShareSong: ( Uri ) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
 
@@ -77,6 +105,9 @@ fun GenreScreenContent(
                 playSong = playSong,
                 isFavorite = { uiState.favoriteSongIds.contains( it ) },
                 onFavorite = onFavorite,
+                onViewAlbum = onViewAlbum,
+                onViewArtist = onViewArtist,
+                onShareSong = onShareSong,
             )
         }
     }
@@ -93,7 +124,10 @@ fun GenreScreenContentPreview() {
         onShufflePlay = {},
         playSong = {},
         onFavorite = {},
-        onNavigateBack = {}
+        onNavigateBack = {},
+        onViewAlbum = {},
+        onViewArtist = {},
+        onShareSong = {}
     )
 }
 

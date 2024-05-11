@@ -86,4 +86,8 @@ class FakePlaylistRepository : PlaylistRepository {
     override suspend fun deletePlaylist( playlist: Playlist ) {
         _playlists.value = _playlists.value.filter { it.id != playlist.id }
     }
+
+    override suspend fun addSongIdToPlaylist( songId: String, playlistId: String ) {
+        TODO("Not yet implemented")
+    }
 }

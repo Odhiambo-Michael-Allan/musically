@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -115,6 +116,8 @@ fun MusicallyNavHost(
         navigationTriggeredFromBottomBar = false
     }
 
+    val context = LocalContext.current
+
     NavHost(
         modifier = modifier,
         navController = navController,
@@ -153,7 +156,9 @@ fun MusicallyNavHost(
             )
             SongsScreen(
                 songsScreenViewModel = songsScreenViewModel,
-                onSettingsClicked = { navController.navigate( Route.Settings.name ) }
+                onSettingsClicked = { navController.navigate( Route.Settings.name ) },
+                onViewAlbum = { navController.navigateToAlbumScreen( it ) },
+                onViewArtist = { navController.navigateToArtistScreen( it ) },
             )
         }
         composable(
@@ -195,6 +200,7 @@ fun MusicallyNavHost(
                 artistName = artist,
                 artistScreenViewModel = artistScreenViewModel,
                 onViewAlbum = { navController.navigateToAlbumScreen( it ) },
+                onViewArtist = { navController.navigateToArtistScreen( it ) },
                 onNavigateBack = { navController.navigateUp() }
             )
         }
@@ -235,7 +241,9 @@ fun MusicallyNavHost(
             AlbumScreen(
                 albumName = albumName,
                 albumScreenViewModel = albumScreenViewModel,
-                onNavigateBack = { navController.navigateUp() }
+                onNavigateBack = { navController.navigateUp() },
+                onViewAlbum = { navController.navigateToAlbumScreen( it ) },
+                onViewArtist = { navController.navigateToArtistScreen( it ) },
             )
         }
         composable(
@@ -275,6 +283,8 @@ fun MusicallyNavHost(
             GenreScreen(
                 genreName = genreName,
                 genreScreenViewModel = genreScreenViewModel,
+                onViewAlbum = { navController.navigateToAlbumScreen( it ) },
+                onViewArtist = { navController.navigateToArtistScreen( it ) },
                 onNavigateBack = { navController.navigateUp() }
             )
         }
@@ -319,6 +329,8 @@ fun MusicallyNavHost(
             PlaylistScreen(
                 playlistTitle = playlistName,
                 viewModel = playlistScreenViewModel,
+                onViewAlbum = { navController.navigateToAlbumScreen( it ) },
+                onViewArtist = { navController.navigateToArtistScreen( it ) },
                 onNavigateBack = { navController.navigateUp() }
             )
         }

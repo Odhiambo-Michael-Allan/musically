@@ -1,5 +1,6 @@
 package com.odesa.musicMatters.ui.components
 
+import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -35,6 +36,9 @@ fun SongList(
     playSong: ( Song ) -> Unit,
     isFavorite: ( String ) -> Boolean,
     onFavorite: ( String ) -> Unit,
+    onViewAlbum: ( String ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
+    onShareSong: ( Uri ) -> Unit,
     leadingContent: ( LazyListScope.() -> Unit )? = null
 ) {
 
@@ -85,9 +89,9 @@ fun SongList(
                             onFavorite = { onFavorite( songs[ index ].id ) },
                             onPlayNext = { /*TODO*/ },
                             onAddToQueue = {},
-                            onViewArtist = {},
-                            onViewAlbum = {},
-                            onShareSong = {}
+                            onViewArtist = onViewArtist,
+                            onViewAlbum = onViewAlbum,
+                            onShareSong = onShareSong
                         )
                     }
                 }
@@ -127,7 +131,10 @@ fun SongListPreview() {
         isFavorite = { true },
         onFavorite = {},
         currentlyPlayingSongId = testSongs.first().id,
-        playSong = {}
+        playSong = {},
+        onViewAlbum = {},
+        onViewArtist = {},
+        onShareSong = {}
     )
 }
 
@@ -137,6 +144,7 @@ fun QueueSongList(
     @DrawableRes fallbackResourceId: Int,
     isFavorite: ( String ) -> Boolean,
     onFavorite: ( String ) -> Unit,
+    onShareSong: ( Uri ) -> Unit,
     playSong: ( Song ) -> Unit,
 ) {
     when {
@@ -172,7 +180,7 @@ fun QueueSongList(
                         onAddToQueue = {},
                         onViewArtist = {},
                         onViewAlbum = {},
-                        onShareSong = {},
+                        onShareSong = onShareSong,
                         onDragHandleClick = {},
                     )
                 }
@@ -189,6 +197,7 @@ fun QueueSongListPreview() {
         fallbackResourceId = R.drawable.placeholder_light,
         isFavorite = { false },
         onFavorite = {},
+        onShareSong = {},
         playSong = {}
     )
 }

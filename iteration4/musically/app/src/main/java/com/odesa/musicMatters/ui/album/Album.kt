@@ -1,5 +1,8 @@
 package com.odesa.musicMatters.ui.album
 
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,10 +34,13 @@ import com.odesa.musicMatters.ui.theme.isLight
 fun AlbumScreen(
     albumName: String,
     albumScreenViewModel: AlbumScreenViewModel,
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    onViewAlbum: (String ) -> Unit,
+    onViewArtist: (String ) -> Unit,
 ) {
 
     val uiState by albumScreenViewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     AlbumScreenContent(
         uiState = uiState,
@@ -45,6 +51,24 @@ fun AlbumScreen(
         onNavigateBack = onNavigateBack,
         playSong = { albumScreenViewModel.playMedia( it.mediaItem ) },
         onFavorite = {},
+        onViewAlbum = onViewAlbum,
+        onViewArtist = onViewArtist,
+        onShareSong = {
+            try {
+                val intent = Intent( Intent.ACTION_SEND ).apply {
+                    addFlags( Intent.FLAG_GRANT_READ_URI_PERMISSION )
+                    putExtra( Intent.EXTRA_STREAM, it )
+                    type = context.contentResolver.getType( it )
+                }
+                context.startActivity( intent )
+            } catch ( exception: Exception ) {
+                Toast.makeText(
+                    context,
+                    uiState.language.shareFailedX( exception.localizedMessage ?: exception.toString() ),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     )
 }
 
@@ -58,6 +82,9 @@ fun AlbumScreenContent(
     onNavigateBack: () -> Unit,
     playSong: ( Song ) -> Unit,
     onFavorite: ( String ) -> Unit,
+    onViewAlbum: ( String ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
+    onShareSong: ( Uri ) -> Unit,
 ) {
 
     val fallbackResourceId =
@@ -88,6 +115,9 @@ fun AlbumScreenContent(
                 playSong = playSong,
                 isFavorite = { uiState.favoriteSongIds.contains( it ) },
                 onFavorite = onFavorite,
+                onViewAlbum = onViewAlbum,
+                onViewArtist = onViewArtist,
+                onShareSong = onShareSong,
                 leadingContent = {
                     item {
                         AlbumArtwork(
@@ -164,6 +194,9 @@ fun AlbumScreenContentPreview() {
         onShufflePlay = { /*TODO*/ },
         onNavigateBack = { /*TODO*/ },
         playSong = {},
-        onFavorite = {}
+        onFavorite = {},
+        onViewAlbum = {},
+        onViewArtist = {},
+        onShareSong = {}
     )
 }

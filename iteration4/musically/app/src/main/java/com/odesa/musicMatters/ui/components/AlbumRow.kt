@@ -28,7 +28,7 @@ fun AlbumRow(
     onAddToQueue: () -> Unit,
     onPlayNext: () -> Unit,
     onShufflePlay: () -> Unit,
-    onViewAlbum: ( Album ) -> Unit,
+    onViewAlbum: ( String ) -> Unit,
 ) {
     BoxWithConstraints {
         val maxSize = min( maxHeight, maxWidth ).div( 2f )
@@ -49,7 +49,7 @@ fun AlbumRow(
                         onPlayNext = onPlayNext,
                         onShufflePlay = onShufflePlay,
                         onViewArtist = {},
-                        onClick = { onViewAlbum( it ) }
+                        onClick = { onViewAlbum( it.name ) }
                     )
                 }
             }
