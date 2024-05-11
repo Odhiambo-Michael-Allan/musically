@@ -23,6 +23,8 @@ class PlaylistScreenViewModel(
     private val playlistRepository: PlaylistRepository
 ) : ViewModel() {
 
+    private var currentPlaylistId: String? = null
+
     private val _uiState = MutableStateFlow(
         PlaylistScreenUiState(
             songsInPlaylist = emptyList(),
@@ -38,6 +40,7 @@ class PlaylistScreenViewModel(
     init {
         viewModelScope.launch { observeCurrentlyPlayingSong() }
         viewModelScope.launch { observeFavoriteSongIds() }
+        viewModelScope.launch { observePlaylists() }
     }
 
     private suspend fun observeCurrentlyPlayingSong() {
@@ -56,7 +59,14 @@ class PlaylistScreenViewModel(
         }
     }
 
+    private suspend fun observePlaylists() {
+        playlistRepository.playlists.collect {
+            currentPlaylistId?.let { loadSongsInPlaylistWithId( it ) }
+        }
+    }
+
     fun loadSongsInPlaylistWithId( playlistId: String ) {
+        currentPlaylistId = playlistId
         musicServiceConnection.runWhenInitialized {
             viewModelScope.launch {
                 val songIds = playlistRepository.playlists.value.find { it.id == playlistId }!!.songIds
@@ -79,6 +89,15 @@ class PlaylistScreenViewModel(
                 mediaItems = uiState.value.songsInPlaylist.map { it.mediaItem },
                 shuffle = settingsRepository.shuffle.value
             )
+        }
+    }
+
+    fun addToFavorites( songId: String ) {
+        viewModelScope.launch {
+            if ( playlistRepository.isFavorite( songId ) )
+                playlistRepository.removeFromFavorites( songId )
+            else
+                playlistRepository.addToFavorites( songId )
         }
     }
 

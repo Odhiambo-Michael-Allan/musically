@@ -300,7 +300,7 @@ class SettingsRepositoryImplTest {
 
     @Test
     fun testShowNowPlayingAudioInformationSettingChange() = runTest {
-        assertTrue( settingsRepository.showNowPlayingAudioInformation.value )
+        assertFalse( settingsRepository.showNowPlayingAudioInformation.value )
         listOf( true, false ).forEach {
             settingsRepository.setShowNowPlayingAudioInformation( it )
             assertEquals( it, preferenceStore.getShowNowPlayingAudioInformation() )

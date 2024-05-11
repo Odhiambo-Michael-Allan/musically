@@ -133,22 +133,6 @@ class MusicallyNavHostKtTest {
     }
 
     @Test
-    fun testNavigateToFoldersScreen() {
-        showBottomSheet()
-        composeTestRule
-            .onNodeWithContentDescription(
-                Folders.iconContentDescription,
-                useUnmergedTree = true
-            ).performClick()
-        composeTestRule
-            .onNode(
-                hasText( Folders.getLabel( English ) ) and
-                hasParent( hasContentDescription( "top-app-bar" ) ),
-                useUnmergedTree = true
-            ).assertIsDisplayed()
-    }
-
-    @Test
     fun testNavigateToPlaylistsScreen() {
         composeTestRule
             .onNodeWithContentDescription(

@@ -45,7 +45,6 @@ fun Tile(
 ) {
     Card(
         modifier = Modifier
-//            .fillMaxWidth()
             .wrapContentHeight().then( modifier ),
         colors = CardDefaults.cardColors( containerColor = Color.Transparent ),
         onClick = onClick

@@ -176,7 +176,7 @@ fun MusicallyNavHost(
         composable(
             route = Artist.route.name,
             arguments = Artist.arguments,
-            enterTransition = { SlideTransition.slideLeft.enterTransition() },
+            enterTransition = { SlideTransition.slideUp.enterTransition() },
             exitTransition = { FadeTransition.exitTransition() }
         ) { navBackStackEntry ->
             val artistScreenViewModel: ArtistScreenViewModel = viewModel(
@@ -218,7 +218,7 @@ fun MusicallyNavHost(
         composable(
             route = Album.routeWithArgs,
             arguments = Album.arguments,
-            enterTransition = { SlideTransition.slideLeft.enterTransition() },
+            enterTransition = { SlideTransition.slideUp.enterTransition() },
             exitTransition = { FadeTransition.exitTransition() }
         ) { navBackStackEntry ->
             val albumScreenViewModel: AlbumScreenViewModel = viewModel(
@@ -258,8 +258,8 @@ fun MusicallyNavHost(
         composable(
             route = Genre.routeWithArgs,
             arguments = Genre.arguments,
-            enterTransition = { SlideTransition.slideLeft.enterTransition() },
-            exitTransition = { FadeTransition.exitTransition() },
+            enterTransition = { SlideTransition.slideUp.enterTransition() },
+            exitTransition = { FadeTransition.exitTransition() }
         ) { navBackStackEntry ->
             val genreScreenViewModel: GenreScreenViewModel = viewModel(
                 factory = GenreScreenViewModelFactory(
@@ -299,8 +299,8 @@ fun MusicallyNavHost(
         composable(
             route = Playlist.routeWithArgs,
             arguments = Playlist.arguments,
-            enterTransition = { SlideTransition.slideLeft.enterTransition() },
-            exitTransition = { SlideTransition.slideRight.exitTransition() }
+            enterTransition = { SlideTransition.slideUp.enterTransition() },
+            exitTransition = { FadeTransition.exitTransition() }
         ) { navBackStackEntry ->
             val playlistScreenViewModel: PlaylistScreenViewModel = viewModel(
                 factory = PlaylistScreenViewModelFactory(
@@ -359,7 +359,7 @@ fun MusicallyNavHost(
 
         composable(
             Route.Settings.name,
-            enterTransition= { ScaleTransition.scaleDown.enterTransition() },
+            enterTransition = { SlideTransition.slideUp.enterTransition() },
             exitTransition = { FadeTransition.exitTransition() }
         ) {
             val settingsViewModel: SettingsViewModel = viewModel(

@@ -271,11 +271,11 @@ class NowPlayingViewModelTest {
 
     @Test
     fun testShowNowPlayingAdditionalInfoChange() = runTest {
-        assertTrue( nowPlayingViewModel.uiState.value.showSamplingInfo )
-        settingsRepository.setShowNowPlayingAudioInformation( false )
         assertFalse( nowPlayingViewModel.uiState.value.showSamplingInfo )
         settingsRepository.setShowNowPlayingAudioInformation( true )
         assertTrue( nowPlayingViewModel.uiState.value.showSamplingInfo )
+        settingsRepository.setShowNowPlayingAudioInformation( false )
+        assertFalse( nowPlayingViewModel.uiState.value.showSamplingInfo )
     }
 
 }

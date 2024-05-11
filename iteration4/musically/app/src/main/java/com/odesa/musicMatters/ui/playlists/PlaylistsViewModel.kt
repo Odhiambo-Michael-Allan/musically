@@ -24,9 +24,9 @@ class PlaylistsViewModel(
 
     private val _uiState = MutableStateFlow(
         PlaylistsScreenUiState(
+            playlists = playlistRepository.playlists.value,
             songs = emptyList(),
-            playlists = emptyList(),
-            isLoadingPlaylists = true,
+            isLoadingSongs = true,
             language = settingsRepository.language.value
         )
     )
@@ -34,6 +34,7 @@ class PlaylistsViewModel(
 
     init {
         fetchSongs()
+        viewModelScope.launch { observePlaylistsChange() }
         viewModelScope.launch { observeLanguageChange() }
     }
 
@@ -44,18 +45,19 @@ class PlaylistsViewModel(
                     it.toSong( artistTagSeparators )
                 }
                 _uiState.value = _uiState.value.copy(
-                    songs = songs
+                    songs = songs,
+                    isLoadingSongs = false
                 )
-                fetchPlaylists()
             }
         }
     }
 
-    private fun fetchPlaylists() {
-        _uiState.value = _uiState.value.copy(
-            playlists = playlistRepository.playlists.value,
-            isLoadingPlaylists = false
-        )
+    private suspend fun observePlaylistsChange() {
+        playlistRepository.playlists.collect {
+            _uiState.value = _uiState.value.copy(
+                playlists = it
+            )
+        }
     }
 
     private suspend fun observeLanguageChange() {
@@ -87,7 +89,7 @@ class PlaylistsViewModel(
 data class PlaylistsScreenUiState(
     val songs: List<Song>,
     val playlists: List<Playlist>,
-    val isLoadingPlaylists: Boolean,
+    val isLoadingSongs: Boolean,
     val language: Language,
 )
 

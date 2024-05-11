@@ -1,6 +1,7 @@
 package com.odesa.musicMatters.ui.playlists
 
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
+import com.odesa.musicMatters.data.playlists.testPlaylists
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.fakes.FakeMusicServiceConnection
 import com.odesa.musicMatters.fakes.FakePlaylistRepository
@@ -14,6 +15,7 @@ import com.odesa.musicMatters.services.i18n.German
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.i18n.Spanish
 import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
+import com.odesa.musicMatters.services.media.testSongs
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import kotlinx.coroutines.test.runTest
@@ -47,9 +49,29 @@ class PlaylistsViewModelTest {
         musicServiceConnection.runWhenInitialized {
             assertEquals( trackList.size, playlistsScreenViewModel.uiState.value.songs.size )
             assertEquals( 3, playlistsScreenViewModel.uiState.value.playlists.size )
-            assertFalse( playlistsScreenViewModel.uiState.value.isLoadingPlaylists )
+            assertFalse( playlistsScreenViewModel.uiState.value.isLoadingSongs )
         }
         musicServiceConnection.isInitialized = true
+    }
+
+    @Test
+    fun testPlaylistsAreCorrectlyUpdated() = runTest {
+        musicServiceConnection.isInitialized = true
+        playlistRepository.savePlaylist( testPlaylists.first() )
+        assertEquals( 4, playlistsScreenViewModel.uiState.value.playlists.size )
+        playlistRepository.deletePlaylist( testPlaylists.first() )
+        assertEquals( 3, playlistsScreenViewModel.uiState.value.playlists.size )
+    }
+
+    @Test
+    fun testPlaylistIsCorrectlyUpdated() = runTest {
+        musicServiceConnection.isInitialized = true
+        playlistRepository.playlists.value.forEach {
+            playlistRepository.addSongIdToPlaylist( testSongs.first().id, it.id )
+        }
+        playlistsScreenViewModel.uiState.value.playlists.forEach {
+            assertEquals( 1, it.songIds.size )
+        }
     }
 
     @Test

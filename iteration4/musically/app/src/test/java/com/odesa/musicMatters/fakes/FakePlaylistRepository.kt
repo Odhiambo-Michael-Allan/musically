@@ -91,12 +91,16 @@ class FakePlaylistRepository : PlaylistRepository {
         val songIdsInMostPlayedSongsPlaylist = _mostPlayedSongsPlaylist.value.songIds.toMutableList()
         songIdsInMostPlayedSongsPlaylist.add( songId )
         val mapOfMostPlayedSongs = _mostPlayedSongsMap.value
-        if ( mapOfMostPlayedSongs.containsKey( songId ) ) mapOfMostPlayedSongs[ songId ] =
-            mapOfMostPlayedSongs[ songId ]!!.plus( 1 ) else mapOfMostPlayedSongs[ songId ] = 1
+        if ( mapOfMostPlayedSongs.containsKey( songId ) ) {
+            mapOfMostPlayedSongs[ songId ] = mapOfMostPlayedSongs[ songId ]!!.plus( 1 )
+        } else {
+            mapOfMostPlayedSongs[ songId ] = 1
+        }
         _mostPlayedSongsMap.value = mapOfMostPlayedSongs
         _mostPlayedSongsPlaylist.value = _mostPlayedSongsPlaylist.value.copy(
             songIds = songIdsInMostPlayedSongsPlaylist
         )
+        println( "Most played songs map size: ${_mostPlayedSongsMap.value.size}" )
     }
 
     override suspend fun removeFromMostPlayedPlaylist( songId: String ) {
@@ -118,5 +122,19 @@ class FakePlaylistRepository : PlaylistRepository {
 
     override suspend fun deletePlaylist( playlist: Playlist ) {
         _playlists.value = _playlists.value.filter { it.id != playlist.id }
+    }
+
+    override suspend fun addSongIdToPlaylist( songId: String, playlistId: String ) {
+        _playlists.value.find { it.id == playlistId }?.let {
+            val currentPlaylists = _playlists.value.toMutableList()
+            currentPlaylists.remove( it )
+            val songIds = it.songIds.toMutableList()
+            songIds.add( songId )
+            val modifiedPlaylist = it.copy(
+                songIds = songIds
+            )
+            currentPlaylists.add( modifiedPlaylist )
+            _playlists.value = currentPlaylists
+        }
     }
 }

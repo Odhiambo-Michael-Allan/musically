@@ -6,7 +6,6 @@ import androidx.compose.material.icons.automirrored.outlined.PlaylistPlay
 import androidx.compose.material.icons.filled.AccountTree
 import androidx.compose.material.icons.filled.Album
 import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.Person
@@ -15,7 +14,6 @@ import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.outlined.AccountTree
 import androidx.compose.material.icons.outlined.Album
 import androidx.compose.material.icons.outlined.Face
-import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Group
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Person
@@ -187,15 +185,6 @@ object Genre : MusicMattersDestination {
     override fun getLabel( language: Language ) = ""
 }
 
-object Folders : MusicMattersDestination {
-    override val selectedIcon = Icons.Filled.Folder
-    override val unselectedIcon = Icons.Outlined.Folder
-    override val route = Route.Folders
-    override val iconContentDescription = "${English.folders}-tab-icon"
-
-    override fun getLabel( language: Language ) = language.folders
-}
-
 object Playlists : MusicMattersDestination {
     override val selectedIcon = Icons.Filled.QueueMusic
     override val unselectedIcon = Icons.Outlined.QueueMusic
@@ -244,7 +233,6 @@ val SupportedDestinations = listOf(
     Artists,
     Albums,
     Genres,
-    Folders,
     Playlists,
     Tree,
 )

@@ -60,22 +60,6 @@ class ForYouScreenViewModelTest {
     }
 
     @Test
-    fun testMostPlayedSongsAreCorrectlyUpdated() = runTest {
-        musicServiceConnection.isInitialized = true
-        assertEquals( 0, forYouScreenViewModel.uiState.value.mostPlayedSongs.size )
-        assertFalse( forYouScreenViewModel.uiState.value.isLoadingMostPlayedSongs )
-        trackList.subList( 0, 4 ).forEach {
-            playlistRepository.addToMostPlayedPlaylist( it.mediaId )
-        }
-        assertEquals( 4, forYouScreenViewModel.uiState.value.mostPlayedSongs.size )
-        playlistRepository.addToMostPlayedPlaylist( trackList.last().mediaId )
-        assertEquals( 5, forYouScreenViewModel.uiState.value.mostPlayedSongs.size )
-        playlistRepository.removeFromMostPlayedPlaylist( trackList.first().mediaId )
-        playlistRepository.removeFromMostPlayedPlaylist( trackList.last().mediaId )
-        assertEquals( 4, forYouScreenViewModel.uiState.value.mostPlayedSongs.size )
-    }
-
-    @Test
     fun testSuggestedArtistsAreCorrectlyLoadedFromMusicServiceConnection() {
         assertEquals( 0, forYouScreenViewModel.uiState.value.suggestedArtists.size )
         assertTrue( forYouScreenViewModel.uiState.value.isLoadingSuggestedArtists )

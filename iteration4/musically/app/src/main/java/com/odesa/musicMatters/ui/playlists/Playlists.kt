@@ -64,7 +64,7 @@ fun PlaylistsScreenContent(
                 onSettingsClicked = onSettingsClicked,
             )
             LoaderScaffold(
-                isLoading = uiState.isLoadingPlaylists,
+                isLoading = uiState.isLoadingSongs,
                 loading = uiState.language.loading
             ) {
                 PlaylistGrid(
@@ -121,7 +121,7 @@ fun PlaylistsScreenContentPreview() {
         uiState = PlaylistsScreenUiState(
             songs = emptyList(),
             playlists = testPlaylists,
-            isLoadingPlaylists = false,
+            isLoadingSongs = false,
             language = English,
         ),
         onSettingsClicked = {},
