@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.media3.common.MediaItem
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.data.preferences.SortSongsBy
 import com.odesa.musicMatters.services.media.Song
@@ -23,8 +24,9 @@ import com.odesa.musicMatters.ui.theme.isLight
 fun GenreScreen(
     genreName: String,
     genreScreenViewModel: GenreScreenViewModel,
-    onViewAlbum: (String ) -> Unit,
-    onViewArtist: (String ) -> Unit,
+    onViewAlbum: ( String ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
+    onPlayNext: ( MediaItem ) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
 
@@ -42,6 +44,7 @@ fun GenreScreen(
         onViewAlbum = onViewAlbum,
         onViewArtist = onViewArtist,
         onNavigateBack = onNavigateBack,
+        onPlayNext = onPlayNext,
         onShareSong = {
             try {
                 val intent = Intent( Intent.ACTION_SEND ).apply {
@@ -74,6 +77,7 @@ fun GenreScreenContent(
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
+    onPlayNext: ( MediaItem ) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
 
@@ -108,6 +112,7 @@ fun GenreScreenContent(
                 onViewAlbum = onViewAlbum,
                 onViewArtist = onViewArtist,
                 onShareSong = onShareSong,
+                onPlayNext = onPlayNext,
             )
         }
     }
@@ -127,7 +132,8 @@ fun GenreScreenContentPreview() {
         onNavigateBack = {},
         onViewAlbum = {},
         onViewArtist = {},
-        onShareSong = {}
+        onShareSong = {},
+        onPlayNext = {}
     )
 }
 

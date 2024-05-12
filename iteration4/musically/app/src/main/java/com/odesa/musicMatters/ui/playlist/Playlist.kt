@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.media3.common.MediaItem
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.data.preferences.SortSongsBy
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
@@ -36,6 +37,7 @@ fun PlaylistScreen(
     viewModel: PlaylistScreenViewModel,
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
+    onPlayNext: ( MediaItem ) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -52,6 +54,7 @@ fun PlaylistScreen(
         onViewAlbum = onViewAlbum,
         onViewArtist = onViewArtist,
         onNavigateBack = onNavigateBack,
+        onPlayNext = onPlayNext,
         onShareSong = {
             try {
                 val intent = Intent( Intent.ACTION_SEND ).apply {
@@ -84,6 +87,7 @@ fun PlaylistScreenContent(
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
+    onPlayNext: ( MediaItem ) -> Unit,
     onNavigateBack: () -> Unit
 ) {
 
@@ -146,6 +150,7 @@ fun PlaylistScreenContent(
                 onViewAlbum = onViewAlbum,
                 onViewArtist = onViewArtist,
                 onShareSong = onShareSong,
+                onPlayNext = onPlayNext,
             )
         }
     }
@@ -173,5 +178,6 @@ fun PlaylistScreenContentPreview() {
         onViewArtist = {},
         onNavigateBack = {},
         onShareSong = {},
+        onPlayNext = {},
     )
 }

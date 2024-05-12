@@ -34,4 +34,6 @@ interface MusicServiceConnection {
     fun shuffleSongsInQueue()
     fun moveMediaItem( from: Int, to: Int )
     fun clearQueue()
+    fun mediaItemIsPresentInQueue( mediaItem: MediaItem ): Boolean
+    fun playNext( mediaItem: MediaItem )
 }

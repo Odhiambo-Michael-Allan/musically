@@ -47,6 +47,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.media3.common.MediaItem
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.odesa.musicMatters.R
@@ -65,7 +66,7 @@ fun SongCard(
     @DrawableRes fallbackResourceId: Int,
     onClick: () -> Unit,
     onFavorite: ( String ) -> Unit,
-    onPlayNext: () -> Unit,
+    onPlayNext: ( MediaItem ) -> Unit,
     onAddToQueue: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
@@ -152,7 +153,7 @@ fun SongCard(
                                     fallbackResourceId = fallbackResourceId,
                                     onFavorite = onFavorite,
                                     onAddToQueue = onAddToQueue,
-                                    onPlayNext = { /*TODO*/ },
+                                    onPlayNext = onPlayNext,
                                     onViewArtist = onViewArtist,
                                     onViewAlbum = onViewAlbum,
                                     onShareSong = onShareSong,
@@ -178,10 +179,10 @@ fun SongOptionsBottomSheetContent(
     @DrawableRes fallbackResourceId: Int,
     onFavorite: ( String ) -> Unit,
     onAddToQueue: ( String ) -> Unit,
-    onPlayNext: () -> Unit,
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
+    onPlayNext: ( MediaItem ) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     Column {
@@ -203,8 +204,8 @@ fun SongOptionsBottomSheetContent(
             imageVector = Icons.AutoMirrored.Filled.PlaylistPlay,
             label = language.playNext
         ) {
-            onPlayNext()
             onDismissRequest()
+            onPlayNext( song.mediaItem )
         }
         SongOptionsBottomSheetItem(
             imageVector = Icons.AutoMirrored.Filled.PlaylistPlay,
@@ -432,7 +433,7 @@ fun QueueSongCard(
     @DrawableRes fallbackResourceId: Int,
     onClick: () -> Unit,
     onFavorite: ( String ) -> Unit,
-    onPlayNext: () -> Unit,
+    onPlayNext: ( MediaItem ) -> Unit,
     onAddToQueue: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,

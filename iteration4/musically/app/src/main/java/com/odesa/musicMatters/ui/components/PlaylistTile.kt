@@ -40,9 +40,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.odesa.musicMatters.R
+import com.odesa.musicMatters.services.i18n.English
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.media.Song
 
@@ -128,7 +131,7 @@ fun PlaylistTile(
                                     MaterialTheme.colorScheme.surface,
                                     RoundedCornerShape(12.dp)
                                 )
-                                .then( Modifier.size( 36.dp ) ),
+                                .then(Modifier.size(36.dp)),
                             onClick = onPlaySongsInPlaylist
                         ) {
                             Icon(
@@ -294,54 +297,6 @@ fun PlaylistDropdownMenu(
             }
         )
     }
-//    if ( showInfoDialog ) {
-//        PlaylistInformationDialog(
-//            playlist = playlist,
-//            onDismissRequest = {
-//                showInfoDialog = false
-//            }
-//        )
-//    }
-//
-//    if ( showSongsPicker ) {
-//        PlaylistManageSongsDialog(
-//            selectedSongIds = playlist.songIds,
-//            onDone = {
-//                coroutineScope.launch {
-//                    onSongsChanged()
-//                    showSongsPicker = false
-//                }
-//            }
-//        )
-//    }
-//
-//    if ( showDeleteDialog ) {
-//        ConfirmationDialog(
-//            title = {
-//                Text( text = language.deletePlaylist )
-//            },
-//            description = {
-//                Text( text = language.areYouSureThatYouWantToDeleteThisPlaylist )
-//            },
-//            onResult = { result ->
-//                coroutineScope.launch {
-//                    showDeleteDialog = false
-//                    if ( result ) {
-//                        onDelete()
-//                    }
-//                }
-//            }
-//        )
-//    }
-//
-//    if ( showAddToPlaylistDialog ) {
-//        AddToPlaylistDialog(
-//            songIds = playlist.songIds,
-//            onDismissRequest = {
-//                showAddToPlaylistDialog = false
-//            }
-//        )
-//    }
 
     if ( showRenameDialog ) {
         RenamePlaylistDialog(
@@ -352,6 +307,26 @@ fun PlaylistDropdownMenu(
                 showRenameDialog = false
             }
         )
+    }
+}
+
+@Preview( showBackground = true )
+@Composable
+fun PlaylistTilePreview() {
+    PlaylistTile(
+        playlistTitle = "Favorites",
+        songsInPlaylist = emptyList(),
+        language = English,
+        fallbackResourceId = R.drawable.placeholder_light,
+        onPlaySongsInPlaylist = { /*TODO*/ },
+        onExportPlaylist = { /*TODO*/ },
+        onDeletePlayList = { /*TODO*/ },
+        onRenamePlaylist = { /*TODO*/ },
+        onPlayNext = { /*TODO*/ },
+        onShufflePlay = { /*TODO*/ },
+        onSongsChanged = { /*TODO*/ }) {
+
+
     }
 }
 

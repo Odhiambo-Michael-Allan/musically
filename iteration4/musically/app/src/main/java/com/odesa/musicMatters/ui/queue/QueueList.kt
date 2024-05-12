@@ -11,6 +11,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.media3.common.MediaItem
 import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.ui.components.IconTextBody
 import com.odesa.musicMatters.ui.components.QueueSongCard
@@ -27,6 +28,7 @@ fun QueueList(
     onFavorite: ( String ) -> Unit,
     playSong: ( Song ) -> Unit,
     onMove: ( Int, Int ) -> Unit,
+    onPlayNext: ( MediaItem ) -> Unit,
 ) {
 
     val lazyListState = rememberLazyListState(
@@ -64,7 +66,7 @@ fun QueueList(
                             fallbackResourceId = fallbackResourceId,
                             onClick = { playSong( song ) },
                             onFavorite = onFavorite,
-                            onPlayNext = { /*TODO*/ },
+                            onPlayNext = onPlayNext,
                             onAddToQueue = {},
                             onViewArtist = {},
                             onViewAlbum = {},

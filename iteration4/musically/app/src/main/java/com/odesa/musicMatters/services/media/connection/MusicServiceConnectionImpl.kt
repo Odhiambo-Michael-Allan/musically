@@ -74,7 +74,8 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
     override val queueSize = _queueSize.asStateFlow()
 
     private val _currentPlayingMediaItemIndex = MutableStateFlow(
-        player?.currentMediaItemIndex ?: 0 )
+        player?.currentMediaItemIndex ?: 0
+    )
     override val currentlyPlayingMediaItemIndex = _currentPlayingMediaItemIndex.asStateFlow()
 
     private val _isPlaying = MutableStateFlow( player?.isPlaying ?: false )
@@ -242,11 +243,12 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
     }
 
     override fun moveMediaItem( from: Int, to: Int ) {
-        player?.moveMediaItem( from, to )
-        val newQueue = _mediaItemsInQueue.value.toMutableList()
-        newQueue.move( from, to )
-        _mediaItemsInQueue.value = newQueue
         player?.let {
+            Timber.tag( TAG ).d( "MOVING MEDIA ITEM FROM POS: $from TO POS: $to" )
+            it.moveMediaItem( from, to )
+            val newQueue = _mediaItemsInQueue.value.toMutableList()
+            newQueue.move( from, to )
+            _mediaItemsInQueue.value = newQueue
             updateCurrentlyPlayingMediaItemIndex( it )
         }
     }
@@ -254,6 +256,34 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
     override fun clearQueue() {
         player?.clearMediaItems()
         _mediaItemsInQueue.value = emptyList()
+    }
+
+    override fun mediaItemIsPresentInQueue( mediaItem: MediaItem ) = _mediaItemsInQueue.value
+        .find { it.mediaId == mediaItem.mediaId }?.let {
+            true
+        } ?: false
+
+    override fun playNext( mediaItem: MediaItem ) {
+        player?.let {
+            val newQueue = _mediaItemsInQueue.value.toMutableList()
+            if ( mediaItemIsPresentInQueue( mediaItem ) ) {
+                moveMediaItem(
+                    newQueue.indexOf( mediaItem ),
+                    _currentPlayingMediaItemIndex.value + 1
+                )
+            } else {
+                addMediaItemToPlayer( mediaItem, _currentPlayingMediaItemIndex.value + 1 )
+            }
+        }
+    }
+
+    private fun addMediaItemToPlayer( mediaItem: MediaItem, position: Int ) {
+        player?.let {
+            val newQueue = _mediaItemsInQueue.value.toMutableList()
+            it.addMediaItem( position, mediaItem )
+            newQueue.add( position, mediaItem )
+            _mediaItemsInQueue.value = newQueue
+        }
     }
 
     override suspend fun playMediaItem(

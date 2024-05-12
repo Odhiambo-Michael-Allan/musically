@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.media3.common.MediaItem
 import coil.request.ImageRequest
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.data.preferences.SortSongsBy
@@ -47,6 +48,7 @@ fun ArtistScreen(
     artistScreenViewModel: ArtistScreenViewModel,
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: (String ) -> Unit,
+    onPlayNext: ( MediaItem ) -> Unit,
     onNavigateBack: () -> Unit
 ) {
 
@@ -65,6 +67,7 @@ fun ArtistScreen(
         onViewAlbum = { onViewAlbum( it ) },
         onViewArtist = onViewArtist,
         onNavigateBack = onNavigateBack,
+        onPlayNext = onPlayNext,
         onShareSong = {
             try {
                 val intent = Intent( Intent.ACTION_SEND ).apply {
@@ -98,6 +101,7 @@ fun ArtistScreenContent(
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
+    onPlayNext: ( MediaItem ) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
 
@@ -132,6 +136,7 @@ fun ArtistScreenContent(
                 onViewAlbum = onViewAlbum,
                 onViewArtist = onViewArtist,
                 onShareSong = onShareSong,
+                onPlayNext = onPlayNext,
                 leadingContent = {
                     item {
                         ArtistArtwork(
@@ -229,6 +234,8 @@ fun ArtistScreenContentPreview() {
         onPlaySongsInAlbum = {},
         onViewAlbum = {},
         onViewArtist = {},
-        onShareSong = {}
-    ) {}
+        onShareSong = {},
+        onPlayNext = {},
+        onNavigateBack = {},
+    )
 }
