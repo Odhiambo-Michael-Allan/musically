@@ -1,5 +1,8 @@
 package com.odesa.musicMatters.ui.navigation
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
@@ -39,6 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.media3.common.MediaItem
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -161,15 +165,10 @@ fun MusicallyNavHost(
                 onViewAlbum = { navController.navigateToAlbumScreen( it ) },
                 onViewArtist = { navController.navigateToArtistScreen( it ) },
                 onPlayNext = {
-                    if ( musicServiceConnection.nowPlaying.value.mediaId == it.mediaId ) {
-                        Toast.makeText(
-                            context,
-                            "Song is already playing",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        musicServiceConnection.playNext( it )
-                    }
+                    playNext( context, musicServiceConnection, it )
+                },
+                onAddToQueue = {
+                    addToQueue( context, musicServiceConnection, it )
                 }
             )
         }
@@ -214,15 +213,10 @@ fun MusicallyNavHost(
                 onViewAlbum = { navController.navigateToAlbumScreen( it ) },
                 onViewArtist = { navController.navigateToArtistScreen( it ) },
                 onPlayNext = {
-                    if ( musicServiceConnection.nowPlaying.value.mediaId == it.mediaId ) {
-                        Toast.makeText(
-                            context,
-                            "Song is already playing",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        musicServiceConnection.playNext( it )
-                    }
+                    playNext( context, musicServiceConnection, it )
+                },
+                onAddToQueue = {
+                    addToQueue( context, musicServiceConnection, it )
                 },
                 onNavigateBack = { navController.navigateUp() }
             )
@@ -268,15 +262,10 @@ fun MusicallyNavHost(
                 onViewAlbum = { navController.navigateToAlbumScreen( it ) },
                 onViewArtist = { navController.navigateToArtistScreen( it ) },
                 onPlayNext = {
-                    if ( musicServiceConnection.nowPlaying.value.mediaId == it.mediaId ) {
-                        Toast.makeText(
-                            context,
-                            "Song is already playing",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        musicServiceConnection.playNext( it )
-                    }
+                    playNext( context, musicServiceConnection, it )
+                },
+                onAddToQueue = {
+                    addToQueue( context, musicServiceConnection, it )
                 }
             )
         }
@@ -321,15 +310,10 @@ fun MusicallyNavHost(
                 onViewArtist = { navController.navigateToArtistScreen( it ) },
                 onNavigateBack = { navController.navigateUp() },
                 onPlayNext = {
-                    if ( musicServiceConnection.nowPlaying.value.mediaId == it.mediaId ) {
-                        Toast.makeText(
-                            context,
-                            "Song is already playing",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        musicServiceConnection.playNext( it )
-                    }
+                    playNext( context, musicServiceConnection, it )
+                },
+                onAddToQueue = {
+                    addToQueue( context, musicServiceConnection, it )
                 }
             )
         }
@@ -378,15 +362,10 @@ fun MusicallyNavHost(
                 onViewArtist = { navController.navigateToArtistScreen( it ) },
                 onNavigateBack = { navController.navigateUp() },
                 onPlayNext = {
-                    if ( musicServiceConnection.nowPlaying.value.mediaId == it.mediaId ) {
-                        Toast.makeText(
-                            context,
-                            "Song is already playing",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        musicServiceConnection.playNext( it )
-                    }
+                    playNext( context, musicServiceConnection, it )
+                },
+                onAddToQueue = {
+                    addToQueue( context, musicServiceConnection, it )
                 }
             )
         }
@@ -422,15 +401,12 @@ fun MusicallyNavHost(
             QueueScreen(
                 queueScreenViewModel = queueScreenViewModel,
                 onPlayNext = {
-                    if ( musicServiceConnection.nowPlaying.value.mediaId == it.mediaId ) {
-                        Toast.makeText(
-                            context,
-                            "Song is already playing",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        musicServiceConnection.playNext( it )
-                    }
+                    playNext( context, musicServiceConnection, it )
+                },
+                onViewArtist = { navController.navigateToArtistScreen( it ) },
+                onViewAlbum = { navController.navigateToAlbumScreen( it ) },
+                onAddToQueue = {
+                    addToQueue( context, musicServiceConnection, it )
                 },
                 onBackArrowClick = { navController.navigateUp() }
             )
@@ -576,6 +552,49 @@ fun MusicallyNavHost(
         }
     }
 
+}
+
+fun displayToastWithMessage(context: Context, message: String ) = Toast.makeText(
+    context,
+    message,
+    Toast.LENGTH_SHORT
+).show()
+
+private fun playNext(
+    context: Context,
+    musicServiceConnection: MusicServiceConnection,
+    mediaItem: MediaItem
+) {
+    if ( musicServiceConnection.nowPlaying.value.mediaId == mediaItem.mediaId ) {
+        displayToastWithMessage( context, "Song is already playing" )
+    } else {
+        musicServiceConnection.playNext( mediaItem )
+        displayToastWithMessage(
+            context, "${mediaItem.mediaMetadata.title} will play next"
+        )
+    }
+}
+
+private fun addToQueue(
+    context: Context,
+    musicServiceConnection: MusicServiceConnection,
+    mediaItem: MediaItem
+) {
+    if ( musicServiceConnection.mediaItemIsPresentInQueue( mediaItem ) ) {
+        displayToastWithMessage( context, "Song is already in queue" )
+    } else {
+        musicServiceConnection.addToQueue( mediaItem )
+        displayToastWithMessage(
+            context,
+            "Added ${mediaItem.mediaMetadata.title} to queue"
+        )
+    }
+}
+
+fun createShareSongIntent( context: Context, uri: Uri ) = Intent( Intent.ACTION_SEND ).apply {
+    addFlags( Intent.FLAG_GRANT_READ_URI_PERMISSION )
+    putExtra( Intent.EXTRA_STREAM, uri )
+    type = context.contentResolver.getType( uri )
 }
 
 fun HomeTab.toDestination() = when( this ) {

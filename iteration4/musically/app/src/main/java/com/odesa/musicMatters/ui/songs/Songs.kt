@@ -1,9 +1,7 @@
 package com.odesa.musicMatters.ui.songs
 
-import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -22,6 +20,8 @@ import com.odesa.musicMatters.services.media.testSongs
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.SongList
 import com.odesa.musicMatters.ui.components.TopAppBar
+import com.odesa.musicMatters.ui.navigation.createShareSongIntent
+import com.odesa.musicMatters.ui.navigation.displayToastWithMessage
 import com.odesa.musicMatters.ui.theme.MusicMattersTheme
 import com.odesa.musicMatters.ui.theme.ThemeMode
 import com.odesa.musicMatters.ui.theme.isLight
@@ -32,6 +32,7 @@ fun SongsScreen(
     onViewAlbum: (String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
+    onAddToQueue: ( MediaItem ) -> Unit,
     onSettingsClicked: () -> Unit
 ) {
     val songsScreenUiState by songsScreenViewModel.uiState.collectAsState()
@@ -50,21 +51,18 @@ fun SongsScreen(
         onViewAlbum = onViewAlbum,
         onViewArtist = onViewArtist,
         onPlayNext = onPlayNext,
+        onAddToQueue = onAddToQueue,
         onShareSong = {
             try {
-                val intent = Intent( Intent.ACTION_SEND ).apply {
-                    addFlags( Intent.FLAG_GRANT_READ_URI_PERMISSION )
-                    putExtra( Intent.EXTRA_STREAM, it )
-                    type = context.contentResolver.getType( it )
-                }
+                val intent = createShareSongIntent( context, it )
                 context.startActivity( intent )
             }
             catch ( exception: Exception ) {
-                Toast.makeText(
+                displayToastWithMessage(
                     context,
-                    uiState.language.shareFailedX( exception.localizedMessage ?: exception.toString() ),
-                    Toast.LENGTH_SHORT
-                ).show()
+                    uiState.language.shareFailedX( exception.localizedMessage
+                        ?: exception.toString() )
+                )
             }
         }
     )
@@ -83,6 +81,7 @@ fun SongsScreenContent(
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
+    onAddToQueue: ( MediaItem ) -> Unit,
 ) {
     val fallbackResourceId =
         if ( uiState.themeMode.isLight( LocalContext.current ) )
@@ -118,6 +117,7 @@ fun SongsScreenContent(
                 onViewArtist = onViewArtist,
                 onShareSong = onShareSong,
                 onPlayNext = onPlayNext,
+                onAddToQueue = onAddToQueue
             )
         }
     }
@@ -146,6 +146,7 @@ fun SongsScreenContentPreview() {
             onViewArtist = {},
             onShareSong = {},
             onPlayNext = {},
+            onAddToQueue = {},
         )
     }
 }

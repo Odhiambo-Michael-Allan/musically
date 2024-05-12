@@ -54,6 +54,7 @@ import com.odesa.musicMatters.R
 import com.odesa.musicMatters.services.i18n.English
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.media.Song
+import com.odesa.musicMatters.services.media.extensions.formatMilliseconds
 import com.odesa.musicMatters.services.media.testSongs
 
 @OptIn( ExperimentalMaterial3Api::class )
@@ -67,13 +68,14 @@ fun SongCard(
     onClick: () -> Unit,
     onFavorite: ( String ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
-    onAddToQueue: ( String ) -> Unit,
+    onAddToQueue: ( MediaItem ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
 ) {
 
     var showSongOptionsBottomSheet by remember { mutableStateOf( false ) }
+    var showSongDetailsDialog by remember { mutableStateOf( false ) }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -157,6 +159,7 @@ fun SongCard(
                                     onViewArtist = onViewArtist,
                                     onViewAlbum = onViewAlbum,
                                     onShareSong = onShareSong,
+                                    onShowSongDetails = { showSongDetailsDialog = true },
                                     onDismissRequest = {
                                         showSongOptionsBottomSheet = false
                                     }
@@ -164,6 +167,15 @@ fun SongCard(
                             }
                         }
                     }
+                }
+            }
+            if ( showSongDetailsDialog ) {
+                SongDetailsDialog(
+                    song = song,
+                    language = language,
+                    durationFormatter = { it.formatMilliseconds() }
+                ) {
+                    showSongDetailsDialog = false
                 }
             }
         }
@@ -178,11 +190,12 @@ fun SongOptionsBottomSheetContent(
     isCurrentlyPlaying: Boolean,
     @DrawableRes fallbackResourceId: Int,
     onFavorite: ( String ) -> Unit,
-    onAddToQueue: ( String ) -> Unit,
+    onAddToQueue: ( MediaItem ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
+    onShowSongDetails: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     Column {
@@ -211,7 +224,7 @@ fun SongOptionsBottomSheetContent(
             imageVector = Icons.AutoMirrored.Filled.PlaylistPlay,
             label = language.addToQueue
         ) {
-            onAddToQueue( song.id )
+            onAddToQueue( song.mediaItem )
             onDismissRequest()
         }
         SongOptionsBottomSheetItem(
@@ -250,6 +263,7 @@ fun SongOptionsBottomSheetContent(
             label = language.details
         ) {
             onDismissRequest()
+            onShowSongDetails()
         }
     }
 }
@@ -358,6 +372,7 @@ fun SongOptionsBottomSheetContentPreview() {
         onViewArtist = {},
         onViewAlbum = {},
         onShareSong = {},
+        onShowSongDetails = {},
         onDismissRequest = {}
     )
 }
@@ -368,8 +383,8 @@ fun NowPlayingSongOptionsBottomSheetContent(
     language: Language,
     isFavorite: Boolean,
     @DrawableRes fallbackResourceId: Int,
-    onFavorite: (String ) -> Unit,
-    onViewAlbum: (String ) -> Unit,
+    onFavorite: ( String ) -> Unit,
+    onViewAlbum: ( String ) -> Unit,
     onDismissRequest: () -> Unit
 ) {
     Column {
@@ -434,7 +449,7 @@ fun QueueSongCard(
     onClick: () -> Unit,
     onFavorite: ( String ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
-    onAddToQueue: ( String ) -> Unit,
+    onAddToQueue: ( MediaItem ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,

@@ -112,7 +112,7 @@ fun MusicallyAppContent(
                     onDismissRequest = { showNowPlayingBottomSheet = false }
                 ) {
                     NowPlayingBottomSheet(
-                        nowPlayingBottomSheetUiState = nowPlayingScreenUiState,
+                        uiState = nowPlayingScreenUiState,
                         onFavorite = { nowPlayingViewModel.onFavorite( it ) },
                         playPause = { nowPlayingViewModel.playPause() },
                         playPreviousSong = { nowPlayingViewModel.playPreviousSong() },

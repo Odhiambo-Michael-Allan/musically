@@ -70,9 +70,6 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
     override val player: Player?
         get() = browser
 
-    private val _queueSize = MutableStateFlow( 0 )
-    override val queueSize = _queueSize.asStateFlow()
-
     private val _currentPlayingMediaItemIndex = MutableStateFlow(
         player?.currentMediaItemIndex ?: 0
     )
@@ -202,9 +199,6 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
         _currentPlayingMediaItemIndex.value = player.currentMediaItemIndex
     }
 
-    private fun updateQueueSize( player: Player ) {
-        _queueSize.value = player.mediaItemCount
-    }
 
     private fun updateNowPlaying( player: Player ) {
         val mediaItem = player.currentMediaItem ?: MediaItem.EMPTY
@@ -277,6 +271,11 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
         }
     }
 
+    override fun addToQueue( mediaItem: MediaItem ) {
+        if ( !mediaItemIsPresentInQueue( mediaItem ) )
+            addMediaItemToPlayer( mediaItem, _mediaItemsInQueue.value.size )
+    }
+
     private fun addMediaItemToPlayer( mediaItem: MediaItem, position: Int ) {
         player?.let {
             val newQueue = _mediaItemsInQueue.value.toMutableList()
@@ -333,7 +332,6 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
                 || events.contains( Player.EVENT_PLAYLIST_METADATA_CHANGED ) ) {
                 updatePlaybackState( player )
                 updateCurrentlyPlayingMediaItemIndex( player )
-                updateQueueSize( player )
             }
             if ( events.contains( Player.EVENT_MEDIA_METADATA_CHANGED )
                 || events.contains( EVENT_MEDIA_ITEM_TRANSITION )

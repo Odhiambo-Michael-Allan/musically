@@ -32,9 +32,6 @@ class FakeMusicServiceConnection : MusicServiceConnection {
     private val _playbackState = MutableStateFlow( PlaybackState() )
     override val playbackState = _playbackState.asStateFlow()
 
-    private val _queueSize = MutableStateFlow( 0 )
-    override val queueSize = _queueSize.asStateFlow()
-
     private val _currentlyPlayingMediaItemIndex = MutableStateFlow( 0 )
     override val currentlyPlayingMediaItemIndex = _currentlyPlayingMediaItemIndex.asStateFlow()
 
@@ -108,6 +105,10 @@ class FakeMusicServiceConnection : MusicServiceConnection {
         TODO("Not yet implemented")
     }
 
+    override fun addToQueue( mediaItem: MediaItem ) {
+        TODO("Not yet implemented")
+    }
+
     fun setNowPlaying( mediaItem: MediaItem ) {
         _nowPlaying.value = mediaItem
     }
@@ -118,7 +119,6 @@ class FakeMusicServiceConnection : MusicServiceConnection {
 
     fun setMediaItems( mediaItemList: List<MediaItem> ) {
         _mediaItemsInQueue.value = mediaItemList
-        _queueSize.value = _mediaItemsInQueue.value.size
     }
 
     fun setCurrentMediaItemIndex( index: Int ) {

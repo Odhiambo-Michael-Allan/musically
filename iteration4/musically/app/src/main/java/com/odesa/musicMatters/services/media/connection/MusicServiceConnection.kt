@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.StateFlow
 interface MusicServiceConnection {
     val nowPlaying: StateFlow<MediaItem>
     val playbackState: StateFlow<PlaybackState>
-    val queueSize: StateFlow<Int>
     val currentlyPlayingMediaItemIndex: StateFlow<Int>
     val isPlaying: StateFlow<Boolean>
     val player: Player?
@@ -36,4 +35,5 @@ interface MusicServiceConnection {
     fun clearQueue()
     fun mediaItemIsPresentInQueue( mediaItem: MediaItem ): Boolean
     fun playNext( mediaItem: MediaItem )
+    fun addToQueue( mediaItem: MediaItem )
 }

@@ -81,7 +81,7 @@ import com.odesa.musicMatters.ui.theme.isLight
 
 @Composable
 fun NowPlayingBottomSheet(
-    nowPlayingBottomSheetUiState: NowPlayingScreenUiState,
+    uiState: NowPlayingScreenUiState,
     onFavorite: ( String ) -> Unit,
     playPause: () -> Unit,
     playPreviousSong: () -> Unit,
@@ -99,27 +99,27 @@ fun NowPlayingBottomSheet(
     onCreateEqualizerActivityContract: () -> Unit
 ) {
 
-    val fallbackResourceId = if ( nowPlayingBottomSheetUiState.themeMode.isLight(
+    val fallbackResourceId = if ( uiState.themeMode.isLight(
             LocalContext.current ) ) R.drawable.placeholder_light else
                 R.drawable.placeholder_dark
 
     NowPlayingScreenContent(
-        currentlyPlayingSong = nowPlayingBottomSheetUiState.currentlyPlayingSong!!,
-        currentlyPlayingSongIndex = nowPlayingBottomSheetUiState.currentlyPlayingSongIndex,
+        currentlyPlayingSong = uiState.currentlyPlayingSong!!,
+        currentlyPlayingSongIndex = uiState.currentlyPlayingSongIndex,
         fallbackResourceId = fallbackResourceId,
-        queueSize = nowPlayingBottomSheetUiState.queueSize,
-        language = nowPlayingBottomSheetUiState.language,
-        isFavorite = nowPlayingBottomSheetUiState.currentlyPlayingSongIsFavorite,
-        controlsLayoutIsDefault = nowPlayingBottomSheetUiState.controlsLayoutIsDefault,
-        isPlaying = nowPlayingBottomSheetUiState.isPlaying,
-        enableSeekControls = nowPlayingBottomSheetUiState.showSeekControls,
-        showLyrics = nowPlayingBottomSheetUiState.showLyrics,
-        playbackPosition = nowPlayingBottomSheetUiState.playbackPosition,
-        shuffle = nowPlayingBottomSheetUiState.shuffle,
-        currentLoopMode = nowPlayingBottomSheetUiState.currentLoopMode,
-        currentPlayingSpeed = nowPlayingBottomSheetUiState.currentPlayingSpeed,
-        currentPlayingPitch = nowPlayingBottomSheetUiState.currentPlayingPitch,
-        showSamplingInfo = nowPlayingBottomSheetUiState.showSamplingInfo,
+        queueSize = uiState.queueSize,
+        language = uiState.language,
+        isFavorite = uiState.currentlyPlayingSongIsFavorite,
+        controlsLayoutIsDefault = uiState.controlsLayoutIsDefault,
+        isPlaying = uiState.isPlaying,
+        enableSeekControls = uiState.showSeekControls,
+        showLyrics = uiState.showLyrics,
+        playbackPosition = uiState.playbackPosition,
+        shuffle = uiState.shuffle,
+        currentLoopMode = uiState.currentLoopMode,
+        currentPlayingSpeed = uiState.currentPlayingSpeed,
+        currentPlayingPitch = uiState.currentPlayingPitch,
+        showSamplingInfo = uiState.showSamplingInfo,
         durationFormatter = { it.formatMilliseconds() },
         onArtistClicked = onArtistClicked,
         onFavorite = { onFavorite( it ) },
@@ -129,7 +129,7 @@ fun NowPlayingBottomSheet(
         onFastRewindButtonClick = fastRewind,
         onFastForwardButtonClick = fastForward,
         onSeekEnd = { onSeekEnd( it ) },
-        onArtworkClicked = { onArtworkClicked( nowPlayingBottomSheetUiState.currentlyPlayingSong.albumTitle!! ) },
+        onArtworkClicked = { onArtworkClicked( uiState.currentlyPlayingSong.albumTitle!! ) },
         onSwipeArtworkLeft = playPreviousSong,
         onSwipeArtworkRight = playNextSong,
         onQueueClicked = onQueueClicked,

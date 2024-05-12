@@ -1,5 +1,6 @@
 package com.odesa.musicMatters.ui.queue
 
+import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,6 +30,10 @@ fun QueueList(
     playSong: ( Song ) -> Unit,
     onMove: ( Int, Int ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
+    onAddToQueue: ( MediaItem ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
+    onViewAlbum: ( String ) -> Unit,
+    onShareSong: ( Uri ) -> Unit,
 ) {
 
     val lazyListState = rememberLazyListState(
@@ -67,10 +72,10 @@ fun QueueList(
                             onClick = { playSong( song ) },
                             onFavorite = onFavorite,
                             onPlayNext = onPlayNext,
-                            onAddToQueue = {},
-                            onViewArtist = {},
-                            onViewAlbum = {},
-                            onShareSong = {},
+                            onAddToQueue = onAddToQueue,
+                            onViewArtist = onViewArtist,
+                            onViewAlbum = onViewAlbum,
+                            onShareSong = onShareSong,
                             onDragHandleClick = {},
                         )
                     }

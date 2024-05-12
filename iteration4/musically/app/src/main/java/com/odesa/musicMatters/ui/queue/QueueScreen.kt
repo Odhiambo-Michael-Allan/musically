@@ -1,5 +1,6 @@
 package com.odesa.musicMatters.ui.queue
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -18,16 +19,22 @@ import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.NewPlaylistDialog
 import com.odesa.musicMatters.ui.components.QueueScreenTopAppBar
 import com.odesa.musicMatters.ui.components.emptyQueueScreenUiState
+import com.odesa.musicMatters.ui.navigation.createShareSongIntent
+import com.odesa.musicMatters.ui.navigation.displayToastWithMessage
 import com.odesa.musicMatters.ui.theme.isLight
 
 @Composable
 fun QueueScreen(
     queueScreenViewModel: QueueScreenViewModel,
-    onPlayNext: ( MediaItem ) -> Unit,
+    onPlayNext: (MediaItem ) -> Unit,
+    onViewAlbum: (String ) -> Unit,
+    onViewArtist: (String ) -> Unit,
+    onAddToQueue: (MediaItem ) -> Unit,
     onBackArrowClick: () -> Unit
 ) {
 
     val uiState by queueScreenViewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     QueueScreenContent(
         uiState = uiState,
@@ -41,7 +48,23 @@ fun QueueScreen(
             )
         },
         onMoveSong = { from, to -> queueScreenViewModel.moveSong( from, to ) },
-        onPlayNext = onPlayNext
+        onPlayNext = onPlayNext,
+        onViewAlbum = onViewAlbum,
+        onViewArtist = onViewArtist,
+        onAddToQueue = onAddToQueue,
+        onShareSong = {
+            try {
+                val intent = createShareSongIntent( context, it )
+                context.startActivity( intent )
+            }
+            catch ( exception: Exception ) {
+                displayToastWithMessage(
+                    context,
+                    uiState.language.shareFailedX( exception.localizedMessage
+                        ?: exception.toString() )
+                )
+            }
+        }
     )
 }
 
@@ -55,6 +78,10 @@ fun QueueScreenContent(
     playSong: ( Song ) -> Unit,
     onMoveSong: ( Int, Int ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
+    onViewAlbum: ( String ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
+    onShareSong: ( Uri ) -> Unit,
+    onAddToQueue: ( MediaItem ) -> Unit,
 ) {
 
     val fallbackResourceId =
@@ -85,6 +112,10 @@ fun QueueScreenContent(
                 playSong = playSong,
                 onMove = onMoveSong,
                 onPlayNext = onPlayNext,
+                onAddToQueue = onAddToQueue,
+                onShareSong = onShareSong,
+                onViewAlbum = onViewAlbum,
+                onViewArtist = onViewArtist,
             )
         }
 
@@ -113,6 +144,10 @@ fun QueueScreenContentPreview() {
         playSong = {},
         onMoveSong = { _, _ -> {} },
         onPlayNext = {},
+        onAddToQueue = {},
+        onViewAlbum = {},
+        onViewArtist = {},
+        onShareSong = {}
     )
 }
 

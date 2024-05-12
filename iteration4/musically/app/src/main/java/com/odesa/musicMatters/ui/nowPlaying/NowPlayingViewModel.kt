@@ -37,7 +37,7 @@ class NowPlayingViewModel(
             currentlyPlayingSong = getCurrentlyPlayingSong(),
             currentlyPlayingSongIndex = musicServiceConnection.currentlyPlayingMediaItemIndex.value,
             playbackPosition = PlaybackPosition.zero,
-            queueSize = musicServiceConnection.queueSize.value,
+            queueSize = musicServiceConnection.mediaItemsInQueue.value.size,
             language = settingsRepository.language.value,
             currentlyPlayingSongIsFavorite = true,
             controlsLayoutIsDefault = settingsRepository.controlsLayoutIsDefault.value,
@@ -133,9 +133,9 @@ class NowPlayingViewModel(
     }, delayMs )
 
     private suspend fun observeQueueSize() {
-        musicServiceConnection.queueSize.collect {
+        musicServiceConnection.mediaItemsInQueue.collect {
             _uiState.value = _uiState.value.copy(
-                queueSize = it
+                queueSize = it.size
             )
         }
     }
@@ -305,8 +305,6 @@ class NowPlayingViewModel(
     fun onSeekEnd( position: Long ) {
         musicServiceConnection.player?.seekTo( position )
     }
-
-    fun onArtworkClicked() {}
 
     fun toggleLoopMode() {
         val currentLoopModePosition = LoopMode.entries.indexOf(

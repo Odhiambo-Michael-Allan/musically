@@ -179,8 +179,6 @@ class FakeMusicServiceConnection : MusicServiceConnection {
 
     override val playbackState: StateFlow<PlaybackState>
         get() = TODO("Not yet implemented")
-    override val queueSize: StateFlow<Int>
-        get() = TODO("Not yet implemented")
     override val currentlyPlayingMediaItemIndex: StateFlow<Int>
         get() = TODO("Not yet implemented")
     override val isPlaying: StateFlow<Boolean>
@@ -241,6 +239,18 @@ class FakeMusicServiceConnection : MusicServiceConnection {
     }
 
     override fun clearQueue() {
+        TODO("Not yet implemented")
+    }
+
+    override fun mediaItemIsPresentInQueue(mediaItem: MediaItem): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun playNext(mediaItem: MediaItem) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addToQueue(mediaItem: MediaItem) {
         TODO("Not yet implemented")
     }
 

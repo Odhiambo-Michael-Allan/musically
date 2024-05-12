@@ -69,6 +69,7 @@ import com.odesa.musicMatters.data.preferences.SortSongsBy
 import com.odesa.musicMatters.services.i18n.English
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.media.Song
+import com.odesa.musicMatters.services.media.extensions.formatMilliseconds
 import com.odesa.musicMatters.ui.tree.TreeScreenUiState
 import com.odesa.musicMatters.ui.tree.label
 import com.odesa.musicMatters.ui.tree.testTreeScreenUiState
@@ -194,17 +195,18 @@ fun TreeSongListContent(
                 }
             }
             if ( expanded ) {
-                items( songsInDirectory ) {
-                    val isCurrentlyPlaying by remember( it, uiState.currentlyPlayingSongId ) {
-                        derivedStateOf { it.id == uiState.currentlyPlayingSongId }
+                items( songsInDirectory ) { song ->
+                    val isCurrentlyPlaying by remember( song, uiState.currentlyPlayingSongId ) {
+                        derivedStateOf { song.id == uiState.currentlyPlayingSongId }
                     }
-                    val isFavorite by remember( uiState.favoriteSongIds, it ) {
-                        derivedStateOf { uiState.favoriteSongIds.contains( it.id ) }
+                    val isFavorite by remember( uiState.favoriteSongIds, song ) {
+                        derivedStateOf { uiState.favoriteSongIds.contains( song.id ) }
                     }
+                    var showSongDetailsDialog by remember { mutableStateOf( false ) }
                     Card (
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors( containerColor = Color.Transparent ),
-                        onClick = { onPlaySong( it ) }
+                        onClick = { onPlaySong( song ) }
                     ) {
                         Row (
                             modifier = Modifier
@@ -222,7 +224,7 @@ fun TreeSongListContent(
                                     .size(30.dp)
                                     .clip(RoundedCornerShape(5.dp)),
                                 model = ImageRequest.Builder( LocalContext.current ).apply {
-                                    data( it.artworkUri )
+                                    data( song.artworkUri )
                                     placeholder( fallbackResourceId )
                                     fallback( fallbackResourceId )
                                     error( fallbackResourceId )
@@ -235,7 +237,7 @@ fun TreeSongListContent(
                                 modifier = Modifier.weight( 1f )
                             ) {
                                 Text(
-                                    text = it.title,
+                                    text = song.title,
                                     style = MaterialTheme.typography.labelLarge.copy(
                                         color = when {
                                             isCurrentlyPlaying -> MaterialTheme.colorScheme.primary
@@ -243,9 +245,9 @@ fun TreeSongListContent(
                                         }
                                     )
                                 )
-                                if ( it.artists.isNotEmpty() ) {
+                                if ( song.artists.isNotEmpty() ) {
                                     Text(
-                                        text = it.artists.joinToString(),
+                                        text = song.artists.joinToString(),
                                         style = MaterialTheme.typography.labelSmall
                                     )
                                 }
@@ -281,16 +283,19 @@ fun TreeSongListContent(
                                             ) {
                                                 SongOptionsBottomSheetContent(
                                                     language = uiState.language,
-                                                    song = it,
+                                                    song = song,
                                                     isFavorite = isFavorite,
-                                                    isCurrentlyPlaying = uiState.currentlyPlayingSongId == it.id,
+                                                    isCurrentlyPlaying = uiState.currentlyPlayingSongId == song.id,
                                                     fallbackResourceId = fallbackResourceId,
                                                     onFavorite = {},
                                                     onAddToQueue = {},
                                                     onPlayNext = { /*TODO*/ },
                                                     onViewArtist = {},
                                                     onViewAlbum = {},
-                                                    onShareSong = {}
+                                                    onShareSong = {},
+                                                    onShowSongDetails = {
+                                                        showSongDetailsDialog = true
+                                                    }
                                                 ) {
                                                     showOptionsMenu = false
                                                 }
@@ -301,6 +306,15 @@ fun TreeSongListContent(
                                         showOptionsMenu = !showOptionsMenu
                                     }
                                 )
+                            }
+                        }
+                        if ( showSongDetailsDialog ) {
+                            SongDetailsDialog(
+                                song = song,
+                                language = uiState.language,
+                                durationFormatter = { it.formatMilliseconds() }
+                            ) {
+                                showSongDetailsDialog = false
                             }
                         }
                     }

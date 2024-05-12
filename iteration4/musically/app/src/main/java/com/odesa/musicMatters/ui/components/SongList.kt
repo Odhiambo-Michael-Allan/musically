@@ -39,6 +39,7 @@ fun SongList(
     onFavorite: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
+    onAddToQueue: ( MediaItem ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
     leadingContent: ( LazyListScope.() -> Unit )? = null
@@ -89,8 +90,8 @@ fun SongList(
                             fallbackResourceId = fallbackResourceId,
                             onClick = { playSong( song ) },
                             onFavorite = { onFavorite( songs[ index ].id ) },
-                            onPlayNext = { onPlayNext( song.mediaItem ) },
-                            onAddToQueue = {},
+                            onPlayNext = onPlayNext,
+                            onAddToQueue = onAddToQueue,
                             onViewArtist = onViewArtist,
                             onViewAlbum = onViewAlbum,
                             onShareSong = onShareSong
@@ -138,6 +139,7 @@ fun SongListPreview() {
         onViewArtist = {},
         onShareSong = {},
         onPlayNext = {},
+        onAddToQueue = {},
     )
 }
 
@@ -149,6 +151,9 @@ fun QueueSongList(
     onFavorite: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
+    onAddToQueue: ( MediaItem ) -> Unit,
+    onViewAlbum: ( String ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
     playSong: ( Song ) -> Unit,
 ) {
     when {
@@ -181,9 +186,9 @@ fun QueueSongList(
                         onClick = { playSong( song ) },
                         onFavorite = onFavorite,
                         onPlayNext = onPlayNext,
-                        onAddToQueue = {},
-                        onViewArtist = {},
-                        onViewAlbum = {},
+                        onAddToQueue = onAddToQueue,
+                        onViewArtist = onViewArtist,
+                        onViewAlbum = onViewAlbum,
                         onShareSong = onShareSong,
                         onDragHandleClick = {},
                     )
@@ -203,7 +208,10 @@ fun QueueSongListPreview() {
         onFavorite = {},
         onShareSong = {},
         onPlayNext = {},
-        playSong = {}
+        playSong = {},
+        onAddToQueue = {},
+        onViewAlbum = {},
+        onViewArtist = {},
     )
 }
 

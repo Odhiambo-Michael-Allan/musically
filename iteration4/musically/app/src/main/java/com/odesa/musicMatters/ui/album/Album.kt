@@ -1,8 +1,6 @@
 package com.odesa.musicMatters.ui.album
 
-import android.content.Intent
 import android.net.Uri
-import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,6 +27,8 @@ import com.odesa.musicMatters.ui.components.Banner
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.MinimalAppBar
 import com.odesa.musicMatters.ui.components.SongList
+import com.odesa.musicMatters.ui.navigation.createShareSongIntent
+import com.odesa.musicMatters.ui.navigation.displayToastWithMessage
 import com.odesa.musicMatters.ui.theme.isLight
 
 @Composable
@@ -36,9 +36,10 @@ fun AlbumScreen(
     albumName: String,
     albumScreenViewModel: AlbumScreenViewModel,
     onNavigateBack: () -> Unit,
-    onViewAlbum: (String ) -> Unit,
-    onViewArtist: (String ) -> Unit,
+    onViewAlbum: ( String ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
+    onAddToQueue: ( MediaItem ) -> Unit,
 ) {
 
     val uiState by albumScreenViewModel.uiState.collectAsState()
@@ -56,20 +57,18 @@ fun AlbumScreen(
         onViewAlbum = onViewAlbum,
         onViewArtist = onViewArtist,
         onPlayNext = onPlayNext,
+        onAddToQueue = onAddToQueue,
         onShareSong = {
             try {
-                val intent = Intent( Intent.ACTION_SEND ).apply {
-                    addFlags( Intent.FLAG_GRANT_READ_URI_PERMISSION )
-                    putExtra( Intent.EXTRA_STREAM, it )
-                    type = context.contentResolver.getType( it )
-                }
+                val intent = createShareSongIntent( context, it )
                 context.startActivity( intent )
-            } catch ( exception: Exception ) {
-                Toast.makeText(
+            }
+            catch ( exception: Exception ) {
+                displayToastWithMessage(
                     context,
-                    uiState.language.shareFailedX( exception.localizedMessage ?: exception.toString() ),
-                    Toast.LENGTH_SHORT
-                ).show()
+                    uiState.language.shareFailedX( exception.localizedMessage
+                        ?: exception.toString() )
+                )
             }
         }
     )
@@ -87,6 +86,7 @@ fun AlbumScreenContent(
     onFavorite: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
+    onAddToQueue: ( MediaItem ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
 ) {
@@ -123,6 +123,7 @@ fun AlbumScreenContent(
                 onViewArtist = onViewArtist,
                 onShareSong = onShareSong,
                 onPlayNext = onPlayNext,
+                onAddToQueue = onAddToQueue,
                 leadingContent = {
                     item {
                         AlbumArtwork(
@@ -203,6 +204,7 @@ fun AlbumScreenContentPreview() {
         onViewAlbum = {},
         onViewArtist = {},
         onShareSong = {},
-        onPlayNext = {}
+        onPlayNext = {},
+        onAddToQueue = {},
     )
 }
