@@ -28,6 +28,12 @@ import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.services.i18n.English
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.media.Song
+import com.odesa.musicMatters.services.media.bitrate
+import com.odesa.musicMatters.services.media.bitsPerSample
+import com.odesa.musicMatters.services.media.codec
+import com.odesa.musicMatters.services.media.dateModifiedString
+import com.odesa.musicMatters.services.media.samplingRate
+import com.odesa.musicMatters.services.media.sizeString
 import com.odesa.musicMatters.ui.theme.MusicMattersTheme
 import java.util.Date
 import java.util.UUID
@@ -113,7 +119,7 @@ fun SongDetailsDialog(
                         song.trackNumber?.let {
                             SongDetailsItem(
                                 key = language.trackNumber,
-                                value = it.toString()
+                                value = ( it % 1000 ).toString()
                             )
                         }
                         SongDetailsItem(
@@ -124,11 +130,38 @@ fun SongDetailsDialog(
                             key = language.path,
                             value = song.path
                         )
-                        SongDetailsItem( key = language.size, value = song.size.toString() )
+                        SongDetailsItem(
+                            key = language.size,
+                            value = song.sizeString
+                        )
                         SongDetailsItem(
                             key = language.dateAdded,
-                            value = song.dateModified.toString()
+                            value = song.dateModifiedString
                         )
+                        song.bitrate?.let {
+                            SongDetailsItem(
+                                key = language.bitrate,
+                                value = language.xKbps( it.toString() )
+                            )
+                        }
+                        song.bitsPerSample?.let {
+                            SongDetailsItem(
+                                key = language.bitDepth,
+                                value = language.xBit( it.toString() )
+                            )
+                        }
+                        song.samplingRate?.let {
+                            SongDetailsItem(
+                                key = language.samplingRate,
+                                value = language.xKHZ( it.toString() )
+                            )
+                        }
+                        song.codec?.let {
+                            SongDetailsItem(
+                                key = language.codec,
+                                value = it
+                            )
+                        }
                     }
                 }
             }

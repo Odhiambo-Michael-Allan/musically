@@ -81,11 +81,21 @@ fun MediaMetadata.Builder.from( cursor: Cursor, context: Context, mediaUri: Uri 
         }.getOrNull() ?: UNKNOWN_STRING_VALUE
 //    Timber.tag( TAG ).d( "Composer: $composer" )
 
-    val dateModified = cursor.getNullableLongFrom( AudioColumns.DATE_MODIFIED )
-        ?: mediaMetadataRetriever.runCatching {
-            extractMetadata( MediaMetadataRetriever.METADATA_KEY_DATE )?.toLong()
-        }.getOrNull() ?: UNKNOWN_LONG_VALUE
-//    Timber.tag( TAG ).d( "Date Modifier: $dateModified" )
+    var dateAdded = cursor.getNullableLongFrom( AudioColumns.DATE_ADDED ) ?: UNKNOWN_LONG_VALUE
+    if ( dateAdded == UNKNOWN_LONG_VALUE ) {
+        dateAdded = cursor.getNullableLongFrom( AudioColumns.DATE_MODIFIED )
+            ?: mediaMetadataRetriever.runCatching {
+                extractMetadata( MediaMetadataRetriever.METADATA_KEY_DATE )?.toLong()
+            }.getOrNull() ?: UNKNOWN_LONG_VALUE
+    }
+    Timber.tag( TAG ).d( "Date Added: $dateAdded" )
+
+    var dateModified = cursor.getNullableLongFrom( AudioColumns.DATE_MODIFIED ) ?: UNKNOWN_LONG_VALUE
+    if ( dateModified == UNKNOWN_LONG_VALUE ) {
+        dateModified = cursor.getNullableLongFrom( AudioColumns.DATE_MODIFIED )
+            ?: UNKNOWN_LONG_VALUE
+    }
+    Timber.tag( TAG ).d( "Date Modified: $dateModified" )
 
     val size = cursor.getNullableLongFrom( AudioColumns.SIZE ) ?: UNKNOWN_LONG_VALUE
 //    Timber.tag( TAG ).d( "Size: $size" )
@@ -146,7 +156,7 @@ fun MediaMetadata.Builder.from( cursor: Cursor, context: Context, mediaUri: Uri 
     setExtras(
         Bundle().apply {
             putLong( SONG_DURATION, duration )
-            putLong( DATE_KEY, dateModified )
+            putLong( DATE_KEY, if ( dateAdded == UNKNOWN_LONG_VALUE ) dateModified else dateAdded )
             putLong( SIZE_KEY, size )
             putString( PATH_KEY, path )
             putLong( BITRATE_KEY, bitrate )

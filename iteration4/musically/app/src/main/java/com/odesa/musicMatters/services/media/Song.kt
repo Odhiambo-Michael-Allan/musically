@@ -7,7 +7,8 @@ import com.odesa.musicMatters.services.media.extensions.BITRATE_KEY
 import com.odesa.musicMatters.services.media.extensions.BITS_PER_SAMPLE_KEY
 import com.odesa.musicMatters.services.media.extensions.CODEC_KEY
 import com.odesa.musicMatters.services.media.extensions.SAMPLING_RATE_KEY
-import java.math.RoundingMode
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.UUID
 
 data class Song(
@@ -31,12 +32,10 @@ data class Song(
 
 fun Song.toSamplingInfoString( language: Language ): String? {
     val values = mutableListOf<String>()
-    val codec = mediaItem.mediaMetadata.extras?.getString( CODEC_KEY )
-    val bitsPerSample = mediaItem.mediaMetadata.extras?.getLong( BITS_PER_SAMPLE_KEY )
-    val bitrate = mediaItem.mediaMetadata.extras?.getLong( BITRATE_KEY )?.div( 1000 )
-    val samplingRate = mediaItem.mediaMetadata.extras?.getLong( SAMPLING_RATE_KEY )?.apply {
-        ( toFloat() / 1000 ).toBigDecimal().setScale( 1, RoundingMode.CEILING ).toFloat()
-    }
+    val codec = codec
+    val bitsPerSample = bitsPerSample
+    val bitrate = bitrate
+    val samplingRate = samplingRate
     values.apply {
         codec?.let { add( it ) }
         bitsPerSample?.let { add( language.xBit( it.toString() ) ) }
@@ -48,6 +47,21 @@ fun Song.toSamplingInfoString( language: Language ): String? {
         else -> null
     }
 }
+
+val Song.codec
+    get() = mediaItem.mediaMetadata.extras?.getString( CODEC_KEY )
+val Song.bitsPerSample
+    get() = mediaItem.mediaMetadata.extras?.getLong( BITS_PER_SAMPLE_KEY )
+val Song.bitrate
+    get() = mediaItem.mediaMetadata.extras?.getLong( BITRATE_KEY )?.div( 1000 )
+val Song.samplingRate
+    get() = mediaItem.mediaMetadata.extras?.getLong( SAMPLING_RATE_KEY )?.run {
+        toFloat().div( 1000 )
+    }
+val Song.sizeString
+    get() = "%.2f MB".format( size.toDouble() / ( 1024 * 1024 ) )
+val Song.dateModifiedString: String
+    get() = SimpleDateFormat.getInstance().format( Date( dateModified * 1000 ) )
 
 enum class SortSongsBy {
     CUSTOM,

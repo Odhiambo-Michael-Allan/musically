@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
@@ -198,7 +200,9 @@ fun SongOptionsBottomSheetContent(
     onShowSongDetails: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    Column {
+    Column (
+        modifier = Modifier.verticalScroll( rememberScrollState() )
+    ) {
         SongOptionsBottomSheetHeader(
             song = song,
             fallbackResourceId = fallbackResourceId,
