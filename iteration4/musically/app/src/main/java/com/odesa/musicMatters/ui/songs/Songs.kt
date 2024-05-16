@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.media3.common.MediaItem
 import com.odesa.musicMatters.R
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.preferences.SortSongsBy
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.services.i18n.English
@@ -28,30 +29,37 @@ import com.odesa.musicMatters.ui.theme.isLight
 
 @Composable
 fun SongsScreen(
-    songsScreenViewModel: SongsScreenViewModel,
+    viewModel: SongsScreenViewModel,
     onViewAlbum: (String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
     onAddToQueue: ( MediaItem ) -> Unit,
     onSettingsClicked: () -> Unit
 ) {
-    val songsScreenUiState by songsScreenViewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
     SongsScreenContent(
-        uiState = songsScreenUiState,
+        uiState = uiState,
         onSortReverseChange = {},
         onSortTypeChange = {},
         onSettingsClicked = onSettingsClicked,
         onShufflePlay = {},
         playSong = {
-            songsScreenViewModel.playMedia( it.mediaItem )
+            viewModel.playMedia( it.mediaItem )
         },
-        onFavorite = { songsScreenViewModel.addToFavorites( it ) },
+        onFavorite = { viewModel.addToFavorites( it ) },
         onViewAlbum = onViewAlbum,
         onViewArtist = onViewArtist,
         onPlayNext = onPlayNext,
         onAddToQueue = onAddToQueue,
+        onGetSongsInPlaylist = { playlist ->
+            uiState.songs.filter { playlist.songIds.contains( it.id ) }
+        },
+        onAddSongToPlaylist = { playlist, song ->
+            viewModel.addSongToPlaylist( playlist, song )
+        },
+        onSearchSongsMatchingQuery = { viewModel.searchSongsMatching( it ) },
         onShareSong = {
             try {
                 val intent = createShareSongIntent( context, it )
@@ -60,7 +68,7 @@ fun SongsScreen(
             catch ( exception: Exception ) {
                 displayToastWithMessage(
                     context,
-                    uiState.language.shareFailedX( exception.localizedMessage
+                    com.odesa.musicMatters.ui.songs.uiState.language.shareFailedX( exception.localizedMessage
                         ?: exception.toString() )
                 )
             }
@@ -82,6 +90,9 @@ fun SongsScreenContent(
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
     onAddToQueue: ( MediaItem ) -> Unit,
+    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onAddSongToPlaylist: ( Playlist, Song ) -> Unit,
+    onSearchSongsMatchingQuery: ( String ) -> List<Song>,
 ) {
     val fallbackResourceId =
         if ( uiState.themeMode.isLight( LocalContext.current ) )
@@ -107,6 +118,7 @@ fun SongsScreenContent(
                 onSortTypeChange = onSortTypeChange,
                 language = uiState.language,
                 songs = uiState.songs,
+                playlists = uiState.playlists,
                 onShufflePlay = onShufflePlay,
                 fallbackResourceId = fallbackResourceId,
                 currentlyPlayingSongId = uiState.currentlyPlayingSongId,
@@ -117,7 +129,10 @@ fun SongsScreenContent(
                 onViewArtist = onViewArtist,
                 onShareSong = onShareSong,
                 onPlayNext = onPlayNext,
-                onAddToQueue = onAddToQueue
+                onAddToQueue = onAddToQueue,
+                onGetSongsInPlaylist = onGetSongsInPlaylist,
+                onAddSongToPlaylist = onAddSongToPlaylist,
+                onSearchSongsMatchingQuery = onSearchSongsMatchingQuery
             )
         }
     }
@@ -147,6 +162,9 @@ fun SongsScreenContentPreview() {
             onShareSong = {},
             onPlayNext = {},
             onAddToQueue = {},
+            onGetSongsInPlaylist = { emptyList() },
+            onAddSongToPlaylist = { _, _ -> },
+            onSearchSongsMatchingQuery = { emptyList() }
         )
     }
 }
@@ -158,5 +176,6 @@ val uiState = SongsScreenUiState(
     themeMode = ThemeMode.LIGHT,
     currentlyPlayingSongId = testSongs.first().id,
     favoriteSongIds = testSongs.map { it.id },
-    isLoading = true
+    isLoading = true,
+    playlists = emptyList()
 )

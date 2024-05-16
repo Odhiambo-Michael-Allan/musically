@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.preferences.SortPathsBy
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
@@ -40,6 +41,7 @@ class TreeScreenViewModel(
             themeMode = settingsRepository.themeMode.value,
             favoriteSongIds = playlistRepository.favoritesPlaylist.value.songIds,
             disabledTreePaths = emptyList(),
+            playlists = fetchRequiredPlaylistsFrom( playlistRepository.playlists.value )
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -51,6 +53,12 @@ class TreeScreenViewModel(
         viewModelScope.launch { observeThemeModeChange() }
         viewModelScope.launch { observeFavoriteSongsPlaylist() }
         viewModelScope.launch { observeDisabledDirectoryNames() }
+        viewModelScope.launch { observePlaylists() }
+    }
+
+    private fun fetchRequiredPlaylistsFrom( playlists: List<Playlist> ) = playlists.filter {
+        it.id != playlistRepository.mostPlayedSongsPlaylist.value.id &&
+                it.id != playlistRepository.recentlyPlayedSongsPlaylist.value.id
     }
 
     private fun createTree() {
@@ -114,6 +122,14 @@ class TreeScreenViewModel(
         }
     }
 
+    private suspend fun observePlaylists() {
+        playlistRepository.playlists.collect {
+            _uiState.value = _uiState.value.copy(
+                playlists = fetchRequiredPlaylistsFrom( it )
+            )
+        }
+    }
+
     fun togglePath( path: String ) {
         viewModelScope.launch {
             val currentlyDisabledPaths = uiState.value.disabledTreePaths.toMutableList()
@@ -125,6 +141,12 @@ class TreeScreenViewModel(
             _uiState.value = _uiState.value.copy(
                 disabledTreePaths = currentlyDisabledPaths
             )
+        }
+    }
+
+    fun saveSongToPlaylist( playlist: Playlist, song: Song ) {
+        viewModelScope.launch {
+            playlistRepository.addSongIdToPlaylist( song.id, playlist.id )
         }
     }
 
@@ -151,6 +173,7 @@ data class TreeScreenUiState(
     val themeMode: ThemeMode,
     val favoriteSongIds: List<String>,
     val disabledTreePaths: List<String>,
+    val playlists: List<Playlist>,
 )
 
 val testPaths = listOf(
@@ -183,7 +206,8 @@ val testTreeScreenUiState = TreeScreenUiState(
     language = English,
     favoriteSongIds = emptyList(),
     themeMode = SettingsDefaults.themeMode,
-    disabledTreePaths = emptyList()
+    disabledTreePaths = emptyList(),
+    playlists = emptyList(),
 )
 
 fun Path.directoryName(): String {

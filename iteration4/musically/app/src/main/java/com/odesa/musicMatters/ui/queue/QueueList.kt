@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.media3.common.MediaItem
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.ui.components.IconTextBody
 import com.odesa.musicMatters.ui.components.QueueSongCard
@@ -34,6 +35,7 @@ fun QueueList(
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
+    onAddSongToPlaylist: ( Playlist, Song ) -> Unit,
 ) {
 
     val lazyListState = rememberLazyListState(
@@ -69,6 +71,7 @@ fun QueueList(
                             isCurrentlyPlaying = uiState.currentlyPlayingSongId == song.id,
                             isFavorite = isFavorite( song.id ),
                             fallbackResourceId = fallbackResourceId,
+                            playlists = uiState.playlists,
                             onClick = { playSong( song ) },
                             onFavorite = onFavorite,
                             onPlayNext = onPlayNext,
@@ -77,6 +80,10 @@ fun QueueList(
                             onViewAlbum = onViewAlbum,
                             onShareSong = onShareSong,
                             onDragHandleClick = {},
+                            onGetSongsInPlaylist = { playlist ->
+                                uiState.songsInQueue.filter { playlist.songIds.contains( it.id ) }
+                            },
+                            onAddSongToPlaylist = onAddSongToPlaylist
                         )
                     }
                 }

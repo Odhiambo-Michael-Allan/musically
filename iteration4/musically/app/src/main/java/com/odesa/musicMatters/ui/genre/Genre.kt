@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.media3.common.MediaItem
 import com.odesa.musicMatters.R
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.preferences.SortSongsBy
 import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.ui.components.LoaderScaffold
@@ -23,7 +24,7 @@ import com.odesa.musicMatters.ui.theme.isLight
 @Composable
 fun GenreScreen(
     genreName: String,
-    genreScreenViewModel: GenreScreenViewModel,
+    viewModel: GenreScreenViewModel,
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
@@ -31,7 +32,7 @@ fun GenreScreen(
     onNavigateBack: () -> Unit,
 ) {
 
-    val uiState by genreScreenViewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
     GenreScreenContent(
@@ -40,13 +41,16 @@ fun GenreScreen(
         onSortReverseChange = {},
         onSortTypeChange = {},
         onShufflePlay = {},
-        playSong = { genreScreenViewModel.playMedia( it.mediaItem ) },
-        onFavorite = { genreScreenViewModel.addToFavorites( it ) },
+        playSong = { viewModel.playMedia( it.mediaItem ) },
+        onFavorite = { viewModel.addToFavorites( it ) },
         onViewAlbum = onViewAlbum,
         onViewArtist = onViewArtist,
         onNavigateBack = onNavigateBack,
         onPlayNext = onPlayNext,
         onAddToQueue = onAddToQueue,
+        onAddSongToPlaylist = { playlist, song ->
+            viewModel.addSongToPlaylist( playlist, song )
+        },
         onShareSong = {
             try {
                 val intent = createShareSongIntent( context, it )
@@ -77,6 +81,7 @@ fun GenreScreenContent(
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
     onAddToQueue: ( MediaItem ) -> Unit,
+    onAddSongToPlaylist: ( Playlist, Song ) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
 
@@ -101,7 +106,8 @@ fun GenreScreenContent(
                 sortSongsBy = SortSongsBy.TITLE,
                 onSortTypeChange = onSortTypeChange,
                 language = uiState.language,
-                songs = uiState.songs,
+                songs = uiState.songsInGenre,
+                playlists = uiState.playlists,
                 onShufflePlay = onShufflePlay,
                 fallbackResourceId = fallbackResourceId,
                 currentlyPlayingSongId = uiState.currentlyPlayingSongId,
@@ -113,6 +119,10 @@ fun GenreScreenContent(
                 onShareSong = onShareSong,
                 onPlayNext = onPlayNext,
                 onAddToQueue = onAddToQueue,
+                onGetSongsInPlaylist = { playlist ->
+                    uiState.songsInGenre.filter { playlist.songIds.contains( it.id ) }
+                },
+                onAddSongToPlaylist = onAddSongToPlaylist
             )
         }
     }
@@ -134,7 +144,8 @@ fun GenreScreenContentPreview() {
         onViewArtist = {},
         onShareSong = {},
         onPlayNext = {},
-        onAddToQueue = {}
+        onAddToQueue = {},
+        onAddSongToPlaylist = { _, _ -> },
     )
 }
 

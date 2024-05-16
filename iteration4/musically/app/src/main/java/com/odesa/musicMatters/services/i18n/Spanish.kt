@@ -407,7 +407,7 @@ object Spanish : Language {
 
     override fun xKHZ( x: String ): String = "${x}KHZ"
 
-    override fun shareFailedX( x: String ) = "error al compartir: $x"
+    override fun shareFailedX( x: String ) = "error al compartir"
 
     override fun exportFailedX( x: String ) = "error al exportar: $x"
 

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.common.MediaItem
 import coil.request.ImageRequest
 import com.odesa.musicMatters.R
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.preferences.SortSongsBy
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.services.i18n.English
@@ -45,7 +46,7 @@ import com.odesa.musicMatters.ui.theme.isLight
 @Composable
 fun ArtistScreen(
     artistName: String,
-    artistScreenViewModel: ArtistScreenViewModel,
+    viewModel: ArtistScreenViewModel,
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: (String ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
@@ -53,7 +54,7 @@ fun ArtistScreen(
     onNavigateBack: () -> Unit
 ) {
 
-    val uiState by artistScreenViewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
     ArtistScreenContent(
@@ -61,15 +62,16 @@ fun ArtistScreen(
         uiState = uiState,
         onSortTypeChange = {},
         onSortReverseChange = {},
-        onPlaySongsInAlbum = { artistScreenViewModel.playAlbum( it.name ) },
+        onPlaySongsInAlbum = { viewModel.playAlbum( it.name ) },
         onShufflePlay = {},
         onFavorite = {},
-        playSong = { artistScreenViewModel.playSong( it.mediaItem ) },
+        playSong = { viewModel.playSong( it.mediaItem ) },
         onViewAlbum = { onViewAlbum( it ) },
         onViewArtist = onViewArtist,
         onNavigateBack = onNavigateBack,
         onPlayNext = onPlayNext,
         onAddToQueue = onAddToQueue,
+        onAddSongToPlaylist = { playlist, song -> viewModel.addSongToPlaylist( playlist, song ) },
         onShareSong = {
             try {
                 val intent = createShareSongIntent( context, it )
@@ -101,6 +103,7 @@ fun ArtistScreenContent(
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
     onAddToQueue: ( MediaItem ) -> Unit,
+    onAddSongToPlaylist: ( Playlist, Song ) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
 
@@ -129,6 +132,7 @@ fun ArtistScreenContent(
                 onSortTypeChange = onSortTypeChange,
                 onSortReverseChange = onSortReverseChange,
                 currentlyPlayingSongId = uiState.currentlyPlayingSongId,
+                playlists = uiState.playlists,
                 playSong = playSong,
                 isFavorite = { uiState.favoriteSongIds.contains(it) },
                 onFavorite = onFavorite,
@@ -137,6 +141,10 @@ fun ArtistScreenContent(
                 onShareSong = onShareSong,
                 onPlayNext = onPlayNext,
                 onAddToQueue = onAddToQueue,
+                onGetSongsInPlaylist = { playlist ->
+                    uiState.songsByArtist.filter { playlist.songIds.contains( it.id ) }
+                },
+                onAddSongToPlaylist = onAddSongToPlaylist,
                 leadingContent = {
                     item {
                         ArtistArtwork(
@@ -224,7 +232,8 @@ fun ArtistScreenContentPreview() {
             language = English,
             themeMode = SettingsDefaults.themeMode,
             currentlyPlayingSongId = testSongs.first().id,
-            favoriteSongIds = emptyList()
+            favoriteSongIds = emptyList(),
+            playlists = emptyList(),
         ),
         onSortReverseChange = {},
         onSortTypeChange = {},
@@ -237,6 +246,7 @@ fun ArtistScreenContentPreview() {
         onShareSong = {},
         onPlayNext = {},
         onNavigateBack = {},
-        onAddToQueue = {}
+        onAddToQueue = {},
+        onAddSongToPlaylist = { _, _ -> }
     )
 }

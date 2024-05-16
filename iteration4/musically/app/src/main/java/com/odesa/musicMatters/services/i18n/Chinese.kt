@@ -405,7 +405,7 @@ object Chinese : Language {
 
     override fun xKHZ( x: String ) = "$x kHz"
 
-    override fun shareFailedX( x: String ) = "分享失败 （错误代码： $x）"
+    override fun shareFailedX( x: String ) = "分享失败"
 
     override fun exportFailedX( x: String ) = "导出失败。错误：$x"
 

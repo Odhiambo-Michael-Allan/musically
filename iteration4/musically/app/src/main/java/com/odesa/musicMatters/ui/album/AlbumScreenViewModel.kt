@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.data.settings.SettingsRepository
@@ -37,7 +38,8 @@ class AlbumScreenViewModel(
             language = settingsRepository.language.value,
             songsInAlbum = emptyList(),
             currentlyPlayingSongId = musicServiceConnection.nowPlaying.value.mediaId,
-            favoriteSongIds = emptyList()
+            favoriteSongIds = playlistRepository.favoritesPlaylist.value.songIds,
+            playlists = fetchRequiredPlaylistsFrom( playlistRepository.playlists.value )
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -47,6 +49,12 @@ class AlbumScreenViewModel(
         viewModelScope.launch { observeThemeModeChange() }
         viewModelScope.launch { observeCurrentlyPlayingSong() }
         viewModelScope.launch { observeFavoriteSongIds() }
+        viewModelScope.launch { observePlaylists() }
+    }
+
+    private fun fetchRequiredPlaylistsFrom(playlists: List<Playlist> ) = playlists.filter {
+        it.id != playlistRepository.mostPlayedSongsPlaylist.value.id &&
+                it.id != playlistRepository.recentlyPlayedSongsPlaylist.value.id
     }
 
     private suspend fun observeLanguageChange() {
@@ -81,6 +89,14 @@ class AlbumScreenViewModel(
         }
     }
 
+    private suspend fun observePlaylists() {
+        playlistRepository.playlists.collect {
+            _uiState.value = _uiState.value.copy(
+                playlists = fetchRequiredPlaylistsFrom( it )
+            )
+        }
+    }
+
     fun addToFavorites( songId: String ) {
         viewModelScope.launch {
             if ( playlistRepository.isFavorite( songId ) )
@@ -106,6 +122,12 @@ class AlbumScreenViewModel(
                     isLoadingSongsInAlbum = false
                 )
             }
+        }
+    }
+
+    fun addSongToPlaylist( playlist: Playlist, song: Song ) {
+        viewModelScope.launch {
+            playlistRepository.addSongIdToPlaylist( song.id, playlist.id )
         }
     }
 
@@ -144,7 +166,8 @@ data class AlbumScreenUiState(
     val language: Language,
     val songsInAlbum: List<Song>,
     val currentlyPlayingSongId: String,
-    val favoriteSongIds: List<String>
+    val favoriteSongIds: List<String>,
+    val playlists: List<Playlist>,
 )
 
 val testAlbumScreenUiState = AlbumScreenUiState(
@@ -154,5 +177,6 @@ val testAlbumScreenUiState = AlbumScreenUiState(
     language = SettingsDefaults.language,
     songsInAlbum = testSongs,
     currentlyPlayingSongId = testSongs.last().id,
-    favoriteSongIds = emptyList()
+    favoriteSongIds = emptyList(),
+    playlists = emptyList(),
 )

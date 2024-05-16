@@ -67,8 +67,7 @@ fun SongDetailsDialog(
                     Row (
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
-                        ,
+                            .padding( 8.dp ),
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(

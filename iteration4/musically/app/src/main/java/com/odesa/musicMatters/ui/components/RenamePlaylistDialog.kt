@@ -39,6 +39,7 @@ fun RenamePlaylistDialog(
         text = {
             OutlinedTextField(
                 value = playlistName,
+                singleLine = true,
                 onValueChange = {
                     playlistName = it
                 },

@@ -19,7 +19,7 @@ interface PlaylistStore {
     suspend fun saveCustomPlaylist( playlist: Playlist )
     suspend fun deleteCustomPlaylist( playlist: Playlist )
 
-    suspend fun addSongToCustomPlaylist( songId: String, playlist: Playlist )
+    suspend fun addSongIdToPlaylist(songId: String, playlist: Playlist )
     fun fetchMostPlayedSongsMap(): Map<String, Int>
 
 }

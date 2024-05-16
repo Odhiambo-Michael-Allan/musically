@@ -160,7 +160,7 @@ fun MusicallyNavHost(
                 )
             )
             SongsScreen(
-                songsScreenViewModel = songsScreenViewModel,
+                viewModel = songsScreenViewModel,
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) },
                 onViewAlbum = { navController.navigateToAlbumScreen( it ) },
                 onViewArtist = { navController.navigateToArtistScreen( it ) },
@@ -209,7 +209,7 @@ fun MusicallyNavHost(
             artistScreenViewModel.loadSongsBy( artist )
             ArtistScreen(
                 artistName = artist,
-                artistScreenViewModel = artistScreenViewModel,
+                viewModel = artistScreenViewModel,
                 onViewAlbum = { navController.navigateToAlbumScreen( it ) },
                 onViewArtist = { navController.navigateToArtistScreen( it ) },
                 onPlayNext = {
@@ -305,7 +305,7 @@ fun MusicallyNavHost(
             genreScreenViewModel.loadSongsWithGenre( genreName )
             GenreScreen(
                 genreName = genreName,
-                genreScreenViewModel = genreScreenViewModel,
+                viewModel = genreScreenViewModel,
                 onViewAlbum = { navController.navigateToAlbumScreen( it ) },
                 onViewArtist = { navController.navigateToArtistScreen( it ) },
                 onNavigateBack = { navController.navigateUp() },
@@ -399,7 +399,7 @@ fun MusicallyNavHost(
                 )
             )
             QueueScreen(
-                queueScreenViewModel = queueScreenViewModel,
+                viewModel = queueScreenViewModel,
                 onPlayNext = {
                     playNext( context, musicServiceConnection, it )
                 },

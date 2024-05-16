@@ -408,7 +408,7 @@ object German : Language {
 
     override fun xKHZ( x: String ) = "$x kHz"
 
-    override fun shareFailedX( x: String ) = "Teilen fehlgeschlagen (Fehler: $x)"
+    override fun shareFailedX( x: String ) = "Teilen fehlgeschlagen"
 
     override fun exportFailedX( x: String ) = "Export fehlgeschlagen (Fehler: $x)"
 

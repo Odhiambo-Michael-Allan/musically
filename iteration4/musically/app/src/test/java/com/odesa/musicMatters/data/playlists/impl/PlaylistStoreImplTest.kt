@@ -26,7 +26,7 @@ class PlaylistStoreImplTest {
     fun setup() {
         playlistFile.createNewFile()
         mostPlayedSongsFile.createNewFile()
-        playlistStore = PlaylistStoreImpl.getInstance(
+        playlistStore = PlaylistStoreImpl(
             playlistFile,
             mostPlayedSongsFile
         )
@@ -59,6 +59,8 @@ class PlaylistStoreImplTest {
         playlistStore.addToFavorites( UUID.randomUUID().toString() )
         assertTrue( FileAdapter( playlistFile ).read().isNotEmpty() )
         assertEquals( 1, playlistStore.fetchFavoritesPlaylist().songIds.size )
+        playlistStore.addSongIdToPlaylist( UUID.randomUUID().toString(), playlistStore.fetchFavoritesPlaylist() )
+        assertEquals( 2, playlistStore.fetchFavoritesPlaylist().songIds.size )
     }
 
     @Test
@@ -167,13 +169,13 @@ class PlaylistStoreImplTest {
             playlistStore.saveCustomPlaylist( it )
         }
         testSongs.forEach {
-            playlistStore.addSongToCustomPlaylist( it.id, customPlaylists.first() )
+            playlistStore.addSongIdToPlaylist( it.id, customPlaylists.first() )
         }
         testSongs.forEach {
-            playlistStore.addSongToCustomPlaylist( it.id, customPlaylists.last() )
+            playlistStore.addSongIdToPlaylist( it.id, customPlaylists.last() )
         }
-        playlistStore.addSongToCustomPlaylist( testSongs.first().id, customPlaylists[1] )
-        playlistStore.addSongToCustomPlaylist( testSongs[1].id, customPlaylists[1] )
+        playlistStore.addSongIdToPlaylist( testSongs.first().id, customPlaylists[1] )
+        playlistStore.addSongIdToPlaylist( testSongs[1].id, customPlaylists[1] )
         val storedCustomPlaylists = playlistStore.fetchAllCustomPlaylists()
         assertEquals( testSongs.size, storedCustomPlaylists.find { it.id == customPlaylists.first().id }!!.songIds.size )
         assertEquals( 2, storedCustomPlaylists.find { it.id == customPlaylists[1].id }!!.songIds.size )

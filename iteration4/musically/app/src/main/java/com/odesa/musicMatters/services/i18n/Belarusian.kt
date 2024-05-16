@@ -407,7 +407,7 @@ object Belarusian : Language {
 
     override fun xKHZ( x: String ) = "$x кГц"
 
-    override fun shareFailedX( x: String ) = "Не ўдалося падзяліцца (Памылка: ${x})"
+    override fun shareFailedX( x: String ) = "Не ўдалося падзяліцца"
 
     override fun exportFailedX( x: String ) = "Экспарт не атрымаўся (Памылка: ${x})"
 

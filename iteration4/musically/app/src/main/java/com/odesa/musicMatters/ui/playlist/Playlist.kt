@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.media3.common.MediaItem
 import com.odesa.musicMatters.R
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.preferences.SortSongsBy
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.services.i18n.English
@@ -57,6 +58,9 @@ fun PlaylistScreen(
         onNavigateBack = onNavigateBack,
         onPlayNext = onPlayNext,
         onAddToQueue = onAddToQueue,
+        onAddSongToPlaylist = { playlist, song ->
+            viewModel.addSongToPlaylist( playlist, song )
+        },
         onShareSong = {
             try {
                 val intent = createShareSongIntent( context, it )
@@ -87,6 +91,7 @@ fun PlaylistScreenContent(
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
     onAddToQueue: ( MediaItem ) -> Unit,
+    onAddSongToPlaylist: ( Playlist, Song ) -> Unit,
     onNavigateBack: () -> Unit
 ) {
 
@@ -143,6 +148,7 @@ fun PlaylistScreenContent(
                 onShufflePlay = onShufflePlay,
                 fallbackResourceId = fallbackResourceId,
                 currentlyPlayingSongId = uiState.currentlyPlayingSongId,
+                playlists = uiState.playlists,
                 playSong = playSong,
                 isFavorite = { uiState.favoriteSongIds.contains( it ) },
                 onFavorite = onFavorite,
@@ -151,6 +157,10 @@ fun PlaylistScreenContent(
                 onShareSong = onShareSong,
                 onPlayNext = onPlayNext,
                 onAddToQueue = onAddToQueue,
+                onGetSongsInPlaylist = {  playlist ->
+                    uiState.songsInPlaylist.filter { playlist.songIds.contains( it.id ) }
+                },
+                onAddSongToPlaylist = onAddSongToPlaylist
             )
         }
     }
@@ -168,6 +178,7 @@ fun PlaylistScreenContentPreview() {
             currentlyPlayingSongId = testSongs.first().id,
             favoriteSongIds = emptyList(),
             themeMode = SettingsDefaults.themeMode,
+            playlists = emptyList(),
         ),
         onFavorite = {},
         onShufflePlay = {},
@@ -179,6 +190,7 @@ fun PlaylistScreenContentPreview() {
         onNavigateBack = {},
         onShareSong = {},
         onPlayNext = {},
-        onAddToQueue = {}
+        onAddToQueue = {},
+        onAddSongToPlaylist = { _, _ -> }
     )
 }

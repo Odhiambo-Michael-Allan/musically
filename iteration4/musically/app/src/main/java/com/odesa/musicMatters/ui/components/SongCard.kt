@@ -53,6 +53,7 @@ import androidx.media3.common.MediaItem
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.odesa.musicMatters.R
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.services.i18n.English
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.media.Song
@@ -66,6 +67,7 @@ fun SongCard(
     song: Song,
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
+    playlists: List<Playlist>,
     @DrawableRes fallbackResourceId: Int,
     onClick: () -> Unit,
     onFavorite: ( String ) -> Unit,
@@ -74,10 +76,15 @@ fun SongCard(
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
+    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onAddSongToPlaylist: ( Playlist, Song ) -> Unit,
+    onSearchSongsMatchingQuery: ( String ) -> List<Song>,
 ) {
 
     var showSongOptionsBottomSheet by remember { mutableStateOf( false ) }
     var showSongDetailsDialog by remember { mutableStateOf( false ) }
+    var showAddToPlaylistDialog by remember { mutableStateOf( false ) }
+    var showCreateNewPlaylistDialog by remember { mutableStateOf( false ) }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -162,6 +169,7 @@ fun SongCard(
                                     onViewAlbum = onViewAlbum,
                                     onShareSong = onShareSong,
                                     onShowSongDetails = { showSongDetailsDialog = true },
+                                    onAddToPlaylist = { showAddToPlaylistDialog = true },
                                     onDismissRequest = {
                                         showSongOptionsBottomSheet = false
                                     }
@@ -179,6 +187,27 @@ fun SongCard(
                 ) {
                     showSongDetailsDialog = false
                 }
+            }
+            if ( showAddToPlaylistDialog ) {
+                AddToPlaylistDialog(
+                    song = song,
+                    playlists = playlists,
+                    language = language,
+                    fallbackResourceId = fallbackResourceId,
+                    onGetSongsInPlaylist = onGetSongsInPlaylist,
+                    onAddSongToPlaylist = { onAddSongToPlaylist( it, song ) },
+                    onCreateNewPlaylist = { showCreateNewPlaylistDialog = true },
+                    onDismissRequest = { showAddToPlaylistDialog = false }
+                )
+            }
+            if ( showCreateNewPlaylistDialog ) {
+                NewPlaylistDialog(
+                    language = uiState.language,
+                    fallbackResourceId = fallbackResourceId,
+                    onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
+                    onConfirmation = { showCreateNewPlaylistDialog = false },
+                    onDismissRequest = { showCreateNewPlaylistDialog = false }
+                )
             }
         }
     }
@@ -198,6 +227,7 @@ fun SongOptionsBottomSheetContent(
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
     onShowSongDetails: () -> Unit,
+    onAddToPlaylist: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     Column (
@@ -236,6 +266,7 @@ fun SongOptionsBottomSheetContent(
             label = language.addToPlaylist
         ) {
             onDismissRequest()
+            onAddToPlaylist()
         }
         song.artists.forEach {
             SongOptionsBottomSheetItem(
@@ -313,7 +344,7 @@ fun SongOptionsBottomSheetHeader(
     Row (
         modifier = Modifier
             .fillMaxWidth()
-            .padding(32.dp, 16.dp),
+            .padding( 32.dp, 16.dp ),
         horizontalArrangement = Arrangement.spacedBy( 24.dp ),
     ) {
         AsyncImage(
@@ -325,8 +356,8 @@ fun SongOptionsBottomSheetHeader(
                 crossfade( true )
             }.build(),
             modifier = Modifier
-                .size(45.dp)
-                .clip(RoundedCornerShape(10.dp)),
+                .size( 45.dp )
+                .clip( RoundedCornerShape( 10.dp ) ),
             contentDescription = null
         )
         Column {
@@ -377,6 +408,7 @@ fun SongOptionsBottomSheetContentPreview() {
         onViewAlbum = {},
         onShareSong = {},
         onShowSongDetails = {},
+        onAddToPlaylist = {},
         onDismissRequest = {}
     )
 }
@@ -449,6 +481,7 @@ fun QueueSongCard(
     song: Song,
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
+    playlists: List<Playlist>,
     @DrawableRes fallbackResourceId: Int,
     onClick: () -> Unit,
     onFavorite: ( String ) -> Unit,
@@ -457,7 +490,10 @@ fun QueueSongCard(
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
-    onDragHandleClick: () -> Unit
+    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onAddSongToPlaylist: ( Playlist, Song ) -> Unit,
+    onSearchSongsMatchingQuery: (String ) -> List<Song>,
+    onDragHandleClick: () -> Unit,
 ) {
     Row (
         verticalAlignment = Alignment.CenterVertically
@@ -476,6 +512,7 @@ fun QueueSongCard(
             song = song,
             isCurrentlyPlaying = isCurrentlyPlaying,
             isFavorite = isFavorite,
+            playlists = playlists,
             fallbackResourceId = fallbackResourceId,
             onClick = onClick,
             onFavorite = onFavorite,
@@ -483,7 +520,10 @@ fun QueueSongCard(
             onAddToQueue = onAddToQueue,
             onViewArtist = onViewArtist,
             onViewAlbum = onViewAlbum,
-            onShareSong = onShareSong
+            onShareSong = onShareSong,
+            onGetSongsInPlaylist = onGetSongsInPlaylist,
+            onAddSongToPlaylist = onAddSongToPlaylist,
+            onSearchSongsMatchingQuery = onSearchSongsMatchingQuery
         )
     }
 }
@@ -496,6 +536,7 @@ fun SongCardPreview() {
         song = testSongs.first(),
         isCurrentlyPlaying = true,
         isFavorite = true,
+        playlists = emptyList(),
         fallbackResourceId = R.drawable.placeholder_light,
         onClick = {},
         onFavorite = {},
@@ -504,6 +545,9 @@ fun SongCardPreview() {
         onViewArtist = {},
         onViewAlbum = {},
         onShareSong = {},
+        onGetSongsInPlaylist = { emptyList() },
+        onAddSongToPlaylist = { _, _ -> },
+        onSearchSongsMatchingQuery = { emptyList() }
     )
 }
 
@@ -515,6 +559,7 @@ fun QueueSongCardPreview() {
         song = testSongs.first(),
         isCurrentlyPlaying = true,
         isFavorite = true,
+        playlists = emptyList(),
         fallbackResourceId = R.drawable.placeholder_light,
         onClick = {},
         onFavorite = {},
@@ -523,5 +568,9 @@ fun QueueSongCardPreview() {
         onViewArtist = {},
         onViewAlbum = {},
         onShareSong = {},
-    ) {}
+        onGetSongsInPlaylist = { emptyList() },
+        onDragHandleClick = {},
+        onAddSongToPlaylist = { _, _ -> },
+        onSearchSongsMatchingQuery = { emptyList() }
+    )
 }

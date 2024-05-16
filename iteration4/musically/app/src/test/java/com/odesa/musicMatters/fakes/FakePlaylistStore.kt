@@ -117,7 +117,7 @@ class FakePlaylistStore : PlaylistStore {
         playlists.remove( playlist )
     }
 
-    override suspend fun addSongToCustomPlaylist( songId: String, playlist: Playlist ) {
+    override suspend fun addSongIdToPlaylist(songId: String, playlist: Playlist ) {
         customPlaylists.find { it.id == playlist.id } ?. let {
             val currentSongIds = it.songIds.toMutableList()
             currentSongIds.add( songId )

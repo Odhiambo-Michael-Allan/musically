@@ -111,8 +111,10 @@ class PlaylistRepositoryImpl( private val playlistStore: PlaylistStore ) : Playl
     override suspend fun addSongIdToPlaylist( songId: String, playlistId: String ) {
         withContext( Dispatchers.IO ) {
             _playlists.value.find { it.id == playlistId }?.let {
-                playlistStore.addSongToCustomPlaylist( songId, it )
+                playlistStore.addSongIdToPlaylist( songId, it )
                 _playlists.value = playlistStore.fetchAllPlaylists()
+                if ( playlistId == _favoritesPlaylist.value.id )
+                    _favoritesPlaylist.value = playlistStore.fetchFavoritesPlaylist()
             }
         }
     }

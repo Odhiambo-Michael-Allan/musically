@@ -1,6 +1,7 @@
 package com.odesa.musicMatters.ui.tree
 
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
+import com.odesa.musicMatters.data.playlists.testPlaylists
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.fakes.FakeMusicServiceConnection
@@ -114,6 +115,15 @@ class TreeScreenViewModelTest {
         viewModel.togglePath( testPaths.first() )
         assertEquals( testPaths.size, viewModel.uiState.value.disabledTreePaths.size )
         assertEquals( testPaths.size, settingsRepository.currentlyDisabledTreePaths.value.size )
+    }
+
+    @Test
+    fun testPlaylistsAreCorrectlyUpdated() = runTest {
+        assertEquals( 1, viewModel.uiState.value.playlists.size )
+        testPlaylists.forEach {
+            playlistRepository.savePlaylist( it )
+        }
+        assertEquals( testPlaylists.size + 1, viewModel.uiState.value.playlists.size )
     }
 
     @Test

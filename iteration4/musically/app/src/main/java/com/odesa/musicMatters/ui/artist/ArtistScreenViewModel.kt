@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.Language
@@ -39,6 +40,7 @@ class ArtistScreenViewModel(
             themeMode = settingsRepository.themeMode.value,
             currentlyPlayingSongId = musicServiceConnection.nowPlaying.value.mediaId,
             favoriteSongIds = playlistRepository.favoritesPlaylist.value.songIds,
+            playlists = fetchRequiredPlaylistsFrom( playlistRepository.playlists.value )
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -48,6 +50,12 @@ class ArtistScreenViewModel(
         viewModelScope.launch { observeThemeModeChange() }
         viewModelScope.launch { observeCurrentlyPlayingSongId() }
         viewModelScope.launch { observeFavoritesPlaylist() }
+        viewModelScope.launch { observePlaylists() }
+    }
+
+    private fun fetchRequiredPlaylistsFrom( playlists: List<Playlist> ) = playlists.filter {
+        it.id != playlistRepository.mostPlayedSongsPlaylist.value.id &&
+                it.id != playlistRepository.recentlyPlayedSongsPlaylist.value.id
     }
 
     fun loadSongsBy( artistName: String ) {
@@ -104,6 +112,14 @@ class ArtistScreenViewModel(
         }
     }
 
+    private suspend fun observePlaylists() {
+        playlistRepository.playlists.collect {
+            _uiState.value = _uiState.value.copy(
+                playlists = fetchRequiredPlaylistsFrom( it )
+            )
+        }
+    }
+
     fun addToFavorites( songId: String ) {
         viewModelScope.launch {
             if ( playlistRepository.isFavorite( songId ) )
@@ -121,6 +137,12 @@ class ArtistScreenViewModel(
                 mediaItems = mediaItems,
                 shuffle = settingsRepository.shuffle.value
             )
+        }
+    }
+
+    fun addSongToPlaylist( playlist: Playlist, song: Song ) {
+        viewModelScope.launch {
+            playlistRepository.addSongIdToPlaylist( song.id, playlist.id )
         }
     }
 
@@ -161,5 +183,6 @@ data class ArtistScreenUiState(
     val language: Language,
     val themeMode: ThemeMode,
     val currentlyPlayingSongId: String,
-    val favoriteSongIds: List<String,>
+    val favoriteSongIds: List<String>,
+    val playlists: List<Playlist>,
 )

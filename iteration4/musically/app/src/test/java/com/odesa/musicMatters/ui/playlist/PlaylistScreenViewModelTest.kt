@@ -2,6 +2,7 @@ package com.odesa.musicMatters.ui.playlist
 
 import com.odesa.musicMatters.MainCoroutineRule
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
+import com.odesa.musicMatters.data.playlists.testPlaylists
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.fakes.FakeMusicServiceConnection
 import com.odesa.musicMatters.fakes.FakePlaylistRepository
@@ -28,14 +29,14 @@ class PlaylistScreenViewModelTest {
     private lateinit var musicServiceConnection: FakeMusicServiceConnection
     private lateinit var settingsRepository: SettingsRepository
     private lateinit var playlistRepository: PlaylistRepository
-    private lateinit var playlistScreenViewModel: PlaylistScreenViewModel
+    private lateinit var viewModel: PlaylistScreenViewModel
 
     @Before
     fun setup() {
         musicServiceConnection = FakeMusicServiceConnection()
         settingsRepository = FakeSettingsRepository()
         playlistRepository = FakePlaylistRepository()
-        playlistScreenViewModel = PlaylistScreenViewModel(
+        viewModel = PlaylistScreenViewModel(
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
             playlistRepository = playlistRepository
@@ -47,28 +48,37 @@ class PlaylistScreenViewModelTest {
         trackList.subList( 0, 3 ).forEach {
             playlistRepository.addToFavorites( it.mediaId )
         }
-        playlistScreenViewModel.loadSongsInPlaylistWithId( playlistRepository.favoritesPlaylist.value.id )
+        viewModel.loadSongsInPlaylistWithId( playlistRepository.favoritesPlaylist.value.id )
         musicServiceConnection.runWhenInitialized {
-            assertEquals( 3, playlistScreenViewModel.uiState.value.songsInPlaylist.size )
-            assertFalse( playlistScreenViewModel.uiState.value.isLoadingSongsInPlaylist )
+            assertEquals( 3, viewModel.uiState.value.songsInPlaylist.size )
+            assertFalse( viewModel.uiState.value.isLoadingSongsInPlaylist )
         }
         musicServiceConnection.isInitialized = true
     }
 
     @Test
     fun testNowPlayingMediaItemIsCorrectlyUpdated() {
-        assertEquals( "", playlistScreenViewModel.uiState.value.currentlyPlayingSongId )
+        assertEquals( "", viewModel.uiState.value.currentlyPlayingSongId )
         musicServiceConnection.setNowPlaying( testMediaItems.first() )
-        assertEquals( id1, playlistScreenViewModel.uiState.value.currentlyPlayingSongId )
+        assertEquals( id1, viewModel.uiState.value.currentlyPlayingSongId )
     }
 
     @Test
     fun testFavoriteSongsChange() = runTest {
-        assertEquals( 0, playlistScreenViewModel.uiState.value.favoriteSongIds.size )
+        assertEquals( 0, viewModel.uiState.value.favoriteSongIds.size )
         testSongs.forEach {
             playlistRepository.addToFavorites( it.id )
         }
-        assertEquals( testSongs.size, playlistScreenViewModel.uiState.value.favoriteSongIds.size )
+        assertEquals( testSongs.size, viewModel.uiState.value.favoriteSongIds.size )
+    }
+
+    @Test
+    fun testPlaylistsAreCorrectlyUpdated() = runTest {
+        assertEquals( 1, viewModel.uiState.value.playlists.size )
+        testPlaylists.forEach {
+            playlistRepository.savePlaylist( it )
+        }
+        assertEquals( testPlaylists.size + 1, viewModel.uiState.value.playlists.size )
     }
 
 }

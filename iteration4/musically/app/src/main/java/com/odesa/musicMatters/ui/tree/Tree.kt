@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.odesa.musicMatters.R
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.TopAppBar
@@ -25,6 +26,9 @@ fun TreeScreen(
         uiState = uiState,
         togglePath = { viewModel.togglePath( it ) },
         onPlaySong = { viewModel.playMedia( it.mediaItem ) },
+        onAddSongToPlaylist = { playlist, song ->
+            viewModel.saveSongToPlaylist( playlist, song )
+        },
         onSettingsClicked = onSettingsClicked
     )
 }
@@ -34,6 +38,7 @@ fun TreeScreenContent(
     uiState: TreeScreenUiState,
     togglePath: ( String ) -> Unit,
     onPlaySong: ( Song ) -> Unit,
+    onAddSongToPlaylist: ( Playlist, Song ) -> Unit,
     onSettingsClicked: () -> Unit
 ) {
 
@@ -56,7 +61,8 @@ fun TreeScreenContent(
                 uiState = uiState,
                 togglePath = togglePath,
                 onPlaySong = onPlaySong,
-                fallbackResourceId = fallbackResourceId
+                fallbackResourceId = fallbackResourceId,
+                onAddSongToPlaylist = onAddSongToPlaylist,
             )
         }
     }
@@ -69,6 +75,7 @@ fun TreeScreenContentPreview() {
         uiState = testTreeScreenUiState,
         togglePath = {},
         onPlaySong = {},
-        onSettingsClicked = {}
+        onSettingsClicked = {},
+        onAddSongToPlaylist = { _, _ -> }
     )
 }

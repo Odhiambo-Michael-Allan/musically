@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.media3.common.MediaItem
 import com.odesa.musicMatters.R
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.preferences.SortSongsBy
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.services.i18n.English
@@ -29,9 +30,10 @@ fun SongList(
     sortSongsBy: SortSongsBy,
     language: Language,
     songs: List<Song>,
+    playlists: List<Playlist>,
     @DrawableRes fallbackResourceId: Int,
     onShufflePlay: () -> Unit,
-    onSortTypeChange: (SortSongsBy) -> Unit,
+    onSortTypeChange: ( SortSongsBy ) -> Unit,
     onSortReverseChange: ( Boolean ) -> Unit,
     currentlyPlayingSongId: String,
     playSong: ( Song ) -> Unit,
@@ -42,6 +44,9 @@ fun SongList(
     onAddToQueue: ( MediaItem ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
+    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onAddSongToPlaylist: ( Playlist, Song ) -> Unit,
+    onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     leadingContent: ( LazyListScope.() -> Unit )? = null
 ) {
 
@@ -87,6 +92,7 @@ fun SongList(
                             song = song,
                             isCurrentlyPlaying = currentlyPlayingSongId == song.id,
                             isFavorite = isFavorite( songs[ index ].id ),
+                            playlists = playlists,
                             fallbackResourceId = fallbackResourceId,
                             onClick = { playSong( song ) },
                             onFavorite = { onFavorite( songs[ index ].id ) },
@@ -94,7 +100,10 @@ fun SongList(
                             onAddToQueue = onAddToQueue,
                             onViewArtist = onViewArtist,
                             onViewAlbum = onViewAlbum,
-                            onShareSong = onShareSong
+                            onShareSong = onShareSong,
+                            onGetSongsInPlaylist = onGetSongsInPlaylist,
+                            onAddSongToPlaylist = onAddSongToPlaylist,
+                            onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                         )
                     }
                 }
@@ -127,6 +136,7 @@ fun SongListPreview() {
         sortSongsBy = SortSongsBy.TITLE,
         language = English,
         songs = testSongs,
+        playlists = emptyList(),
         fallbackResourceId = R.drawable.placeholder_light,
         onShufflePlay = {},
         onSortTypeChange = {},
@@ -140,12 +150,16 @@ fun SongListPreview() {
         onShareSong = {},
         onPlayNext = {},
         onAddToQueue = {},
+        onGetSongsInPlaylist = { emptyList() },
+        onAddSongToPlaylist = { _, _ -> },
+        onSearchSongsMatchingQuery = { emptyList() }
     )
 }
 
 @Composable
 fun QueueSongList(
     uiState: QueueScreenUiState,
+    playlists: List<Playlist>,
     @DrawableRes fallbackResourceId: Int,
     isFavorite: ( String ) -> Boolean,
     onFavorite: ( String ) -> Unit,
@@ -155,6 +169,9 @@ fun QueueSongList(
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     playSong: ( Song ) -> Unit,
+    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onAddSongToPlaylist: ( Playlist, Song ) -> Unit,
+    onSearchSongsMatchingQuery: ( String ) -> List<Song>,
 ) {
     when {
         uiState.songsInQueue.isEmpty() -> IconTextBody(
@@ -176,12 +193,13 @@ fun QueueSongList(
                 state = lazyListState,
                 modifier = Modifier.drawScrollBar( lazyListState )
             ) {
-                itemsIndexed( uiState.songsInQueue ) { index, song ->
+                itemsIndexed( uiState.songsInQueue ) { _, song ->
                     QueueSongCard(
                         language = uiState.language,
                         song = song,
                         isCurrentlyPlaying = uiState.currentlyPlayingSongId == song.id,
                         isFavorite = isFavorite( song.id ),
+                        playlists = playlists,
                         fallbackResourceId = fallbackResourceId,
                         onClick = { playSong( song ) },
                         onFavorite = onFavorite,
@@ -190,7 +208,10 @@ fun QueueSongList(
                         onViewArtist = onViewArtist,
                         onViewAlbum = onViewAlbum,
                         onShareSong = onShareSong,
+                        onGetSongsInPlaylist = onGetSongsInPlaylist,
+                        onAddSongToPlaylist = onAddSongToPlaylist,
                         onDragHandleClick = {},
+                        onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                     )
                 }
             }
@@ -212,6 +233,10 @@ fun QueueSongListPreview() {
         onAddToQueue = {},
         onViewAlbum = {},
         onViewArtist = {},
+        playlists = emptyList(),
+        onGetSongsInPlaylist = { emptyList() },
+        onAddSongToPlaylist = { _, _ -> },
+        onSearchSongsMatchingQuery = { emptyList() }
     )
 }
 
@@ -222,6 +247,7 @@ val emptyQueueScreenUiState = QueueScreenUiState(
     currentlyPlayingSongIndex = 0,
     themeMode = SettingsDefaults.themeMode,
     favoriteSongIds = emptyList(),
-    isLoading = false
+    isLoading = false,
+    playlists = emptyList(),
 )
 

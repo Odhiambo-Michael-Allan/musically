@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.data.settings.SettingsRepository
@@ -29,10 +30,11 @@ class GenreScreenViewModel(
         GenreScreenUistate(
             language = settingsRepository.language.value,
             themeMode = settingsRepository.themeMode.value,
-            songs = emptyList(),
+            songsInGenre = emptyList(),
             currentlyPlayingSongId = musicServiceConnection.nowPlaying.value.mediaId,
             favoriteSongIds = emptyList(),
-            isLoading = true
+            isLoading = true,
+            playlists = fetchRequiredPlaylistsFrom( playlistRepository.playlists.value )
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -42,6 +44,12 @@ class GenreScreenViewModel(
         viewModelScope.launch { observeThemeModeChange() }
         viewModelScope.launch { observeCurrentlyPlayingSong() }
         viewModelScope.launch { observeFavoriteSongIds() }
+        viewModelScope.launch { observePlaylists() }
+    }
+
+    private fun fetchRequiredPlaylistsFrom( playlists: List<Playlist> ) = playlists.filter {
+        it.id != playlistRepository.recentlyPlayedSongsPlaylist.value.id &&
+                it.id != playlistRepository.mostPlayedSongsPlaylist.value.id
     }
 
     private suspend fun observeLanguageChange() {
@@ -76,6 +84,14 @@ class GenreScreenViewModel(
         }
     }
 
+    private suspend fun observePlaylists() {
+        playlistRepository.playlists.collect {
+            _uiState.value = _uiState.value.copy(
+                playlists = fetchRequiredPlaylistsFrom( it )
+            )
+        }
+    }
+
     fun addToFavorites( songId: String ) {
         viewModelScope.launch {
             if ( playlistRepository.isFavorite( songId ) )
@@ -92,10 +108,16 @@ class GenreScreenViewModel(
                     it.toSong( artistTagSeparators )
                 }
                 _uiState.value = _uiState.value.copy(
-                    songs = songs.filter { it.genre?.lowercase() == genre.lowercase() },
+                    songsInGenre = songs.filter { it.genre?.lowercase() == genre.lowercase() },
                     isLoading = false
                 )
             }
+        }
+    }
+
+    fun addSongToPlaylist( playlist: Playlist, song: Song ) {
+        viewModelScope.launch {
+            playlistRepository.addSongIdToPlaylist( song.id, playlist.id )
         }
     }
 
@@ -105,7 +127,7 @@ class GenreScreenViewModel(
         viewModelScope.launch {
             musicServiceConnection.playMediaItem(
                 mediaItem = mediaItem,
-                mediaItems = uiState.value.songs.map { it.mediaItem },
+                mediaItems = uiState.value.songsInGenre.map { it.mediaItem },
                 shuffle = settingsRepository.shuffle.value
             )
         }
@@ -129,17 +151,19 @@ class GenreScreenViewModelFactory(
 data class GenreScreenUistate(
     val language: Language,
     val themeMode: ThemeMode,
-    val songs: List<Song>,
+    val songsInGenre: List<Song>,
     val currentlyPlayingSongId: String,
     val favoriteSongIds: List<String>,
-    val isLoading: Boolean
+    val isLoading: Boolean,
+    val playlists: List<Playlist>,
 )
 
 val testGenreScreenUiState = GenreScreenUistate(
     language = SettingsDefaults.language,
     themeMode = SettingsDefaults.themeMode,
-    songs = testSongs,
+    songsInGenre = testSongs,
     currentlyPlayingSongId = testSongs.first().id,
     favoriteSongIds = emptyList(),
-    isLoading = false
+    isLoading = false,
+    playlists = emptyList(),
 )

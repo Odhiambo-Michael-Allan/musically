@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="84cfbd63-bd62-4aaa-8475-66758b62f4bb" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/.idea/deploymentTargetSelector.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/debug/music-matters.apk" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/data/playlists/PlaylistStore.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/data/playlists/PlaylistStore.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/data/playlists/impl/PlaylistRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/data/playlists/impl/PlaylistRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/data/playlists/impl/PlaylistStoreImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/data/playlists/impl/PlaylistStoreImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/services/i18n/Belarusian.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/services/i18n/Belarusian.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/services/i18n/Chinese.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/services/i18n/Chinese.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/services/i18n/English.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/services/i18n/English.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/services/i18n/French.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/services/i18n/French.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/services/i18n/German.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/services/i18n/German.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/services/i18n/Spanish.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/services/i18n/Spanish.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/album/Album.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/album/Album.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/album/AlbumScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/album/AlbumScreenViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/artist/Artist.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/artist/Artist.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/artist/ArtistScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/artist/ArtistScreenViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/components/AddToPlaylistDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/components/AddToPlaylistDialog.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/components/NewPlaylistDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/components/NewPlaylistDialog.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/components/RenamePlaylistDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/components/RenamePlaylistDialog.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/components/SongCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/components/SongCard.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/components/SongDetailsDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/components/SongDetailsDialog.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/components/SongList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/components/SongList.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/components/TreeSongList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/components/TreeSongList.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/genre/Genre.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/genre/Genre.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/genre/GenreScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/genre/GenreScreenViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/navigation/MusicallyNavHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/navigation/MusicallyNavHost.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/playlist/Playlist.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/playlist/Playlist.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/playlist/PlaylistScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/playlist/PlaylistScreenViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/queue/QueueList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/queue/QueueList.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/queue/QueueScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/queue/QueueScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/queue/QueueScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/queue/QueueScreenViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/songs/Songs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/songs/Songs.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/songs/SongsScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/songs/SongsScreenViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/tree/Tree.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/tree/Tree.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/tree/TreeScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/main/java/com/odesa/musicMatters/ui/tree/TreeScreenViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/data/playlists/impl/PlaylistStoreImplTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/data/playlists/impl/PlaylistStoreImplTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/fakes/FakePlaylistStore.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/fakes/FakePlaylistStore.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/ui/album/AlbumScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/ui/album/AlbumScreenViewModelTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/ui/artist/ArtistScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/ui/artist/ArtistScreenViewModelTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/ui/genre/GenreScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/ui/genre/GenreScreenViewModelTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/ui/playlist/PlaylistScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/ui/playlist/PlaylistScreenViewModelTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/ui/queue/QueueScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/ui/queue/QueueScreenViewModelTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/ui/songs/SongsScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/ui/songs/SongsScreenViewModelTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/ui/tree/TreeScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../iteration4/musically/app/src/test/java/com/odesa/musicMatters/ui/tree/TreeScreenViewModelTest.kt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=RF8RA0P5LRF)]" />
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/app">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Kotlin Interface" />
+        <option value="Kotlin Data Class" />
+        <option value="Kotlin Object" />
+        <option value="JUnit4 Test Class" />
+        <option value="Kotlin Class" />
+      </list>
+    </option>
+  </component>
+  <component name="GenerateSignedApkSettings">
+    <option name="KEY_STORE_PATH" value="$PROJECT_DIR$/../../../../../../key.jks" />
+    <option name="KEY_ALIAS" value="key_alias" />
+    <option name="REMEMBER_PASSWORDS" value="true" />
+    <option name="BUILD_TARGET_KEY" value="apk" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="KotlinCodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2aWqhKx9kegiF1mgShfcTe9X8WC" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Android App.app.executor": "Run",
+    "Android Instrumented Tests.Tests in 'com.odesa.musicMatters'.executor": "Run",
+    "ApkExportedModule": "MusicMatters.app",
+    "Compose Preview.ManagePlaylistSongsDialogPreview.executor": "Run",
+    "Compose Preview.TreeSongListPreview.executor": "Run",
+    "ExportApk.ApkPathForMusicMatters.app": "/home/michael/Desktop/projects/Android/Compose/music-matters/iteration4/musically/app",
+    "ExportApk.ApkPathForMusically.app": "/home/michael/Desktop/projects/Android/Compose/musically/iteration1/musically/app",
+    "Gradle.AlbumScreenViewModelTest.executor": "Run",
+    "Gradle.AlbumScreenViewModelTest.testLoadSongsInAlbum.executor": "Run",
+    "Gradle.ArtistScreenViewModelTest.executor": "Run",
+    "Gradle.ArtistsViewModelTest.executor": "Run",
+    "Gradle.BrowseTreeTest.testAlbumsAreLoadedCorrectly.executor": "Run",
+    "Gradle.ForYouScreenViewModelTest.testMostPlayedSongsAreCorrectlyUpdated.executor": "Run",
+    "Gradle.GenreScreenViewModelTest.executor": "Run",
+    "Gradle.NowPlayingViewModelTest.executor": "Run",
+    "Gradle.PlaylistScreenViewModelTest.executor": "Run",
+    "Gradle.PlaylistScreenViewModelTest.testLoadSongsInPlaylistWithGivenId.executor": "Run",
+    "Gradle.PlaylistStoreImplTest.executor": "Run",
+    "Gradle.PlaylistStoreImplTest.testAddToFavoriteSongsPlaylist.executor": "Run",
+    "Gradle.PlaylistStoreImplTest.testFetchFavoriteSongsPlaylist.executor": "Run",
+    "Gradle.PlaylistStoreImplTest.testWhenNoPlaylistsHadInitiallyBeenSavedFavoritesRecentsAndMostPlayedPlaylistsAreReturnedByDefault.executor": "Run",
+    "Gradle.PlaylistsViewModelTest.executor": "Run",
+    "Gradle.PlaylistsViewModelTest.testPlaylistsAreCorrectlyLoaded.executor": "Run",
+    "Gradle.QueueScreenViewModelTest.executor": "Run",
+    "Gradle.QueueScreenViewModelTest.testSaveCurrentPlaylist.executor": "Run",
+    "Gradle.SettingsRepositoryImplTest.executor": "Run",
+    "Gradle.SongsScreenViewModelTest.executor": "Run",
+    "Gradle.SongsScreenViewModelTest.testPlaylistsAreCorrectlyUpdated.executor": "Run",
+    "Gradle.Tests in 'com.odesa.musicMatters'.executor": "Run",
+    "Gradle.Tests in 'com.odesa.musicMatters.services.media.library'.executor": "Run",
+    "Gradle.TreeScreenViewModelTest.executor": "Run",
+    "Gradle.TreeScreenViewModelTest.testDisabledTreePathsChange.executor": "Run",
+    "Gradle.TreeScreenViewModelTest.testPath.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit4",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_directory_selection": "/home/michael/Desktop/projects/Android/Compose/music-matters/iteration4/musically/app/src/test/java/com/odesa/musicMatters/ui",
+    "last_opened_file_path": "/home/michael/Desktop/projects/Android/Compose/music-matters/iteration5/music-matters",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.17",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
+  },
+  "keyToStringList": {
+    "ExportApk.BuildVariants": [
+      "debug"
+    ],
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "TOML"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
+      <recent name="$PROJECT_DIR$/gradle" />
+      <recent name="$PROJECT_DIR$/app/src/main/res/raw" />
+      <recent name="$PROJECT_DIR$/app/src/main/res/font" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/java/com/odesa/musicMatters/data/playlists/impl" />
+      <recent name="$PROJECT_DIR$/app/src/main/java/com/odesa/musically/ui/nowPlaying" />
+      <recent name="$PROJECT_DIR$/app/src/test/java/com/odesa/musically/fakes" />
+      <recent name="$PROJECT_DIR$/app/src/main/java/com/odesa/musically/ui/navigation" />
+      <recent name="$PROJECT_DIR$/app/src/main/java/com/odesa/musically/data/storage/preferences" />
+    </key>
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="com.odesa.musically.fakes" />
+      <recent name="com.odesa.musically.services.media.connection" />
+      <recent name="com.odesa.musically.services.media.browser" />
+      <recent name="com.odesa.musically.data.songs" />
+      <recent name="com.odesa.musically.utils" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.odesa.musicMatters.ui.artist" />
+      <recent name="com.odesa.musicMatters.ui.artists" />
+      <recent name="com.odesa.musicMatters.ui.tree" />
+      <recent name="com.odesa.musicMatters.ui.playlist" />
+      <recent name="com.odesa.musicMatters.ui.playlists" />
+    </key>
+    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="com.odesa.musicMatters.data" />
+      <recent name="com.odesa.musically.data" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.Tests in 'com.odesa.musicMatters'">
+    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App">
+      <module name="MusicMatters.app.main" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
+      <option name="CLEAR_APP_STORAGE" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Hybrid>
+      <Java>
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Java>
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ManagePlaylistSongsDialogPreview" type="ComposePreviewRunConfiguration" singleton="false" temporary="true">
+      <module name="MusicMatters.app.main" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
+      <option name="CLEAR_APP_STORAGE" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="--es composable com.odesa.musicMatters.ui.components.ManagePlaylistSongsDialogKt.ManagePlaylistSongsDialogPreview" />
+      <option name="MODE" value="specific_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Hybrid>
+      <Java>
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Java>
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="androidx.compose.ui.tooling.PreviewActivity" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="true" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <compose-preview-run-configuration composable-fqn="com.odesa.musicMatters.ui.components.ManagePlaylistSongsDialogKt.ManagePlaylistSongsDialogPreview" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PlaylistStoreImplTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":app:testDebugUnitTest" />
+            <option value="--tests" />
+            <option value="&quot;com.odesa.musicMatters.data.playlists.impl.PlaylistStoreImplTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="PlaylistStoreImplTest.testAddToFavoriteSongsPlaylist" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":app:testDebugUnitTest" />
+            <option value="--tests" />
+            <option value="&quot;com.odesa.musicMatters.data.playlists.impl.PlaylistStoreImplTest.testAddToFavoriteSongsPlaylist&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="PlaylistStoreImplTest.testWhenNoPlaylistsHadInitiallyBeenSavedFavoritesRecentsAndMostPlayedPlaylistsAreReturnedByDefault" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":app:testDebugUnitTest" />
+            <option value="--tests" />
+            <option value="&quot;com.odesa.musicMatters.data.playlists.impl.PlaylistStoreImplTest.testWhenNoPlaylistsHadInitiallyBeenSavedFavoritesRecentsAndMostPlayedPlaylistsAreReturnedByDefault&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="Tests in 'com.odesa.musicMatters'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":app:testDebugUnitTest" />
+            <option value="--tests" />
+            <option value="&quot;com.odesa.musicMatters.*&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.Tests in 'com.odesa.musicMatters'" />
+        <item itemvalue="Compose Preview.ManagePlaylistSongsDialogPreview" />
+        <item itemvalue="Gradle.PlaylistStoreImplTest" />
+        <item itemvalue="Gradle.PlaylistStoreImplTest.testAddToFavoriteSongsPlaylist" />
+        <item itemvalue="Gradle.PlaylistStoreImplTest.testWhenNoPlaylistsHadInitiallyBeenSavedFavoritesRecentsAndMostPlayedPlaylistsAreReturnedByDefault" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="84cfbd63-bd62-4aaa-8475-66758b62f4bb" name="Changes" comment="" />
+      <created>1704444800704</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1704444800704</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="kotlin-function">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/odesa/musicMatters/utils/FileExplorer.kt</url>
+          <line>4</line>
+          <properties class="com.odesa.musicMatters.utils.FileExplorer.Path" method="&lt;init&gt;">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.media3.common.MediaItem
 import com.odesa.musicMatters.R
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.NewPlaylistDialog
@@ -25,7 +26,7 @@ import com.odesa.musicMatters.ui.theme.isLight
 
 @Composable
 fun QueueScreen(
-    queueScreenViewModel: QueueScreenViewModel,
+    viewModel: QueueScreenViewModel,
     onPlayNext: (MediaItem ) -> Unit,
     onViewAlbum: (String ) -> Unit,
     onViewArtist: (String ) -> Unit,
@@ -33,25 +34,28 @@ fun QueueScreen(
     onBackArrowClick: () -> Unit
 ) {
 
-    val uiState by queueScreenViewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
     QueueScreenContent(
         uiState = uiState,
         onBackArrowClick = onBackArrowClick,
-        onSaveClick = { queueScreenViewModel.saveCurrentPlaylist( it ) },
-        onClearClick = { queueScreenViewModel.clearQueue() },
-        onFavorite = { queueScreenViewModel.addToFavorites( it ) },
+        onSaveClick = { viewModel.saveCurrentPlaylist( it ) },
+        onClearClick = { viewModel.clearQueue() },
+        onFavorite = { viewModel.addToFavorites( it ) },
         playSong = {
-            queueScreenViewModel.playMedia(
+            viewModel.playMedia(
                 it.mediaItem,
             )
         },
-        onMoveSong = { from, to -> queueScreenViewModel.moveSong( from, to ) },
+        onMoveSong = { from, to -> viewModel.moveSong( from, to ) },
         onPlayNext = onPlayNext,
         onViewAlbum = onViewAlbum,
         onViewArtist = onViewArtist,
         onAddToQueue = onAddToQueue,
+        onAddSongToPlaylist = { playlist, song ->
+            viewModel.addSongToPlaylist( playlist, song )
+        },
         onShareSong = {
             try {
                 val intent = createShareSongIntent( context, it )
@@ -82,6 +86,7 @@ fun QueueScreenContent(
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onAddToQueue: ( MediaItem ) -> Unit,
+    onAddSongToPlaylist: ( Playlist, Song ) -> Unit,
 ) {
 
     val fallbackResourceId =
@@ -116,6 +121,7 @@ fun QueueScreenContent(
                 onShareSong = onShareSong,
                 onViewAlbum = onViewAlbum,
                 onViewArtist = onViewArtist,
+                onAddSongToPlaylist = onAddSongToPlaylist,
             )
         }
 
@@ -147,7 +153,8 @@ fun QueueScreenContentPreview() {
         onAddToQueue = {},
         onViewAlbum = {},
         onViewArtist = {},
-        onShareSong = {}
+        onShareSong = {},
+        onAddSongToPlaylist = { _, _, -> }
     )
 }
 

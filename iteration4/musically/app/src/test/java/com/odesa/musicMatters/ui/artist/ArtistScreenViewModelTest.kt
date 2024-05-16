@@ -1,6 +1,7 @@
 package com.odesa.musicMatters.ui.artist
 
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
+import com.odesa.musicMatters.data.playlists.testPlaylists
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.fakes.FakeMusicServiceConnection
@@ -34,14 +35,14 @@ class ArtistScreenViewModelTest {
     private lateinit var musicServiceConnection: FakeMusicServiceConnection
     private lateinit var settingsRepository: SettingsRepository
     private lateinit var playlistRepository: PlaylistRepository
-    private lateinit var artistScreenViewModel: ArtistScreenViewModel
+    private lateinit var viewModel: ArtistScreenViewModel
 
     @Before
     fun setup() {
         musicServiceConnection = FakeMusicServiceConnection()
         settingsRepository = FakeSettingsRepository()
         playlistRepository = FakePlaylistRepository()
-        artistScreenViewModel = ArtistScreenViewModel(
+        viewModel = ArtistScreenViewModel(
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
             playlistRepository = playlistRepository
@@ -50,23 +51,23 @@ class ArtistScreenViewModelTest {
 
     @Test
     fun testLoadSongsByArtist() {
-        assertNull( artistScreenViewModel.uiState.value.artist )
-        assertEquals( 0, artistScreenViewModel.uiState.value.songsByArtist.size )
-        assertTrue( artistScreenViewModel.uiState.value.isLoadingSongsByArtist )
-        artistScreenViewModel.loadSongsBy( "Travis Scott" )
+        assertNull( viewModel.uiState.value.artist )
+        assertEquals( 0, viewModel.uiState.value.songsByArtist.size )
+        assertTrue( viewModel.uiState.value.isLoadingSongsByArtist )
+        viewModel.loadSongsBy( "Travis Scott" )
         musicServiceConnection.runWhenInitialized {
-            assertFalse( artistScreenViewModel.uiState.value.isLoadingSongsByArtist )
-            assertNotNull( artistScreenViewModel.uiState.value.artist )
-            assertEquals( "Travis Scott", artistScreenViewModel.uiState.value.artist?.name )
-            assertEquals( 2, artistScreenViewModel.uiState.value.songsByArtist.size )
-            assertEquals( 1, artistScreenViewModel.uiState.value.albumsByArtist.size )
+            assertFalse( viewModel.uiState.value.isLoadingSongsByArtist )
+            assertNotNull( viewModel.uiState.value.artist )
+            assertEquals( "Travis Scott", viewModel.uiState.value.artist?.name )
+            assertEquals( 2, viewModel.uiState.value.songsByArtist.size )
+            assertEquals( 1, viewModel.uiState.value.albumsByArtist.size )
         }
         musicServiceConnection.isInitialized = true
     }
 
     @Test
     fun testLanguageChange() {
-        assertEquals( "Settings", artistScreenViewModel.uiState.value.language.settings )
+        assertEquals( "Settings", viewModel.uiState.value.language.settings )
         changeLanguageTo( Belarusian, "Налады" )
         changeLanguageTo( Chinese, "设置" )
         changeLanguageTo( English, "Settings" )
@@ -77,35 +78,44 @@ class ArtistScreenViewModelTest {
 
     private fun changeLanguageTo(language: Language, testString: String ) = runTest {
         settingsRepository.setLanguage( language.locale )
-        val currentLanguage = artistScreenViewModel.uiState.value.language
+        val currentLanguage = viewModel.uiState.value.language
         assertEquals( testString, currentLanguage.settings )
     }
 
     @Test
     fun testThemeModeChange() = runTest {
-        assertEquals( SettingsDefaults.themeMode, artistScreenViewModel.uiState.value.themeMode )
+        assertEquals( SettingsDefaults.themeMode, viewModel.uiState.value.themeMode )
         ThemeMode.entries.forEach {
             settingsRepository.setThemeMode( it )
-            assertEquals( it, artistScreenViewModel.uiState.value.themeMode )
+            assertEquals( it, viewModel.uiState.value.themeMode )
         }
     }
 
     @Test
     fun testNowPlayingMediaItemIsCorrectlyUpdated() {
-        assertEquals( "", artistScreenViewModel.uiState.value.currentlyPlayingSongId )
+        assertEquals( "", viewModel.uiState.value.currentlyPlayingSongId )
         musicServiceConnection.setNowPlaying( testMediaItems.first() )
-        assertEquals( id1, artistScreenViewModel.uiState.value.currentlyPlayingSongId )
+        assertEquals( id1, viewModel.uiState.value.currentlyPlayingSongId )
     }
 
     @Test
     fun testFavoriteSongsChange() = runTest {
-        assertEquals( 0, artistScreenViewModel.uiState.value.favoriteSongIds.size )
+        assertEquals( 0, viewModel.uiState.value.favoriteSongIds.size )
         testSongs.forEach {
             playlistRepository.addToFavorites( it.id )
         }
-        assertEquals( testSongs.size, artistScreenViewModel.uiState.value.favoriteSongIds.size )
-        artistScreenViewModel.addToFavorites( testSongs.first().id )
-        assertEquals( testSongs.size - 1, artistScreenViewModel.uiState.value.favoriteSongIds.size )
+        assertEquals( testSongs.size, viewModel.uiState.value.favoriteSongIds.size )
+        viewModel.addToFavorites( testSongs.first().id )
+        assertEquals( testSongs.size - 1, viewModel.uiState.value.favoriteSongIds.size )
+    }
+
+    @Test
+    fun testPlaylistsAreCorrectlyUpdated() = runTest {
+        assertEquals( 1, viewModel.uiState.value.playlists.size )
+        testPlaylists.forEach {
+            playlistRepository.savePlaylist( it )
+        }
+        assertEquals( testPlaylists.size + 1, viewModel.uiState.value.playlists.size )
     }
 
 }

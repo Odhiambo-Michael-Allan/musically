@@ -10,86 +10,78 @@ import java.io.File
 import java.util.UUID
 
 
-class PlaylistStoreImpl private constructor( playlistsFile: File, mostPlayedSongsFile: File ) : PlaylistStore {
+class PlaylistStoreImpl( playlistsFile: File, mostPlayedSongsFile: File ) : PlaylistStore {
 
     private val playlistsFileAdapter: FileAdapter = FileAdapter( playlistsFile )
     private val mostPlayedSongsFileAdapter: FileAdapter = FileAdapter( mostPlayedSongsFile )
+    private var currentPlaylistData: PlaylistData
+    private var mostPlayedSongsPlaylist: Playlist
+
+    init {
+        currentPlaylistData = fetchPlaylistData()
+        mostPlayedSongsPlaylist = loadMostPlayedSongsPlaylist()
+    }
+
 
     override fun fetchAllPlaylists(): List<Playlist> {
-        val playlistData = fetchPlaylistData()
-        val playlists = mutableListOf( playlistData.favoritesPlaylist, playlistData.recentlyPlayedSongsPlaylist )
-        playlists.addAll( playlistData.customPlaylists )
-        val mostPlayedSongsPlaylist = fetchMostPlayedSongsPlaylist()
-        playlists.add( mostPlayedSongsPlaylist )
+        val playlists = mutableListOf( currentPlaylistData.favoritesPlaylist, currentPlaylistData.recentlyPlayedSongsPlaylist, mostPlayedSongsPlaylist )
+        playlists.addAll( currentPlaylistData.customPlaylists )
         return playlists
     }
 
     private fun fetchPlaylistData() = PlaylistData.fromJSONObject( playlistsFileAdapter.read() )
 
     override fun fetchFavoritesPlaylist(): Playlist {
-        return fetchPlaylistData().favoritesPlaylist
+        return currentPlaylistData.favoritesPlaylist
     }
 
     override suspend fun addToFavorites( songId: String ) {
-        val currentPlaylistData = fetchPlaylistData()
         val favoritesPlaylist = currentPlaylistData.favoritesPlaylist
         val songIds = favoritesPlaylist.songIds.toMutableList()
+        if ( songIds.contains( songId ) ) return
         songIds.add( songId )
-        val newFavoritesPlaylist = favoritesPlaylist.copy(
-            songIds = songIds
-        )
-        val newPlaylistData = currentPlaylistData.copy(
-            favoritesPlaylist = newFavoritesPlaylist
-        )
-        playlistsFileAdapter.overwrite( newPlaylistData.toJSONObject().toString() )
+        val newFavoritesPlaylist = favoritesPlaylist.copy( songIds = songIds )
+        currentPlaylistData = currentPlaylistData.copy( favoritesPlaylist = newFavoritesPlaylist )
+        playlistsFileAdapter.overwrite( currentPlaylistData.toJSONObject().toString() )
     }
 
     override suspend fun removeFromFavorites( songId: String ) {
-        val currentPlaylistData = fetchPlaylistData()
         val favoritesPlaylist = currentPlaylistData.favoritesPlaylist
         val songIds = favoritesPlaylist.songIds.toMutableList()
         songIds.remove( songId )
-        val newFavoritesPlaylist = favoritesPlaylist.copy(
-            songIds = songIds,
-        )
-        val newPlaylistData = currentPlaylistData.copy(
-            favoritesPlaylist = newFavoritesPlaylist
-        )
-        playlistsFileAdapter.overwrite( newPlaylistData.toJSONObject().toString() )
+        val newFavoritesPlaylist = favoritesPlaylist.copy( songIds = songIds )
+        currentPlaylistData = currentPlaylistData.copy( favoritesPlaylist = newFavoritesPlaylist )
+        playlistsFileAdapter.overwrite( currentPlaylistData.toJSONObject().toString() )
     }
 
-    override fun fetchRecentlyPlayedSongsPlaylist() = fetchPlaylistData().recentlyPlayedSongsPlaylist
+    override fun fetchRecentlyPlayedSongsPlaylist() = currentPlaylistData.recentlyPlayedSongsPlaylist
 
     override suspend fun addSongIdToRecentlyPlayedSongsPlaylist( songId: String ) {
-        val currentPlaylistData = fetchPlaylistData()
         val recentSongsPlaylist = currentPlaylistData.recentlyPlayedSongsPlaylist
         val songIds = recentSongsPlaylist.songIds.toMutableList()
         songIds.remove( songId )
         songIds.add( 0, songId )
-        val newRecentSongsPlaylist = recentSongsPlaylist.copy(
-            songIds = songIds
-        )
-        val newPlaylistData = currentPlaylistData.copy(
+        val newRecentSongsPlaylist = recentSongsPlaylist.copy( songIds = songIds )
+        currentPlaylistData = currentPlaylistData.copy(
             recentlyPlayedSongsPlaylist = newRecentSongsPlaylist
         )
-        playlistsFileAdapter.overwrite( newPlaylistData.toJSONObject().toString() )
+        playlistsFileAdapter.overwrite( currentPlaylistData.toJSONObject().toString() )
     }
 
     override suspend fun removeFromRecentlyPlayedSongsPlaylist(songId: String ) {
-        val currentPlaylistData = fetchPlaylistData()
         val recentSongsPlaylist = currentPlaylistData.recentlyPlayedSongsPlaylist
         val songIds = recentSongsPlaylist.songIds.toMutableList()
         songIds.remove( songId )
-        val newRecentSongsPlaylist = recentSongsPlaylist.copy(
-            songIds = songIds
-        )
-        val newPlaylistData = currentPlaylistData.copy(
+        val newRecentSongsPlaylist = recentSongsPlaylist.copy( songIds = songIds )
+        currentPlaylistData = currentPlaylistData.copy(
             recentlyPlayedSongsPlaylist = newRecentSongsPlaylist
         )
-        playlistsFileAdapter.overwrite( newPlaylistData.toJSONObject().toString() )
+        playlistsFileAdapter.overwrite( currentPlaylistData.toJSONObject().toString() )
     }
 
-    override fun fetchMostPlayedSongsPlaylist(): Playlist {
+    override fun fetchMostPlayedSongsPlaylist() = mostPlayedSongsPlaylist
+
+    private fun loadMostPlayedSongsPlaylist(): Playlist {
         val fileContents = mostPlayedSongsFileAdapter.read()
         return if ( fileContents.isEmpty() ) createMostPlayedSongsPlaylist()
         else loadMostPlayedSongsPlaylistFrom( fileContents )
@@ -102,7 +94,6 @@ class PlaylistStoreImpl private constructor( playlistsFile: File, mostPlayedSong
     )
 
     private fun loadMostPlayedSongsPlaylistFrom( fileContents: String ): Playlist {
-        Timber.tag( PLAYLIST_STORE_TAG ).d( "LOADING MOST PLAYED SONGS PLAYLIST.." )
         val jsonObject = JSONObject( fileContents )
         val songIdToPlayCountMap = mutableMapOf<String, Int>()
         val keys = jsonObject.keys()
@@ -111,8 +102,6 @@ class PlaylistStoreImpl private constructor( playlistsFile: File, mostPlayedSong
             val value = jsonObject.getInt( key )
             songIdToPlayCountMap[ key ] = value
         }
-        val sortedMap = songIdToPlayCountMap.toList().sortedByDescending { it.second }.toMap()
-        Timber.tag( PLAYLIST_STORE_TAG ).d( "SORTED MAP OF MOST PLAYED SONGS: $sortedMap" )
         return Playlist(
             id = UUID.randomUUID().toString() + PlaylistData.MOST_PLAYED_SONGS_PLAYLIST,
             title = "Most Played Songs",
@@ -139,6 +128,9 @@ class PlaylistStoreImpl private constructor( playlistsFile: File, mostPlayedSong
         for ( entry in sortedMap )
             newJsonObject.put( entry.key, entry.value )
         mostPlayedSongsFileAdapter.overwrite( newJsonObject.toString() )
+        mostPlayedSongsPlaylist = mostPlayedSongsPlaylist.copy(
+            songIds = sortedMap.keys.toList()
+        )
     }
 
     override suspend fun removeFromMostPlayedSongsPlaylist( songId: String ) {
@@ -158,38 +150,39 @@ class PlaylistStoreImpl private constructor( playlistsFile: File, mostPlayedSong
         for ( entry in songIdToPlayCountMap )
             newJsonObject.put( entry.key, entry.value )
         mostPlayedSongsFileAdapter.overwrite( newJsonObject.toString() )
+        mostPlayedSongsPlaylist = mostPlayedSongsPlaylist.copy(
+            songIds = songIdToPlayCountMap.keys.toList()
+        )
     }
 
-    override fun fetchAllCustomPlaylists() = fetchPlaylistData().customPlaylists
+    override fun fetchAllCustomPlaylists() = currentPlaylistData.customPlaylists
 
     override suspend fun saveCustomPlaylist( playlist: Playlist ) {
-        val currentPlaylistData = fetchPlaylistData()
         val currentPlaylists = currentPlaylistData.customPlaylists.toMutableList()
         currentPlaylists.add( playlist )
-        playlistsFileAdapter.overwrite(
-            currentPlaylistData.copy(
-                customPlaylists = currentPlaylists
-            ).toJSONObject().toString()
+        currentPlaylistData = currentPlaylistData.copy(
+            customPlaylists = currentPlaylists
         )
+        playlistsFileAdapter.overwrite( currentPlaylistData.toJSONObject().toString() )
     }
 
     override suspend fun deleteCustomPlaylist( playlist: Playlist ) {
-        val currentPlaylistData = fetchPlaylistData()
-        val currentPlaylists = currentPlaylistData.customPlaylists.toMutableList()
-        currentPlaylists.removeIf {
-            it.id == playlist.id
-        }
-        playlistsFileAdapter.overwrite(
-            currentPlaylistData.copy(
-                customPlaylists = currentPlaylists
-            ).toJSONObject().toString()
-        )
+        val currentCustomPlaylists = currentPlaylistData.customPlaylists.toMutableList()
+        currentCustomPlaylists.removeIf { it.id == playlist.id }
+        currentPlaylistData = currentPlaylistData.copy( customPlaylists = currentCustomPlaylists )
+        playlistsFileAdapter.overwrite( currentPlaylistData.toJSONObject().toString() )
     }
 
-    override suspend fun addSongToCustomPlaylist( songId: String, playlist: Playlist ) {
-        val customPlaylists = fetchPlaylistData().customPlaylists
+    override suspend fun addSongIdToPlaylist( songId: String, playlist: Playlist ) {
+        if ( playlist.id == currentPlaylistData.favoritesPlaylist.id ) addToFavorites( songId )
+        else addSongIdToCustomPlaylist( songId, playlist )
+    }
+
+    private suspend fun addSongIdToCustomPlaylist( songId: String, playlist: Playlist ) {
+        val customPlaylists = currentPlaylistData.customPlaylists
         customPlaylists.find { it.id == playlist.id }?.let {
             val currentSongIdsInPlaylist = it.songIds.toMutableList()
+            if ( currentSongIdsInPlaylist.contains( songId ) ) return
             currentSongIdsInPlaylist.add( songId )
             val modifiedPlaylist = it.copy(
                 songIds = currentSongIdsInPlaylist

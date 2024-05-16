@@ -32,7 +32,8 @@ class QueueScreenViewModel(
             currentlyPlayingSongIndex = musicServiceConnection.currentlyPlayingMediaItemIndex.value,
             themeMode = settingsRepository.themeMode.value,
             favoriteSongIds = emptyList(),
-            isLoading = true
+            isLoading = true,
+            playlists = fetchRequiredPlaylistsFrom( playlistRepository.playlists.value )
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -43,6 +44,12 @@ class QueueScreenViewModel(
         viewModelScope.launch { observeCurrentlyPlayingSongIndex() }
         viewModelScope.launch { observeThemeMode() }
         viewModelScope.launch { observeFavoriteSongIds() }
+        viewModelScope.launch { observePlaylists() }
+    }
+
+    private fun fetchRequiredPlaylistsFrom(playlists: List<Playlist> ) = playlists.filter {
+        it.id != playlistRepository.recentlyPlayedSongsPlaylist.value.id &&
+                it.id != playlistRepository.mostPlayedSongsPlaylist.value.id
     }
 
     private suspend fun observeMediaItems() {
@@ -95,6 +102,14 @@ class QueueScreenViewModel(
         }
     }
 
+    private suspend fun observePlaylists() {
+        playlistRepository.playlists.collect {
+            _uiState.value = _uiState.value.copy(
+                playlists = fetchRequiredPlaylistsFrom( it )
+            )
+        }
+    }
+
     fun moveSong( from: Int, to: Int ) {
         musicServiceConnection.moveMediaItem( from, to )
     }
@@ -111,6 +126,12 @@ class QueueScreenViewModel(
         )
         viewModelScope.launch {
             playlistRepository.savePlaylist( playlist )
+        }
+    }
+
+    fun addSongToPlaylist( playlist: Playlist, song: Song ) {
+        viewModelScope.launch {
+            playlistRepository.addSongIdToPlaylist( song.id, playlist.id )
         }
     }
 
@@ -134,7 +155,8 @@ data class QueueScreenUiState(
     val language: Language,
     val themeMode: ThemeMode,
     val favoriteSongIds: List<String>,
-    val isLoading: Boolean
+    val isLoading: Boolean,
+    val playlists: List<Playlist>
 )
 
 @Suppress( "UNCHECKED_CAST" )

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.Language
@@ -32,7 +33,8 @@ class PlaylistScreenViewModel(
             language = settingsRepository.language.value,
             themeMode = settingsRepository.themeMode.value,
             currentlyPlayingSongId = musicServiceConnection.nowPlaying.value.mediaId,
-            favoriteSongIds = emptyList(),
+            favoriteSongIds = playlistRepository.favoritesPlaylist.value.songIds,
+            playlists = fetchRequiredPlaylistsFrom( playlistRepository.playlists.value )
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -41,6 +43,12 @@ class PlaylistScreenViewModel(
         viewModelScope.launch { observeCurrentlyPlayingSong() }
         viewModelScope.launch { observeFavoriteSongIds() }
         viewModelScope.launch { observePlaylists() }
+        viewModelScope.launch { observePlaylists() }
+    }
+
+    private fun fetchRequiredPlaylistsFrom( playlists: List<Playlist> ) = playlists.filter {
+        it.id != playlistRepository.mostPlayedSongsPlaylist.value.id &&
+                it.id != playlistRepository.recentlyPlayedSongsPlaylist.value.id
     }
 
     private suspend fun observeCurrentlyPlayingSong() {
@@ -62,8 +70,12 @@ class PlaylistScreenViewModel(
     private suspend fun observePlaylists() {
         playlistRepository.playlists.collect {
             currentPlaylistId?.let { loadSongsInPlaylistWithId( it ) }
+            _uiState.value = _uiState.value.copy(
+                playlists = fetchRequiredPlaylistsFrom( it )
+            )
         }
     }
+
 
     fun loadSongsInPlaylistWithId( playlistId: String ) {
         currentPlaylistId = playlistId
@@ -77,6 +89,12 @@ class PlaylistScreenViewModel(
                     isLoadingSongsInPlaylist = false
                 )
             }
+        }
+    }
+
+    fun addSongToPlaylist( playlist: Playlist, song: Song ) {
+        viewModelScope.launch {
+            playlistRepository.addSongIdToPlaylist( song.id, playlist.id )
         }
     }
 
@@ -110,6 +128,7 @@ data class PlaylistScreenUiState(
     val themeMode: ThemeMode,
     val currentlyPlayingSongId: String,
     val favoriteSongIds: List<String>,
+    val playlists: List<Playlist>,
 )
 
 @Suppress( "UNCHECKED_CAST" )

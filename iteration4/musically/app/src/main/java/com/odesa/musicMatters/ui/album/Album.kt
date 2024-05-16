@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.media3.common.MediaItem
 import coil.request.ImageRequest
 import com.odesa.musicMatters.R
+import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.preferences.SortSongsBy
 import com.odesa.musicMatters.services.i18n.English
 import com.odesa.musicMatters.services.i18n.Language
@@ -58,6 +59,9 @@ fun AlbumScreen(
         onViewArtist = onViewArtist,
         onPlayNext = onPlayNext,
         onAddToQueue = onAddToQueue,
+        onAddSongToPlaylist = { playlist, song ->
+            albumScreenViewModel.addSongToPlaylist( playlist, song )
+        },
         onShareSong = {
             try {
                 val intent = createShareSongIntent( context, it )
@@ -89,6 +93,7 @@ fun AlbumScreenContent(
     onAddToQueue: ( MediaItem ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( MediaItem ) -> Unit,
+    onAddSongToPlaylist: ( Playlist, Song ) -> Unit,
 ) {
 
     val fallbackResourceId =
@@ -116,6 +121,7 @@ fun AlbumScreenContent(
                 onSortTypeChange = onSortTypeChange,
                 onSortReverseChange = onSortReverseChange,
                 currentlyPlayingSongId = uiState.currentlyPlayingSongId,
+                playlists = uiState.playlists,
                 playSong = playSong,
                 isFavorite = { uiState.favoriteSongIds.contains( it ) },
                 onFavorite = onFavorite,
@@ -124,6 +130,10 @@ fun AlbumScreenContent(
                 onShareSong = onShareSong,
                 onPlayNext = onPlayNext,
                 onAddToQueue = onAddToQueue,
+                onGetSongsInPlaylist = { playlist ->
+                    uiState.songsInAlbum.filter { playlist.songIds.contains( it.id ) }
+                },
+                onAddSongToPlaylist = onAddSongToPlaylist,
                 leadingContent = {
                     item {
                         AlbumArtwork(
@@ -206,5 +216,6 @@ fun AlbumScreenContentPreview() {
         onShareSong = {},
         onPlayNext = {},
         onAddToQueue = {},
+        onAddSongToPlaylist = { _, _ -> }
     )
 }
