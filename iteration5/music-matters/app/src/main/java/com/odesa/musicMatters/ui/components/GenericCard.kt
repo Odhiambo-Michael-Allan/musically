@@ -34,6 +34,7 @@ import coil.request.ImageRequest
 
 @Composable
 fun GenericCard(
+    modifier: Modifier = Modifier,
     imageRequest: ImageRequest?,
     imageLabel: ( @Composable () -> Unit )? = null,
     title: @Composable () -> Unit,
@@ -42,7 +43,7 @@ fun GenericCard(
     onClick: () -> Unit,
 ) {
     Card (
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().then( modifier ),
         colors = CardDefaults.cardColors( containerColor = Color.Transparent ),
         onClick = onClick
     ) {

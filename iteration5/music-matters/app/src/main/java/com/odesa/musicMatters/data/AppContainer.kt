@@ -8,6 +8,10 @@ import com.odesa.musicMatters.data.playlists.impl.PlaylistRepositoryImpl
 import com.odesa.musicMatters.data.playlists.impl.PlaylistStoreImpl
 import com.odesa.musicMatters.data.preferences.PreferenceStore
 import com.odesa.musicMatters.data.preferences.impl.PreferenceStoreImpl
+import com.odesa.musicMatters.data.search.SearchHistoryRepository
+import com.odesa.musicMatters.data.search.SearchHistoryStore
+import com.odesa.musicMatters.data.search.impl.SearchHistoryRepositoryImpl
+import com.odesa.musicMatters.data.search.impl.SearchHistoryStoreImpl
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.data.settings.impl.SettingsRepositoryImpl
 import com.odesa.musicMatters.services.media.MusicService
@@ -23,9 +27,11 @@ import java.io.IOException
 interface AppContainer {
     val preferenceStore: PreferenceStore
     val playlistStore: PlaylistStore
+    val searchHistoryStore: SearchHistoryStore
     val settingsRepository: SettingsRepository
     val playlistRepository: PlaylistRepository
     val musicServiceConnection: MusicServiceConnection
+    val searchHistoryRepository: SearchHistoryRepository
 }
 
 /**
@@ -33,12 +39,15 @@ interface AppContainer {
  * Variables are initialized lazily and the same instance is shared across the whole
  * app
  */
-class AppContainerImpl( private val context: Context ) : AppContainer {
+class AppContainerImpl( context: Context ) : AppContainer {
 
     override val preferenceStore = PreferenceStoreImpl( context )
     override val playlistStore = PlaylistStoreImpl.getInstance(
         retrievePlaylistFileFromAppExternalCache( context ),
         retrieveMostPlayedSongsFileFromAppExternalCache( context )
+    )
+    override val searchHistoryStore = SearchHistoryStoreImpl(
+        retrieveFileFromAppExternalCache( "search-history.json", context )
     )
     override val settingsRepository = SettingsRepositoryImpl( preferenceStore )
     override val playlistRepository = PlaylistRepositoryImpl.getInstance( playlistStore )
@@ -46,6 +55,7 @@ class AppContainerImpl( private val context: Context ) : AppContainer {
         context,
         ComponentName( context, MusicService::class.java )
     )
+    override val searchHistoryRepository = SearchHistoryRepositoryImpl( searchHistoryStore )
 
     companion object {
         fun retrievePlaylistFileFromAppExternalCache( context: Context ) = retrieveFileFromAppExternalCache(

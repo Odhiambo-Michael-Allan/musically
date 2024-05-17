@@ -7,6 +7,7 @@ import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import com.odesa.musicMatters.services.media.Album
 import com.odesa.musicMatters.services.media.Artist
+import com.odesa.musicMatters.services.media.Genre
 import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.services.media.artistTagSeparators
 import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
@@ -140,7 +141,7 @@ val testMediaItems: List<MediaItem> = listOf(
     MediaItem.Builder().setMediaId( id3 ).build()
 )
 
-val genreList: List<MediaItem> = listOf(
+val genreList: List<Genre> = listOf(
     MediaItem.Builder().apply {
         setMediaId( UUID.randomUUID().toString() ).setMediaMetadata(
             MediaMetadata.Builder().apply {
@@ -162,7 +163,7 @@ val genreList: List<MediaItem> = listOf(
             }.build()
         )
     }.build()
-)
+).map { Genre( it.mediaMetadata.title.toString(), 0 ) }
 
 val trackList: List<Song> = listOf(
     MediaItem.Builder().apply {

@@ -46,11 +46,11 @@ sealed class Route( val name: String ) {
     data object Album : Route( "album" )
     data object Genres : Route( "genres" )
     data object Genre : Route( "genre" )
-    data object Folders : Route( "folders" )
     data object Playlists : Route( "playlists" )
     data object Playlist : Route( "playlist" )
     data object Tree : Route( "tree" )
     data object Queue : Route( "queue" )
+    data object Search : Route( "search" )
     data object Settings : Route( "settings" )
 }
 
@@ -226,6 +226,7 @@ object Tree : MusicMattersDestination {
     override fun getLabel( language: Language ) = language.tree
 
 }
+
 
 val SupportedDestinations = listOf(
     ForYou,

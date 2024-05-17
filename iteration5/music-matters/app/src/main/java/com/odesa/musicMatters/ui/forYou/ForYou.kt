@@ -70,6 +70,7 @@ import com.odesa.musicMatters.ui.theme.isLight
 fun ForYouScreen(
     viewModel: ForYouScreenViewModel,
     onSettingsClicked: () -> Unit,
+    onNavigateToSearch: () -> Unit,
     onSuggestedAlbumClick: ( Album ) -> Unit,
     onSuggestedArtistClick: ( Artist ) -> Unit,
 ) {
@@ -80,6 +81,7 @@ fun ForYouScreen(
         uiState = uiState,
         onShuffleAndPlay = { viewModel.shuffleAndPlay() },
         onSettingsClicked = onSettingsClicked,
+        onNavigateToSearch = onNavigateToSearch,
         onSongInRecentlyAddedSongsSelected = { viewModel.playRecentlyAddedSong( it ) },
         onSongInMostPlayedSongsSelected = { viewModel.playMostPlayedSong( it ) },
         onSongInPlayHistorySelected = { viewModel.playSongInPlayHistory( it ) },
@@ -93,6 +95,7 @@ fun ForYouScreenContent(
     uiState: ForYouScreenUiState,
     onShuffleAndPlay: () -> Unit,
     onSettingsClicked: () -> Unit,
+    onNavigateToSearch: () -> Unit,
     onSongInRecentlyAddedSongsSelected: ( MediaItem ) -> Unit,
     onSongInMostPlayedSongsSelected: ( MediaItem ) -> Unit,
     onSongInPlayHistorySelected: ( MediaItem ) -> Unit,
@@ -111,7 +114,7 @@ fun ForYouScreenContent(
     ) {
         Column {
             TopAppBar(
-                onNavigationIconClicked = { /*TODO*/ },
+                onNavigationIconClicked = onNavigateToSearch,
                 title = stringResource( id = R.string.app_name ),
                 settings = "Settings",
                 onSettingsClicked = onSettingsClicked
@@ -284,7 +287,8 @@ fun ForYouScreenContentPreview() {
         onSongInMostPlayedSongsSelected = {},
         onSongInRecentlyAddedSongsSelected = {},
         onSuggestedAlbumClick = {},
-        onSuggestedArtistClick = {}
+        onSuggestedArtistClick = {},
+        onNavigateToSearch = {}
     )
 }
 

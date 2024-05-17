@@ -34,7 +34,6 @@ fun QueueScreen(
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
-    val context = LocalContext.current
 
     QueueScreenContent(
         uiState = uiState,

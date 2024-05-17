@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.media.Genre
-import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -42,20 +41,8 @@ class GenresScreenViewModel(
 
     private suspend fun observeGenres() {
         musicServiceConnection.cachedGenres.collect {
-            val genreList = mutableListOf<Genre>()
-            musicServiceConnection.cachedGenres.value.forEach { genreMediaItem ->
-                val genreTitle = genreMediaItem.mediaMetadata.title.toString()
-                var numberOfTrackInGenre = 0
-                musicServiceConnection.cachedSongs.value.forEach { song: Song ->
-                    song.genre?.let { genre ->
-                        if ( genre.lowercase() == genreTitle.lowercase() )
-                            numberOfTrackInGenre++
-                    }
-                }
-                genreList.add( Genre( genreTitle, numberOfTrackInGenre ) )
-            }
             _uiState.value = _uiState.value.copy(
-                genres = genreList
+                genres = it
             )
         }
     }

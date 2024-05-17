@@ -49,6 +49,7 @@ import androidx.navigation.compose.composable
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
+import com.odesa.musicMatters.data.search.SearchHistoryRepository
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
@@ -83,6 +84,9 @@ import com.odesa.musicMatters.ui.playlists.PlaylistsViewModelFactory
 import com.odesa.musicMatters.ui.queue.QueueScreen
 import com.odesa.musicMatters.ui.queue.QueueScreenViewModel
 import com.odesa.musicMatters.ui.queue.QueueScreenViewModelFactory
+import com.odesa.musicMatters.ui.search.SearchScreen
+import com.odesa.musicMatters.ui.search.SearchScreenViewModel
+import com.odesa.musicMatters.ui.search.SearchScreenViewModelFactory
 import com.odesa.musicMatters.ui.settings.SettingsScreen
 import com.odesa.musicMatters.ui.settings.SettingsViewModel
 import com.odesa.musicMatters.ui.settings.SettingsViewModelFactory
@@ -100,6 +104,7 @@ fun MusicMattersNavHost(
     navController: NavHostController,
     settingsRepository: SettingsRepository,
     playlistRepository: PlaylistRepository,
+    searchHistoryRepository: SearchHistoryRepository,
     musicServiceConnection: MusicServiceConnection,
     visibleTabs: Set<HomeTab>,
     language: Language,
@@ -143,6 +148,7 @@ fun MusicMattersNavHost(
             ForYouScreen(
                 viewModel = forYouScreenViewModel,
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) },
+                onNavigateToSearch = { navController.navigate( Route.Search.name ) },
                 onSuggestedAlbumClick = { navController.navigateToAlbumScreen( it.name ) },
                 onSuggestedArtistClick = { navController.navigateToArtistScreen( it.name ) },
             )
@@ -422,7 +428,29 @@ fun MusicMattersNavHost(
                 onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
             )
         }
-
+        composable(
+            Route.Search.name,
+            enterTransition = { SlideTransition.slideUp.enterTransition() },
+            exitTransition = { FadeTransition.exitTransition() }
+        ) {
+            val searchScreenViewModel: SearchScreenViewModel = viewModel(
+                factory = SearchScreenViewModelFactory(
+                    musicServiceConnection = musicServiceConnection,
+                    settingsRepository = settingsRepository,
+                    playlistRepository = playlistRepository,
+                    searchHistoryRepository = searchHistoryRepository
+                )
+            )
+            SearchScreen(
+                viewModel = searchScreenViewModel,
+                onAlbumClick = { navController.navigateToAlbumScreen( it.name ) },
+                onArtistClick = { navController.navigateToArtistScreen( it.name ) },
+                onGenreClick = { navController.navigateToGenreScreen( it.name ) },
+                onPlaylistClick = { navController.navigateToPlaylistScreen( it.id, it.title ) }
+            ) {
+                navController.navigateUp()
+            }
+        }
         composable(
             Route.Settings.name,
             enterTransition = { SlideTransition.slideUp.enterTransition() },
@@ -565,7 +593,7 @@ fun MusicMattersNavHost(
 
 }
 
-fun displayToastWithMessage(context: Context, message: String ) = Toast.makeText(
+private fun displayToastWithMessage( context: Context, message: String ) = Toast.makeText(
     context,
     message,
     Toast.LENGTH_SHORT
@@ -602,7 +630,7 @@ private fun addToQueue(
     }
 }
 
-fun shareSong( context: Context, uri: Uri, localizedErrorMessage: String ) {
+private fun shareSong( context: Context, uri: Uri, localizedErrorMessage: String ) {
     try {
         val intent = createShareSongIntent( context, uri )
         context.startActivity( intent )
@@ -614,13 +642,13 @@ fun shareSong( context: Context, uri: Uri, localizedErrorMessage: String ) {
     }
 }
 
-fun createShareSongIntent( context: Context, uri: Uri ) = Intent( Intent.ACTION_SEND ).apply {
+private fun createShareSongIntent( context: Context, uri: Uri ) = Intent( Intent.ACTION_SEND ).apply {
     addFlags( Intent.FLAG_GRANT_READ_URI_PERMISSION )
     putExtra( Intent.EXTRA_STREAM, uri )
     type = context.contentResolver.getType( uri )
 }
 
-fun HomeTab.toDestination() = when( this ) {
+private fun HomeTab.toDestination() = when( this ) {
     HomeTab.ForYou -> ForYou
     HomeTab.Songs -> Songs
     HomeTab.Tree -> Tree

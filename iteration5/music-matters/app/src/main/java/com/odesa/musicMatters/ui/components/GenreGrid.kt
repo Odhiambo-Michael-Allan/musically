@@ -186,7 +186,7 @@ fun GenreCard(
 @Composable
 fun GenreCardPreview() {
     GenreCard(
-        genre = testGenreList.first(),
+        genre = testGenres.first(),
         position = 0,
         onClick = {}
     )
@@ -198,7 +198,7 @@ fun GenreCardPreview() {
 @Composable
 fun GenreGridPreview() {
     GenreGrid(
-        genres = testGenreList,
+        genres = testGenres,
         language = SettingsDefaults.language,
         sortType = SortGenresBy.GENRE,
         sortReverse = false,
@@ -214,7 +214,7 @@ fun SortGenresBy.label(language: Language ) = when ( this ) {
     SortGenresBy.TRACKS_COUNT -> language.trackCount
 }
 
-val testGenreList: ImmutableList<Genre> = ImmutableList.of(
+val testGenres: ImmutableList<Genre> = ImmutableList.of(
     Genre(
         name = "Hip Hop",
         numberOfTracks = 5

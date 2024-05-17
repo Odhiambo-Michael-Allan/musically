@@ -16,13 +16,16 @@ import androidx.media3.common.Player
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.odesa.musicMatters.data.FakePlaylistRepository
+import com.odesa.musicMatters.data.FakeSearchHistoryRepository
 import com.odesa.musicMatters.data.FakeSettingsRepository
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.data.search.SearchHistoryRepository
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.English
 import com.odesa.musicMatters.services.media.Album
 import com.odesa.musicMatters.services.media.Artist
+import com.odesa.musicMatters.services.media.Genre
 import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
 import com.odesa.musicMatters.services.media.connection.NOTHING_PLAYING
@@ -41,12 +44,14 @@ class MusicallyNavHostKtTest {
     private lateinit var navController: TestNavHostController
     private lateinit var settingsRepository: SettingsRepository
     private lateinit var playlistRepository: PlaylistRepository
+    private lateinit var searchHistoryRepository: SearchHistoryRepository
     private lateinit var musicServiceConnection: MusicServiceConnection
 
     @Before
     fun setup() {
         settingsRepository = FakeSettingsRepository()
         playlistRepository = FakePlaylistRepository()
+        searchHistoryRepository = FakeSearchHistoryRepository()
         musicServiceConnection = FakeMusicServiceConnection()
 
         composeTestRule.setContent {
@@ -59,7 +64,8 @@ class MusicallyNavHostKtTest {
                 visibleTabs = SettingsDefaults.homeTabs,
                 labelVisibility = SettingsDefaults.homePageBottomBarLabelVisibility,
                 language = SettingsDefaults.language,
-                playlistRepository = playlistRepository
+                playlistRepository = playlistRepository,
+                searchHistoryRepository = searchHistoryRepository,
             ) {}
         }
     }
@@ -190,7 +196,7 @@ class FakeMusicServiceConnection : MusicServiceConnection {
         get() = TODO("Not yet implemented")
 
     override val cachedSongs: StateFlow<List<Song>> = MutableStateFlow( emptyList() )
-    override val cachedGenres: StateFlow<List<MediaItem>> = MutableStateFlow( emptyList() )
+    override val cachedGenres: StateFlow<List<Genre>> = MutableStateFlow( emptyList() )
     override val cachedRecentlyAddedSongs: StateFlow<List<Song>> = MutableStateFlow( emptyList() )
     override val cachedArtists: StateFlow<List<Artist>> = MutableStateFlow( emptyList() )
     override val cachedSuggestedArtists: StateFlow<List<Artist>> = MutableStateFlow( emptyList() )

@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
+import com.odesa.musicMatters.data.search.SearchHistoryRepository
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
 import com.odesa.musicMatters.ui.components.NowPlayingBottomBar
@@ -38,6 +39,7 @@ fun MusicallyApp(
     navController: NavHostController = rememberNavController(),
     settingsRepository: SettingsRepository,
     playlistRepository: PlaylistRepository,
+    searchHistoryRepository: SearchHistoryRepository,
     musicServiceConnection: MusicServiceConnection,
     nowPlayingViewModel: NowPlayingViewModel
 ) {
@@ -46,6 +48,7 @@ fun MusicallyApp(
         settingsRepository = settingsRepository,
         playlistRepository = playlistRepository,
         musicServiceConnection = musicServiceConnection,
+        searchHistoryRepository = searchHistoryRepository,
         nowPlayingViewModel = nowPlayingViewModel
     )
 }
@@ -56,6 +59,7 @@ fun MusicallyAppContent(
     navController: NavHostController,
     settingsRepository: SettingsRepository,
     playlistRepository: PlaylistRepository,
+    searchHistoryRepository: SearchHistoryRepository,
     musicServiceConnection: MusicServiceConnection,
     nowPlayingViewModel: NowPlayingViewModel
 ) {
@@ -88,6 +92,7 @@ fun MusicallyAppContent(
             navController = navController,
             settingsRepository = settingsRepository,
             playlistRepository = playlistRepository,
+            searchHistoryRepository = searchHistoryRepository,
             musicServiceConnection = musicServiceConnection,
             visibleTabs = homeTabs,
             language = language,

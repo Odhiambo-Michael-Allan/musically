@@ -4,6 +4,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import com.odesa.musicMatters.services.media.Album
 import com.odesa.musicMatters.services.media.Artist
+import com.odesa.musicMatters.services.media.Genre
 import com.odesa.musicMatters.services.media.Song
 import kotlinx.coroutines.flow.StateFlow
 
@@ -16,7 +17,7 @@ interface MusicServiceConnection {
     val player: Player?
     val mediaItemsInQueue: StateFlow<List<MediaItem>>
     val cachedSongs: StateFlow<List<Song>>
-    val cachedGenres: StateFlow<List<MediaItem>>
+    val cachedGenres: StateFlow<List<Genre>>
     val cachedRecentlyAddedSongs: StateFlow<List<Song>>
     val cachedArtists: StateFlow<List<Artist>>
     val cachedSuggestedArtists: StateFlow<List<Artist>>

@@ -27,6 +27,7 @@ import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.MoreExecutors
 import com.odesa.musicMatters.services.media.Album
 import com.odesa.musicMatters.services.media.Artist
+import com.odesa.musicMatters.services.media.Genre
 import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.services.media.artistTagSeparators
 import com.odesa.musicMatters.services.media.extensions.toAlbum
@@ -110,7 +111,7 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
     private val _cachedSongs = MutableStateFlow( emptyList<Song>() )
     override val cachedSongs = _cachedSongs.asStateFlow()
 
-    private val _cachedGenres = MutableStateFlow( emptyList<MediaItem>() )
+    private val _cachedGenres = MutableStateFlow( emptyList<Genre>() )
     override val cachedGenres = _cachedGenres.asStateFlow()
 
     private val _cachedRecentSongs = MutableStateFlow( emptyList<Song>() )
@@ -128,14 +129,20 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
     private val _cachedSuggestedAlbums = MutableStateFlow( emptyList<Album>() )
     override val cachedSuggestedAlbums = _cachedSuggestedAlbums.asStateFlow()
 
-    private lateinit var songsFuzzySearcher: FuzzySearcher<String>
+    private val songsFuzzySearcher: FuzzySearcher<String> = FuzzySearcher(
+        options = listOf(
+            FuzzySearchOption( { v -> getSongWithId( v )?.title?.let { compareString( it ) } }, 3 ),
+            FuzzySearchOption( { v -> getSongWithId( v )?.path?.let { compareString( it ) } }, 2 ),
+            FuzzySearchOption( { v -> getSongWithId( v )?.artists?.let { compareCollection( it ) } } ),
+            FuzzySearchOption( { v -> getSongWithId( v )?.albumTitle?.let { compareString( it ) } } )
+        )
+    )
 
 
     init {
         scope.launch {
             initializeMediaBrowser( context, serviceComponentName )
             updateCaches()
-            initializeFuzzySearcher()
             _isInitializing.value = false
         }
     }
@@ -158,7 +165,7 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
         _cachedSongs.value = getChildren( MUSIC_MATTERS_TRACKS_ROOT ).map {
             it.toSong( artistTagSeparators )
         }
-        _cachedGenres.value = getChildren( MUSIC_MATTERS_GENRES_ROOT )
+        _cachedGenres.value = createGenresUsing( getChildren( MUSIC_MATTERS_GENRES_ROOT ).map { it.mediaMetadata.title.toString() } )
         _cachedRecentSongs.value = getChildren( MUSIC_MATTERS_RECENT_SONGS_ROOT ).map {
             it.toSong( artistTagSeparators )
         }
@@ -168,15 +175,19 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
         _cachedSuggestedAlbums.value = getChildren( MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT ).map { it.toAlbum() }
     }
 
-    private fun initializeFuzzySearcher() {
-        songsFuzzySearcher = FuzzySearcher(
-            options = listOf(
-                FuzzySearchOption( { v -> getSongWithId( v )?.title?.let { compareString( it ) } }, 3 ),
-                FuzzySearchOption( { v -> getSongWithId( v )?.path?.let { compareString( it ) } }, 2 ),
-                FuzzySearchOption( { v -> getSongWithId( v )?.artists?.let { compareCollection( it ) } } ),
-                FuzzySearchOption( { v -> getSongWithId( v )?.albumTitle?.let { compareString( it ) } } )
-            )
-        )
+    private fun createGenresUsing( genreNames: List<String> ): List<Genre> {
+        val genreList = mutableListOf<Genre>()
+        genreNames.forEach { name ->
+            var numberOfTracksInGenre = 0
+            cachedSongs.value.forEach { song ->
+                song.genre?.let { genre ->
+                    if ( genre.lowercase() == name.lowercase() )
+                        numberOfTracksInGenre++
+                }
+            }
+            genreList.add( Genre( name, numberOfTracksInGenre ) )
+        }
+        return genreList
     }
 
     private fun getSongWithId( id: String ) = cachedSongs.value.find { it.id == id }

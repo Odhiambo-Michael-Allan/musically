@@ -12,7 +12,7 @@ import com.odesa.musicMatters.services.i18n.English
 import com.odesa.musicMatters.ui.components.GenreGrid
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.TopAppBar
-import com.odesa.musicMatters.ui.components.testGenreList
+import com.odesa.musicMatters.ui.components.testGenres
 
 @Composable
 fun GenresScreen(
@@ -73,7 +73,7 @@ fun GenresScreenContentPreview() {
 }
 
 val testGenreScreenUiState = GenreScreenUiState(
-    genres = testGenreList,
+    genres = testGenres,
     language = English,
     isLoading = false
 )

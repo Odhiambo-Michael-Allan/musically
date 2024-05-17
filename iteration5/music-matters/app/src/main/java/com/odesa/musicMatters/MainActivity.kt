@@ -93,6 +93,7 @@ class MainActivity : ComponentActivity() {
                                 settingsRepository = appContainer.settingsRepository,
                                 musicServiceConnection = appContainer.musicServiceConnection,
                                 playlistRepository = appContainer.playlistRepository,
+                                searchHistoryRepository = appContainer.searchHistoryRepository,
                                 nowPlayingViewModel = nowPlayingViewModel
                             )
                         }

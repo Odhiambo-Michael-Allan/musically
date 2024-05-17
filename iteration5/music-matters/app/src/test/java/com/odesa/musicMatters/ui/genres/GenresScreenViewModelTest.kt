@@ -51,14 +51,6 @@ class GenresScreenViewModelTest {
         assertEquals( 3, viewModel.uiState.value.genres.size )
     }
 
-    @Test
-    fun testNumberOfTracksInGenreAreCorrectlySet() {
-        val genreList = viewModel.uiState.value.genres
-        genreList.forEach { genre ->
-            if ( genre.name == "Hip Hop" )
-                assertEquals( 2, genre.numberOfTracks )
-        }
-    }
 
     @Test
     fun testLanguageChange() {
