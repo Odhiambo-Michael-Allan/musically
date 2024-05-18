@@ -29,6 +29,7 @@ class SongsScreenViewModel(
             themeMode = settingsRepository.themeMode.value,
             songs = emptyList(),
             sortSongsBy = settingsRepository.currentSortSongsBy.value,
+            sortSongsInReverse = settingsRepository.sortSongsInReverse.value,
             currentlyPlayingSongId = musicServiceConnection.nowPlaying.value.mediaId,
             favoriteSongIds = playlistRepository.favoritesPlaylist.value.songIds,
             isLoading = musicServiceConnection.isInitializing.value,
@@ -46,12 +47,13 @@ class SongsScreenViewModel(
         viewModelScope.launch { observeFavoriteSongIds() }
         viewModelScope.launch { observePlaylists() }
         viewModelScope.launch { observeSortSongsBy() }
+        viewModelScope.launch { observeSortSongsInReverse() }
     }
 
     private suspend fun observeSongs() {
         musicServiceConnection.cachedSongs.collect {
             _uiState.value = _uiState.value.copy(
-                songs = sortSongs( it, uiState.value.sortSongsBy )
+                songs = sortSongs( it, uiState.value.sortSongsBy, uiState.value.sortSongsInReverse )
             )
         }
     }
@@ -108,7 +110,16 @@ class SongsScreenViewModel(
         settingsRepository.currentSortSongsBy.collect {
             _uiState.value = _uiState.value.copy(
                 sortSongsBy = it,
-                songs = sortSongs( uiState.value.songs, it )
+                songs = sortSongs( uiState.value.songs, it, uiState.value.sortSongsInReverse )
+            )
+        }
+    }
+
+    private suspend fun observeSortSongsInReverse() {
+        settingsRepository.sortSongsInReverse.collect {
+            _uiState.value = _uiState.value.copy(
+                sortSongsInReverse = it,
+                songs = sortSongs( uiState.value.songs, uiState.value.sortSongsBy, it )
             )
         }
     }
@@ -173,17 +184,23 @@ class SongsScreenViewModel(
         }
     }
 
-    private fun sortSongs( songs: List<Song>, sortSongsBy: SortSongsBy ): List<Song> {
+    fun setSortSongsInReverse( sortSongsInReverse: Boolean ) {
+        viewModelScope.launch {
+            settingsRepository.setSortSongsInReverse( sortSongsInReverse )
+        }
+    }
+
+    private fun sortSongs( songs: List<Song>, sortSongsBy: SortSongsBy, reverse: Boolean ): List<Song> {
         return when ( sortSongsBy ) {
-            SortSongsBy.TITLE -> songs.sortedBy { it.title }
-            SortSongsBy.ALBUM -> songs.sortedBy { it.albumTitle }
-            SortSongsBy.ARTIST -> songs.sortedBy { it.artists.joinToString() }
-            SortSongsBy.COMPOSER -> songs.sortedBy { it.composer }
-            SortSongsBy.DURATION -> songs.sortedBy { it.duration }
-            SortSongsBy.YEAR -> songs.sortedBy { it.year }
-            SortSongsBy.DATE_ADDED -> songs.sortedBy { it.dateModified }
-            SortSongsBy.FILENAME -> songs.sortedBy { it.path }
-            SortSongsBy.TRACK_NUMBER -> songs.sortedBy { it.trackNumber }
+            SortSongsBy.TITLE -> if ( reverse ) songs.sortedByDescending { it.title } else songs.sortedBy { it.title }
+            SortSongsBy.ALBUM -> if ( reverse ) songs.sortedByDescending { it.albumTitle } else songs.sortedBy { it.albumTitle }
+            SortSongsBy.ARTIST -> if ( reverse ) songs.sortedByDescending { it.artists.joinToString() } else songs.sortedBy { it.artists.joinToString() }
+            SortSongsBy.COMPOSER -> if ( reverse ) songs.sortedByDescending { it.composer } else songs.sortedBy { it.composer }
+            SortSongsBy.DURATION -> if ( reverse ) songs.sortedByDescending { it.duration } else songs.sortedBy { it.duration }
+            SortSongsBy.YEAR -> if ( reverse ) songs.sortedByDescending { it.year } else songs.sortedBy { it.year }
+            SortSongsBy.DATE_ADDED -> if ( reverse ) songs.sortedByDescending { it.dateModified } else songs.sortedBy { it.dateModified }
+            SortSongsBy.FILENAME -> if ( reverse ) songs.sortedByDescending { it.path } else songs.sortedBy { it.path }
+            SortSongsBy.TRACK_NUMBER -> if ( reverse ) songs.sortedByDescending { it.trackNumber } else songs.sortedBy { it.trackNumber }
             SortSongsBy.CUSTOM -> songs.shuffled()
         }
     }
@@ -194,6 +211,7 @@ data class SongsScreenUiState(
     val themeMode: ThemeMode,
     val songs: List<Song>,
     val sortSongsBy: SortSongsBy,
+    val sortSongsInReverse: Boolean,
     val currentlyPlayingSongId: String,
     val favoriteSongIds: List<String>,
     val isLoading: Boolean,

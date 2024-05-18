@@ -391,4 +391,15 @@ class SettingsRepositoryImplTest {
         }
     }
 
+    @Test
+    fun testSortSongsInReverseIsCorrectlySet() = runTest {
+        assertFalse( settingsRepository.sortSongsInReverse.value )
+        settingsRepository.setSortSongsInReverse( true )
+        assertTrue( preferenceStore.getSortSongsInReverse() )
+        assertTrue( settingsRepository.sortSongsInReverse.value )
+        settingsRepository.setSortSongsInReverse( false )
+        assertFalse( preferenceStore.getSortSongsInReverse() )
+        assertFalse( settingsRepository.sortSongsInReverse.value )
+    }
+
 }

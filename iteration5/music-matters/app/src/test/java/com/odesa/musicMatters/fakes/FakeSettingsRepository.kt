@@ -132,6 +132,9 @@ class FakeSettingsRepository : SettingsRepository {
     private val _currentSortSongsBy = MutableStateFlow( SettingsDefaults.sortSongsBy )
     override val currentSortSongsBy = _currentSortSongsBy.asStateFlow()
 
+    private val _sortSongsInReverse = MutableStateFlow( SettingsDefaults.SORT_SONGS_IN_REVERSE )
+    override val sortSongsInReverse = _sortSongsInReverse.asStateFlow()
+
 
     override suspend fun setLanguage( localeCode: String ) {
         _currentLanguage.value = resolveLanguage( localeCode )
@@ -276,5 +279,9 @@ class FakeSettingsRepository : SettingsRepository {
 
     override suspend fun setCurrentSortSongsByValueTo( newSortSongsBy: SortSongsBy ) {
         _currentSortSongsBy.value = newSortSongsBy
+    }
+
+    override suspend fun setSortSongsInReverse( sortSongsInReverse: Boolean ) {
+        _sortSongsInReverse.value = sortSongsInReverse
     }
 }

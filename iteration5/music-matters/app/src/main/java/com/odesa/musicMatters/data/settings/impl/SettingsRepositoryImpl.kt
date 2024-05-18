@@ -115,6 +115,10 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore) : Se
     private val _currentSortSongsBy = MutableStateFlow( preferenceStore.getSortSongsBy() )
     override val currentSortSongsBy = _currentSortSongsBy.asStateFlow()
 
+    private val _sortSongsInReverse = MutableStateFlow( preferenceStore.getSortSongsInReverse() )
+    override val sortSongsInReverse = _sortSongsInReverse.asStateFlow()
+
+
     override suspend fun setLanguage( localeCode: String ) {
         withContext( Dispatchers.IO ) {
             preferenceStore.setLanguage( localeCode )
@@ -391,6 +395,13 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore) : Se
         withContext( Dispatchers.IO ) {
             preferenceStore.setSortSongsBy( newSortSongsBy )
             _currentSortSongsBy.value = newSortSongsBy
+        }
+    }
+
+    override suspend fun setSortSongsInReverse( sortSongsInReverse: Boolean ) {
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setSortSongsInReverse( sortSongsInReverse )
+            _sortSongsInReverse.value = sortSongsInReverse
         }
     }
 

@@ -43,6 +43,7 @@ interface SettingsRepository {
 
     val currentlyDisabledTreePaths: StateFlow<List<String>>
     val currentSortSongsBy: StateFlow<SortSongsBy>
+    val sortSongsInReverse: StateFlow<Boolean>
 
     suspend fun setLanguage( localeCode: String )
     suspend fun setFont( fontName: String )
@@ -74,4 +75,5 @@ interface SettingsRepository {
     suspend fun setControlsLayoutIsDefault( controlsLayoutIsDefault: Boolean )
     suspend fun setCurrentlyDisabledTreePaths( paths: List<String> )
     suspend fun setCurrentSortSongsByValueTo( newSortSongsBy: SortSongsBy )
+    suspend fun setSortSongsInReverse( sortSongsInReverse: Boolean )
 }

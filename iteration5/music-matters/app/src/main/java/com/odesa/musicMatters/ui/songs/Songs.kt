@@ -40,7 +40,7 @@ fun SongsScreen(
 
     SongsScreenContent(
         uiState = uiState,
-        onSortReverseChange = {},
+        onSortReverseChange = { viewModel.setSortSongsInReverse( it ) },
         onSortTypeChange = { viewModel.setSortSongsBy( it ) },
         onSettingsClicked = onSettingsClicked,
         onShufflePlay = { viewModel.shuffleAndPlay() },
@@ -103,7 +103,7 @@ fun SongsScreenContent(
             loading = uiState.language.loading
         ) {
             SongList(
-                sortReverse = true,
+                sortReverse = uiState.sortSongsInReverse,
                 onSortReverseChange = onSortReverseChange,
                 sortSongsBy = uiState.sortSongsBy,
                 onSortTypeChange = onSortTypeChange,
@@ -172,5 +172,6 @@ val uiState = SongsScreenUiState(
     favoriteSongIds = testSongs.map { it.id },
     isLoading = true,
     playlists = emptyList(),
-    sortSongsBy = SortSongsBy.TITLE
+    sortSongsBy = SortSongsBy.TITLE,
+    sortSongsInReverse = false
 )

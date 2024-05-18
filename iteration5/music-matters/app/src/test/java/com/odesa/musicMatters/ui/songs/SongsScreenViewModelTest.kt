@@ -128,8 +128,15 @@ class SongsScreenViewModelTest {
     @Test
     fun testSongsAreSortedCorrectly() = runTest {
         musicServiceConnection.setIsInitialized()
+
+        // -- Sort by title --
+        // Ascending
         musicServiceConnection.setSongs( testSongsForSorting )
         assertEquals( "id1", viewModel.uiState.value.songs.first().id )
+        // Descending
+        viewModel.setSortSongsInReverse( true )
+        assertEquals( "id5", viewModel.uiState.value.songs.first().id )
+        viewModel.setSortSongsInReverse( false )
         viewModel.setSortSongsBy( SortSongsBy.ALBUM )
         assertEquals( "id5", viewModel.uiState.value.songs.first().id )
         viewModel.setSortSongsBy( SortSongsBy.ARTIST )
