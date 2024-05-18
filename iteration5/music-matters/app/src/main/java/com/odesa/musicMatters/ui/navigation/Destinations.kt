@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.QueueMusic
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.outlined.AccountTree
 import androidx.compose.material.icons.outlined.Album
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.outlined.Group
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.QueueMusic
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavBackStackEntry
@@ -35,6 +37,7 @@ object RouteParameters {
     const val ALBUM_ROUTE_ALBUM_NAME = "album-name"
     const val PLAYLIST_ROUTE_PLAYLIST_ID = "playlist-id"
     const val PLAYLIST_ROUTE_PLAYLIST_NAME = "playlist-name"
+    const val SEARCH_ROUTE_SEARCH_FILTER = "search-filter"
 }
 
 sealed class Route( val name: String ) {
@@ -214,6 +217,22 @@ object Playlist : MusicMattersDestination {
             type = NavType.StringType
         }
     )
+}
+
+object Search : MusicMattersDestination {
+    override val selectedIcon = Icons.Filled.Search
+    override val unselectedIcon = Icons.Outlined.Search
+    override val route = Route.Search
+    override val iconContentDescription = ""
+
+    override fun getLabel( language: Language ) = ""
+
+    val routeWithArgs = "${route.name}/{${RouteParameters.SEARCH_ROUTE_SEARCH_FILTER}}"
+    val arguments = listOf(
+        navArgument( RouteParameters.SEARCH_ROUTE_SEARCH_FILTER ) {
+            type = NavType.StringType
+        }
+    )
 
 }
 
@@ -264,6 +283,9 @@ fun NavHostController.navigateToPlaylistScreen( playlistId: String, playlistTitl
 
 fun NavHostController.navigateToArtistScreen( artistName: String ) =
     this.navigate( RoutesBuilder.buildArtistRoute( artistName ) )
+
+fun NavHostController.navigateToSearchScreen( searchFilterName: String ) =
+    this.navigate( "${Search.route.name}/$searchFilterName" )
 
 fun NavBackStackEntry.getRouteArgument( key: String ) = arguments?.getString( key )?.let {
     Timber.tag( DESTINATIONS_TAG ).d( "DECODING PARAM: $key -> $it" )

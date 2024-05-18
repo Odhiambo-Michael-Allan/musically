@@ -52,6 +52,7 @@ import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
+import kotlin.random.Random
 
 /**
  * Class that manages a connection to a [MediaLibraryService] instance, typically a [MusicService]
@@ -230,6 +231,19 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
             newMediaItemsInQueue.add( 0, nowPlaying.value )
             _mediaItemsInQueue.value = newMediaItemsInQueue
         }
+    }
+
+    override suspend fun shuffleAndPlay(
+        mediaItems: List<MediaItem>
+    ) {
+        if ( isInitializing.value ) return
+        val randomSongToPlay = cachedSongs.value[ Random.nextInt( cachedSongs.value.size ) ]
+        playMediaItem(
+            mediaItem = randomSongToPlay.mediaItem,
+            mediaItems = mediaItems,
+            shuffle = true,
+        )
+
     }
 
     override fun moveMediaItem( from: Int, to: Int ) {

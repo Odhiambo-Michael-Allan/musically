@@ -84,6 +84,7 @@ import com.odesa.musicMatters.ui.playlists.PlaylistsViewModelFactory
 import com.odesa.musicMatters.ui.queue.QueueScreen
 import com.odesa.musicMatters.ui.queue.QueueScreenViewModel
 import com.odesa.musicMatters.ui.queue.QueueScreenViewModelFactory
+import com.odesa.musicMatters.ui.search.SearchFilter
 import com.odesa.musicMatters.ui.search.SearchScreen
 import com.odesa.musicMatters.ui.search.SearchScreenViewModel
 import com.odesa.musicMatters.ui.search.SearchScreenViewModelFactory
@@ -148,7 +149,7 @@ fun MusicMattersNavHost(
             ForYouScreen(
                 viewModel = forYouScreenViewModel,
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) },
-                onNavigateToSearch = { navController.navigate( Route.Search.name ) },
+                onNavigateToSearch = { navController.navigateToSearchScreen( "--" ) },
                 onSuggestedAlbumClick = { navController.navigateToAlbumScreen( it.name ) },
                 onSuggestedArtistClick = { navController.navigateToArtistScreen( it.name ) },
             )
@@ -177,6 +178,7 @@ fun MusicMattersNavHost(
                     addToQueue( context, musicServiceConnection, it )
                 },
                 onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
+                onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.SONG.name ) }
             )
         }
         composable(
@@ -193,6 +195,7 @@ fun MusicMattersNavHost(
             ArtistsScreen(
                 viewModel = artistsScreenViewModel,
                 onArtistClick = { navController.navigateToArtistScreen( it ) },
+                onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.ARTIST.name ) },
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) }
             )
         }
@@ -202,20 +205,20 @@ fun MusicMattersNavHost(
             enterTransition = { SlideTransition.slideUp.enterTransition() },
             exitTransition = { FadeTransition.exitTransition() }
         ) { navBackStackEntry ->
+            // Retrieve the passed argument
+            val artistName = navBackStackEntry.getRouteArgument(
+                RouteParameters.ARTIST_ROUTE_ARTIST_NAME
+            ) ?: ""
             val artistScreenViewModel: ArtistScreenViewModel = viewModel(
                 factory = ArtistScreenViewModelFactory(
+                    artistName = artistName,
                     musicServiceConnection = musicServiceConnection,
                     settingsRepository = settingsRepository,
                     playlistRepository = playlistRepository
                 )
             )
-            // Retrieve the passed argument
-            val artist = navBackStackEntry.getRouteArgument(
-                RouteParameters.ARTIST_ROUTE_ARTIST_NAME
-            ) ?: ""
-            artistScreenViewModel.loadSongsBy( artist )
             ArtistScreen(
-                artistName = artist,
+                artistName = artistName,
                 viewModel = artistScreenViewModel,
                 onViewAlbum = { navController.navigateToAlbumScreen( it ) },
                 onViewArtist = { navController.navigateToArtistScreen( it ) },
@@ -243,6 +246,7 @@ fun MusicMattersNavHost(
             AlbumsScreen(
                 viewModel = albumsScreenViewModel,
                 onAlbumClick = { navController.navigateToAlbumScreen( it ) },
+                onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.ALBUM.name ) },
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) }
             )
         }
@@ -252,17 +256,18 @@ fun MusicMattersNavHost(
             enterTransition = { SlideTransition.slideUp.enterTransition() },
             exitTransition = { FadeTransition.exitTransition() }
         ) { navBackStackEntry ->
+            // Retrieve the passed argument
+            val albumName = navBackStackEntry.getRouteArgument(
+                RouteParameters.ALBUM_ROUTE_ALBUM_NAME ) ?: ""
             val albumScreenViewModel: AlbumScreenViewModel = viewModel(
                 factory = AlbumScreenViewModelFactory(
+                    albumName = albumName,
                     musicServiceConnection = musicServiceConnection,
                     settingsRepository = settingsRepository,
                     playlistRepository = playlistRepository
                 )
             )
-            // Retrieve the passed argument
-            val albumName = navBackStackEntry.getRouteArgument(
-                RouteParameters.ALBUM_ROUTE_ALBUM_NAME ) ?: ""
-            albumScreenViewModel.loadSongsInAlbum( albumName )
+
             AlbumScreen(
                 albumName = albumName,
                 viewModel = albumScreenViewModel,
@@ -292,6 +297,7 @@ fun MusicMattersNavHost(
             GenresScreen(
                 viewModel = genresScreenViewModel,
                 onGenreClick = { navController.navigateToGenreScreen( it ) },
+                onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.GENRE.name ) },
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) }
             )
         }
@@ -301,17 +307,18 @@ fun MusicMattersNavHost(
             enterTransition = { SlideTransition.slideUp.enterTransition() },
             exitTransition = { FadeTransition.exitTransition() }
         ) { navBackStackEntry ->
+            // Retrieve the passed argument
+            val genreName = navBackStackEntry.getRouteArgument(
+                RouteParameters.GENRE_ROUTE_GENRE_NAME ) ?: ""
+
             val genreScreenViewModel: GenreScreenViewModel = viewModel(
                 factory = GenreScreenViewModelFactory(
+                    genreName = genreName,
                     musicServiceConnection = musicServiceConnection,
                     settingsRepository = settingsRepository,
                     playlistRepository = playlistRepository,
                 )
             )
-            // Retrieve the passed argument
-            val genreName = navBackStackEntry.getRouteArgument(
-                RouteParameters.GENRE_ROUTE_GENRE_NAME ) ?: ""
-            genreScreenViewModel.loadSongsWithGenre( genreName )
             GenreScreen(
                 genreName = genreName,
                 viewModel = genreScreenViewModel,
@@ -342,6 +349,7 @@ fun MusicMattersNavHost(
             PlaylistsScreen(
                 viewModel = playlistsViewModel,
                 onPlaylistClick = { playlistId, playlistName -> navController.navigateToPlaylistScreen( playlistId, playlistName ) },
+                onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.PLAYLIST.name ) },
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) }
             )
         }
@@ -351,20 +359,21 @@ fun MusicMattersNavHost(
             enterTransition = { SlideTransition.slideUp.enterTransition() },
             exitTransition = { FadeTransition.exitTransition() }
         ) { navBackStackEntry ->
-            val playlistScreenViewModel: PlaylistScreenViewModel = viewModel(
-                factory = PlaylistScreenViewModelFactory(
-                    musicServiceConnection = musicServiceConnection,
-                    settingsRepository = settingsRepository,
-                    playlistsRepository = playlistRepository
-                )
-            )
             val playlistId = navBackStackEntry.getRouteArgument(
                 RouteParameters.PLAYLIST_ROUTE_PLAYLIST_ID
             ) ?: ""
             val playlistName = navBackStackEntry.getRouteArgument(
                 RouteParameters.PLAYLIST_ROUTE_PLAYLIST_NAME
             ) ?: ""
-            playlistScreenViewModel.loadSongsInPlaylistWithId( playlistId )
+            val playlistScreenViewModel: PlaylistScreenViewModel = viewModel(
+                factory = PlaylistScreenViewModelFactory(
+                    playlistId = playlistId,
+                    musicServiceConnection = musicServiceConnection,
+                    settingsRepository = settingsRepository,
+                    playlistsRepository = playlistRepository
+                )
+            )
+
             PlaylistScreen(
                 playlistTitle = playlistName,
                 viewModel = playlistScreenViewModel,
@@ -399,6 +408,7 @@ fun MusicMattersNavHost(
                 onAddToQueue = { addToQueue( context, musicServiceConnection, it ) },
                 onPlayNext = { playNext( context, musicServiceConnection, it ) },
                 onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
+                onNavigateToSearch = { navController.navigateToSearchScreen( "--" ) },
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) }
             )
         }
@@ -429,10 +439,14 @@ fun MusicMattersNavHost(
             )
         }
         composable(
-            Route.Search.name,
+            route = Search.routeWithArgs,
             enterTransition = { SlideTransition.slideUp.enterTransition() },
             exitTransition = { FadeTransition.exitTransition() }
-        ) {
+        ) { navBackStackEntry ->
+            val searchFilterName = navBackStackEntry.getRouteArgument(
+                RouteParameters.SEARCH_ROUTE_SEARCH_FILTER
+            ) ?: ""
+
             val searchScreenViewModel: SearchScreenViewModel = viewModel(
                 factory = SearchScreenViewModelFactory(
                     musicServiceConnection = musicServiceConnection,
@@ -443,6 +457,7 @@ fun MusicMattersNavHost(
             )
             SearchScreen(
                 viewModel = searchScreenViewModel,
+                initialSearchFilter = getSearchFilterFrom( searchFilterName ),
                 onAlbumClick = { navController.navigateToAlbumScreen( it.name ) },
                 onArtistClick = { navController.navigateToArtistScreen( it.name ) },
                 onGenreClick = { navController.navigateToGenreScreen( it.name ) },
@@ -657,5 +672,15 @@ private fun HomeTab.toDestination() = when( this ) {
     HomeTab.Albums -> Albums
     HomeTab.Genres -> Genres
 }
+
+private fun getSearchFilterFrom( name: String ) =
+    when ( name ) {
+        SearchFilter.SONG.name -> SearchFilter.SONG
+        SearchFilter.ALBUM.name -> SearchFilter.ALBUM
+        SearchFilter.ARTIST.name -> SearchFilter.ARTIST
+        SearchFilter.GENRE.name -> SearchFilter.GENRE
+        SearchFilter.PLAYLIST.name -> SearchFilter.PLAYLIST
+        else -> null
+    }
 
 

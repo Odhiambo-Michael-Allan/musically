@@ -4,6 +4,7 @@ import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
 import com.odesa.musicMatters.data.preferences.NowPlayingLyricsLayout
 import com.odesa.musicMatters.data.preferences.PreferenceStore
+import com.odesa.musicMatters.data.preferences.SortSongsBy
 import com.odesa.musicMatters.data.preferences.impl.LoopMode
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.data.preferences.impl.allowedSpeedPitchValues
@@ -373,6 +374,21 @@ class SettingsRepositoryImplTest {
     @Test
     fun testCurrentlyDisabledTreePathsChange() = runTest {
         assertEquals( 0, settingsRepository.currentlyDisabledTreePaths.value.size )
+        settingsRepository.setCurrentlyDisabledTreePaths(
+            listOf( "path-1", "path-2", "path-3", "path-4", "path-5" )
+        )
+        assertEquals( 5, preferenceStore.getCurrentlyDisabledTreePaths().size )
+        assertEquals( 5, settingsRepository.currentlyDisabledTreePaths.value.size )
+    }
+
+    @Test
+    fun testSortSongsByValueIsSetCorrectly() = runTest {
+        assertEquals( SortSongsBy.TITLE, settingsRepository.currentSortSongsBy.value )
+        SortSongsBy.entries.forEach {
+            settingsRepository.setCurrentSortSongsByValueTo( it )
+            assertEquals( it, preferenceStore.getSortSongsBy() )
+            assertEquals( it, settingsRepository.currentSortSongsBy.value )
+        }
     }
 
 }

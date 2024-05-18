@@ -23,6 +23,7 @@ import com.odesa.musicMatters.ui.theme.isLight
 fun ArtistsScreen(
     viewModel: ArtistsScreenViewModel,
     onArtistClick: ( String ) -> Unit,
+    onNavigateToSearch: () -> Unit,
     onSettingsClicked: () -> Unit
 ) {
 
@@ -32,7 +33,8 @@ fun ArtistsScreen(
         uiState = artistsScreenUiState,
         onArtistClick = onArtistClick,
         onPlaySongsByArtist = { viewModel.playSongsByArtist( it ) },
-        onSettingsClicked = onSettingsClicked
+        onSettingsClicked = onSettingsClicked,
+        onNavigateToSearch = onNavigateToSearch
     )
 }
 
@@ -41,7 +43,8 @@ fun ArtistsScreenContent(
     uiState: ArtistsScreenUiState,
     onArtistClick: ( String ) -> Unit,
     onPlaySongsByArtist: ( Artist ) -> Unit,
-    onSettingsClicked: () -> Unit
+    onSettingsClicked: () -> Unit,
+    onNavigateToSearch: () -> Unit,
 ) {
 
     val fallbackResourceId =
@@ -52,7 +55,7 @@ fun ArtistsScreenContent(
         modifier = Modifier.fillMaxSize()
     ) {
         TopAppBar(
-            onNavigationIconClicked = { /*TODO*/ },
+            onNavigationIconClicked = onNavigateToSearch,
             title = uiState.language.artists,
             settings = uiState.language.settings,
             onSettingsClicked = onSettingsClicked
@@ -88,6 +91,7 @@ fun ArtistsScreenContentPreview() {
         ),
         onArtistClick = {},
         onPlaySongsByArtist = {},
-        onSettingsClicked = {}
+        onSettingsClicked = {},
+        onNavigateToSearch = {}
     )
 }

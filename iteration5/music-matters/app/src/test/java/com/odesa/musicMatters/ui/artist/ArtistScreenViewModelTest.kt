@@ -43,6 +43,7 @@ class ArtistScreenViewModelTest {
         settingsRepository = FakeSettingsRepository()
         playlistRepository = FakePlaylistRepository()
         viewModel = ArtistScreenViewModel(
+            artistName = "Travis Scott",
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
             playlistRepository = playlistRepository
@@ -54,7 +55,6 @@ class ArtistScreenViewModelTest {
         assertNull( viewModel.uiState.value.artist )
         assertEquals( 0, viewModel.uiState.value.songsByArtist.size )
         assertTrue( viewModel.uiState.value.isLoadingSongsByArtist )
-        viewModel.loadSongsBy( "Travis Scott" )
         musicServiceConnection.setIsInitialized()
         assertFalse( viewModel.uiState.value.isLoadingSongsByArtist )
         assertNotNull( viewModel.uiState.value.artist )

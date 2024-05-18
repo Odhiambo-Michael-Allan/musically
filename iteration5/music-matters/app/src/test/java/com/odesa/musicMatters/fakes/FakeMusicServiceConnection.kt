@@ -73,10 +73,18 @@ class FakeMusicServiceConnection : MusicServiceConnection {
         _isInitializing.value = false
     }
 
+    fun setSongs( songs: List<Song> ) {
+        _cachedSongs.value = songs
+    }
+
     override suspend fun playMediaItem(
         mediaItem: MediaItem,
         mediaItems: List<MediaItem>,
         shuffle: Boolean ) {
+        _mediaItemsInQueue.value = mediaItems
+    }
+
+    override suspend fun shuffleAndPlay( mediaItems: List<MediaItem> ) {
         _mediaItemsInQueue.value = mediaItems
     }
 

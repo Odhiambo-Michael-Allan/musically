@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 
 class ArtistScreenViewModel(
+    private val artistName: String,
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
     private val playlistRepository: PlaylistRepository,
@@ -49,14 +50,15 @@ class ArtistScreenViewModel(
     }
 
     private suspend fun observeMusicServiceConnectionInitializedStatus() {
-        musicServiceConnection.isInitializing.collect {
+        musicServiceConnection.isInitializing.collect { isInitializing ->
             _uiState.value = _uiState.value.copy(
-                isLoadingSongsByArtist = it
+                isLoadingSongsByArtist = isInitializing
             )
+            if ( !isInitializing ) loadSongsBy( artistName )
         }
     }
 
-    fun loadSongsBy( artistName: String ) {
+    private fun loadSongsBy( artistName: String ) {
         val artist = musicServiceConnection.cachedArtists.value.find { it.name == artistName }
         val songsByArtist = musicServiceConnection.cachedSongs.value.filter { it.artists.contains( artistName ) }
         val albumsByArtist = musicServiceConnection.cachedAlbums.value.filter { it.artists.contains( artistName ) }
@@ -161,12 +163,14 @@ class ArtistScreenViewModel(
 
 @Suppress( "UNCHECKED_CAST" )
 class ArtistScreenViewModelFactory(
+    private val artistName: String,
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
     private val playlistRepository: PlaylistRepository
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create( modelClass: Class<T> ) =
         ( ArtistScreenViewModel(
+            artistName = artistName,
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
             playlistRepository = playlistRepository

@@ -13,6 +13,7 @@ import com.odesa.musicMatters.fakes.trackList
 import com.odesa.musicMatters.services.media.testSongs
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -37,6 +38,7 @@ class PlaylistScreenViewModelTest {
         settingsRepository = FakeSettingsRepository()
         playlistRepository = FakePlaylistRepository()
         viewModel = PlaylistScreenViewModel(
+            playlistId = playlistRepository.favoritesPlaylist.value.id,
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
             playlistRepository = playlistRepository
@@ -45,12 +47,13 @@ class PlaylistScreenViewModelTest {
 
     @Test
     fun testLoadSongsInPlaylistWithGivenId() = runTest {
+        assertEquals( 0, viewModel.uiState.value.songsInPlaylist.size )
+        assertTrue( viewModel.uiState.value.isLoadingSongsInPlaylist )
         trackList.subList( 0, 3 ).forEach {
             playlistRepository.addToFavorites( it.id )
         }
-        viewModel.loadSongsInPlaylistWithId( playlistRepository.favoritesPlaylist.value.id )
-        assertEquals( 3, viewModel.uiState.value.songsInPlaylist.size )
         musicServiceConnection.setIsInitialized()
+        assertEquals( 3, viewModel.uiState.value.songsInPlaylist.size )
         assertFalse( viewModel.uiState.value.isLoadingSongsInPlaylist )
     }
 

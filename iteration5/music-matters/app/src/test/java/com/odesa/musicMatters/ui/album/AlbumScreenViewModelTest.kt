@@ -42,6 +42,7 @@ class AlbumScreenViewModelTest {
         settingsRepository = FakeSettingsRepository()
         playlistRepository = FakePlaylistRepository()
         viewModel = AlbumScreenViewModel(
+            albumName = "Album-4",
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
             playlistRepository = playlistRepository
@@ -116,7 +117,6 @@ class AlbumScreenViewModelTest {
     fun testLoadSongsInAlbum() = runTest {
         assertEquals( 0, viewModel.uiState.value.songsInAlbum.size )
         assertTrue( viewModel.uiState.value.isLoadingSongsInAlbum )
-        viewModel.loadSongsInAlbum( "Album-4" )
         musicServiceConnection.setIsInitialized()
         assertFalse( viewModel.uiState.value.isLoadingSongsInAlbum )
         assertEquals( 2, viewModel.uiState.value.songsInAlbum.size )

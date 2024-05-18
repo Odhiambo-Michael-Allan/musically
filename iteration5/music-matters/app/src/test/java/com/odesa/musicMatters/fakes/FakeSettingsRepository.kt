@@ -3,6 +3,7 @@ package com.odesa.musicMatters.fakes
 import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
 import com.odesa.musicMatters.data.preferences.NowPlayingLyricsLayout
+import com.odesa.musicMatters.data.preferences.SortSongsBy
 import com.odesa.musicMatters.data.preferences.impl.LoopMode
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.data.settings.SettingsRepository
@@ -127,6 +128,9 @@ class FakeSettingsRepository : SettingsRepository {
 
     private val _currentlyDisabledTreePaths = MutableStateFlow( emptyList<String>() )
     override val currentlyDisabledTreePaths = _currentlyDisabledTreePaths.asStateFlow()
+
+    private val _currentSortSongsBy = MutableStateFlow( SettingsDefaults.sortSongsBy )
+    override val currentSortSongsBy = _currentSortSongsBy.asStateFlow()
 
 
     override suspend fun setLanguage( localeCode: String ) {
@@ -268,5 +272,9 @@ class FakeSettingsRepository : SettingsRepository {
 
     override suspend fun setCurrentlyDisabledTreePaths( paths: List<String> ) {
         _currentlyDisabledTreePaths.value = paths
+    }
+
+    override suspend fun setCurrentSortSongsByValueTo( newSortSongsBy: SortSongsBy ) {
+        _currentSortSongsBy.value = newSortSongsBy
     }
 }

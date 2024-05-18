@@ -9,6 +9,8 @@ import com.odesa.musicMatters.fakes.FakeMusicServiceConnection
 import com.odesa.musicMatters.fakes.FakePlaylistRepository
 import com.odesa.musicMatters.fakes.FakeSearchHistoryRepository
 import com.odesa.musicMatters.fakes.FakeSettingsRepository
+import com.odesa.musicMatters.fakes.id1
+import com.odesa.musicMatters.fakes.testMediaItems
 import com.odesa.musicMatters.services.i18n.Belarusian
 import com.odesa.musicMatters.services.i18n.Chinese
 import com.odesa.musicMatters.services.i18n.English
@@ -18,6 +20,8 @@ import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.i18n.Spanish
 import com.odesa.musicMatters.ui.theme.ThemeMode
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -90,5 +94,19 @@ class SearchScreenViewModelTest {
             settingsRepository.setThemeMode( it )
             assertEquals( it, viewModel.uiState.value.themeMode )
         }
+    }
+
+    @Test
+    fun testMusicServiceConnectionInitializationStatusIsCorrectlyUpdated() {
+        assertTrue( viewModel.uiState.value.isLoadingSearchHistory )
+        musicServiceConnection.setIsInitialized()
+        assertFalse( viewModel.uiState.value.isLoadingSearchHistory )
+    }
+
+    @Test
+    fun testNowPlayingMediaItemIsCorrectlyUpdated() {
+        assertEquals( "", viewModel.uiState.value.currentlyPlayingSongId )
+        musicServiceConnection.setNowPlaying( testMediaItems.first() )
+        assertEquals( id1, viewModel.uiState.value.currentlyPlayingSongId )
     }
 }

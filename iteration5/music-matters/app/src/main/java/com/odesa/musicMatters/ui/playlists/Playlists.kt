@@ -17,21 +17,25 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.playlists.testPlaylists
 import com.odesa.musicMatters.data.preferences.SortPlaylistsBy
+import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.services.i18n.English
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.PlaylistGrid
 import com.odesa.musicMatters.ui.components.TopAppBar
+import com.odesa.musicMatters.ui.theme.isLight
 
 @Composable
 fun PlaylistsScreen(
     viewModel: PlaylistsViewModel,
     onPlaylistClick: ( String, String ) -> Unit,
+    onNavigateToSearch: () -> Unit,
     onSettingsClicked: () -> Unit
 ) {
 
@@ -40,6 +44,7 @@ fun PlaylistsScreen(
     PlaylistsScreenContent(
         uiState = uiState,
         onPlaylistClick = onPlaylistClick,
+        onNavigateToSearch = onNavigateToSearch,
         onSettingsClicked = onSettingsClicked,
         onPlaySongsInPlaylist = { viewModel.playSongsInPlaylist( it.songIds ) }
     )
@@ -48,17 +53,22 @@ fun PlaylistsScreen(
 @Composable
 fun PlaylistsScreenContent(
     uiState: PlaylistsScreenUiState,
-    onPlaylistClick: (String, String) -> Unit,
+    onPlaylistClick: ( String, String ) -> Unit,
+    onNavigateToSearch: () -> Unit,
     onSettingsClicked: () -> Unit,
     onPlaySongsInPlaylist: ( Playlist ) -> Unit,
 ) {
+
+    val fallbackResourceId =
+        if ( uiState.themeMode.isLight( LocalContext.current ) )
+            R.drawable.placeholder_light else R.drawable.placeholder_dark
 
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         Column {
             TopAppBar(
-                onNavigationIconClicked = { /*TODO*/ },
+                onNavigationIconClicked = onNavigateToSearch,
                 title = uiState.language.playlists,
                 settings = uiState.language.settings,
                 onSettingsClicked = onSettingsClicked,
@@ -72,7 +82,7 @@ fun PlaylistsScreenContent(
                     language = uiState.language,
                     sortType = SortPlaylistsBy.CUSTOM,
                     sortReverse = false,
-                    fallbackResourceId = R.drawable.placeholder_light,
+                    fallbackResourceId = fallbackResourceId,
                     onSortReverseChange = {},
                     onSortTypeChange = {},
                     onPlaylistClick = onPlaylistClick,
@@ -114,7 +124,7 @@ fun PlaylistsScreenContent(
     }
 }
 
-@Preview( showSystemUi = true )
+@PreviewScreenSizes
 @Composable
 fun PlaylistsScreenContentPreview() {
     PlaylistsScreenContent(
@@ -123,9 +133,11 @@ fun PlaylistsScreenContentPreview() {
             playlists = testPlaylists,
             isLoadingSongs = false,
             language = English,
+            themeMode = SettingsDefaults.themeMode
         ),
         onSettingsClicked = {},
         onPlaySongsInPlaylist = {},
-        onPlaylistClick = { _, _ -> }
+        onPlaylistClick = { _, _ -> },
+        onNavigateToSearch = {}
     )
 }

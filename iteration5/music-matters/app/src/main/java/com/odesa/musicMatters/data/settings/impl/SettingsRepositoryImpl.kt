@@ -4,6 +4,7 @@ import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
 import com.odesa.musicMatters.data.preferences.NowPlayingLyricsLayout
 import com.odesa.musicMatters.data.preferences.PreferenceStore
+import com.odesa.musicMatters.data.preferences.SortSongsBy
 import com.odesa.musicMatters.data.preferences.impl.LoopMode
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.Belarusian
@@ -16,9 +17,11 @@ import com.odesa.musicMatters.services.i18n.Spanish
 import com.odesa.musicMatters.ui.theme.MusicallyFont
 import com.odesa.musicMatters.ui.theme.SupportedFonts
 import com.odesa.musicMatters.ui.theme.ThemeMode
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.withContext
 
 class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore) : SettingsRepository {
 
@@ -109,17 +112,24 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore) : Se
     private val _currentlyDisabledTreePaths = MutableStateFlow( preferenceStore.getCurrentlyDisabledTreePaths() )
     override val currentlyDisabledTreePaths = _currentlyDisabledTreePaths.asStateFlow()
 
+    private val _currentSortSongsBy = MutableStateFlow( preferenceStore.getSortSongsBy() )
+    override val currentSortSongsBy = _currentSortSongsBy.asStateFlow()
+
     override suspend fun setLanguage( localeCode: String ) {
-        preferenceStore.setLanguage( localeCode )
-        _language.update {
-            getLanguage( localeCode )
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setLanguage( localeCode )
+            _language.update {
+                getLanguage( localeCode )
+            }
         }
     }
 
     override suspend fun setFont( fontName: String ) {
-        preferenceStore.setFontName( fontName )
-        _font.update {
-            getFont( fontName )
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setFontName( fontName )
+            _font.update {
+                getFont( fontName )
+            }
         }
     }
 
@@ -134,192 +144,253 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore) : Se
     }
 
     override suspend fun setFontScale( fontScale: Float ) {
-        preferenceStore.setFontScale( fontScale )
-        _fontScale.update {
-            fontScale
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setFontScale( fontScale )
+            _fontScale.update {
+                fontScale
+            }
         }
     }
 
 
     override suspend fun setThemeMode( themeMode: ThemeMode ) {
-        preferenceStore.setThemeMode( themeMode )
-        _themeMode.update {
-            themeMode
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setThemeMode( themeMode )
+            _themeMode.update {
+                themeMode
+            }
         }
     }
 
     override suspend fun setUseMaterialYou( useMaterialYou: Boolean ) {
-        preferenceStore.setUseMaterialYou( useMaterialYou )
-        _useMaterialYou.update {
-            useMaterialYou
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setUseMaterialYou( useMaterialYou )
+            _useMaterialYou.update {
+                useMaterialYou
+            }
         }
     }
 
     override suspend fun setPrimaryColorName( primaryColorName: String ) {
-        preferenceStore.setPrimaryColorName( primaryColorName )
-        _primaryColorName.update {
-            primaryColorName
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setPrimaryColorName( primaryColorName )
+            _primaryColorName.update {
+                primaryColorName
+            }
         }
     }
 
     override suspend fun setHomeTabs( homeTabs: Set<HomeTab> ) {
-        preferenceStore.setHomeTabs( homeTabs )
-        _homeTabs.update {
-            homeTabs
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setHomeTabs( homeTabs )
+            _homeTabs.update {
+                homeTabs
+            }
         }
     }
 
     override suspend fun setHomePageBottomBarLabelVisibility( homePageBottomBarLabelVisibility: HomePageBottomBarLabelVisibility) {
-        preferenceStore.setHomePageBottomBarLabelVisibility( homePageBottomBarLabelVisibility )
-        _homePageBottomBarLabelVisibility.update {
-            homePageBottomBarLabelVisibility
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setHomePageBottomBarLabelVisibility( homePageBottomBarLabelVisibility )
+            _homePageBottomBarLabelVisibility.update {
+                homePageBottomBarLabelVisibility
+            }
         }
     }
 
     override suspend fun setFadePlayback( fadePlayback: Boolean ) {
-        preferenceStore.setFadePlayback( fadePlayback )
-        _fadePlayback.update {
-            fadePlayback
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setFadePlayback( fadePlayback )
+            _fadePlayback.update {
+                fadePlayback
+            }
         }
     }
 
     override suspend fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
-        preferenceStore.setFadePlaybackDuration( fadePlaybackDuration )
-        _fadePlaybackDuration.update {
-            fadePlaybackDuration
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setFadePlaybackDuration( fadePlaybackDuration )
+            _fadePlaybackDuration.update {
+                fadePlaybackDuration
+            }
         }
     }
 
     override suspend fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
-        preferenceStore.setRequireAudioFocus( requireAudioFocus )
-        _requireAudioFocus.update {
-            requireAudioFocus
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setRequireAudioFocus( requireAudioFocus )
+            _requireAudioFocus.update {
+                requireAudioFocus
+            }
         }
     }
 
     override suspend fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean ) {
-        preferenceStore.setIgnoreAudioFocusLoss( ignoreAudioFocusLoss )
-        _ignoreAudioFocusLoss.update {
-            ignoreAudioFocusLoss
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setIgnoreAudioFocusLoss( ignoreAudioFocusLoss )
+            _ignoreAudioFocusLoss.update {
+                ignoreAudioFocusLoss
+            }
         }
     }
 
     override suspend fun setPlayOnHeadphonesConnect( playOnHeadphonesConnect: Boolean ) {
-        preferenceStore.setPlayOnHeadphonesConnect( playOnHeadphonesConnect )
-        _playOnHeadphonesConnect.update {
-            playOnHeadphonesConnect
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setPlayOnHeadphonesConnect( playOnHeadphonesConnect )
+            _playOnHeadphonesConnect.update {
+                playOnHeadphonesConnect
+            }
         }
     }
 
     override suspend fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean ) {
-        preferenceStore.setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect )
-        _pauseOnHeadphonesDisconnect.update {
-            pauseOnHeadphonesDisconnect
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect )
+            _pauseOnHeadphonesDisconnect.update {
+                pauseOnHeadphonesDisconnect
+            }
         }
     }
 
     override suspend fun setFastRewindDuration( fastRewindDuration: Int ) {
-        preferenceStore.setFastRewindDuration( fastRewindDuration )
-        _fastRewindDuration.update {
-            fastRewindDuration
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setFastRewindDuration( fastRewindDuration )
+            _fastRewindDuration.update {
+                fastRewindDuration
+            }
         }
     }
 
     override suspend fun setFastForwardDuration( fastForwardDuration: Int ) {
-        preferenceStore.setFastForwardDuration( fastForwardDuration )
-        _fastForwardDuration.update {
-            fastForwardDuration
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setFastForwardDuration( fastForwardDuration )
+            _fastForwardDuration.update {
+                fastForwardDuration
+            }
         }
     }
 
     override suspend fun setMiniPlayerShowTrackControls( showTrackControls: Boolean ) {
-        preferenceStore.setMiniPlayerShowTrackControls( showTrackControls )
-        _miniPlayerShowTrackControls.update {
-            showTrackControls
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setMiniPlayerShowTrackControls( showTrackControls )
+            _miniPlayerShowTrackControls.update {
+                showTrackControls
+            }
         }
     }
 
     override suspend fun setMiniPlayerShowSeekControls( showSeekControls: Boolean ) {
-        preferenceStore.setMiniPlayerShowSeekControls( showSeekControls )
-        _miniPlayerShowSeekControls.update {
-            showSeekControls
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setMiniPlayerShowSeekControls( showSeekControls )
+            _miniPlayerShowSeekControls.update {
+                showSeekControls
+            }
         }
     }
 
     override suspend fun setMiniPlayerTextMarquee( textMarquee: Boolean ) {
-        preferenceStore.setMiniPlayerTextMarquee( textMarquee )
-        _miniPlayerTextMarquee.update {
-            textMarquee
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setMiniPlayerTextMarquee( textMarquee )
+            _miniPlayerTextMarquee.update {
+                textMarquee
+            }
         }
     }
 
     override suspend fun setNowPlayingLyricsLayout( nowPlayingLyricsLayout: NowPlayingLyricsLayout) {
-        preferenceStore.setNowPlayingLyricsLayout( nowPlayingLyricsLayout )
-        _nowPlayingLyricsLayout.update {
-            nowPlayingLyricsLayout
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setNowPlayingLyricsLayout( nowPlayingLyricsLayout )
+            _nowPlayingLyricsLayout.update {
+                nowPlayingLyricsLayout
+            }
         }
     }
 
     override suspend fun setShowNowPlayingAudioInformation(showNowPlayingAudioInformation: Boolean ) {
-        preferenceStore.setShowNowPlayingAudioInformation( showNowPlayingAudioInformation )
-        _showNowPlayingAudioInformation.update {
-            showNowPlayingAudioInformation
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setShowNowPlayingAudioInformation( showNowPlayingAudioInformation )
+            _showNowPlayingAudioInformation.update {
+                showNowPlayingAudioInformation
+            }
         }
     }
 
     override suspend fun setShowNowPlayingSeekControls( showNowPlayingSeekControls: Boolean ) {
-        preferenceStore.setShowNowPlayingSeekControls( showNowPlayingSeekControls )
-        _showNowPlayingSeekControls.update {
-            showNowPlayingSeekControls
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setShowNowPlayingSeekControls( showNowPlayingSeekControls )
+            _showNowPlayingSeekControls.update {
+                showNowPlayingSeekControls
+            }
         }
     }
 
     override suspend fun setCurrentPlayingSpeed( currentPlayingSpeed: Float ) {
-        preferenceStore.setCurrentPlayingSpeed( currentPlayingSpeed )
-        _currentPlayingSpeed.update {
-            currentPlayingSpeed
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setCurrentPlayingSpeed( currentPlayingSpeed )
+            _currentPlayingSpeed.update {
+                currentPlayingSpeed
+            }
         }
     }
 
     override suspend fun setCurrentPlayingPitch( currentPlayingPitch: Float ) {
-        preferenceStore.setCurrentPlayingPitch( currentPlayingPitch )
-        _currentPlayingPitch.update {
-            currentPlayingPitch
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setCurrentPlayingPitch( currentPlayingPitch )
+            _currentPlayingPitch.update {
+                currentPlayingPitch
+            }
         }
     }
 
     override suspend fun setCurrentLoopMode( currentLoopMode: LoopMode) {
-        preferenceStore.setCurrentLoopMode( currentLoopMode )
-        _currentLoopMode.update {
-            currentLoopMode
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setCurrentLoopMode( currentLoopMode )
+            _currentLoopMode.update {
+                currentLoopMode
+            }
         }
     }
 
     override suspend fun setShuffle( shuffle: Boolean ) {
-        preferenceStore.setShuffle( shuffle )
-        _shuffle.update {
-            shuffle
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setShuffle( shuffle )
+            _shuffle.update {
+                shuffle
+            }
         }
     }
 
     override suspend fun setShowLyrics( showLyrics: Boolean ) {
-        preferenceStore.setShowLyrics( showLyrics )
-        _showLyrics.update {
-            showLyrics
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setShowLyrics( showLyrics )
+            _showLyrics.update {
+                showLyrics
+            }
         }
     }
 
     override suspend fun setControlsLayoutIsDefault( controlsLayoutIsDefault: Boolean ) {
-        preferenceStore.setControlsLayoutIsDefault( controlsLayoutIsDefault )
-        _controlsLayoutIsDefault.update {
-            controlsLayoutIsDefault
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setControlsLayoutIsDefault( controlsLayoutIsDefault )
+            _controlsLayoutIsDefault.update {
+                controlsLayoutIsDefault
+            }
         }
     }
 
     override suspend fun setCurrentlyDisabledTreePaths( paths: List<String> ) {
-        preferenceStore.setCurrentlyDisabledTreePaths( paths )
-        _currentlyDisabledTreePaths.update {
-            paths
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setCurrentlyDisabledTreePaths( paths )
+            _currentlyDisabledTreePaths.update {
+                paths
+            }
+        }
+    }
+
+    override suspend fun setCurrentSortSongsByValueTo( newSortSongsBy: SortSongsBy ) {
+        withContext( Dispatchers.IO ) {
+            preferenceStore.setSortSongsBy( newSortSongsBy )
+            _currentSortSongsBy.value = newSortSongsBy
         }
     }
 

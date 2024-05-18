@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import com.odesa.musicMatters.data.playlists.Playlist
 import com.odesa.musicMatters.data.playlists.PlaylistRepository
+import com.odesa.musicMatters.data.preferences.SortSongsBy
 import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.media.Song
@@ -27,6 +28,7 @@ class SongsScreenViewModel(
             language = settingsRepository.language.value,
             themeMode = settingsRepository.themeMode.value,
             songs = emptyList(),
+            sortSongsBy = settingsRepository.currentSortSongsBy.value,
             currentlyPlayingSongId = musicServiceConnection.nowPlaying.value.mediaId,
             favoriteSongIds = playlistRepository.favoritesPlaylist.value.songIds,
             isLoading = musicServiceConnection.isInitializing.value,
@@ -43,12 +45,13 @@ class SongsScreenViewModel(
         viewModelScope.launch { observeCurrentlyPlayingSong() }
         viewModelScope.launch { observeFavoriteSongIds() }
         viewModelScope.launch { observePlaylists() }
+        viewModelScope.launch { observeSortSongsBy() }
     }
 
     private suspend fun observeSongs() {
         musicServiceConnection.cachedSongs.collect {
             _uiState.value = _uiState.value.copy(
-                songs = it
+                songs = sortSongs( it, uiState.value.sortSongsBy )
             )
         }
     }
@@ -101,6 +104,15 @@ class SongsScreenViewModel(
         }
     }
 
+    private suspend fun observeSortSongsBy() {
+        settingsRepository.currentSortSongsBy.collect {
+            _uiState.value = _uiState.value.copy(
+                sortSongsBy = it,
+                songs = sortSongs( uiState.value.songs, it )
+            )
+        }
+    }
+
     private fun fetchRequiredPlaylistsFrom( playlists: List<Playlist> ): List<Playlist> {
         val requiredPlaylists = playlists.filter {
             it != playlistRepository.recentlyPlayedSongsPlaylist.value &&
@@ -131,9 +143,18 @@ class SongsScreenViewModel(
         }
     }
 
+    fun shuffleAndPlay() {
+        viewModelScope.launch {
+            musicServiceConnection.shuffleAndPlay(
+                mediaItems = uiState.value.songs.map { it.mediaItem }
+            )
+        }
+    }
+
     fun searchSongsMatching( query: String ): List<Song> {
         return musicServiceConnection.searchSongsMatching( query )
     }
+
     fun createPlaylist( title: String, songs: List<Song> ) {
         viewModelScope.launch {
             playlistRepository.savePlaylist(
@@ -145,12 +166,34 @@ class SongsScreenViewModel(
             )
         }
     }
+
+    fun setSortSongsBy( sortSongsBy: SortSongsBy ) {
+        viewModelScope.launch {
+            settingsRepository.setCurrentSortSongsByValueTo( sortSongsBy )
+        }
+    }
+
+    private fun sortSongs( songs: List<Song>, sortSongsBy: SortSongsBy ): List<Song> {
+        return when ( sortSongsBy ) {
+            SortSongsBy.TITLE -> songs.sortedBy { it.title }
+            SortSongsBy.ALBUM -> songs.sortedBy { it.albumTitle }
+            SortSongsBy.ARTIST -> songs.sortedBy { it.artists.joinToString() }
+            SortSongsBy.COMPOSER -> songs.sortedBy { it.composer }
+            SortSongsBy.DURATION -> songs.sortedBy { it.duration }
+            SortSongsBy.YEAR -> songs.sortedBy { it.year }
+            SortSongsBy.DATE_ADDED -> songs.sortedBy { it.dateModified }
+            SortSongsBy.FILENAME -> songs.sortedBy { it.path }
+            SortSongsBy.TRACK_NUMBER -> songs.sortedBy { it.trackNumber }
+            SortSongsBy.CUSTOM -> songs.shuffled()
+        }
+    }
 }
 
 data class SongsScreenUiState(
     val language: Language,
     val themeMode: ThemeMode,
     val songs: List<Song>,
+    val sortSongsBy: SortSongsBy,
     val currentlyPlayingSongId: String,
     val favoriteSongIds: List<String>,
     val isLoading: Boolean,

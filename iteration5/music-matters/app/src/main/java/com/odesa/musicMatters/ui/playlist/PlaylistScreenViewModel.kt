@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 
 class PlaylistScreenViewModel(
+    private val playlistId: String,
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
     private val playlistRepository: PlaylistRepository
@@ -42,14 +43,14 @@ class PlaylistScreenViewModel(
         viewModelScope.launch { observeCurrentlyPlayingSong() }
         viewModelScope.launch { observeFavoriteSongIds() }
         viewModelScope.launch { observePlaylists() }
-        viewModelScope.launch { observePlaylists() }
     }
 
     private suspend fun observeMusicServiceConnectionInitializedStatus() {
-        musicServiceConnection.isInitializing.collect {
+        musicServiceConnection.isInitializing.collect { isInitializing ->
             _uiState.value = _uiState.value.copy(
-                isLoadingSongsInPlaylist = it
+                isLoadingSongsInPlaylist = isInitializing
             )
+            if ( !isInitializing ) loadSongsInPlaylistWithId( playlistId )
         }
     }
 
@@ -71,7 +72,7 @@ class PlaylistScreenViewModel(
 
     private suspend fun observePlaylists() {
         playlistRepository.playlists.collect {
-            currentPlaylistId?.let { loadSongsInPlaylistWithId( it ) }
+            currentPlaylistId?.let { id -> loadSongsInPlaylistWithId( id ) }
             _uiState.value = _uiState.value.copy(
                 playlists = fetchRequiredPlaylistsFrom( it )
             )
@@ -84,7 +85,7 @@ class PlaylistScreenViewModel(
     }
 
 
-    fun loadSongsInPlaylistWithId( playlistId: String ) {
+    private fun loadSongsInPlaylistWithId( playlistId: String ) {
         currentPlaylistId = playlistId
         playlistRepository.playlists.value.find { it.id == playlistId }?.let { playlist ->
             _uiState.value = _uiState.value.copy(
@@ -143,12 +144,14 @@ data class PlaylistScreenUiState(
 
 @Suppress( "UNCHECKED_CAST" )
 class PlaylistScreenViewModelFactory(
+    private val playlistId: String,
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
     private val playlistsRepository: PlaylistRepository
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create( modelClass: Class<T> ) =
         ( PlaylistScreenViewModel(
+            playlistId = playlistId,
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
             playlistRepository = playlistsRepository

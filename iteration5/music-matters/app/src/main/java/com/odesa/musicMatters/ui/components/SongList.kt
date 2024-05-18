@@ -121,9 +121,7 @@ fun SortSongsBy.label( language: Language ) = when ( this ) {
     SortSongsBy.ALBUM -> language.album
     SortSongsBy.DURATION -> language.duration
     SortSongsBy.DATE_ADDED -> language.dateAdded
-    SortSongsBy.DATE_MODIFIED -> language.lastModified
     SortSongsBy.COMPOSER -> language.composer
-    SortSongsBy.ALBUM_ARTIST -> language.albumArtist
     SortSongsBy.YEAR -> language.year
     SortSongsBy.FILENAME -> language.filename
     SortSongsBy.TRACK_NUMBER -> language.trackNumber

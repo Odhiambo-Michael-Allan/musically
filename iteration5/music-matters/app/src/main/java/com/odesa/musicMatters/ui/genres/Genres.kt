@@ -18,6 +18,7 @@ import com.odesa.musicMatters.ui.components.testGenres
 fun GenresScreen(
     viewModel: GenresScreenViewModel,
     onGenreClick: ( String ) -> Unit,
+    onNavigateToSearch: () -> Unit,
     onSettingsClicked: () -> Unit
 ) {
 
@@ -26,6 +27,7 @@ fun GenresScreen(
     GenresScreenContent(
         uiState = genreScreenUiState,
         onGenreClick = onGenreClick,
+        onNavigateToSearch = onNavigateToSearch,
         onSettingsClicked = onSettingsClicked
     )
 }
@@ -34,13 +36,14 @@ fun GenresScreen(
 fun GenresScreenContent(
     uiState: GenreScreenUiState,
     onGenreClick: ( String ) -> Unit,
+    onNavigateToSearch: () -> Unit,
     onSettingsClicked: () -> Unit
 ) {
     Column (
         modifier = Modifier.fillMaxSize()
     ) {
         TopAppBar(
-            onNavigationIconClicked = { /*TODO*/ },
+            onNavigationIconClicked = onNavigateToSearch,
             title = uiState.language.genres,
             settings = uiState.language.settings,
             onSettingsClicked = onSettingsClicked
@@ -68,6 +71,7 @@ fun GenresScreenContentPreview() {
     GenresScreenContent(
         uiState = testGenreScreenUiState,
         onGenreClick = {},
+        onNavigateToSearch = {},
         onSettingsClicked = {}
     )
 }

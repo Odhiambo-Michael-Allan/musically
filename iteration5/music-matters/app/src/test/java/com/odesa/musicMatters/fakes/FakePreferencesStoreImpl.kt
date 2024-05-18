@@ -37,7 +37,6 @@ class FakePreferencesStoreImpl : PreferenceStore {
     private var sortSongsInReverse: Boolean? = null
     private var currentPlayingSpeed: Float? = null
     private var currentPlayingPitch: Float? = null
-    private var pauseOnCurrentSongEnd: Boolean? = null
     private var currentLoopMode: LoopMode? = null
     private var shuffle: Boolean? = null
     private var showLyrics: Boolean? = null

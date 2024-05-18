@@ -1,7 +1,6 @@
 package com.odesa.musicMatters.ui.forYou
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,7 +47,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.MediaItem
 import coil.compose.AsyncImage
@@ -235,7 +234,6 @@ fun PlayHistory(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ForYouSongRow(
     heading: String,
@@ -276,7 +274,7 @@ fun ForYouSongRow(
     }
 }
 
-@Preview( showSystemUi = true )
+@PreviewScreenSizes
 @Composable
 fun ForYouScreenContentPreview() {
     ForYouScreenContent(

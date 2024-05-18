@@ -212,6 +212,10 @@ class FakeMusicServiceConnection : MusicServiceConnection {
         TODO("Not yet implemented")
     }
 
+    override suspend fun shuffleAndPlay( mediaItems: List<MediaItem> ) {
+        TODO("Not yet implemented")
+    }
+
     override fun setPlaybackSpeed(playbackSpeed: Float) {
         TODO("Not yet implemented")
     }

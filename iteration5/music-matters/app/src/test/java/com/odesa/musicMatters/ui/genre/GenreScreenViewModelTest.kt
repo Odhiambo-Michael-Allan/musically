@@ -41,6 +41,7 @@ class GenreScreenViewModelTest {
         settingsRepository = FakeSettingsRepository()
         playlistRepository = FakePlaylistRepository()
         viewModel = GenreScreenViewModel(
+            genreName = "Hip Hop",
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
             playlistRepository = playlistRepository
@@ -50,7 +51,6 @@ class GenreScreenViewModelTest {
     @Test
     fun testLoadSongsWithSpecificGenre() {
         assertTrue( viewModel.uiState.value.isLoading )
-        viewModel.loadSongsWithGenre(  "Hip Hop" )
         musicServiceConnection.setIsInitialized()
         assertFalse( viewModel.uiState.value.isLoading )
         assertEquals( 2, viewModel.uiState.value.songsInGenre.size )

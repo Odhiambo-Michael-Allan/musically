@@ -19,13 +19,14 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 
 class GenreScreenViewModel(
+    private val genreName: String,
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
     private val playlistRepository: PlaylistRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
-        GenreScreenUistate(
+        GenreScreenUiState(
             language = settingsRepository.language.value,
             themeMode = settingsRepository.themeMode.value,
             songsInGenre = emptyList(),
@@ -47,11 +48,19 @@ class GenreScreenViewModel(
     }
 
     private suspend fun observeMusicServiceConnectionInitializedStatus() {
-        musicServiceConnection.isInitializing.collect {
+        musicServiceConnection.isInitializing.collect { isInitializing ->
             _uiState.value = _uiState.value.copy(
-                isLoading = it
+                isLoading = isInitializing
             )
+            if ( !isInitializing ) loadSongsWithGenre( genreName )
         }
+    }
+
+    private fun loadSongsWithGenre( genre: String ) {
+        val songs = musicServiceConnection.cachedSongs.value
+        _uiState.value = _uiState.value.copy(
+            songsInGenre = songs.filter { it.genre?.lowercase() == genre.lowercase() },
+        )
     }
 
     private suspend fun observeLanguageChange() {
@@ -103,13 +112,6 @@ class GenreScreenViewModel(
         viewModelScope.launch { playlistRepository.addToFavorites( songId ) }
     }
 
-    fun loadSongsWithGenre( genre: String ) {
-        val songs = musicServiceConnection.cachedSongs.value
-        _uiState.value = _uiState.value.copy(
-            songsInGenre = songs.filter { it.genre?.lowercase() == genre.lowercase() },
-        )
-    }
-
     fun addSongToPlaylist( playlist: Playlist, song: Song ) {
         viewModelScope.launch {
             playlistRepository.addSongIdToPlaylist( song.id, playlist.id )
@@ -144,19 +146,21 @@ class GenreScreenViewModel(
 
 @Suppress( "UNCHECKED_CAST" )
 class GenreScreenViewModelFactory(
+    private val genreName: String,
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
     private val playlistRepository: PlaylistRepository,
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T: ViewModel> create( modelClass: Class<T> ) =
         ( GenreScreenViewModel(
+            genreName = genreName,
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
             playlistRepository = playlistRepository,
         ) as T )
 }
 
-data class GenreScreenUistate(
+data class GenreScreenUiState(
     val language: Language,
     val themeMode: ThemeMode,
     val songsInGenre: List<Song>,
@@ -166,7 +170,7 @@ data class GenreScreenUistate(
     val playlists: List<Playlist>,
 )
 
-val testGenreScreenUiState = GenreScreenUistate(
+val testGenreScreenUiState = GenreScreenUiState(
     language = SettingsDefaults.language,
     themeMode = SettingsDefaults.themeMode,
     songsInGenre = testSongs,

@@ -3,6 +3,7 @@ package com.odesa.musicMatters.data.settings
 import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.data.preferences.HomeTab
 import com.odesa.musicMatters.data.preferences.NowPlayingLyricsLayout
+import com.odesa.musicMatters.data.preferences.SortSongsBy
 import com.odesa.musicMatters.data.preferences.impl.LoopMode
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.ui.theme.MusicallyFont
@@ -41,6 +42,7 @@ interface SettingsRepository {
     val controlsLayoutIsDefault: StateFlow<Boolean>
 
     val currentlyDisabledTreePaths: StateFlow<List<String>>
+    val currentSortSongsBy: StateFlow<SortSongsBy>
 
     suspend fun setLanguage( localeCode: String )
     suspend fun setFont( fontName: String )
@@ -71,4 +73,5 @@ interface SettingsRepository {
     suspend fun setShowLyrics( showLyrics: Boolean )
     suspend fun setControlsLayoutIsDefault( controlsLayoutIsDefault: Boolean )
     suspend fun setCurrentlyDisabledTreePaths( paths: List<String> )
+    suspend fun setCurrentSortSongsByValueTo( newSortSongsBy: SortSongsBy )
 }

@@ -19,7 +19,6 @@ import com.odesa.musicMatters.utils.subListNonStrict
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 class ForYouScreenViewModel(
     private val musicServiceConnection: MusicServiceConnection,
@@ -131,13 +130,8 @@ class ForYouScreenViewModel(
     fun shuffleAndPlay() {
         if ( uiState.value.isLoadingRecentSongs ) return
         viewModelScope.launch {
-            val songsList = musicServiceConnection.cachedSongs.value
-            val randomSongToPlay = songsList[ Random.nextInt( songsList.size ) ]
-            musicServiceConnection.playMediaItem(
-                mediaItem = randomSongToPlay.mediaItem,
-                mediaItems = songsList.map { it.mediaItem },
-                shuffle = true
-            )
+            val mediaItems = musicServiceConnection.cachedSongs.value.map { it.mediaItem }
+            musicServiceConnection.shuffleAndPlay( mediaItems )
         }
     }
 

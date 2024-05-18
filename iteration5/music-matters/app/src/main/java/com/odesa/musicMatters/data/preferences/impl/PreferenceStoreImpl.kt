@@ -307,16 +307,16 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
         }
     }
 
-    override suspend fun setSortSongsBy(sortSongsBy: SortSongsBy) {
+    override suspend fun setSortSongsBy( sortSongsBy: SortSongsBy ) {
         withContext( Dispatchers.IO ) {
             getSharedPreferences().edit {
-                putEnum(SettingsKeys.SORT_SONGS_BY, sortSongsBy )
+                putEnum( SettingsKeys.SORT_SONGS_BY, sortSongsBy )
             }
         }
     }
 
     override fun getSortSongsBy() = getSharedPreferences()
-        .getEnum(SettingsKeys.SORT_SONGS_BY, null ) ?: SettingsDefaults.sortSongsBy
+        .getEnum( SettingsKeys.SORT_SONGS_BY, null ) ?: SettingsDefaults.sortSongsBy
 
     override suspend fun setSortSongsInReverse(sortSongsInReverse: Boolean ) {
         withContext( Dispatchers.IO ) {
@@ -327,7 +327,7 @@ class PreferenceStoreImpl( private val context: Context ) : PreferenceStore {
     }
 
     override fun getSortSongsInReverse() = getSharedPreferences()
-        .getBoolean(SettingsKeys.SORT_SONGS_IN_REVERSE, SettingsDefaults.SORT_SONGS_IN_REVERSE)
+        .getBoolean( SettingsKeys.SORT_SONGS_IN_REVERSE, SettingsDefaults.SORT_SONGS_IN_REVERSE )
 
     override suspend fun setCurrentPlayingSpeed( currentPlayingSpeed: Float ) {
         withContext( Dispatchers.IO ) {

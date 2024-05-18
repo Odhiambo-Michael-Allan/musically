@@ -9,6 +9,7 @@ import com.odesa.musicMatters.data.settings.SettingsRepository
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
+import com.odesa.musicMatters.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -24,7 +25,8 @@ class PlaylistsViewModel(
             playlists = playlistRepository.playlists.value,
             songs = emptyList(),
             isLoadingSongs = musicServiceConnection.isInitializing.value,
-            language = settingsRepository.language.value
+            language = settingsRepository.language.value,
+            themeMode = settingsRepository.themeMode.value
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -34,6 +36,7 @@ class PlaylistsViewModel(
         viewModelScope.launch { observeSongs() }
         viewModelScope.launch { observePlaylistsChange() }
         viewModelScope.launch { observeLanguageChange() }
+        viewModelScope.launch { observeThemeModeChange() }
     }
 
     private suspend fun observeMusicServiceConnectionInitializedStatus() {
@@ -68,6 +71,14 @@ class PlaylistsViewModel(
         }
     }
 
+    private suspend fun observeThemeModeChange() {
+        settingsRepository.themeMode.collect {
+            _uiState.value = _uiState.value.copy(
+                themeMode = it
+            )
+        }
+    }
+
     fun playSongsInPlaylist( songIds: List<String> ) {
         viewModelScope.launch {
             val songs = musicServiceConnection.cachedSongs.value.filter {
@@ -88,6 +99,7 @@ data class PlaylistsScreenUiState(
     val playlists: List<Playlist>,
     val isLoadingSongs: Boolean,
     val language: Language,
+    val themeMode: ThemeMode,
 )
 
 @Suppress( "UNCHECKED_CAST" )

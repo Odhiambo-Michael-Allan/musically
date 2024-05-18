@@ -24,6 +24,7 @@ fun TreeScreen(
     onPlayNext: (MediaItem ) -> Unit,
     onAddToQueue: ( MediaItem ) -> Unit,
     onShareSong: ( Uri, String ) -> Unit,
+    onNavigateToSearch: () -> Unit,
     onSettingsClicked: () -> Unit
 ) {
 
@@ -46,7 +47,8 @@ fun TreeScreen(
         onViewAlbum = onViewAlbum,
         onFavorite = { viewModel.addToFavorites( it ) },
         onAddToQueue = onAddToQueue,
-        onShareSong = { onShareSong( it, uiState.language.shareFailedX( "" ) )}
+        onShareSong = { onShareSong( it, uiState.language.shareFailedX( "" ) ) },
+        onNavigateToSearch = onNavigateToSearch,
     )
 }
 
@@ -64,6 +66,7 @@ fun TreeScreenContent(
     onPlayNext: ( MediaItem ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
+    onNavigateToSearch: () -> Unit,
     onSettingsClicked: () -> Unit
 ) {
 
@@ -73,7 +76,7 @@ fun TreeScreenContent(
 
     Column {
         TopAppBar(
-            onNavigationIconClicked = { /*TODO*/ },
+            onNavigationIconClicked = onNavigateToSearch,
             title = uiState.language.tree,
             settings = uiState.language.settings,
             onSettingsClicked = onSettingsClicked,
@@ -117,6 +120,7 @@ fun TreeScreenContentPreview() {
         onPlayNext = {},
         onShareSong = {},
         onViewAlbum = {},
-        onViewArtist = {}
+        onViewArtist = {},
+        onNavigateToSearch = {}
     )
 }

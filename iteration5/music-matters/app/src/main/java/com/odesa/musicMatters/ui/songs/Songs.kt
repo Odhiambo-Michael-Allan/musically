@@ -33,16 +33,17 @@ fun SongsScreen(
     onPlayNext: ( MediaItem ) -> Unit,
     onAddToQueue: ( MediaItem ) -> Unit,
     onShareSong: ( Uri, String ) -> Unit,
-    onSettingsClicked: () -> Unit
+    onSettingsClicked: () -> Unit,
+    onNavigateToSearch: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     SongsScreenContent(
         uiState = uiState,
         onSortReverseChange = {},
-        onSortTypeChange = {},
+        onSortTypeChange = { viewModel.setSortSongsBy( it ) },
         onSettingsClicked = onSettingsClicked,
-        onShufflePlay = {},
+        onShufflePlay = { viewModel.shuffleAndPlay() },
         playSong = {
             viewModel.playMedia( it.mediaItem )
         },
@@ -59,7 +60,8 @@ fun SongsScreen(
         },
         onSearchSongsMatchingQuery = { viewModel.searchSongsMatching( it ) },
         onCreatePlaylist = { title, songs -> viewModel.createPlaylist( title, songs ) },
-        onShareSong = { onShareSong( it, uiState.language.shareFailedX( "" ) ) }
+        onShareSong = { onShareSong( it, uiState.language.shareFailedX( "" ) ) },
+        onNavigateToSearch = onNavigateToSearch,
     )
 }
 
@@ -67,7 +69,7 @@ fun SongsScreen(
 fun SongsScreenContent(
     uiState: SongsScreenUiState,
     onSortReverseChange: ( Boolean ) -> Unit,
-    onSortTypeChange: (SortSongsBy) -> Unit,
+    onSortTypeChange: ( SortSongsBy ) -> Unit,
     onSettingsClicked: () -> Unit,
     onShufflePlay: () -> Unit,
     playSong: ( Song ) -> Unit,
@@ -81,6 +83,7 @@ fun SongsScreenContent(
     onAddSongToPlaylist: ( Playlist, Song ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
+    onNavigateToSearch: () -> Unit,
 ) {
     val fallbackResourceId =
         if ( uiState.themeMode.isLight( LocalContext.current ) )
@@ -90,7 +93,7 @@ fun SongsScreenContent(
         modifier = Modifier.fillMaxSize()
     ) {
         TopAppBar(
-            onNavigationIconClicked = { /*TODO*/ },
+            onNavigationIconClicked = onNavigateToSearch,
             title = uiState.language.songs,
             settings = uiState.language.settings,
             onSettingsClicked = onSettingsClicked
@@ -102,7 +105,7 @@ fun SongsScreenContent(
             SongList(
                 sortReverse = true,
                 onSortReverseChange = onSortReverseChange,
-                sortSongsBy = SortSongsBy.TITLE,
+                sortSongsBy = uiState.sortSongsBy,
                 onSortTypeChange = onSortTypeChange,
                 language = uiState.language,
                 songs = uiState.songs,
@@ -154,7 +157,8 @@ fun SongsScreenContentPreview() {
             onGetSongsInPlaylist = { emptyList() },
             onAddSongToPlaylist = { _, _ -> },
             onSearchSongsMatchingQuery = { emptyList() },
-            onCreatePlaylist = { _, _ -> }
+            onCreatePlaylist = { _, _ -> },
+            onNavigateToSearch = {}
         )
     }
 }
@@ -167,5 +171,6 @@ val uiState = SongsScreenUiState(
     currentlyPlayingSongId = testSongs.first().id,
     favoriteSongIds = testSongs.map { it.id },
     isLoading = true,
-    playlists = emptyList()
+    playlists = emptyList(),
+    sortSongsBy = SortSongsBy.TITLE
 )
