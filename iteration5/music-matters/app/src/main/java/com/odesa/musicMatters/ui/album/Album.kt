@@ -23,7 +23,7 @@ import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.media.Album
 import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.services.media.testAlbums
-import com.odesa.musicMatters.ui.components.AlbumDropdownMenu
+import com.odesa.musicMatters.ui.components.AlbumOptionsBottomSheetMenu
 import com.odesa.musicMatters.ui.components.Banner
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.MinimalAppBar
@@ -136,7 +136,12 @@ fun AlbumScreenContent(
                         AlbumArtwork(
                             album = uiState.album!!,
                             language = uiState.language,
-                            fallbackResourceId = fallbackResourceId
+                            fallbackResourceId = fallbackResourceId,
+                            onAddToPlaylist = {},
+                            onAddToQueue = {},
+                            onShufflePlay = {},
+                            onPlayNext = {},
+                            onViewArtist = {}
                         )
                     }
                 }
@@ -151,6 +156,11 @@ private fun AlbumArtwork(
     album: Album,
     language: Language,
     @DrawableRes fallbackResourceId: Int,
+    onShufflePlay: () -> Unit,
+    onPlayNext: () -> Unit,
+    onAddToPlaylist: () -> Unit,
+    onAddToQueue: () -> Unit,
+    onViewArtist: ( String ) -> Unit,
 ) {
     Banner(
         imageRequest = ImageRequest.Builder( LocalContext.current ).apply {
@@ -161,16 +171,19 @@ private fun AlbumArtwork(
             crossfade( true )
         }.build(),
         options = { expanded, onDismissRequest ->
-            AlbumDropdownMenu(
-                album = album,
-                language = language,
-                expanded = expanded,
-                onShufflePlay = { /*TODO*/ },
-                onPlayNext = { /*TODO*/ },
-                onAddToQueue = { /*TODO*/ },
-                onViewArtist = {},
-                onDismissRequest = onDismissRequest
-            )
+            if ( expanded ) {
+                AlbumOptionsBottomSheetMenu(
+                    album = album,
+                    language = language,
+                    fallbackResourceId = fallbackResourceId,
+                    onShufflePlay = onShufflePlay,
+                    onPlayNext = onPlayNext,
+                    onAddToQueue = onAddToQueue,
+                    onAddToPlaylist = onAddToPlaylist,
+                    onViewArtist = onViewArtist,
+                    onDismissRequest = onDismissRequest
+                )
+            }
         }
     ) {
         Column {
@@ -192,7 +205,12 @@ fun AlbumArtworkPreview() {
     AlbumArtwork(
         album = testAlbums.first(),
         language = English,
-        fallbackResourceId = R.drawable.placeholder_light
+        fallbackResourceId = R.drawable.placeholder_light,
+        onAddToPlaylist = {},
+        onAddToQueue = {},
+        onShufflePlay = {},
+        onPlayNext = {},
+        onViewArtist = {}
     )
 }
 

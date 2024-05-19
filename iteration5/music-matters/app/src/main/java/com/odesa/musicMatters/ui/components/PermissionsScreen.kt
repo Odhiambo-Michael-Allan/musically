@@ -21,10 +21,11 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
@@ -66,9 +67,10 @@ fun PermissionsScreen(
     ) {
         Column (
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
+                .verticalScroll( rememberScrollState() )
                 .weight(1f)
                 .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer( modifier = Modifier.height( 48.dp ) )
             FlowRow(
@@ -77,6 +79,7 @@ fun PermissionsScreen(
                     .padding(16.dp)
             ) {
                 Text(
+                    modifier = Modifier.padding( end = 8.dp ),
                     text = stringResource( id = R.string.welcome_message ),
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold
@@ -97,18 +100,9 @@ fun PermissionsScreen(
                 )
             }
             HorizontalDivider()
-            PermissionCard(
-                position = "1.",
-                title = stringResource( id = R.string.storage_access ),
-                description = stringResource( id = R.string.storage_access_prompt ),
-                permissionGranted = readExternalStoragePermissionsGranted,
-                onClick = {
-                    readExternalStoragePermissionRequestLauncher.launch( Manifest.permission.READ_EXTERNAL_STORAGE )
-                }
-            )
+
             if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ) {
                 PermissionCard(
-                    position = "2.",
                     title = stringResource( id = R.string.read_media_audio ),
                     permissionGranted = readMediaAudioPermissionGranted,
                     description = stringResource( id = R.string.read_media_audio_prompt )
@@ -116,13 +110,22 @@ fun PermissionsScreen(
                     readMediaAudioPermissionRequestLauncher.launch( Manifest.permission.READ_MEDIA_AUDIO )
                 }
                 PermissionCard(
-                    position = "3.",
                     title = stringResource( id = R.string.post_notifications_permission ),
                     permissionGranted = postNotificationsPermissionGranted,
                     description = stringResource( id = R.string.post_notifications_prompt )
                 ) {
                     postNotificationsPermissionRequestLauncher.launch( Manifest.permission.POST_NOTIFICATIONS )
                 }
+            }
+            else {
+                PermissionCard(
+                    title = stringResource( id = R.string.storage_access ),
+                    description = stringResource( id = R.string.storage_access_prompt ),
+                    permissionGranted = readExternalStoragePermissionsGranted,
+                    onClick = {
+                        readExternalStoragePermissionRequestLauncher.launch( Manifest.permission.READ_EXTERNAL_STORAGE )
+                    }
+                )
             }
         }
         Row (
@@ -145,7 +148,7 @@ fun PermissionsScreen(
     }
 }
 
-@Preview( showSystemUi = true )
+@PreviewScreenSizes
 @Composable
 fun PermissionsScreenPreview() {
     MusicMattersTheme(

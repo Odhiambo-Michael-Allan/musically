@@ -3,6 +3,7 @@ package com.odesa.musicMatters.ui.components
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -21,20 +22,26 @@ import com.odesa.musicMatters.ui.theme.MusicMattersTheme
 
 @Composable
 fun AlbumRow(
+    modifier: Modifier = Modifier,
     albums: List<Album>,
     language: Language,
     @DrawableRes fallbackResourceId: Int,
     onPlaySongsInAlbum: ( Album ) -> Unit,
-    onAddToQueue: () -> Unit,
+    onAddToQueue: ( Album ) -> Unit,
     onPlayNext: () -> Unit,
-    onShufflePlay: () -> Unit,
+    onShufflePlay: ( Album ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
+    onAddToPlaylist: ( Album ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
 ) {
     BoxWithConstraints {
         val maxSize = min( maxHeight, maxWidth ).div( 2f )
         val width = min( maxSize, 200.dp )
 
-        LazyRow {
+        LazyRow (
+            modifier = modifier,
+            contentPadding = PaddingValues( 8.dp, 0.dp )
+        ) {
             items( albums ) {
                 Box(
                     modifier = Modifier.width( width.minus( 15.dp ) )
@@ -45,10 +52,11 @@ fun AlbumRow(
                         language = language,
                         fallbackResourceId = fallbackResourceId,
                         onPlayAlbum = { onPlaySongsInAlbum( it ) },
-                        onAddToQueue = onAddToQueue,
+                        onAddToQueue = { onAddToQueue( it ) },
+                        onAddToPlaylist = { onAddToPlaylist( it ) },
                         onPlayNext = onPlayNext,
-                        onShufflePlay = onShufflePlay,
-                        onViewArtist = {},
+                        onShufflePlay = { onShufflePlay( it ) },
+                        onViewArtist = onViewArtist,
                         onClick = { onViewAlbum( it.name ) }
                     )
                 }
@@ -73,9 +81,11 @@ fun AlbumRowPreview() {
             fallbackResourceId = R.drawable.placeholder_light,
             onPlaySongsInAlbum = {},
             onAddToQueue = { /*TODO*/ },
+            onAddToPlaylist = {},
             onPlayNext = { /*TODO*/ },
             onShufflePlay = { /*TODO*/ },
-            onViewAlbum = {}
+            onViewAlbum = {},
+            onViewArtist = {}
         )
     }
 }

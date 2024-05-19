@@ -52,7 +52,6 @@ object PermissionsManager {
 
     private fun hasReadExternalStoragePermission() = hasPermission( Manifest.permission.READ_EXTERNAL_STORAGE )
 
-
     private fun hasReadMediaAudioPermission(): Boolean {
         return if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU )
             hasPermission( Manifest.permission.READ_MEDIA_AUDIO )
@@ -64,8 +63,6 @@ object PermissionsManager {
             hasPermission( Manifest.permission.POST_NOTIFICATIONS )
         else false
     }
-
-    private fun hasSetRingtoneNotificationGranted() = hasPermission( Manifest.permission.WRITE_SETTINGS )
 
     private fun hasAllRequiredPermissions(): Boolean {
         getRequiredPermissions().forEach {
@@ -85,10 +82,12 @@ object PermissionsManager {
     } ?: false
 
     private fun getRequiredPermissions(): List<String> {
-        val requiredPermissions = mutableListOf( Manifest.permission.READ_EXTERNAL_STORAGE )
+        val requiredPermissions = mutableListOf<String>()
         if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ) {
             requiredPermissions.add( Manifest.permission.READ_MEDIA_AUDIO )
             requiredPermissions.add( Manifest.permission.POST_NOTIFICATIONS )
+        } else {
+            requiredPermissions.add( Manifest.permission.READ_EXTERNAL_STORAGE )
         }
         Timber.tag( TAG ).d( "REQUIRED PERMISSIONS SIZE: ${requiredPermissions.size}" )
         return requiredPermissions

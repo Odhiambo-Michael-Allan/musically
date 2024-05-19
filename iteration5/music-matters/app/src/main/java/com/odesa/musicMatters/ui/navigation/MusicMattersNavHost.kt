@@ -150,8 +150,8 @@ fun MusicMattersNavHost(
                 viewModel = forYouScreenViewModel,
                 onSettingsClicked = { navController.navigate( Route.Settings.name ) },
                 onNavigateToSearch = { navController.navigateToSearchScreen( "--" ) },
-                onSuggestedAlbumClick = { navController.navigateToAlbumScreen( it.name ) },
-                onSuggestedArtistClick = { navController.navigateToArtistScreen( it.name ) },
+                onSuggestedAlbumClick = { navController.navigateToAlbumScreen( it ) },
+                onViewArtist = { navController.navigateToArtistScreen( it ) },
             )
         }
         composable(

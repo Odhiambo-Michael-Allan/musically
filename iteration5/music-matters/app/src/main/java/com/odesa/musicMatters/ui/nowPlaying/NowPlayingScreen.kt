@@ -72,7 +72,7 @@ import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.services.media.extensions.formatMilliseconds
 import com.odesa.musicMatters.services.media.testSongs
 import com.odesa.musicMatters.services.media.toSamplingInfoString
-import com.odesa.musicMatters.ui.components.NowPlayingSongOptionsBottomSheetContent
+import com.odesa.musicMatters.ui.components.NowPlayingSongOptionsBottomSheetMenu
 import com.odesa.musicMatters.ui.components.PlaybackPosition
 import com.odesa.musicMatters.ui.components.swipeable
 import com.odesa.musicMatters.ui.navigation.FadeTransition
@@ -278,7 +278,7 @@ fun NowPlayingScreenContent(
                                 showOptionsMenu = false
                             }
                         ) {
-                            NowPlayingSongOptionsBottomSheetContent(
+                            NowPlayingSongOptionsBottomSheetMenu(
                                 song = currentlyPlayingSong,
                                 language = language,
                                 isFavorite = isFavorite,

@@ -27,7 +27,6 @@ import com.odesa.musicMatters.ui.theme.MusicMattersTheme
 
 @Composable
 fun PermissionCard(
-    position: String,
     title: String,
     description: String,
     permissionGranted: Boolean,
@@ -36,16 +35,6 @@ fun PermissionCard(
     Row(
         modifier = Modifier.padding( 12.dp )
     ) {
-        Column(
-            modifier = Modifier.padding( 8.dp )
-        ) {
-            Text(
-                text = position,
-                style = MaterialTheme.typography.labelLarge.copy(
-                    fontWeight = FontWeight.Bold
-                )
-            )
-        }
         Column (
             modifier = Modifier.padding( 8.dp ),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -101,7 +90,6 @@ fun PermissionCardPreview() {
         useMaterialYou = SettingsDefaults.USE_MATERIAL_YOU
     ) {
         PermissionCard(
-            position = "1.",
             title = stringResource( id = R.string.storage_access ),
             description = stringResource( id = R.string.storage_access_prompt ),
             permissionGranted = true,

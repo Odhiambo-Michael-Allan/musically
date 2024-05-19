@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var appContainer: AppContainer
 
-    override fun onCreate(savedInstanceState: Bundle? ) {
+    override fun onCreate( savedInstanceState: Bundle? ) {
         super.onCreate( savedInstanceState )
         Timber.plant( Timber.DebugTree() )
         appContainer = ( application as MusicMatters ).container

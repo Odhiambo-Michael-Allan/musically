@@ -179,6 +179,31 @@ class ForYouScreenViewModel(
             )
         }
     }
+
+    fun playSongsInAlbum( album: Album, shuffle: Boolean ) {
+        viewModelScope.launch {
+            val songsInAlbum = musicServiceConnection.cachedSongs.value.filter {
+                it.albumTitle == album.name
+            }.map { it.mediaItem }
+            musicServiceConnection.playMediaItem(
+                mediaItem = if ( shuffle ) songsInAlbum.random() else songsInAlbum.first(),
+                mediaItems = songsInAlbum,
+                shuffle = shuffle
+            )
+        }
+    }
+
+    fun addSongsInAlbumToQueue( album: Album ): Int {
+        val songsInAlbum = musicServiceConnection.cachedSongs.value.filter {
+            it.albumTitle == album.name
+        }.map { it.mediaItem }
+        val songsInAlbumAlreadyInQueue = songsInAlbum.size.minus(
+            musicServiceConnection.mediaItemsInQueue.value.count { songsInAlbum.contains( it ) } )
+        songsInAlbum.forEach {
+            musicServiceConnection.addToQueue( it )
+        }
+        return songsInAlbumAlreadyInQueue
+    }
 }
 
 data class ForYouScreenUiState(

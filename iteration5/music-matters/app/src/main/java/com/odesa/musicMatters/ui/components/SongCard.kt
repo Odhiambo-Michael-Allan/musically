@@ -2,7 +2,6 @@ package com.odesa.musicMatters.ui.components
 
 import android.net.Uri
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,9 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
@@ -28,7 +25,6 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
@@ -44,7 +40,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -157,7 +152,7 @@ fun SongCard(
                                     showSongOptionsBottomSheet = false
                                 }
                             ) {
-                                SongOptionsBottomSheetContent(
+                                SongOptionsBottomSheetMenu(
                                     language = language,
                                     song = song,
                                     isFavorite = isFavorite,
@@ -218,7 +213,7 @@ fun SongCard(
 }
 
 @Composable
-fun SongOptionsBottomSheetContent(
+fun SongOptionsBottomSheetMenu(
     language: Language,
     song: Song,
     isFavorite: Boolean,
@@ -234,38 +229,44 @@ fun SongOptionsBottomSheetContent(
     onAddToPlaylist: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    Column (
-        modifier = Modifier.verticalScroll( rememberScrollState() )
+    BottomSheetMenuContent(
+        bottomSheetHeader = {
+            BottomSheetMenuHeader(
+                headerImage = ImageRequest.Builder( LocalContext.current ).apply {
+                    data( song.artworkUri )
+                    placeholder( fallbackResourceId )
+                    fallback( fallbackResourceId )
+                    error( fallbackResourceId )
+                    crossfade( true )
+                }.build(),
+                title = song.title,
+                titleIsHighlighted = isCurrentlyPlaying,
+                description = song.artists.joinToString()
+            )
+        }
     ) {
-        SongOptionsBottomSheetHeader(
-            song = song,
-            fallbackResourceId = fallbackResourceId,
-            isCurrentlyPlaying = isCurrentlyPlaying,
-        )
-        HorizontalDivider( modifier = Modifier.padding( 32.dp, 0.dp ) )
-        SongOptionsBottomSheetItem(
+        BottomSheetMenuItem(
             imageVector = if ( isFavorite ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-            label = language.favorite,
-            onClick = {
-                onFavorite( song.id )
-                onDismissRequest()
-            }
-        )
-        SongOptionsBottomSheetItem(
+            label = language.favorite
+        ) {
+            onFavorite( song.id )
+            onDismissRequest()
+        }
+        BottomSheetMenuItem(
             imageVector = Icons.AutoMirrored.Filled.PlaylistPlay,
             label = language.playNext
         ) {
             onDismissRequest()
             onPlayNext( song.mediaItem )
         }
-        SongOptionsBottomSheetItem(
+        BottomSheetMenuItem(
             imageVector = Icons.AutoMirrored.Filled.PlaylistPlay,
             label = language.addToQueue
         ) {
             onAddToQueue( song.mediaItem )
             onDismissRequest()
         }
-        SongOptionsBottomSheetItem(
+        BottomSheetMenuItem(
             imageVector = Icons.AutoMirrored.Filled.PlaylistAdd,
             label = language.addToPlaylist
         ) {
@@ -273,7 +274,7 @@ fun SongOptionsBottomSheetContent(
             onAddToPlaylist()
         }
         song.artists.forEach {
-            SongOptionsBottomSheetItem(
+            BottomSheetMenuItem(
                 imageVector = Icons.Filled.Person,
                 label = "${language.viewArtist}: $it"
             ) {
@@ -282,7 +283,7 @@ fun SongOptionsBottomSheetContent(
             }
         }
         song.albumTitle?.let {
-            SongOptionsBottomSheetItem(
+            BottomSheetMenuItem(
                 imageVector = Icons.Filled.Album,
                 label = language.viewAlbum
             ) {
@@ -290,14 +291,14 @@ fun SongOptionsBottomSheetContent(
                 onViewAlbum( it )
             }
         }
-        SongOptionsBottomSheetItem(
+        BottomSheetMenuItem(
             imageVector = Icons.Filled.Share,
             label = language.shareSong
         ) {
             onDismissRequest()
             onShareSong( song.mediaUri )
         }
-        SongOptionsBottomSheetItem(
+        BottomSheetMenuItem(
             imageVector = Icons.Filled.Info,
             label = language.details
         ) {
@@ -307,99 +308,16 @@ fun SongOptionsBottomSheetContent(
     }
 }
 
-@Composable
-fun SongOptionsBottomSheetItem(
-    imageVector: ImageVector,
-    label: String,
-    onClick: () -> Unit,
-) {
-    Card (
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp),
-        colors = CardDefaults.cardColors().copy(
-            containerColor = Color.Transparent
-        ),
-        onClick = onClick
-    ) {
-        Row (
-            modifier = Modifier.padding( 16.dp ),
-            horizontalArrangement = Arrangement.spacedBy( 24.dp ),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = imageVector,
-                tint = MaterialTheme.colorScheme.primary,
-                contentDescription = null
-            )
-            Text(
-                text = label
-            )
-        }
-    }
-}
 
-@Composable
-fun SongOptionsBottomSheetHeader(
-    song: Song,
-    @DrawableRes fallbackResourceId: Int,
-    isCurrentlyPlaying: Boolean,
-) {
-    Row (
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding( 32.dp, 16.dp ),
-        horizontalArrangement = Arrangement.spacedBy( 24.dp ),
-    ) {
-        AsyncImage(
-            model = ImageRequest.Builder( LocalContext.current ).apply {
-                data( song.artworkUri )
-                placeholder( fallbackResourceId )
-                fallback( fallbackResourceId )
-                error( fallbackResourceId )
-                crossfade( true )
-            }.build(),
-            modifier = Modifier
-                .size( 45.dp )
-                .clip( RoundedCornerShape( 10.dp ) ),
-            contentDescription = null
-        )
-        Column {
-            Text(
-                text = song.title,
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = when {
-                        isCurrentlyPlaying -> MaterialTheme.colorScheme.primary
-                        else -> LocalTextStyle.current.color
-                    }
-                ),
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = song.artists.joinToString(),
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
-}
+// --------------------------------------------------------------------------------------------
 
-@Preview( showBackground = true )
-@Composable
-fun SongOptionsBottomSheetHeaderPreview() {
-    SongOptionsBottomSheetHeader(
-        song = testSongs.first(),
-        fallbackResourceId = R.drawable.placeholder_light,
-        isCurrentlyPlaying = true
-    )
-}
+
+
 
 @Preview( showBackground = true )
 @Composable
 fun SongOptionsBottomSheetContentPreview() {
-    SongOptionsBottomSheetContent(
+    SongOptionsBottomSheetMenu(
         language = English,
         song = testSongs.first(),
         isFavorite = true,
@@ -418,7 +336,7 @@ fun SongOptionsBottomSheetContentPreview() {
 }
 
 @Composable
-fun NowPlayingSongOptionsBottomSheetContent(
+fun NowPlayingSongOptionsBottomSheetMenu(
     song: Song,
     language: Language,
     isFavorite: Boolean,
@@ -427,14 +345,23 @@ fun NowPlayingSongOptionsBottomSheetContent(
     onViewAlbum: ( String ) -> Unit,
     onDismissRequest: () -> Unit
 ) {
-    Column {
-        SongOptionsBottomSheetHeader(
-            song = song,
-            fallbackResourceId = fallbackResourceId,
-            isCurrentlyPlaying = true,
-        )
-        HorizontalDivider( modifier = Modifier.padding( 32.dp, 0.dp ) )
-        SongOptionsBottomSheetItem(
+    BottomSheetMenuContent(
+        bottomSheetHeader = {
+            BottomSheetMenuHeader(
+                headerImage = ImageRequest.Builder( LocalContext.current ).apply {
+                    data( song.artworkUri )
+                    placeholder( fallbackResourceId )
+                    fallback( fallbackResourceId )
+                    error( fallbackResourceId )
+                    crossfade( true )
+                }.build(),
+                title = song.title,
+                titleIsHighlighted = true,
+                description = song.artists.joinToString()
+            )
+        }
+    ) {
+        BottomSheetMenuItem(
             imageVector = if ( isFavorite ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
             label = language.favorite,
             onClick = {
@@ -443,7 +370,7 @@ fun NowPlayingSongOptionsBottomSheetContent(
             }
         )
         song.albumTitle?.let {
-            SongOptionsBottomSheetItem(
+            BottomSheetMenuItem(
                 imageVector = Icons.Filled.Album,
                 label = language.viewAlbum
             ) {
@@ -451,25 +378,25 @@ fun NowPlayingSongOptionsBottomSheetContent(
                 onViewAlbum( it )
             }
         }
-        SongOptionsBottomSheetItem(
+        BottomSheetMenuItem(
             imageVector = Icons.Filled.Person,
             label = "${language.viewArtist}: ${song.artists}"
         ) {
             onDismissRequest()
         }
-        SongOptionsBottomSheetItem(
+        BottomSheetMenuItem(
             imageVector = Icons.AutoMirrored.Filled.PlaylistAdd,
             label = language.addToPlaylist
         ) {
             onDismissRequest()
         }
-        SongOptionsBottomSheetItem(
+        BottomSheetMenuItem(
             imageVector = Icons.Filled.Share,
             label = language.shareSong
         ) {
             onDismissRequest()
         }
-        SongOptionsBottomSheetItem(
+        BottomSheetMenuItem(
             imageVector = Icons.Filled.Info,
             label = language.details
         ) {

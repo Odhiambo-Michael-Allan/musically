@@ -32,6 +32,11 @@ fun AlbumGrid(
     onSortTypeChange: ( SortAlbumsBy ) -> Unit,
     onAlbumClick: ( String ) -> Unit,
     onPlayAlbum: ( String ) -> Unit,
+    onAddToPlaylist: ( Album ) -> Unit,
+    onAddToQueue: ( Album ) -> Unit,
+    onPlayNext: ( Album ) -> Unit,
+    onShufflePlay: ( Album ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
 ) {
     MediaSortBarScaffold(
         mediaSortBar = {
@@ -73,10 +78,11 @@ fun AlbumGrid(
                             language = language,
                             fallbackResourceId = fallbackResourceId,
                             onPlayAlbum = { onPlayAlbum( album.name ) },
-                            onAddToQueue = { /*TODO*/ },
-                            onPlayNext = { /*TODO*/ },
-                            onShufflePlay = { /*TODO*/ },
-                            onViewArtist = {},
+                            onAddToQueue = { onAddToQueue( album ) },
+                            onAddToPlaylist = { onAddToPlaylist( album ) },
+                            onPlayNext = { onPlayNext( album ) },
+                            onShufflePlay = { onShufflePlay( album ) },
+                            onViewArtist = onViewArtist,
                             onClick = { onAlbumClick( album.name ) }
                         )
                     }
@@ -105,6 +111,11 @@ fun AlbumGridPreview() {
         onSortReverseChange = {},
         onSortTypeChange = {},
         onAlbumClick = {},
-        onPlayAlbum = {}
+        onPlayAlbum = {},
+        onViewArtist = {},
+        onAddToPlaylist = {},
+        onPlayNext = {},
+        onAddToQueue = {},
+        onShufflePlay = {}
     )
 }

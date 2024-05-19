@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.services.i18n.English
+import com.odesa.musicMatters.services.media.Album
 import com.odesa.musicMatters.services.media.SortAlbumsBy
 import com.odesa.musicMatters.services.media.testAlbums
 import com.odesa.musicMatters.ui.components.AlbumGrid
@@ -33,7 +34,12 @@ fun AlbumsScreen(
         onAlbumClick = onAlbumClick,
         onSettingsClicked = onSettingsClicked,
         onPlayAlbum = { viewModel.playAlbum( it ) },
-        onNavigateToSearch = onNavigateToSearch
+        onNavigateToSearch = onNavigateToSearch,
+        onAddToPlaylist = {},
+        onViewArtist = {},
+        onPlayNext = {},
+        onShufflePlay = {},
+        onAddToQueue = {}
     )
 }
 
@@ -44,6 +50,11 @@ fun AlbumsScreenContent(
     onSettingsClicked: () -> Unit,
     onPlayAlbum: ( String ) -> Unit,
     onNavigateToSearch: () -> Unit,
+    onViewArtist: ( String ) -> Unit,
+    onPlayNext: ( Album ) -> Unit,
+    onShufflePlay: ( Album ) -> Unit,
+    onAddToPlaylist: ( Album ) -> Unit,
+    onAddToQueue: ( Album ) -> Unit,
 ) {
 
     val fallbackResourceId =
@@ -72,7 +83,12 @@ fun AlbumsScreenContent(
                 onSortReverseChange = {},
                 onSortTypeChange = {},
                 onAlbumClick = onAlbumClick,
-                onPlayAlbum = onPlayAlbum
+                onPlayAlbum = onPlayAlbum,
+                onViewArtist = onViewArtist,
+                onPlayNext = onPlayNext,
+                onShufflePlay = onShufflePlay,
+                onAddToPlaylist = onAddToPlaylist,
+                onAddToQueue = onAddToQueue,
             )
         }
     }
@@ -91,6 +107,11 @@ fun AlbumsScreenContentPreview() {
         onAlbumClick = {},
         onSettingsClicked = {},
         onPlayAlbum = {},
-        onNavigateToSearch = {}
+        onNavigateToSearch = {},
+        onAddToPlaylist = {},
+        onViewArtist = {},
+        onPlayNext = {},
+        onShufflePlay = {},
+        onAddToQueue = {}
     )
 }

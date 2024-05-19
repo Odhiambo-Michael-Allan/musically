@@ -33,7 +33,7 @@ import com.odesa.musicMatters.services.media.testAlbums
 import com.odesa.musicMatters.services.media.testArtists
 import com.odesa.musicMatters.services.media.testSongs
 import com.odesa.musicMatters.ui.components.AlbumRow
-import com.odesa.musicMatters.ui.components.ArtistDropdownMenu
+import com.odesa.musicMatters.ui.components.ArtistOptionsBottomSheetMenu
 import com.odesa.musicMatters.ui.components.Banner
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.MinimalAppBar
@@ -146,7 +146,8 @@ fun ArtistScreenContent(
                             fallbackResourceId = fallbackResourceId,
                             onShufflePlay = { /*TODO*/ },
                             onPlayNext = { /*TODO*/ },
-                            onAddToQueue = {}
+                            onAddToQueue = {},
+                            onAddToPlaylist = {}
                         )
                     }
                     if ( uiState.albumsByArtist.isNotEmpty() ) {
@@ -167,7 +168,9 @@ fun ArtistScreenContent(
                                 onAddToQueue = {},
                                 onPlayNext = { /*TODO*/ },
                                 onShufflePlay = { /*TODO*/ },
-                                onViewAlbum = onViewAlbum
+                                onViewAlbum = onViewAlbum,
+                                onAddToPlaylist = {},
+                                onViewArtist = {}
                             )
                             HorizontalDivider()
                         }
@@ -186,6 +189,7 @@ private fun ArtistArtwork(
     onShufflePlay: () -> Unit,
     onPlayNext: () -> Unit,
     onAddToQueue: () -> Unit,
+    onAddToPlaylist: () -> Unit,
 ) {
     Banner(
         imageRequest = ImageRequest.Builder( LocalContext.current ).apply {
@@ -196,12 +200,14 @@ private fun ArtistArtwork(
             crossfade( true )
         }.build(),
         options = { expanded, onDismissRequest ->
-            ArtistDropdownMenu(
-                expanded = expanded,
+            ArtistOptionsBottomSheetMenu(
+                artist = artist,
                 language = language,
+                fallbackResourceId = fallbackResourceId,
                 onShufflePlay = onShufflePlay,
                 onPlayNext = onPlayNext,
                 onAddToQueue = onAddToQueue,
+                onAddToPlaylist = onAddToPlaylist,
                 onDismissRequest = onDismissRequest
             )
         }

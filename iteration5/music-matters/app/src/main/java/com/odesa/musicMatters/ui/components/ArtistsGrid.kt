@@ -30,6 +30,10 @@ fun ArtistsGrid(
     onSortTypeChange: ( SortArtistsBy ) -> Unit,
     onArtistClick: ( String ) -> Unit,
     onPlaySongsByArtist: ( Artist ) -> Unit,
+    onShufflePlay: ( Artist ) -> Unit,
+    onAddToQueue: ( Artist ) -> Unit,
+    onPlayNext: ( Artist ) -> Unit,
+    onAddToPlaylist: ( Artist ) -> Unit,
 ) {
     MediaSortBarScaffold(
         mediaSortBar = {
@@ -68,10 +72,10 @@ fun ArtistsGrid(
                             language = language,
                             fallbackResourceId = fallbackResourceId,
                             onPlaySongsByArtist = { onPlaySongsByArtist( artist ) },
-                            onShufflePlay = { /*TODO*/ },
-                            onPlayNext = { /*TODO*/ },
-                            onAddToQueue = { /*TODO*/ },
-                            onAddToPlaylist = { /*TODO*/ },
+                            onShufflePlay = { onShufflePlay( artist ) },
+                            onPlayNext = { onPlayNext( artist ) },
+                            onAddToQueue = { onAddToQueue( artist ) },
+                            onAddToPlaylist = { onAddToPlaylist( artist ) },
                             onClick = { onArtistClick( artist.name ) }
                         )
                     }
@@ -100,6 +104,10 @@ fun ArtistsGridPreview() {
         onSortReverseChange = {},
         onSortTypeChange = {},
         onArtistClick = {},
-        onPlaySongsByArtist = {}
+        onPlaySongsByArtist = {},
+        onAddToQueue = {},
+        onAddToPlaylist = {},
+        onShufflePlay = {},
+        onPlayNext = {}
     )
 }

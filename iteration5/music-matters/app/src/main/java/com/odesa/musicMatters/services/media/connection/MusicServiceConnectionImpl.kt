@@ -390,6 +390,7 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
                     )
                 }
             } else {
+                it.addMediaItem( position, mediaItem )
                 val newQueue = _mediaItemsInQueue.value.toMutableList()
                 newQueue.add( position, mediaItem )
                 _mediaItemsInQueue.value = newQueue

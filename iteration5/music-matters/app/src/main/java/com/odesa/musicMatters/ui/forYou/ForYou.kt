@@ -1,10 +1,10 @@
 package com.odesa.musicMatters.ui.forYou
 
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -26,10 +26,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Shuffle
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
@@ -46,6 +44,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
@@ -62,6 +61,8 @@ import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.services.media.testAlbums
 import com.odesa.musicMatters.services.media.testArtists
 import com.odesa.musicMatters.services.media.testSongs
+import com.odesa.musicMatters.ui.components.AlbumRow
+import com.odesa.musicMatters.ui.components.ArtistsRow
 import com.odesa.musicMatters.ui.components.TopAppBar
 import com.odesa.musicMatters.ui.theme.isLight
 
@@ -70,11 +71,12 @@ fun ForYouScreen(
     viewModel: ForYouScreenViewModel,
     onSettingsClicked: () -> Unit,
     onNavigateToSearch: () -> Unit,
-    onSuggestedAlbumClick: ( Album ) -> Unit,
-    onSuggestedArtistClick: ( Artist ) -> Unit,
+    onSuggestedAlbumClick: ( String ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     ForYouScreenContent(
         uiState = uiState,
@@ -85,7 +87,31 @@ fun ForYouScreen(
         onSongInMostPlayedSongsSelected = { viewModel.playMostPlayedSong( it ) },
         onSongInPlayHistorySelected = { viewModel.playSongInPlayHistory( it ) },
         onSuggestedAlbumClick = onSuggestedAlbumClick,
-        onSuggestedArtistClick = onSuggestedArtistClick,
+        onViewArtist = onViewArtist,
+        onPlaySongsInAlbum = {
+            viewModel.playSongsInAlbum(
+                album = it,
+                shuffle = false
+            )
+        },
+        onShufflePlaySongsInAlbum = {
+            viewModel.playSongsInAlbum(
+                album = it,
+                shuffle = true
+            )
+        },
+        onAddSongsInAlbumToQueue = {
+            val numberOfSongsAddedToQueue = viewModel.addSongsInAlbumToQueue( it )
+            val messageToDisplayToUser = if ( numberOfSongsAddedToQueue < 1 )
+                "All Songs in album are already in queue"
+            else
+                "Added $numberOfSongsAddedToQueue songs to queue"
+            Toast.makeText(
+                context,
+                messageToDisplayToUser,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     )
 }
 
@@ -98,10 +124,12 @@ fun ForYouScreenContent(
     onSongInRecentlyAddedSongsSelected: ( MediaItem ) -> Unit,
     onSongInMostPlayedSongsSelected: ( MediaItem ) -> Unit,
     onSongInPlayHistorySelected: ( MediaItem ) -> Unit,
-    onSuggestedAlbumClick: ( Album ) -> Unit,
-    onSuggestedArtistClick: ( Artist ) -> Unit
-
-) {
+    onSuggestedAlbumClick: ( String ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
+    onPlaySongsInAlbum: ( Album ) -> Unit,
+    onShufflePlaySongsInAlbum: ( Album ) -> Unit,
+    onAddSongsInAlbumToQueue: (Album ) -> Unit,
+    ) {
 
     val fallbackResourceId =
         if ( uiState.themeMode.isLight( LocalContext.current ) )
@@ -135,6 +163,10 @@ fun ForYouScreenContent(
                     isLoading = uiState.isLoadingSuggestedAlbums,
                     albums = uiState.suggestedAlbums,
                     fallbackResourceId = fallbackResourceId,
+                    onPlaySongsInAlbum = onPlaySongsInAlbum,
+                    onShufflePlaySongsInAlbum = onShufflePlaySongsInAlbum,
+                    onViewArtist = onViewArtist,
+                    onAddSongsInAlbumToQueue = onAddSongsInAlbumToQueue,
                     onClick = { onSuggestedAlbumClick( it ) }
                 )
                 if ( uiState.mostPlayedSongs.isNotEmpty() ) {
@@ -151,7 +183,7 @@ fun ForYouScreenContent(
                     isLoading = uiState.isLoadingSuggestedArtists,
                     suggestedArtists = uiState.suggestedArtists,
                     fallbackResourceId = fallbackResourceId,
-                    onSuggestedArtistClick = { onSuggestedArtistClick( it ) }
+                    onSuggestedArtistClick = { onViewArtist( it.name ) }
                 )
                 if ( uiState.recentlyPlayedSongs.isNotEmpty() ) {
                     PlayHistory(
@@ -250,24 +282,19 @@ fun ForYouSongRow(
         isLoading -> Loading()
         songs.isEmpty() -> Empty( language = language )
         else -> {
-            BoxWithConstraints {
-                val tileWidth = maxWidth.times( 0.7f )
-                val tileHeight = 96.dp
-
-                LazyRow (
-                    contentPadding = PaddingValues( 20.dp, 4.dp ),
-                    horizontalArrangement = Arrangement.spacedBy( 8.dp )
-                ) {
-                    items( songs ) { song ->
-                        ForYouSongCard(
-                            modifier = Modifier
-                                .width(tileWidth)
-                                .height(tileHeight),
-                            song = song,
-                            fallbackResourceId = fallbackResourceId,
-                            onClick = { onSongSelected( song.mediaItem ) }
-                        )
-                    }
+            LazyRow (
+                contentPadding = PaddingValues( 20.dp, 0.dp ),
+                horizontalArrangement = Arrangement.spacedBy( 8.dp )
+            ) {
+                items( songs ) { song ->
+                    ForYouSongCard(
+                        modifier = Modifier
+                            .width(300.dp)
+                            .height(96.dp),
+                        song = song,
+                        fallbackResourceId = fallbackResourceId,
+                        onClick = { onSongSelected( song.mediaItem ) }
+                    )
                 }
             }
         }
@@ -285,8 +312,11 @@ fun ForYouScreenContentPreview() {
         onSongInMostPlayedSongsSelected = {},
         onSongInRecentlyAddedSongsSelected = {},
         onSuggestedAlbumClick = {},
-        onSuggestedArtistClick = {},
-        onNavigateToSearch = {}
+        onViewArtist = {},
+        onNavigateToSearch = {},
+        onPlaySongsInAlbum = {},
+        onShufflePlaySongsInAlbum = {},
+        onAddSongsInAlbumToQueue = {},
     )
 }
 
@@ -295,7 +325,11 @@ private fun SideHeading( text: @Composable () -> Unit ) {
     Box(
         modifier = Modifier.padding( 20.dp, 12.dp )
     ) {
-        ProvideTextStyle( value = MaterialTheme.typography.titleLarge ) {
+        ProvideTextStyle(
+            value = MaterialTheme.typography.headlineSmall.copy(
+                fontWeight = FontWeight.Bold
+            )
+        ) {
             text()
         }
     }
@@ -335,7 +369,6 @@ fun Empty(
     }
 }
 
-@OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun ForYouSongCard(
     modifier: Modifier = Modifier,
@@ -441,47 +474,39 @@ fun ForYouSongCard(
     }
 }
 
-@OptIn( ExperimentalMaterial3Api::class )
 @Composable
 private fun SuggestedAlbums(
     language: Language,
     isLoading: Boolean,
     albums: List<Album>,
     @DrawableRes fallbackResourceId: Int,
-    onClick: ( Album ) -> Unit,
+    onPlaySongsInAlbum: ( Album ) -> Unit,
+    onShufflePlaySongsInAlbum: ( Album ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
+    onAddSongsInAlbumToQueue: ( Album ) -> Unit,
+    onClick: ( String ) -> Unit,
 ) {
     SideHeading {
         Text( text = language.suggestedAlbums )
     }
-    Spacer( modifier = Modifier.padding( 0.dp, 8.dp ) )
-    StatedSixGrid(
-        language = language,
-        isLoading = isLoading,
-        items = albums
-    ) {
-        Card(
-            onClick = { onClick( it ) }
-        ) {
-            AsyncImage(
-                modifier = Modifier
-                    .aspectRatio(1f)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(4.dp)),
-                model = ImageRequest.Builder( LocalContext.current ).apply {
-                    data( it.artworkUri )
-                    placeholder( fallbackResourceId )
-                    fallback( fallbackResourceId )
-                    error( fallbackResourceId )
-                    crossfade( true )
-                }.build(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
-        }
+    when {
+        isLoading -> RowLoading()
+        albums.isEmpty() -> RowEmpty( language )
+        else -> AlbumRow(
+            albums = albums,
+            language = language,
+            fallbackResourceId = fallbackResourceId,
+            onPlaySongsInAlbum = onPlaySongsInAlbum,
+            onAddToQueue = onAddSongsInAlbumToQueue,
+            onAddToPlaylist = {},
+            onPlayNext = { /*TODO*/ },
+            onShufflePlay = onShufflePlaySongsInAlbum,
+            onViewArtist = onViewArtist,
+            onViewAlbum = onClick
+        )
     }
 }
 
-@OptIn( ExperimentalMaterial3Api::class )
 @Composable
 private fun SuggestedArtists(
     language: Language,
@@ -494,52 +519,24 @@ private fun SuggestedArtists(
     SideHeading {
         Text( text = language.suggestedArtists )
     }
-    Spacer( modifier = Modifier.padding( 0.dp, 8.dp ) )
-    StatedSixGrid(
-        language = language,
-        isLoading = isLoading,
-        items = suggestedArtists
-    ) {
-        Card(
-            onClick = { onSuggestedArtistClick( it ) }
-        ) {
-            AsyncImage(
-                modifier = Modifier
-                    .aspectRatio(1f)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(4.dp)),
-                model = ImageRequest.Builder( LocalContext.current ).apply {
-                    data( it.artworkUri )
-                    placeholder( fallbackResourceId )
-                    fallback( fallbackResourceId )
-                    error( fallbackResourceId )
-                    crossfade( true )
-                }.build(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
-        }
-    }
-}
-
-@Composable
-private fun <T> StatedSixGrid(
-    language: Language,
-    isLoading: Boolean,
-    items: List<T>,
-    content: @Composable ( T ) -> Unit
-) {
     when {
-        isLoading -> SixGridLoading()
-        items.isEmpty() -> SixGridEmpty( language )
-        else -> SixGrid( items ) {
-            content( it )
-        }
+        isLoading -> RowLoading()
+        suggestedArtists.isEmpty() -> RowEmpty( language )
+        else -> ArtistsRow(
+            artists = suggestedArtists,
+            language = language,
+            fallbackResourceId = fallbackResourceId,
+            onPlaySongsByArtist = {},
+            onAddToQueue = { /*TODO*/ },
+            onPlayNext = { /*TODO*/ },
+            onShufflePlay = { /*TODO*/ },
+            onViewArtist = onSuggestedArtistClick
+        )
     }
 }
 
 @Composable
-private fun SixGridLoading() {
+private fun RowLoading() {
     Box(
         modifier = Modifier
             .height((LocalConfiguration.current.screenHeightDp * 0.2f).dp)
@@ -552,7 +549,7 @@ private fun SixGridLoading() {
 }
 
 @Composable
-private fun SixGridEmpty(
+private fun RowEmpty(
     language: Language
 ) {
     val height = ( LocalConfiguration.current.screenHeightDp * 0.15f ).dp
@@ -569,40 +566,6 @@ private fun SixGridEmpty(
                 color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.7f )
             )
         )
-    }
-}
-
-@Composable
-private fun <T> SixGrid(
-    items: List<T>,
-    content: @Composable ( T ) -> Unit,
-) {
-    val gap = 12.dp
-
-    Row (
-        modifier = Modifier.padding( 20.dp, 0.dp ),
-        horizontalArrangement = Arrangement.spacedBy( gap )
-    ) {
-        ( 0..2 ).forEach { i ->
-            val item = items.getOrNull( i )
-            Box( modifier = Modifier.weight( 1f ) ) {
-                item?.let { content( it ) }
-            }
-        }
-    }
-    if ( items.size > 3 ) {
-        Spacer( modifier = Modifier.height( gap ) )
-        Row (
-            modifier = Modifier.padding( 20.dp, 0.dp ),
-            horizontalArrangement = Arrangement.spacedBy( gap )
-        ) {
-            ( 3..5 ).forEach { i ->
-                val item = items.getOrNull( i )
-                Box( modifier = Modifier.weight( 1f ) ) {
-                    item?.let { content( it ) }
-                }
-            }
-        }
     }
 }
 

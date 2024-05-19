@@ -34,7 +34,11 @@ fun ArtistsScreen(
         onArtistClick = onArtistClick,
         onPlaySongsByArtist = { viewModel.playSongsByArtist( it ) },
         onSettingsClicked = onSettingsClicked,
-        onNavigateToSearch = onNavigateToSearch
+        onNavigateToSearch = onNavigateToSearch,
+        onPlayNext = {},
+        onShufflePlay = {},
+        onAddToQueue = {},
+        onAddToPlaylist = {}
     )
 }
 
@@ -45,6 +49,10 @@ fun ArtistsScreenContent(
     onPlaySongsByArtist: ( Artist ) -> Unit,
     onSettingsClicked: () -> Unit,
     onNavigateToSearch: () -> Unit,
+    onAddToQueue: ( Artist ) -> Unit,
+    onShufflePlay: ( Artist ) -> Unit,
+    onPlayNext: ( Artist ) -> Unit,
+    onAddToPlaylist: ( Artist ) -> Unit,
 ) {
 
     val fallbackResourceId =
@@ -73,7 +81,11 @@ fun ArtistsScreenContent(
                 onSortReverseChange = {},
                 onSortTypeChange = {},
                 onArtistClick = onArtistClick,
-                onPlaySongsByArtist = onPlaySongsByArtist
+                onPlaySongsByArtist = onPlaySongsByArtist,
+                onAddToQueue = onAddToQueue,
+                onShufflePlay = onShufflePlay,
+                onPlayNext = onPlayNext,
+                onAddToPlaylist = onAddToPlaylist
             )
         }
     }
@@ -92,6 +104,10 @@ fun ArtistsScreenContentPreview() {
         onArtistClick = {},
         onPlaySongsByArtist = {},
         onSettingsClicked = {},
-        onNavigateToSearch = {}
+        onNavigateToSearch = {},
+        onAddToQueue = {},
+        onAddToPlaylist = {},
+        onShufflePlay = {},
+        onPlayNext = {}
     )
 }

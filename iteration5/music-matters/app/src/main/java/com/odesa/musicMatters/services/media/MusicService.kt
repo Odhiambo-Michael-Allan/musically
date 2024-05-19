@@ -137,7 +137,7 @@ class MusicService : MediaLibraryService() {
 
         musicSource = LocalMusicSource( applicationContext )
         serviceScope.launch {
-            PermissionsManager.readExternalStoragePermissionGranted.collect {
+            PermissionsManager.hasAllRequiredPermissions.collect {
                 if ( it ) musicSource.load()
             }
         }

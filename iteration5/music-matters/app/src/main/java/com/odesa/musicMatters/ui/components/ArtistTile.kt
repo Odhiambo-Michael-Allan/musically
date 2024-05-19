@@ -5,16 +5,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
@@ -28,6 +23,7 @@ import com.odesa.musicMatters.services.media.Artist
 import com.odesa.musicMatters.services.media.testArtists
 
 
+@OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun ArtistTile(
     artist: Artist,
@@ -51,21 +47,29 @@ fun ArtistTile(
         }.build(),
         options = {
             expanded, onDismissRequest ->
-                  ArtistDropdownMenu(
-                      expanded = expanded,
-                      language = language,
-                      onShufflePlay = onShufflePlay,
-                      onPlayNext = onPlayNext,
-                      onAddToQueue = onAddToQueue,
-                      onDismissRequest = onDismissRequest
-                  )
+                  if ( expanded ) {
+                      ModalBottomSheet(
+                          onDismissRequest = onDismissRequest
+                      ) {
+                          ArtistOptionsBottomSheetMenu(
+                              artist = artist,
+                              language = language,
+                              fallbackResourceId = fallbackResourceId,
+                              onShufflePlay = onShufflePlay,
+                              onPlayNext = onPlayNext,
+                              onAddToQueue = onAddToQueue,
+                              onAddToPlaylist = onAddToPlaylist,
+                              onDismissRequest = onDismissRequest
+                          )
+                      }
+                  }
         },
         content = {
             Text(
                 text = artist.name,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
-                maxLines = 2,
+                maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
         },
@@ -75,93 +79,62 @@ fun ArtistTile(
 }
 
 @Composable
-fun ArtistDropdownMenu(
-    expanded: Boolean,
+fun ArtistOptionsBottomSheetMenu(
+    artist: Artist,
     language: Language,
-//    playlists: List<Playlist>,
+    @DrawableRes fallbackResourceId: Int,
     onShufflePlay: () -> Unit,
     onPlayNext: () -> Unit,
     onAddToQueue: () -> Unit,
+    onAddToPlaylist: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    var showAddToPlaylistDialog by remember { mutableStateOf( false ) }
-
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = onDismissRequest
+    BottomSheetMenuContent(
+        bottomSheetHeader = {
+            BottomSheetMenuHeader(
+                headerImage = ImageRequest.Builder( LocalContext.current ).apply {
+                    data( artist.artworkUri )
+                    placeholder( fallbackResourceId )
+                    fallback( fallbackResourceId )
+                    error( fallbackResourceId )
+                    crossfade( true )
+                }.build(),
+                title = language.artist,
+                description = artist.name
+            )
+        }
     ) {
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.PlaylistPlay,
-                    contentDescription = null
-                )
-            },
-            text = {
-                Text(text = language.shufflePlay )
-            },
-            onClick = {
-                onDismissRequest()
-                onShufflePlay()
-            }
-        )
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.PlaylistPlay,
-                    contentDescription = null
-                )
-            },
-            text = {
-                Text( text = language.playNext )
-            },
-            onClick = {
-                onDismissRequest()
-                onPlayNext()
-            }
-        )
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.PlaylistPlay,
-                    contentDescription = null
-                )
-            },
-            text = {
-                Text( text = language.addToQueue )
-            },
-            onClick = {
-                onDismissRequest()
-                onAddToQueue()
-            }
-        )
-        DropdownMenuItem(
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.PlaylistAdd,
-                    contentDescription = null
-                )
-            },
-            text = {
-                Text( text = language.addToPlaylist )
-            },
-            onClick = {
-                onDismissRequest()
-                showAddToPlaylistDialog = true
-            }
-        )
+        BottomSheetMenuItem(
+            imageVector = Icons.AutoMirrored.Filled.PlaylistPlay,
+            label = language.shufflePlay
+        ) {
+            onDismissRequest()
+            onShufflePlay()
+        }
+        BottomSheetMenuItem(
+            imageVector = Icons.AutoMirrored.Filled.PlaylistPlay,
+            label = language.playNext
+        ) {
+            onDismissRequest()
+            onPlayNext()
+        }
+        BottomSheetMenuItem(
+            imageVector = Icons.AutoMirrored.Filled.PlaylistPlay,
+            label = language.addToQueue
+        ) {
+            onDismissRequest()
+            onAddToQueue()
+        }
+        BottomSheetMenuItem(
+            imageVector = Icons.AutoMirrored.Filled.PlaylistAdd,
+            label = language.addToPlaylist
+        ) {
+            onDismissRequest()
+            onAddToPlaylist()
+        }
     }
-//    if ( showAddToPlaylistDialog ) {
-//        AddToPlaylistDialog(
-//            playlists = playlists,
-//            language = language,
-//            fallbackResourceId = fallbackResourceId,
-//            onGetSongsInPlaylist =
-//        ) {
-//
-//        }
-//    }
 }
+
 
 @Preview( showBackground = true )
 @Composable
