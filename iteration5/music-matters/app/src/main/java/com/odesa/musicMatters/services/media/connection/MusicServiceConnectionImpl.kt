@@ -57,21 +57,6 @@ import kotlin.random.Random
 /**
  * Class that manages a connection to a [MediaLibraryService] instance, typically a [MusicService]
  * or one of its subclasses
- *
- * Typically it's best to construct/inject dependencies either using DI or, as Musically does,
- * using an [AppContainer]. There are a few difficulties for that here:
- * - [MediaBrowser] is a final class, so mocking it directly is difficult.
- * - A [MediaBrowserConnectionCallback] is a parameter into the construction of a
- *   [MediaBrowserCompat], and provides callbacks to this class
- * - [MediaBrowserCompat.ConnectionCallback.onConnected] is the best place to construct a
- *   [MediaControllerCompat] that will be used to control the [MediaSessionCompat]
- *
- *   Because of these reasons, rather than constructing additional classes, this is treated as
- *   a black box ( which is why there's very little logic here ).
- *
- *   This is also why the parameters to construct a [MusicServiceConnection] are simple parameters,
- *   rather than private properties. They're only required to build the [MediaBrowserConnectionCallback]
- *   and [MediaBrowserCompat] objects.
  */
 class MusicServiceConnectionImpl( context: Context, serviceComponentName: ComponentName )
     : MusicServiceConnection {
@@ -269,6 +254,7 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
 
     override fun playNext( mediaItem: MediaItem ) {
         player?.let {
+            if ( nowPlaying.value.mediaId == mediaItem.mediaId ) return
             val mediaItems = _mediaItemsInQueue.value.toMutableList()
             if ( mediaItemIsPresentInQueue( mediaItem ) ) {
                 val indexOfMediaItemToPlayNext = mediaItems.indexOf( mediaItem )
@@ -381,19 +367,19 @@ class MusicServiceConnectionImpl( context: Context, serviceComponentName: Compon
 
     private fun addMediaItemToPlayer( mediaItem: MediaItem, position: Int ) {
         player?.let {
-            if ( _mediaItemsInQueue.value.isEmpty() ) {
-                scope.launch {
+            scope.launch {
+                if ( _mediaItemsInQueue.value.isEmpty() ) {
                     playMediaItem(
                         mediaItem = mediaItem,
                         mediaItems = listOf( mediaItem ),
                         shuffle = false,
                     )
+                } else {
+                    it.addMediaItem( position, mediaItem )
+                    val newQueue = _mediaItemsInQueue.value.toMutableList()
+                    newQueue.add( position, mediaItem )
+                    _mediaItemsInQueue.value = newQueue
                 }
-            } else {
-                it.addMediaItem( position, mediaItem )
-                val newQueue = _mediaItemsInQueue.value.toMutableList()
-                newQueue.add( position, mediaItem )
-                _mediaItemsInQueue.value = newQueue
             }
         }
     }

@@ -136,9 +136,11 @@ class SongsScreenViewModel(
         viewModelScope.launch { playlistRepository.addToFavorites( songId ) }
     }
 
-    fun addSongToPlaylist( playlist: Playlist, song: Song ) {
+    fun addSongToPlaylist( playlist: Playlist, songs: List<Song> ) {
         viewModelScope.launch {
-            playlistRepository.addSongIdToPlaylist( song.id, playlist.id )
+            songs.forEach {
+                playlistRepository.addSongIdToPlaylist( it.id, playlist.id )
+            }
         }
     }
 

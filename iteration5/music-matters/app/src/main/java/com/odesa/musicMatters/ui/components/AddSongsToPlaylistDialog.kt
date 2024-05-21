@@ -34,20 +34,19 @@ import androidx.compose.ui.window.Dialog
 import coil.request.ImageRequest
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.data.playlists.Playlist
-import com.odesa.musicMatters.data.playlists.testPlaylists
 import com.odesa.musicMatters.services.i18n.English
 import com.odesa.musicMatters.services.i18n.Language
 import com.odesa.musicMatters.services.media.Song
 import com.odesa.musicMatters.services.media.testSongs
 
 @Composable
-fun AddToPlaylistDialog(
-    song: Song,
-    playlists: List<Playlist>,
+fun AddSongsToPlaylistDialog(
+    songs: List<Song>,
+    onGetPlaylists: () -> List<Playlist>,
     language: Language,
     @DrawableRes fallbackResourceId: Int,
     onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
-    onAddSongToPlaylist: ( Playlist ) -> Unit,
+    onAddSongsToPlaylist: ( Playlist ) -> Unit,
     onCreateNewPlaylist: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -70,7 +69,7 @@ fun AddToPlaylistDialog(
                 Column (
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding( 8.dp, 4.dp )
+                        .padding(8.dp, 4.dp)
                 ) {
                     Row (
                         modifier = Modifier
@@ -87,13 +86,16 @@ fun AddToPlaylistDialog(
                     }
                     HorizontalDivider( thickness = 1.dp )
                     when {
-                        playlists.isEmpty() -> SubtleCaptionText( text = language.noInAppPlaylistsFound )
+                        onGetPlaylists().isEmpty() -> SubtleCaptionText(
+                            modifier = Modifier.weight( 1f ),
+                            text = language.noInAppPlaylistsFound
+                        )
                         else -> {
                             LazyColumn (
                                 modifier = Modifier.weight( 1f ),
                                 contentPadding = PaddingValues( bottom = 4.dp )
                             ) {
-                                items( playlists ) { playlist ->
+                                items( onGetPlaylists() ) { playlist ->
                                     GenericCard(
                                         imageRequest = ImageRequest.Builder( LocalContext.current ).apply {
                                             data( onGetSongsInPlaylist( playlist ).firstOrNull { it.artworkUri != null }?.artworkUri )
@@ -107,7 +109,7 @@ fun AddToPlaylistDialog(
                                             Text( text = playlist.title )
                                         },
                                         imageLabel = {
-                                            if ( onGetSongsInPlaylist( playlist ).contains( song ) ) {
+                                            if ( songs.size == 1  && onGetSongsInPlaylist( playlist ).contains( songs.first() ) ) {
                                                 Icon(
                                                     modifier = Modifier.size( 16.dp ),
                                                     imageVector = Icons.Default.Check,
@@ -117,7 +119,7 @@ fun AddToPlaylistDialog(
                                         },
                                         onClick = {
                                             onDismissRequest()
-                                            onAddSongToPlaylist( playlist )
+                                            onAddSongsToPlaylist( playlist )
                                         }
                                     )
                                 }
@@ -147,13 +149,13 @@ fun AddToPlaylistDialog(
 @Preview( showSystemUi = true )
 @Composable
 fun AddToPlaylistDialogPreview() {
-    AddToPlaylistDialog(
-        song = testSongs.first(),
-        playlists = testPlaylists.subList( 0, 2 ),
+    AddSongsToPlaylistDialog(
+        songs = listOf( testSongs.first() ),
+        onGetPlaylists = { emptyList() },
         language = English,
         fallbackResourceId = R.drawable.placeholder_light,
         onGetSongsInPlaylist = { emptyList() },
-        onAddSongToPlaylist = {},
+        onAddSongsToPlaylist = {},
         onCreateNewPlaylist = {},
         onDismissRequest = {}
     )

@@ -38,7 +38,6 @@ fun ArtistsScreen(
         onPlayNext = {},
         onShufflePlay = {},
         onAddToQueue = {},
-        onAddToPlaylist = {}
     )
 }
 
@@ -52,7 +51,6 @@ fun ArtistsScreenContent(
     onAddToQueue: ( Artist ) -> Unit,
     onShufflePlay: ( Artist ) -> Unit,
     onPlayNext: ( Artist ) -> Unit,
-    onAddToPlaylist: ( Artist ) -> Unit,
 ) {
 
     val fallbackResourceId =
@@ -85,7 +83,6 @@ fun ArtistsScreenContent(
                 onAddToQueue = onAddToQueue,
                 onShufflePlay = onShufflePlay,
                 onPlayNext = onPlayNext,
-                onAddToPlaylist = onAddToPlaylist
             )
         }
     }
@@ -106,7 +103,6 @@ fun ArtistsScreenContentPreview() {
         onSettingsClicked = {},
         onNavigateToSearch = {},
         onAddToQueue = {},
-        onAddToPlaylist = {},
         onShufflePlay = {},
         onPlayNext = {}
     )

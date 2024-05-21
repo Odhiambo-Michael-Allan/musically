@@ -19,6 +19,7 @@ import com.odesa.musicMatters.utils.subListNonStrict
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class ForYouScreenViewModel(
     private val musicServiceConnection: MusicServiceConnection,
@@ -203,6 +204,88 @@ class ForYouScreenViewModel(
             musicServiceConnection.addToQueue( it )
         }
         return songsInAlbumAlreadyInQueue
+    }
+
+    fun playSongsInAlbumNext( album: Album ) {
+        val songsInAlbum = musicServiceConnection.cachedSongs.value.filter {
+            it.albumTitle == album.name
+        }.map { it.mediaItem }
+        songsInAlbum.forEach {
+            musicServiceConnection.playNext( it )
+        }
+    }
+
+    fun searchSongsMatching( query: String ) =
+        musicServiceConnection.searchSongsMatching( query )
+
+    fun getPlaylists() = playlistRepository.playlists.value.filter {
+        it.id != playlistRepository.mostPlayedSongsPlaylist.value.id &&
+                it.id != playlistRepository.recentlyPlayedSongsPlaylist.value.id
+    }
+
+    fun getSongsInAlbum( album: Album ) =
+        musicServiceConnection.cachedSongs.value.filter { it.albumTitle == album.name }
+
+    fun createPlaylist( playlistName: String, songsToAddToPlaylist: List<Song> ) {
+        viewModelScope.launch {
+            playlistRepository.savePlaylist(
+                Playlist(
+                    id = UUID.randomUUID().toString(),
+                    title = playlistName,
+                    songIds = songsToAddToPlaylist.map { it.id }
+                )
+            )
+        }
+    }
+
+    fun addSongsToPlaylist( playlist: Playlist, songs: List<Song> ) {
+        viewModelScope.launch {
+            songs.forEach {
+                playlistRepository.addSongIdToPlaylist( it.id, playlist.id )
+            }
+        }
+    }
+
+    fun getSongsInPlaylist( playlist: Playlist ) =
+        musicServiceConnection.cachedSongs.value.filter { playlist.songIds.contains( it.id ) }
+
+    fun getSongsByArtist( artist: Artist ) =
+        musicServiceConnection.cachedSongs.value.filter { it.artists.contains( artist.name ) }
+
+    fun playSongsByArtistNext( artist: Artist ) {
+        musicServiceConnection.cachedSongs.value
+            .filter { it.artists.contains( artist.name ) }
+            .map { it.mediaItem }
+            .forEach {
+                musicServiceConnection.playNext( it )
+            }
+    }
+
+    fun playSongsByArtist( artist: Artist, shuffle: Boolean = false ) {
+        viewModelScope.launch {
+            val songsByArtist = musicServiceConnection.cachedSongs.value
+                .filter { it.artists.contains( artist.name ) }
+                .map { it.mediaItem }
+            musicServiceConnection.playMediaItem(
+                mediaItem = if ( shuffle ) songsByArtist.random() else songsByArtist.first(),
+                mediaItems = songsByArtist,
+                shuffle = shuffle
+            )
+        }
+    }
+
+    fun addSongsByArtistToQueue( artist: Artist ): Int {
+        val songsByArtist = musicServiceConnection.cachedSongs.value
+            .filter { it.artists.contains( artist.name ) }
+            .map { it.mediaItem }
+        val numberOfSongsByArtistAlreadyInQueue =
+            songsByArtist.size.minus(
+                musicServiceConnection.mediaItemsInQueue.value.count { songsByArtist.contains( it ) }
+            )
+        songsByArtist.forEach {
+            musicServiceConnection.addToQueue( it )
+        }
+        return numberOfSongsByArtistAlreadyInQueue
     }
 }
 

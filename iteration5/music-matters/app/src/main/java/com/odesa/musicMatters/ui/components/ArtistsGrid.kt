@@ -33,7 +33,6 @@ fun ArtistsGrid(
     onShufflePlay: ( Artist ) -> Unit,
     onAddToQueue: ( Artist ) -> Unit,
     onPlayNext: ( Artist ) -> Unit,
-    onAddToPlaylist: ( Artist ) -> Unit,
 ) {
     MediaSortBarScaffold(
         mediaSortBar = {
@@ -75,8 +74,13 @@ fun ArtistsGrid(
                             onShufflePlay = { onShufflePlay( artist ) },
                             onPlayNext = { onPlayNext( artist ) },
                             onAddToQueue = { onAddToQueue( artist ) },
-                            onAddToPlaylist = { onAddToPlaylist( artist ) },
-                            onClick = { onArtistClick( artist.name ) }
+                            onViewArtist = { onArtistClick( artist.name ) },
+                            onAddSongsToPlaylist = { _, _ -> },
+                            onCreatePlaylist = { _, _ -> },
+                            onGetPlaylists = { emptyList() },
+                            onGetSongsInPlaylist = { emptyList() },
+                            onSearchSongsMatchingQuery = { emptyList() },
+                            onGetSongsByArtist = { emptyList() }
                         )
                     }
                 }
@@ -106,7 +110,6 @@ fun ArtistsGridPreview() {
         onArtistClick = {},
         onPlaySongsByArtist = {},
         onAddToQueue = {},
-        onAddToPlaylist = {},
         onShufflePlay = {},
         onPlayNext = {}
     )
