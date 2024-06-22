@@ -61,7 +61,11 @@ class MusicServiceConnectionImpl(
 
     private var player: Player? = null
 
-    private val _mediaItemsInQueue = MutableStateFlow( emptyList<MediaItem>() )
+    private var _mediaItemsInQueue = MutableStateFlow( emptyList<MediaItem>() )
+        set( value ) {
+            field = value
+            saveCurrentQueue() // Whenever the queue changes, save it..
+        }
     override val mediaItemsInQueue = _mediaItemsInQueue.asStateFlow()
 
     private val _cachedSongs = MutableStateFlow( emptyList<Song>() )
