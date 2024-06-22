@@ -1,0 +1,105 @@
+package com.odesa.musicMatters.ui.components
+
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Save
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import coil.request.ImageRequest
+import com.odesa.musicMatters.R
+import com.odesa.musicMatters.core.datatesting.playlists.testPlaylists
+import com.odesa.musicMatters.core.i8n.English
+import com.odesa.musicMatters.core.i8n.Language
+import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.Song
+
+@Composable
+fun PlaylistTile(
+    modifier: Modifier,
+    playList: Playlist,
+    language: Language,
+    @DrawableRes fallbackResourceId: Int,
+    onPlaySongsInPlaylist: () -> Unit,
+    onPlayNext: () -> Unit,
+    onShufflePlay: () -> Unit,
+    onPlaylistClick: () -> Unit,
+    onAddToQueue: () -> Unit,
+    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onGetPlaylists: () -> List<Playlist>,
+    onAddSongsInPlaylistToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onCreatePlaylist: ( String, List<Song> ) -> Unit,
+    onSearchSongsMatchingQuery: ( String ) -> List<Song>
+) {
+    GenericTile(
+        modifier = modifier,
+        imageRequest = ImageRequest.Builder( LocalContext.current ).apply {
+            data( onGetSongsInPlaylist( playList ).firstOrNull { it.artworkUri != null }?.artworkUri )
+            placeholder( fallbackResourceId )
+            error( fallbackResourceId )
+            crossfade( true )
+        }.build(),
+        title = playList.title,
+        headerDescription = language.playlist,
+        language = language,
+        fallbackResourceId = fallbackResourceId,
+        onPlay = onPlaySongsInPlaylist,
+        onClick = onPlaylistClick,
+        onShufflePlay = onShufflePlay,
+        onAddToQueue = onAddToQueue,
+        onPlayNext = onPlayNext,
+        onGetSongs = { onGetSongsInPlaylist( playList ) },
+        onGetPlaylists = onGetPlaylists,
+        onGetSongsInPlaylist = onGetSongsInPlaylist,
+        onAddSongsToPlaylist = onAddSongsInPlaylistToPlaylist,
+        onCreatePlaylist = onCreatePlaylist,
+        onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
+        additionalBottomSheetMenuItems = { onDismissRequest ->
+            BottomSheetMenuItem(
+                leadingIcon = Icons.Default.Save,
+                label = language.export
+            ) {
+                onDismissRequest()
+            }
+            BottomSheetMenuItem(
+                leadingIcon = Icons.Default.Edit,
+                label = language.rename
+            ) {
+                onDismissRequest()
+            }
+            BottomSheetMenuItem(
+                leadingIcon = Icons.Default.Delete,
+                leadingIconTint = Color.Red,
+                label = language.delete,
+            ) {
+                onDismissRequest()
+            }
+        }
+    )
+}
+
+@Preview( showBackground = true )
+@Composable
+fun PlaylistTilePreview() {
+    PlaylistTile(
+        modifier = Modifier.fillMaxWidth(),
+        playList = testPlaylists.first(),
+        language = English,
+        fallbackResourceId = R.drawable.placeholder_light,
+        onPlaySongsInPlaylist = { /*TODO*/ },
+        onPlayNext = { /*TODO*/ },
+        onShufflePlay = { /*TODO*/ },
+        onAddSongsInPlaylistToPlaylist = { _, _ -> },
+        onCreatePlaylist = { _, _ -> },
+        onPlaylistClick = {},
+        onGetPlaylists = { emptyList() },
+        onSearchSongsMatchingQuery = { emptyList() },
+        onAddToQueue = {},
+        onGetSongsInPlaylist = { emptyList() }
+    )
+}
