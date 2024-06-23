@@ -152,18 +152,10 @@ class MusicService : MediaLibraryService() {
      */
     override fun onTaskRemoved( rootIntent: Intent? ) {
         super.onTaskRemoved( rootIntent )
-        Timber.tag( TAG ).d( "ON TASK REMOVED" )
-        dataDiModule.playlistRepository.cachePlaylistData()
-    }
-
-    override fun onUnbind(intent: Intent?): Boolean {
-        return super.onUnbind(intent)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Timber.tag( TAG ).d( "DESTROYING SERVICE" )
-        dataDiModule.playlistRepository.cachePlaylistData()
         releaseMediaSession()
     }
 
@@ -207,6 +199,7 @@ class MusicService : MediaLibraryService() {
         conditionVariable.open()
     }
 
+    @UnstableApi
     open inner class MusicServiceCallback : MediaLibrarySession.Callback {
 
         @UnstableApi
@@ -308,6 +301,25 @@ class MusicService : MediaLibraryService() {
         ): ListenableFuture<SessionResult> {
             return Futures.immediateFuture(
                 SessionResult( SessionResult.RESULT_ERROR_NOT_SUPPORTED ) )
+        }
+
+        override fun onPlaybackResumption(
+            mediaSession: MediaSession,
+            controller: MediaSession.ControllerInfo
+        ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> {
+            val mediaItems = dataDiModule.playlistRepository.currentPlayingQueuePlaylist
+                .value.songIds.mapNotNull { browseTree.getMediaItemById( it ) }.reversed()
+            val index = mediaItems.indexOfFirst {
+                it.mediaId == dataDiModule.settingsRepository.currentlyPlayingSongId.value
+            }
+            val indexOfCurrentlyPlayingMediaItem = if ( index < 0 ) 0 else index
+            return Futures.immediateFuture(
+                MediaSession.MediaItemsWithStartPosition(
+                    mediaItems,
+                    indexOfCurrentlyPlayingMediaItem,
+                    replaceableForwardingPlayer.currentPosition
+                )
+            )
         }
     }
 

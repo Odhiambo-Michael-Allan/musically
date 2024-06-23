@@ -342,6 +342,7 @@ class NowPlayingViewModel(
     override fun onCleared() {
         super.onCleared()
         _updatePlaybackPosition.value = false // Stop updating the position.
+        playlistRepository.cacheCurrentPlaylistData()
     }
 
     private fun getCurrentlyPlayingSong(): Song? {

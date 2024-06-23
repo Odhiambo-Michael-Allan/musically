@@ -26,7 +26,6 @@ import com.odesa.musicMatters.core.model.Genre
 import com.odesa.musicMatters.core.model.Song
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -91,8 +90,6 @@ class MusicServiceConnectionImpl(
 
     override val currentPlaybackPosition: Long
         get() = player?.currentPosition ?: 0L
-
-    private var currentQueueSavingJob: Job? = null
 
     init {
         scope.launch {
@@ -321,17 +318,13 @@ class MusicServiceConnectionImpl(
     private fun release() {
         _nowPlayingMediaItem.value = NOTHING_PLAYING
         scope.cancel( message = "CONNECTION TO CONNECTABLE UNAVAILABLE" )
-        currentQueueSavingJob?.cancel()
         instance = null
     }
 
     private fun saveCurrentQueue() {
-        currentQueueSavingJob?.cancel()
-        currentQueueSavingJob = scope.launch {
-            Timber.tag( TAG ).d( "SAVING CURRENT QUEUE.." )
-            playlistRepository.clearCurrentPlayingQueuePlaylist()
-            playlistRepository.saveCurrentQueue( mediaItemsInQueue.value.map{ it.mediaId } )
-        }
+        Timber.tag( TAG ).d( "SAVING CURRENT QUEUE.." )
+        playlistRepository.clearCurrentPlayingQueuePlaylist()
+        playlistRepository.saveCurrentQueue( mediaItemsInQueue.value.map{ it.mediaId } )
     }
 
     companion object {

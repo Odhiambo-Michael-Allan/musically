@@ -119,12 +119,7 @@ class PlaylistRepositoryImpl( private val playlistStore: PlaylistStore ) : Playl
         _currentPlayingQueuePlaylist.value = playlistStore.fetchCurrentPlayingQueue()
     }
 
-    /**
-     * This method will be called when the MusicService is being destroyed. This ensures
-     * playlist data saved in the app's external cache is read only TWICE, once when the
-     * playlist store is created, and once when the MusicService is destroyed.
-     */
-    override fun cachePlaylistData() {
+    override fun cacheCurrentPlaylistData() {
         playlistStore.cachePlaylistData()
     }
 

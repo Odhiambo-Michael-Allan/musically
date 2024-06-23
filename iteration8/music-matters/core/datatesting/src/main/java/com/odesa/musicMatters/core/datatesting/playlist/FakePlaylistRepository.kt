@@ -172,7 +172,7 @@ class FakePlaylistRepository : PlaylistRepository {
         )
     }
 
-    override fun cachePlaylistData() {
+    override fun cacheCurrentPlaylistData() {
         TODO("Not yet implemented")
     }
 }

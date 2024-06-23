@@ -29,5 +29,5 @@ interface PlaylistRepository {
     fun saveCurrentQueue( songIds: List<String> )
 
     fun clearCurrentPlayingQueuePlaylist()
-    fun cachePlaylistData()
+    fun cacheCurrentPlaylistData()
 }
